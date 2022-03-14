@@ -1,6 +1,6 @@
-# play_together_mobile
+# Play Together Mobile Application
 
-A new Flutter project.
+This is a capstone project.
 
 ## Getting Started
 
