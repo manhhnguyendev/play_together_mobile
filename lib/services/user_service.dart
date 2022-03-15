@@ -1,0 +1,45 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart';
+import 'package:play_together_mobile/constants/api_url.dart' as apiUrl;
+import 'package:play_together_mobile/constants/config_json.dart' as configJson;
+import 'package:play_together_mobile/models/user_model.dart';
+
+class UserService {
+  Future<UserModel?> getUserProfile(dynamic token) async {
+    Response response;
+    UserModel? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/profile'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = UserModel.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> updateUserProfile(
+      String id, UserUpdateModel hirerUpdateModel, dynamic token) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.users}/$id'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(hirerUpdateModel.toJson()),
+      );
+
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+}
