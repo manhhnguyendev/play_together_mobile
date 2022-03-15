@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "232763101189",
+    "project_id": "play-together-mobile",
+    "storage_bucket": "play-together-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232763101189:android:35ee218e01620ec4f54c6c",
+        "android_client_info": {
+          "package_name": "com.example.play_together_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232763101189-ub06e89ole8af96sud5q8i2v2d21e3tu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.play_together_mobile",
+            "certificate_hash": "bb99585d8f1322b97f4b441b85ca3d898f2bf0c1"
+          }
+        },
+        {
+          "client_id": "232763101189-6bsk76m6vq3qrkluqteg3q00c9mks8th.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsGXJhDGzsE6_sKMSseP0r0Sn27WVH8X4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232763101189-6bsk76m6vq3qrkluqteg3q00c9mks8th.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
