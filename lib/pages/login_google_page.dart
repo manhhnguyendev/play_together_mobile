@@ -5,8 +5,6 @@ import 'package:play_together_mobile/models/login_google_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
-import 'package:play_together_mobile/pages/test_login.dart';
-import 'package:play_together_mobile/services/hirer_service.dart';
 import 'package:play_together_mobile/services/login_google_service.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/services/user_service.dart';
@@ -76,26 +74,22 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                                 loginGoogleModelFuture.then((value) {
                                   if (value != null) {
                                     tokenModel = value;
-                                    print("Đăng nhập thành công: " +
-                                        value.message);
-                                    helper.pushInto(
-                                        context, const TestHomePage(), true);
-                                    // setState(() {
-                                    //   Future<UserModel?> hirerModelFuture =
-                                    //       UserService()
-                                    //           .getUserProfile(value.message);
-                                    //   print("Đăng nhập thành công " +
-                                    //       value.message);
-                                    //   hirerModelFuture.then((hirer) {
-                                    //     setState(() {
-                                    //       if (hirer != null) {
-                                    //         userModel = hirer;
-                                    //         helper.pushInto(
-                                    //             context, getScreen(), true);
-                                    //       }
-                                    //     });
-                                    //   });
-                                    // });
+                                    setState(() {
+                                      Future<UserModel?> hirerModelFuture =
+                                          UserService()
+                                              .getUserProfile(value.message);
+                                      print("Đăng nhập thành công " +
+                                          value.message);
+                                      hirerModelFuture.then((hirer) {
+                                        setState(() {
+                                          if (hirer != null) {
+                                            userModel = hirer;
+                                            helper.pushInto(
+                                                context, getScreen(), true);
+                                          }
+                                        });
+                                      });
+                                    });
                                   }
                                 });
                               });

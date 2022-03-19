@@ -11,7 +11,7 @@ class UserService {
     UserModel? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/profile'),
+        Uri.parse('${apiUrl.users}/personal'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -24,18 +24,36 @@ class UserService {
   }
 
   Future<bool?> updateUserProfile(
-      String id, UserUpdateModel hirerUpdateModel, dynamic token) async {
+      UserUpdateModel userUpdateModel, dynamic token) async {
     Response response;
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/$id'),
+        Uri.parse('${apiUrl.users}/personal'),
         headers: configJson.headerAuth(token),
-        body: jsonEncode(hirerUpdateModel.toJson()),
+        body: jsonEncode(userUpdateModel.toJson()),
       );
 
       if (response.statusCode == 204) {
         result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<List<UserModel>?> getAllUsers(dynamic token) async {
+    Response response;
+    List<UserModel>? result;
+    try {
+      response = await get(
+        Uri.parse(apiUrl.users),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
       }
     } on Exception {
       rethrow;

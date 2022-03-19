@@ -7,8 +7,6 @@ import 'package:play_together_mobile/constants/const.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/forgot_password_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
-import 'package:play_together_mobile/pages/test_login.dart';
-import 'package:play_together_mobile/services/hirer_service.dart';
 import 'package:play_together_mobile/services/login_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
@@ -110,27 +108,25 @@ class _LoginPageState extends State<LoginPage> {
                         loginModelFuture.then((value) {
                           if (value != null) {
                             tokenModel = value;
-                            helper.pushInto(
-                                context, const TestHomePage(), true);
-                            // setState(() {
-                            //   if (value != null) {
-                            //     Future<UserModel?> hirerModelFuture =
-                            //         UserService().getUserProfile(value.message);
-                            //     print(value.message);
-                            //     hirerModelFuture.then((hirer) {
-                            //       setState(() {
-                            //         if (hirer != null) {
-                            //           userModel = hirer;
-                            //           helper.pushInto(
-                            //               context, getScreen(), true);
-                            //         }
-                            //       });
-                            //     });
-                            //   } else {
-                            //     print(
-                            //         "Tên đăng nhập hoặc mật khẩu không chính xác");
-                            //   }
-                            // });
+                            setState(() {
+                              if (value != null) {
+                                Future<UserModel?> hirerModelFuture =
+                                    UserService().getUserProfile(value.message);
+                                print(value.message);
+                                hirerModelFuture.then((hirer) {
+                                  setState(() {
+                                    if (hirer != null) {
+                                      userModel = hirer;
+                                      helper.pushInto(
+                                          context, getScreen(), true);
+                                    }
+                                  });
+                                });
+                              } else {
+                                print(
+                                    "Tên đăng nhập hoặc mật khẩu không chính xác");
+                              }
+                            });
                           }
                         });
                       });

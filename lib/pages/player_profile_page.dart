@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/player_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/send_hiring_request_page.dart';
-
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class PlayerProfilePage extends StatefulWidget {
-  final PlayerModel playerModel;
+  final UserModel userModel;
 
-  const PlayerProfilePage({Key? key, required this.playerModel})
+  const PlayerProfilePage({Key? key, required this.userModel})
       : super(key: key);
 
   @override
