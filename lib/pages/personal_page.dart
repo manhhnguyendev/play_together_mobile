@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/hirer_profile_page.dart';
+import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 
 class PersonalPage extends StatefulWidget {
@@ -108,11 +108,11 @@ class _PersonalPageState extends State<PersonalPage> {
                         const SizedBox(
                           height: 5,
                         ),
-                        Text(
-                          widget.userModel.balance.toString() + ' vnđ',
-                          style: const TextStyle(
-                              fontSize: 22, color: Color(0xff320444)),
-                        ),
+                        // Text(
+                        //   widget.userModel.balance.toString() + ' vnđ',
+                        //   style: const TextStyle(
+                        //       fontSize: 22, color: Color(0xff320444)),
+                        // ),
                       ],
                     ),
                   ),

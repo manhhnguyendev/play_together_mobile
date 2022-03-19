@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/const.dart';
-import 'package:play_together_mobile/models/hirer_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/services/hirer_service.dart';
+import 'package:play_together_mobile/pages/personal_page.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -14,10 +14,10 @@ import 'package:path/path.dart';
 import 'dart:io';
 
 class HirerProfilePage extends StatefulWidget {
-  final UserModel userModel;
+  late UserModel userModel;
   final TokenModel tokenModel;
 
-  const HirerProfilePage(
+  HirerProfilePage(
       {Key? key, required this.userModel, required this.tokenModel})
       : super(key: key);
 
@@ -29,19 +29,23 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
   String avatar =
       "https://firebasestorage.googleapis.com/v0/b/play-together-flutter.appspot.com/o/avatar%2Fdefault-profile-picture.jpg?alt=media&token=79641b44-454b-43e0-8c57-85d1431fcfce";
   String name = "";
+  String description = "";
   final _formKey = GlobalKey<FormState>();
   final initialDate = DateTime.now();
   final List listErrorName = [''];
   final List listErrorBirthday = ['', birthdayNullError];
   final List listErrorCity = [''];
+  final List listErrorDescription = [''];
   final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
   final dateOfBirthController = TextEditingController();
-  HirerUpdateModel hirerUpdateModel = HirerUpdateModel(
+  UserUpdateModel userUpdateModel = UserUpdateModel(
     name: "",
     dateOfBirth: "",
     city: "",
     gender: false,
     avatar: "",
+    description: "",
   );
   late String city;
   late DateTime dateOfBirth;
@@ -116,28 +120,27 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     'Yên Bái',
   ];
 
-  // File? _imageFile;
-  // final picker = ImagePicker();
+  File? _imageFile;
 
-  // Future pickImage() async {
-  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  getImageFromGallery() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      _imageFile = File(pickedFile.path);
+    }
+  }
 
-  //   setState(() {
-  //     _imageFile = File(pickedFile!.path);
-  //     avatar = pickedFile.toString();
-  //   });
-  // }
-
-  // Future uploadImageToFirebase(BuildContext context) async {
-  //   String fileName = basename(_imageFile!.path);
-  //   Reference firebaseStorageRef =
-  //       FirebaseStorage.instance.ref().child('avatar/$fileName');
-  //   UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
-  //   TaskSnapshot taskSnapshot = await uploadTask;
-  //   taskSnapshot.ref.getDownloadURL().then(
-  //         (value) => value = avatar,
-  //       );
-  // }
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile!.path);
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('avatar/$fileName');
+    UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => _imageFile);
+    taskSnapshot.ref.getDownloadURL().then(
+          (value) => print("Done: $value"),
+        );
+  }
 
   void loadData() {
     listDrop = [];
@@ -203,6 +206,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
       gender = widget.userModel.gender;
       checkFirstTime = false;
       dateOfBirth = DateTime.parse(widget.userModel.dateOfBirth);
+      descriptionController.text = widget.userModel.description;
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -259,7 +263,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                           right: -25,
                           child: RawMaterialButton(
                             onPressed: () {
-                              //pickImage();
+                              getImageFromGallery();
                             },
                             elevation: 2.0,
                             fillColor: const Color(0xFFF5F6F9),
@@ -280,10 +284,13 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                   children: <Widget>[
                     Row(
                       children: [
-                        buildNameField(),
-                        FormError(listError: listErrorName),
+                        Expanded(flex: 1, child: buildNameField()),
                       ],
                     ),
+                    Row(children: [
+                      Expanded(
+                          flex: 1, child: FormError(listError: listErrorName)),
+                    ]),
                     const SizedBox(
                       height: 5,
                     ),
@@ -350,6 +357,11 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                     const SizedBox(
                       height: 10,
                     ),
+                    Row(
+                      children: [
+                        Expanded(flex: 1, child: buildDescriptionField()),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -373,21 +385,36 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                       listErrorBirthday.length == 1) {}
                   setState(() {
                     //uploadImageToFirebase(context);
-                    hirerUpdateModel.name = nameController.text;
-                    hirerUpdateModel.dateOfBirth = dateOfBirth.toString();
-                    hirerUpdateModel.city = city;
-                    hirerUpdateModel.gender = gender;
-                    hirerUpdateModel.avatar = avatar;
-                    Future<bool?> hirerUpdateModelFuture = HirerService()
-                        .updateHirerProfile(widget.userModel.id,
-                            hirerUpdateModel, widget.tokenModel.message);
-                    hirerUpdateModelFuture.then((hirer) {
-                      helper.pushInto(
-                          context,
-                          HirerProfilePage(
-                              userModel: widget.userModel,
-                              tokenModel: widget.tokenModel),
-                          true);
+                    userUpdateModel.name = nameController.text;
+                    userUpdateModel.dateOfBirth = dateOfBirth.toString();
+                    userUpdateModel.city = city;
+                    userUpdateModel.gender = gender;
+                    userUpdateModel.avatar = avatar;
+                    userUpdateModel.description = description;
+                    Future<bool?> userUpdateModelFuture = UserService()
+                        .updateUserProfile(
+                            userUpdateModel, widget.tokenModel.message);
+                    userUpdateModelFuture.then((userUpdate) {
+                      if (userUpdate != true) {
+                        userUpdateModel = userUpdate as UserUpdateModel;
+                      }
+                      setState(() {
+                        Future<UserModel?> userModelFuture = UserService()
+                            .getUserProfile(widget.tokenModel.message);
+                        userModelFuture.then((user) {
+                          setState(() {
+                            if (user != null) {
+                              widget.userModel = user;
+                              helper.pushInto(
+                                  context,
+                                  PersonalPage(
+                                      userModel: widget.userModel,
+                                      tokenModel: widget.tokenModel),
+                                  false);
+                            }
+                          });
+                        });
+                      });
                     });
                   });
                 }
@@ -540,6 +567,36 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
             });
           },
         ),
+      ),
+    );
+  }
+
+  TextFormField buildDescriptionField() {
+    return TextFormField(
+      controller: descriptionController,
+      maxLength: 200,
+      keyboardType: TextInputType.name,
+      onSaved: (newValue) => description = newValue!,
+      onChanged: (value) {
+        description = value;
+      },
+      decoration: const InputDecoration(
+        counterText: "",
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        labelText: "Giới thiệu sơ lược",
+        hintText: "Giới thiệu bản thân bạn ...",
+        enabledBorder: OutlineInputBorder(
+          gapPadding: 10,
+        ),
+        focusedBorder: OutlineInputBorder(
+          gapPadding: 10,
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+            gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
+        errorBorder: (OutlineInputBorder(
+            gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
+        errorStyle: TextStyle(height: 0, color: Colors.black),
       ),
     );
   }

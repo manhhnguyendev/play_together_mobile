@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/player_model.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
 
-class PlayerCard extends StatefulWidget {
-  final double width, aspectRetio;
-  final PlayerModel playerModel;
-  const PlayerCard({
+class UserCard extends StatefulWidget {
+  final double width, aspectRatio;
+  final UserModel userModel;
+  const UserCard({
     Key? key,
     this.width = 140,
-    this.aspectRetio = 1.02,
-    required this.playerModel,
+    this.aspectRatio = 1.02,
+    required this.userModel,
   }) : super(key: key);
 
   @override
-  _PlayerCardState createState() => _PlayerCardState();
+  _UserCardState createState() => _UserCardState();
 }
 
-class _PlayerCardState extends State<PlayerCard> {
+class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,7 +31,7 @@ class _PlayerCardState extends State<PlayerCard> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PlayerProfilePage(playerModel: widget.playerModel)),
+                          PlayerProfilePage(userModel: widget.userModel)),
                 );
               },
               child: Column(
@@ -46,7 +46,7 @@ class _PlayerCardState extends State<PlayerCard> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ClipRRect(
-                        child: Image.network(widget.playerModel.avatar,
+                        child: Image.network(widget.userModel.avatar,
                             fit: BoxFit.cover),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -56,9 +56,7 @@ class _PlayerCardState extends State<PlayerCard> {
                   Row(
                     children: [
                       Text(
-                        widget.playerModel.firstname +
-                            ' ' +
-                            widget.playerModel.lastname,
+                        widget.userModel.name,
                         style: const TextStyle(color: Colors.black),
                       ),
                     ],

@@ -5,15 +5,14 @@ import 'package:play_together_mobile/pages/search_page.dart';
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final String titles;
-
-  //final PreferredSizeWidget? bottomAppBar;
   final void Function() onPressedSearch;
-  Appbar(
+  const Appbar(
       {Key? key,
       required this.height,
       required this.titles,
       required this.onPressedSearch})
       : super(key: key);
+  @override
   Size get preferredSize => Size.fromHeight(height);
   @override
   Widget build(BuildContext context) {
@@ -25,10 +24,9 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
       toolbarOpacity: 1,
       toolbarHeight: 65,
       title: Container(
-        margin: EdgeInsets.only(top: 10, left: 10),
+        margin: const EdgeInsets.only(top: 10, left: 10),
         child: Row(children: [
-          // avatar
-          CircleAvatar(
+          const CircleAvatar(
             radius: 27,
             backgroundColor: Colors.white,
             backgroundImage:
@@ -57,7 +55,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   hintText: "Tìm kiếm",
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.search,
                     color: my_colors.secondary,
                   ),
