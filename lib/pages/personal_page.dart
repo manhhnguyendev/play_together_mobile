@@ -31,12 +31,11 @@ class _PersonalPageState extends State<PersonalPage> {
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
             child: Row(
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 150,
                   width: 150,
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://firebasestorage.googleapis.com/v0/b/play-together-flutter.appspot.com/o/avatar%2Fdefault-profile-picture.jpg?alt=media&token=79641b44-454b-43e0-8c57-85d1431fcfce"),
+                    backgroundImage: NetworkImage(widget.userModel.avatar),
                   ),
                 ),
                 Padding(
