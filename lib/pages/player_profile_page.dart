@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/send_hiring_request_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
@@ -14,12 +15,7 @@ class PlayerProfilePage extends StatefulWidget {
 }
 
 class _PlayerProfilePageState extends State<PlayerProfilePage> {
-  String profileLink = "assets/images/defaultprofile.png";
-  List listPlayerImage = [
-    "assets/images/Zuto.png",
-    "assets/images/Jennie.png",
-    "assets/images/HangDam.png"
-  ];
+  List listPlayerImage = [];
 
   List listGameAndRank = ['LOL : Kim Cuong', 'CSGO : MG', 'Among Us'];
 
@@ -43,7 +39,9 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
             child: FlatButton(
               child: const Icon(Icons.arrow_back_ios),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
         ),
@@ -59,22 +57,22 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     height: 150,
                     width: 150,
                     child: CircleAvatar(
-                      backgroundImage: AssetImage(profileLink),
+                      backgroundImage: NetworkImage(widget.userModel.avatar),
                     ),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    "Player name",
-                    style: TextStyle(fontSize: 20),
+                  Text(
+                    widget.userModel.name,
+                    style: const TextStyle(fontSize: 20),
                   ),
                   const SizedBox(
                     height: 2,
                   ),
-                  const Text(
-                    "status",
-                    style: TextStyle(fontSize: 10),
+                  Text(
+                    widget.userModel.status,
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ],
               ),
@@ -190,11 +188,11 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+              padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
               child: Container(
                 alignment: Alignment.topLeft,
                 child: const Text(
-                  'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                  'Description ở đây',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
                 ),
               ),
@@ -248,28 +246,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
             ),
             const SizedBox(
               height: 15,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: const Text(
-                  'Top người thuê',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  children: List.generate(
-                      listTopHirer.length,
-                      (index) =>
-                          buildTopHirers(listTopHirer[index], index + 1)),
-                ),
-              ),
             ),
           ],
         ),

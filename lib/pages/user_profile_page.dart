@@ -26,8 +26,6 @@ class HirerProfilePage extends StatefulWidget {
 }
 
 class _HirerProfilePageState extends State<HirerProfilePage> {
-  String avatar =
-      "https://firebasestorage.googleapis.com/v0/b/play-together-flutter.appspot.com/o/avatar%2Fdefault-profile-picture.jpg?alt=media&token=79641b44-454b-43e0-8c57-85d1431fcfce";
   String name = "";
   String description = "";
   final _formKey = GlobalKey<FormState>();
@@ -50,6 +48,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
   late String city;
   late DateTime dateOfBirth;
   late bool gender;
+  late String avatar;
   bool checkFirstTime = true;
   ValueNotifier<String> dateDisplay =
       ValueNotifier<String>("Ngày sinh của bạn");
@@ -207,6 +206,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
       checkFirstTime = false;
       dateOfBirth = DateTime.parse(widget.userModel.dateOfBirth);
       descriptionController.text = widget.userModel.description;
+      avatar = widget.userModel.avatar;
     }
     return Scaffold(
       backgroundColor: Colors.white,
