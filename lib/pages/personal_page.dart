@@ -107,11 +107,12 @@ class _PersonalPageState extends State<PersonalPage> {
                         const SizedBox(
                           height: 5,
                         ),
-                        // Text(
-                        //   widget.userModel.balance.toString() + ' vnđ',
-                        //   style: const TextStyle(
-                        //       fontSize: 22, color: Color(0xff320444)),
-                        // ),
+                        Text(
+                          widget.userModel.userBalance.balance.toString() +
+                              ' vnđ',
+                          style: const TextStyle(
+                              fontSize: 22, color: Color(0xff320444)),
+                        ),
                       ],
                     ),
                   ),

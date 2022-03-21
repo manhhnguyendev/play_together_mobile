@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
 
@@ -10,9 +12,9 @@ class UserModel {
   String city;
   bool gender;
   String email;
-  //List<ImageModel> listImageModel;
+  List<ImageModel> images;
   String description;
-  //UserBalanceModel userBalanceModel;
+  UserBalanceModel userBalance;
   String status;
   bool isActive;
 
@@ -25,9 +27,9 @@ class UserModel {
     required this.city,
     required this.gender,
     required this.email,
-    //required this.listImageModel,
+    required this.images,
     required this.description,
-    //required this.userBalanceModel,
+    required this.userBalance,
     required this.status,
     required this.isActive,
   });
@@ -41,9 +43,15 @@ class UserModel {
         city: json['city'] as String,
         gender: json['gender'] as bool,
         email: json['email'] as String,
-        //listImageModel: json['images'] as List<ImageModel>,
+        images: (json['images'] as List<dynamic>?) != null
+            ? (json['images'] as List<dynamic>)
+                .map((balance) => ImageModel.fromJson(balance))
+                .toList()
+            : <ImageModel>[],
         description: json['description'] as String,
-        //userBalanceModel: json['userBalance'] as UserBalanceModel,
+        userBalance: (json['userBalance']) != null
+            ? UserBalanceModel.fromJson(json['userBalance'])
+            : UserBalanceModel.fromJson(json),
         status: json['status'] as String,
         isActive: json['isActive'] as bool,
       );
@@ -57,9 +65,9 @@ class UserModel {
         "city": city,
         "gender": gender,
         "email": email,
-        //"images": listImageModel,
+        "images": images,
         "description": description,
-        //"userBalance": userBalanceModel,
+        "userBalance": userBalance,
         "status": status,
         "isActive": isActive,
       };
