@@ -37,7 +37,10 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, SearchPage.routeName);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchPage()),
+              );
             },
             child: Container(
               width: size.width * 0.7,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/app_bar_home.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
@@ -41,7 +42,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: Appbar(height: 70, titles: "Home", onPressedSearch: () {}),
+      appBar: Appbar(
+          height: 70,
+          titles: "Home",
+          onPressedSearch: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchPage(),
+                ));
+          }),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
@@ -14,11 +15,20 @@ class SendHiringRequestPage extends StatefulWidget {
 
 class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   bool checkFirstTime = true;
-  String profileLink = "assets/images/defaultprofile.png";
+  String profileLink = "assets/images/play_together_logo_text.png";
   int choosenTime = 1;
   int maxHour = 5;
   String beginMessage = '';
   List<int> listHour = [];
+  List listGames = ['Liên Minh', 'CSGO', 'Game V'];
+  List listGamesCheckBox = [];
+  List listGamesChoosen = [];
+
+  void createAListCheckBox() {
+    for (var i = 0; i < listGames.length; i++) {
+      listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
+    }
+  }
 
   void createHourList() {
     for (var i = 1; i <= maxHour; i++) {
@@ -31,6 +41,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   Widget build(BuildContext context) {
     if (checkFirstTime) {
       createHourList();
+      createAListCheckBox();
       checkFirstTime = false;
     }
     return Scaffold(
@@ -160,6 +171,21 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                 ],
               ),
             ),
+            Container(
+              alignment: Alignment.topLeft,
+              padding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
+              child: Text(
+                'Tựa game bạn chọn ',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+              child: Column(
+                children: List.generate(listGamesCheckBox.length,
+                    (index) => buildSingleCheckBox(listGamesCheckBox[index])),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
               child: Container(
@@ -186,11 +212,36 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             SecondMainButton(
                 text: 'Gửi yêu cầu',
                 onpress: () {
-                  Navigator.pushNamed(context, HiringNegotiatingPage.routeName);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HiringNegotiatingPage()),
+                  );
                 },
                 height: 50,
                 width: 200),
           ]),
         ));
   }
+
+  Widget buildSingleCheckBox(CheckBoxState cbState) => CheckboxListTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        activeColor: Color(0xff8980FF),
+        value: cbState.value,
+        onChanged: (value) => setState(() {
+          if (value == true) {
+            cbState.value = value!;
+            listGamesChoosen.add(cbState.title);
+            print(listGamesChoosen.toString());
+          } else {
+            cbState.value = value!;
+            listGamesChoosen.remove(cbState.title);
+            print(listGamesChoosen.toString());
+          }
+        }),
+        title: Text(
+          cbState.title,
+          style: TextStyle(fontSize: 15),
+        ),
+      );
 }
