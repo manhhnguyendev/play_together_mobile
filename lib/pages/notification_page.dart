@@ -58,7 +58,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       bottomNavigationBar: BottomBar(
         userModel: widget.userModel,
         tokenModel: widget.tokenModel,
-        bottomBarIndex: 2,
+        bottomBarIndex: 3,
       ),
     );
   }

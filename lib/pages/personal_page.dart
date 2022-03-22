@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
@@ -47,6 +48,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       Text(
                         widget.userModel.name,
                         style: const TextStyle(fontSize: 20),
+                        maxLines: 2,
                       ),
                       const SizedBox(
                         height: 5,
@@ -122,27 +124,53 @@ class _PersonalPageState extends State<PersonalPage> {
                     height: 70,
                     width: 1,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Column(
-                        children: const [
-                          Icon(
-                            Icons.account_balance_wallet_outlined,
-                            size: 30,
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: const [
+                              Icon(
+                                FontAwesomeIcons.wallet,
+                                size: 30,
+                              ),
+                              SizedBox(
+                                height: 0,
+                              ),
+                              Text(
+                                'Nạp tiền',
+                                style: TextStyle(
+                                    fontSize: 15, color: Color(0xff320444)),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 0,
-                          ),
-                          Text(
-                            'Nạp tiền',
-                            style: TextStyle(
-                                fontSize: 18, color: Color(0xff320444)),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: const [
+                              Icon(
+                                FontAwesomeIcons.moneyBill,
+                                size: 30,
+                              ),
+                              SizedBox(
+                                height: 0,
+                              ),
+                              Text(
+                                'Rút tiền',
+                                style: TextStyle(
+                                    fontSize: 15, color: Color(0xff320444)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -315,7 +343,7 @@ class _PersonalPageState extends State<PersonalPage> {
       bottomNavigationBar: BottomBar(
         userModel: widget.userModel,
         tokenModel: widget.tokenModel,
-        bottomBarIndex: 3,
+        bottomBarIndex: 4,
       ),
     );
   }

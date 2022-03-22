@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class RatingAndCommentPage extends StatefulWidget {
@@ -20,27 +21,41 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
-      appBar:
-          AppBar(backgroundColor: Colors.transparent, elevation: 0, actions: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.close,
-                color: Colors.black,
-              )),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ReportPage()),
+                  );
+                },
+                icon: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.black,
+                )),
+          ),
+        ],
+        centerTitle: true,
+        title: Text(
+          'Kết thúc thuê',
+          style: TextStyle(
+              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
         ),
-      ]),
+      ),
       body: Column(
         children: [
-          Container(
-            alignment: Alignment.center,
-            child: Text(
-              'Kết thúc thuê',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   child: Text(
+          //     'Kết thúc thuê',
+          //     style: TextStyle(fontSize: 20),
+          //   ),
+          // ),
           SizedBox(
             height: 15,
           ),

@@ -4,7 +4,6 @@ import 'package:play_together_mobile/models/search_player_model.dart';
 import 'package:play_together_mobile/widgets/search_player_card.dart';
 
 class SearchPage extends StatefulWidget {
-  static String routeName = 'SearchPage';
   const SearchPage({Key? key}) : super(key: key);
 
   @override

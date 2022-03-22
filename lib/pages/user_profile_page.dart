@@ -28,6 +28,11 @@ class HirerProfilePage extends StatefulWidget {
 class _HirerProfilePageState extends State<HirerProfilePage> {
   String name = "";
   String description = "";
+  List listPlayerImage = [
+    "assets/images/defaultprofile.png",
+    "assets/images/defaultprofile.png",
+    "assets/images/defaultprofile.png"
+  ];
   final _formKey = GlobalKey<FormState>();
   final initialDate = DateTime.now();
   final List listErrorName = [''];
@@ -278,15 +283,33 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                   ),
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                alignment: Alignment.centerLeft,
+                child: Row(children: [
+                  Text(
+                    'Hình ảnh ',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  Icon(Icons.add_box_outlined),
+                ]),
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 25, 10, 10),
+                padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                      children: List.generate(listPlayerImage.length,
+                          (index) => buildImageItem(listPlayerImage[index]))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                 child: Column(
                   children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(flex: 1, child: buildNameField()),
-                      ],
-                    ),
+                    buildNameField(),
                     Row(children: [
                       Expanded(
                           flex: 1, child: FormError(listError: listErrorName)),
@@ -355,13 +378,9 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
-                    Row(
-                      children: [
-                        Expanded(flex: 1, child: buildDescriptionField()),
-                      ],
-                    ),
+                    buildDescriptionField(),
                   ],
                 ),
               ),
@@ -571,33 +590,41 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     );
   }
 
-  TextFormField buildDescriptionField() {
-    return TextFormField(
-      controller: descriptionController,
-      maxLength: 200,
-      keyboardType: TextInputType.name,
-      onSaved: (newValue) => description = newValue!,
-      onChanged: (value) {
-        description = value;
-      },
-      decoration: const InputDecoration(
-        counterText: "",
-        floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-        labelText: "Giới thiệu sơ lược",
-        hintText: "Giới thiệu bản thân bạn ...",
-        enabledBorder: OutlineInputBorder(
-          gapPadding: 10,
+  Container buildDescriptionField() {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+      child: TextFormField(
+        controller: descriptionController,
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+        maxLength: 1000,
+        onSaved: (newValue) => description = newValue!,
+        onChanged: (value) {
+          description = value;
+        },
+        decoration: const InputDecoration(
+          counterText: "",
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          labelText: "Giới thiệu sơ lược",
+          hintText: "Giới thiệu bản thân bạn ...",
+          border: InputBorder.none,
         ),
-        focusedBorder: OutlineInputBorder(
-          gapPadding: 10,
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-            gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
-            gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
       ),
     );
   }
+
+  Widget buildImageItem(String imageLink) => Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Container(
+          width: 150,
+          height: 100,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              image: DecorationImage(
+                  image: AssetImage(imageLink),
+                  fit: BoxFit.cover)), //sua asset image thanh network
+        ),
+      );
 }

@@ -15,7 +15,7 @@ class PlayerProfilePage extends StatefulWidget {
 }
 
 class _PlayerProfilePageState extends State<PlayerProfilePage> {
-  List listPlayerImage = [];
+  List listPlayerImage = []; //gan list images tu model vao
 
   List listGameAndRank = ['LOL : Kim Cuong', 'CSGO : MG', 'Among Us'];
 
@@ -263,8 +263,13 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
               SecondMainButton(
                   text: 'Thuê',
                   onpress: () {
-                    Navigator.pushNamed(
-                        context, SendHiringRequestPage.routeName);
+                    // Navigator.pushNamed(
+                    //     context, SendHiringRequestPage.routeName);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SendHiringRequestPage()),
+                    );
                   },
                   height: 50,
                   width: 150),
@@ -283,7 +288,8 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                  image: AssetImage(imageLink), fit: BoxFit.cover)),
+                  image: AssetImage(imageLink),
+                  fit: BoxFit.cover)), //sua asset image thanh network
         ),
       );
 
@@ -306,22 +312,22 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
         ),
       );
 
-  Widget buildTopHirers(String hirerName, int count) => Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Container(
-          alignment: Alignment.topLeft,
-          child: Column(
-            children: [
-              Text(
-                '#' + count.toString() + '. ' + hirerName,
-                style: const TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.normal),
-              ),
-              const SizedBox(
-                height: 5,
-              )
-            ],
-          ),
-        ),
-      );
+  // Widget buildTopHirers(String hirerName, int count) => Padding(
+  //       padding: const EdgeInsets.only(left: 10),
+  //       child: Container(
+  //         alignment: Alignment.topLeft,
+  //         child: Column(
+  //           children: [
+  //             Text(
+  //               '#' + count.toString() + '. ' + hirerName,
+  //               style: const TextStyle(
+  //                   fontSize: 15, fontWeight: FontWeight.normal),
+  //             ),
+  //             const SizedBox(
+  //               height: 5,
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
 }
