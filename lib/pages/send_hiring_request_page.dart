@@ -1,26 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
-import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class SendHiringRequestPage extends StatefulWidget {
-  const SendHiringRequestPage({Key? key}) : super(key: key);
+
+  final UserModel userModel;
+  final UserModel playerModel;
+  final TokenModel tokenModel;
+
+  const SendHiringRequestPage(
+      {Key? key,
+      required this.userModel,
+      required this.playerModel,
+      required this.tokenModel})
+      : super(key: key);
+
+  
 
   @override
   _SendHiringRequestPageState createState() => _SendHiringRequestPageState();
 }
 
 class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
+  UserServiceModel? userServiceModel;
+  CreateOrderModel? createOrderModel;
   bool checkFirstTime = true;
   String profileLink = "assets/images/play_together_logo_text.png";
-  int choosenTime = 1;
+  int chooseTime = 1;
   int maxHour = 5;
   String beginMessage = '';
   List<int> listHour = [];
   List listGames = ['Liên Minh', 'CSGO', 'Game V'];
   List listGamesCheckBox = [];
   List listGamesChoosen = [];
+  late double totalTimes;
 
   void createAListCheckBox() {
     for (var i = 0; i < listGames.length; i++) {
@@ -32,7 +50,34 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
     for (var i = 1; i <= maxHour; i++) {
       listHour.add(i);
     }
-    choosenTime = listHour[0];
+    chooseTime = listHour[0];
+  }
+
+  // Future getUserServiceById() {
+  //   Future<UserServiceModel?> userServiceModelFuture = UserService()
+  //       .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
+  //   userServiceModelFuture.then((userService) {
+  //     if (userService != null) {
+  //       setState(() {
+  //         userServiceModel = userService;
+  //       });
+  //     }
+  //   });
+  //   return userServiceModelFuture;
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    Future<UserServiceModel?> userServiceModelFuture = UserService()
+        .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
+    userServiceModelFuture.then((userService) {
+      if (userService != null) {
+        setState(() {
+          userServiceModel = userService;
+        });
+      }
+    });
   }
 
   @override
@@ -46,14 +91,14 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: FlatButton(
-                child: Icon(Icons.arrow_back_ios),
+                child: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -71,22 +116,22 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                     height: 150,
                     width: 150,
                     child: CircleAvatar(
-                      backgroundImage: AssetImage(profileLink),
+                      backgroundImage: NetworkImage(widget.playerModel.avatar),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    "Player name",
-                    style: TextStyle(fontSize: 20),
+                    widget.playerModel.name,
+                    style: const TextStyle(fontSize: 20),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   Text(
-                    "status",
-                    style: TextStyle(fontSize: 10),
+                    widget.playerModel.status,
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ],
               ),
@@ -95,31 +140,31 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
               padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Thời lượng thuê: ',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Spacer(),
-                  Container(
+                  const Spacer(),
+                  SizedBox(
                     width: 80,
                     child: DropdownButton(
                       //underline: SizedBox.shrink(),
                       isExpanded: true,
-                      value: choosenTime,
+                      value: chooseTime,
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: listHour.map((item) {
                         return DropdownMenuItem(
-                            child: new Text(item.toString()), value: item);
+                            child: Text(item.toString()), value: item);
                       }).toList(),
                       onChanged: (value) {
-                        choosenTime = int.parse(value.toString());
+                        chooseTime = int.parse(value.toString());
                         setState(() {
-                          choosenTime = int.parse(value.toString());
+                          chooseTime = int.parse(value.toString());
                         });
                       },
                     ),
                   ),
-                  Text(
+                  const Text(
                     ' giờ',
                     style: TextStyle(fontSize: 18),
                   ),
@@ -136,7 +181,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   ),
                   Spacer(),
                   Text(
-                    '1.000.000',
+                    (userServiceModel!.pricePerHour * chooseTime).toString(),
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
@@ -150,19 +195,20 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
               padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Số dư hiện tại ',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   IconButton(
                       onPressed: () {},
                       icon: const Icon(Icons.add_circle_outline)),
                   Text(
-                    '2.000.000',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    widget.userModel.userBalance.balance.toString(),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text(
+                  const Text(
                     ' đ',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),

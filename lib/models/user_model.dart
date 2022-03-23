@@ -107,3 +107,28 @@ class UserUpdateModel {
         "description": description,
       };
 }
+
+class UserServiceModel {
+  bool isPlayer;
+  double pricePerHour;
+  int maxHourHire;
+
+  UserServiceModel({
+    required this.isPlayer,
+    required this.pricePerHour,
+    required this.maxHourHire,
+  });
+
+  factory UserServiceModel.fromJson(Map<String, dynamic> json) =>
+      UserServiceModel(
+        isPlayer: json['isPlayer'] as bool,
+        pricePerHour: json['pricePerHour'] as double,
+        maxHourHire: json['maxHourHire'] as int,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "isPlayer": isPlayer,
+        "pricePerHour": pricePerHour,
+        "maxHourHire": maxHourHire,
+      };
+}

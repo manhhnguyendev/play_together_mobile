@@ -40,51 +40,54 @@ class _PersonalPageState extends State<PersonalPage> {
                     backgroundImage: NetworkImage(widget.userModel.avatar),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.userModel.name,
-                        style: const TextStyle(fontSize: 20),
-                        maxLines: 2,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HirerProfilePage(
-                                    userModel: widget.userModel,
-                                    tokenModel: widget.tokenModel)),
-                          );
-                        },
-                        child: Row(
-                          children: const [
-                            Text(
-                              'Chỉnh sửa tài khoản',
-                              style: TextStyle(
-                                fontSize: 15,
+                SizedBox(
+                  width: 200,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.userModel.name,
+                          style: const TextStyle(fontSize: 20),
+                          maxLines: 2,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HirerProfilePage(
+                                      userModel: widget.userModel,
+                                      tokenModel: widget.tokenModel)),
+                            );
+                          },
+                          child: Row(
+                            children: const [
+                              Text(
+                                'Chỉnh sửa tài khoản',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 15,
                                 color: Colors.grey,
                               ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 15,
-                              color: Colors.grey,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],

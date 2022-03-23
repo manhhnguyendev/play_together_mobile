@@ -60,4 +60,39 @@ class UserService {
     }
     return result;
   }
+
+  Future<UserModel?> getUserById(String userId, dynamic token) async {
+    Response response;
+    UserModel? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/$userId'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = UserModel.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<UserServiceModel?> getUserServiceById(
+      String userId, dynamic token) async {
+    Response response;
+    UserServiceModel? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/service/$userId'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = UserServiceModel.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
 }
