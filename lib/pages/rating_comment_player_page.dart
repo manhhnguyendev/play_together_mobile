@@ -4,8 +4,6 @@ import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class RatingAndCommentPage extends StatefulWidget {
-  static String routeName = 'RatingAndComment';
-
   const RatingAndCommentPage({Key? key}) : super(key: key);
 
   @override

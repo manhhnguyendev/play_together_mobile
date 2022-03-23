@@ -4,8 +4,6 @@ import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class HiringNegotiatingPage extends StatefulWidget {
-  static String routeName = 'HiringNegotiating';
-
   const HiringNegotiatingPage({Key? key}) : super(key: key);
 
   @override

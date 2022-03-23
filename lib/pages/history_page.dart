@@ -6,7 +6,6 @@ import 'package:play_together_mobile/widgets/history_hiring_card.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 
 class HistoryPage extends StatefulWidget {
-  static String routeName = 'HistoryHiring';
   final UserModel userModel;
   final TokenModel tokenModel;
 

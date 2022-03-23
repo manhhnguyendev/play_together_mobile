@@ -4,7 +4,6 @@ import 'package:play_together_mobile/models/total_comment_model.dart';
 import 'package:play_together_mobile/widgets/rating_comment_card.dart';
 
 class RatingCommentPage extends StatefulWidget {
-  static String routeName = 'RatingComment';
   const RatingCommentPage({Key? key}) : super(key: key);
 
   @override
