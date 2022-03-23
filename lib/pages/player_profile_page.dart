@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/send_hiring_request_page.dart';
@@ -6,8 +7,14 @@ import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class PlayerProfilePage extends StatefulWidget {
   final UserModel userModel;
+  final UserModel playerModel;
+  final TokenModel tokenModel;
 
-  const PlayerProfilePage({Key? key, required this.userModel})
+  const PlayerProfilePage(
+      {Key? key,
+      required this.userModel,
+      required this.playerModel,
+      required this.tokenModel})
       : super(key: key);
 
   @override
@@ -57,21 +64,21 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     height: 150,
                     width: 150,
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(widget.userModel.avatar),
+                      backgroundImage: NetworkImage(widget.playerModel.avatar),
                     ),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    widget.userModel.name,
+                    widget.playerModel.name,
                     style: const TextStyle(fontSize: 20),
                   ),
                   const SizedBox(
                     height: 2,
                   ),
                   Text(
-                    widget.userModel.status,
+                    widget.playerModel.status,
                     style: const TextStyle(fontSize: 10),
                   ),
                 ],
@@ -188,7 +195,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
               child: Container(
                 alignment: Alignment.topLeft,
                 child: const Text(
@@ -263,12 +270,14 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
               SecondMainButton(
                   text: 'Thuê',
                   onpress: () {
-                    // Navigator.pushNamed(
-                    //     context, SendHiringRequestPage.routeName);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SendHiringRequestPage()),
+                          builder: (context) => SendHiringRequestPage(
+                                userModel: widget.userModel,
+                                playerModel: widget.playerModel,
+                                tokenModel: widget.tokenModel,
+                              )),
                     );
                   },
                   height: 50,

@@ -286,7 +286,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 alignment: Alignment.centerLeft,
-                child: Row(children: [
+                child: Row(children: const [
                   Text(
                     'Hình ảnh ',
                     style: TextStyle(

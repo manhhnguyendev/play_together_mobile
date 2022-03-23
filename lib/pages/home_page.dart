@@ -5,7 +5,7 @@ import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/app_bar_home.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
-import 'package:play_together_mobile/widgets/user_card.dart';
+import 'package:play_together_mobile/widgets/player_card.dart';
 
 class HomePage extends StatefulWidget {
   final UserModel userModel;
@@ -22,16 +22,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<UserModel>? userList;
+  List<UserModel>? playerList;
 
   Future loadList() {
-    userList ??= [];
+    playerList ??= [];
     Future<List<UserModel>?> listUserModelFuture =
         UserService().getAllUsers(widget.tokenModel.message);
-    listUserModelFuture.then((_userList) {
+    listUserModelFuture.then((_playerList) {
       if (mounted) {
         setState(() {
-          userList = _userList;
+          playerList = _playerList;
         });
       }
     });
@@ -97,12 +97,16 @@ class _HomePageState extends State<HomePage> {
                               builder: (context, snapshot) {
                                 return ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      userList == null ? 0 : userList!.length,
+                                  itemCount: playerList == null
+                                      ? 0
+                                      : playerList!.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return UserCard(
-                                        userModel: userList![index]);
+                                    return PlayerCard(
+                                      playerModel: playerList![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: widget.userModel,
+                                    );
                                   },
                                 );
                               })),
@@ -147,12 +151,16 @@ class _HomePageState extends State<HomePage> {
                               builder: (context, snapshot) {
                                 return ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      userList == null ? 0 : userList!.length,
+                                  itemCount: playerList == null
+                                      ? 0
+                                      : playerList!.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return UserCard(
-                                        userModel: userList![index]);
+                                    return PlayerCard(
+                                      playerModel: playerList![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: widget.userModel,
+                                    );
                                   },
                                 );
                               })),
@@ -197,12 +205,16 @@ class _HomePageState extends State<HomePage> {
                               builder: (context, snapshot) {
                                 return ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      userList == null ? 0 : userList!.length,
+                                  itemCount: playerList == null
+                                      ? 0
+                                      : playerList!.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return UserCard(
-                                        userModel: userList![index]);
+                                    return PlayerCard(
+                                      playerModel: playerList![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: widget.userModel,
+                                    );
                                   },
                                 );
                               })),
@@ -247,12 +259,16 @@ class _HomePageState extends State<HomePage> {
                               builder: (context, snapshot) {
                                 return ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      userList == null ? 0 : userList!.length,
+                                  itemCount: playerList == null
+                                      ? 0
+                                      : playerList!.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return UserCard(
-                                        userModel: userList![index]);
+                                    return PlayerCard(
+                                      playerModel: playerList![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: widget.userModel,
+                                    );
                                   },
                                 );
                               })),
