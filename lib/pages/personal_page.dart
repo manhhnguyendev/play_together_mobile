@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/manage_hiring_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 
@@ -186,7 +187,7 @@ class _PersonalPageState extends State<PersonalPage> {
               child: Row(
                 children: const [
                   Text(
-                    'Lịch sử nạp tiền',
+                    'Lịch sử Giao dịch',
                     style: TextStyle(fontSize: 20),
                   ),
                   Spacer(),
@@ -209,11 +210,17 @@ class _PersonalPageState extends State<PersonalPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ManageHiringPage(),
+                    ));
+              },
               child: Row(
                 children: const [
                   Text(
-                    'Danh sách theo dõi',
+                    'Quản lý nhận thuê',
                     style: TextStyle(fontSize: 20),
                   ),
                   Spacer(),

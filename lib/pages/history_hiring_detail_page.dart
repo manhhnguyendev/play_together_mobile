@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/detail_hiring_model.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
-  static String routeName = 'HistoryHiringDetail';
   final DetailHiringModel detailHiringModel;
 
   const HistoryHiringDetail({Key? key, required this.detailHiringModel})

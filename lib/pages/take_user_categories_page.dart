@@ -4,8 +4,6 @@ import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/widgets/main_go_back_button.dart';
 
 class UserCategoriesPage extends StatefulWidget {
-  static String routeName = 'user_needs_page1';
-
   const UserCategoriesPage({Key? key}) : super(key: key);
 
   @override

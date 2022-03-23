@@ -8,6 +8,7 @@ import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class SendHiringRequestPage extends StatefulWidget {
+
   final UserModel userModel;
   final UserModel playerModel;
   final TokenModel tokenModel;
@@ -18,6 +19,8 @@ class SendHiringRequestPage extends StatefulWidget {
       required this.playerModel,
       required this.tokenModel})
       : super(key: key);
+
+  
 
   @override
   _SendHiringRequestPageState createState() => _SendHiringRequestPageState();
