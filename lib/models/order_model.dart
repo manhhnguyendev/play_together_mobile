@@ -5,12 +5,12 @@ import 'package:play_together_mobile/models/user_model.dart';
 class OrderModel {
   String id;
   String userId;
-  UserModel user;
+  UserModel? user;
   String toUserId;
-  UserModel toUser;
+  UserModel? toUser;
   List<GameOfOrdersModel> gameOfOrderModel;
   String message;
-  double totalTimes;
+  int totalTimes;
   double totalPrices;
   String status;
   String timeStart;
@@ -36,20 +36,18 @@ class OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
         id: json['id'] as String,
         userId: json['userId'] as String,
-        user: (json['user']) != null
-            ? UserModel.fromJson(json['user'])
-            : UserModel.fromJson(json),
+        user: (json['user']) != null ? UserModel.fromJson(json['user']) : null,
         toUserId: json['toUserId'] as String,
         toUser: (json['toUser']) != null
             ? UserModel.fromJson(json['toUser'])
-            : UserModel.fromJson(json),
+            : null,
         gameOfOrderModel: (json['gameOfOrderModel'] as List<dynamic>?) != null
             ? (json['gameOfOrderModel'] as List<dynamic>)
-                .map((balance) => GameOfOrdersModel.fromJson(balance))
+                .map((games) => GameOfOrdersModel.fromJson(games))
                 .toList()
             : <GameOfOrdersModel>[],
         message: json['message'] as String,
-        totalTimes: json['totalTimes'] as double,
+        totalTimes: json['totalTimes'] as int,
         totalPrices: json['totalPrices'] as double,
         status: json['status'] as String,
         timeStart: json['timeStart'] as String,
@@ -75,9 +73,9 @@ class OrderModel {
 }
 
 class CreateOrderModel {
-  double totalTimes;
+  int totalTimes;
   String message;
-  List<GameModel> games;
+  List<GameOrderModel>? games;
 
   CreateOrderModel({
     required this.totalTimes,
@@ -86,18 +84,33 @@ class CreateOrderModel {
   });
   factory CreateOrderModel.fromJson(Map<String, dynamic> json) =>
       CreateOrderModel(
-        totalTimes: json['totalTimes'] as double,
+        totalTimes: json['totalTimes'] as int,
         message: json['message'] as String,
         games: (json['games'] as List<dynamic>?) != null
             ? (json['games'] as List<dynamic>)
-                .map((balance) => GameModel.fromJson(balance))
+                .map((games) => GameOrderModel.fromJson(games))
                 .toList()
-            : <GameModel>[],
+            : <GameOrderModel>[],
       );
 
   Map<String, dynamic> toJson() => {
         "totalTimes": totalTimes,
         "message": message,
         "games": games,
+      };
+}
+
+class GameOrderModel {
+  String gameId;
+
+  GameOrderModel({
+    required this.gameId,
+  });
+  factory GameOrderModel.fromJson(Map<String, dynamic> json) => GameOrderModel(
+        gameId: json['gameId'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "gameId": gameId,
       };
 }

@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
+
+import '../services/order_service.dart';
 
 class HiringNegotiatingPage extends StatefulWidget {
-  const HiringNegotiatingPage({Key? key}) : super(key: key);
+  final OrderModel? orderModel;
+  final UserModel userModel;
+  final PlayerModel? playerModel;
+  final TokenModel tokenModel;
+
+  const HiringNegotiatingPage(
+      {Key? key,
+      this.orderModel,
+      required this.tokenModel,
+      required this.userModel,
+      this.playerModel})
+      : super(key: key);
 
   @override
   _HiringNegotiatingPageState createState() => _HiringNegotiatingPageState();
@@ -206,7 +224,30 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
               height: 5,
             ),
             DeclineButton(
-                text: 'Hủy yêu cầu', onpress: () {}, height: 50, width: 250),
+                text: 'Hủy yêu cầu',
+                onpress: () {
+                  setState(() {
+                    Future<bool?> cancelFuture = OrderService()
+                        .cancelOrderRequest(
+                            widget.orderModel!.id, widget.tokenModel.message);
+                    cancelFuture.then((check) {
+                      if (check == true) {
+                        setState(() {
+                          print("Cancel về Home nè");
+                          helper.pushInto(
+                              context,
+                              HomePage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel,
+                              ),
+                              true);
+                        });
+                      }
+                    });
+                  });
+                },
+                height: 50,
+                width: 250),
             SecondMainButton(
                 text: 'temp forward',
                 onpress: () {
