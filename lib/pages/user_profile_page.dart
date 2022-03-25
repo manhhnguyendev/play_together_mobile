@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/personal_page.dart';
@@ -301,8 +302,10 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                      children: List.generate(listPlayerImage.length,
-                          (index) => buildImageItem(listPlayerImage[index]))),
+                      children: List.generate(
+                          widget.userModel.images.length,
+                          (index) =>
+                              buildImageItem(widget.userModel.images[index]))),
                 ),
               ),
               Padding(
@@ -615,7 +618,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     );
   }
 
-  Widget buildImageItem(String imageLink) => Padding(
+  Widget buildImageItem(ImageModel imageLink) => Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Container(
           width: 150,
@@ -623,7 +626,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
           decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                  image: AssetImage(imageLink),
+                  image: NetworkImage(imageLink.imageLink),
                   fit: BoxFit.cover)), //sua asset image thanh network
         ),
       );
