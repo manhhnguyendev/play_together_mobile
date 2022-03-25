@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.play_together_mobile">
    <application
-        android:label="play_together_mobile"
+        android:label="Play Together"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

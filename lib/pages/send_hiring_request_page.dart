@@ -8,26 +8,24 @@ import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class SendHiringRequestPage extends StatefulWidget {
-
   final UserModel userModel;
-  final UserModel playerModel;
+  final PlayerModel? playerModel;
+  final List<GameOfUserModel>? listGameAndRank;
   final TokenModel tokenModel;
 
-  const SendHiringRequestPage(
-      {Key? key,
-      required this.userModel,
-      required this.playerModel,
-      required this.tokenModel})
-      : super(key: key);
-
-  
+  const SendHiringRequestPage({
+    Key? key,
+    required this.userModel,
+    required this.playerModel,
+    required this.tokenModel,
+    this.listGameAndRank,
+  }) : super(key: key);
 
   @override
   _SendHiringRequestPageState createState() => _SendHiringRequestPageState();
 }
 
 class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
-  UserServiceModel? userServiceModel;
   CreateOrderModel? createOrderModel;
   bool checkFirstTime = true;
   String profileLink = "assets/images/play_together_logo_text.png";
@@ -41,9 +39,15 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   late double totalTimes;
 
   void createAListCheckBox() {
-    for (var i = 0; i < listGames.length; i++) {
-      listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
-    }
+    if (widget.listGameAndRank == null) {
+      for (var i = 0; i < listGames.length; i++) {
+        listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
+      }
+    } else
+      for (var i = 0; i < widget.listGameAndRank!.length; i++) {
+        listGamesCheckBox
+            .add(CheckBoxState(title: widget.listGameAndRank![i].game.name));
+      }
   }
 
   void createHourList() {
@@ -66,19 +70,19 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   //   return userServiceModelFuture;
   // }
 
-  @override
-  void initState() {
-    super.initState();
-    Future<UserServiceModel?> userServiceModelFuture = UserService()
-        .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
-    userServiceModelFuture.then((userService) {
-      if (userService != null) {
-        setState(() {
-          userServiceModel = userService;
-        });
-      }
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future<UserServiceModel?> userServiceModelFuture = UserService()
+  //       .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
+  //   userServiceModelFuture.then((userService) {
+  //     if (userService != null) {
+  //       setState(() {
+  //         userServiceModel = userService;
+  //       });
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -116,21 +120,21 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                     height: 150,
                     width: 150,
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(widget.playerModel.avatar),
+                      backgroundImage: NetworkImage(widget.playerModel!.avatar),
                     ),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    widget.playerModel.name,
+                    widget.playerModel!.name,
                     style: const TextStyle(fontSize: 20),
                   ),
                   const SizedBox(
                     height: 2,
                   ),
                   Text(
-                    widget.playerModel.status,
+                    widget.playerModel!.status,
                     style: const TextStyle(fontSize: 10),
                   ),
                 ],
@@ -181,7 +185,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   ),
                   Spacer(),
                   Text(
-                    (userServiceModel!.pricePerHour * chooseTime).toString(),
+                    (widget.playerModel!.pricePerHour * chooseTime).toString(),
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
@@ -226,7 +230,10 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
               child: Column(
-                children: List.generate(listGamesCheckBox.length,
+                children: List.generate(
+                    widget.listGameAndRank != null
+                        ? listGamesCheckBox.length
+                        : 0,
                     (index) => buildSingleCheckBox(listGamesCheckBox[index])),
               ),
             ),
@@ -255,13 +262,17 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             ),
             SecondMainButton(
                 text: 'Gửi yêu cầu',
-                onpress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HiringNegotiatingPage()),
-                  );
-                },
+                onpress: (widget.playerModel!.pricePerHour * chooseTime) <
+                        widget.userModel.userBalance.balance
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const HiringNegotiatingPage()),
+                        );
+                      }
+                    : () {},
                 height: 50,
                 width: 200),
           ]),

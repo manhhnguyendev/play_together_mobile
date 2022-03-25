@@ -23,20 +23,59 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<UserModel>? playerList;
+  List<PlayerModel>? _list;
+
+  // List<PlayerFullModel>? _listFull;
+  // PlayerFullModel tmp = PlayerFullModel(player: null, games: null);
 
   Future loadList() {
     playerList ??= [];
+    _list ??= [];
     Future<List<UserModel>?> listUserModelFuture =
         UserService().getAllUsers(widget.tokenModel.message);
     listUserModelFuture.then((_playerList) {
-      if (mounted) {
-        setState(() {
-          playerList = _playerList;
-        });
-      }
+      // if (mounted) {
+      setState(() {
+        playerList = _playerList;
+
+        if (_list!.length == 0) {
+          for (var item in _playerList!) {
+            //get player
+            Future<PlayerModel?> playerFuture =
+                UserService().getPlayerById(item.id, widget.tokenModel.message);
+            playerFuture.then((value) {
+              if (value != null) {
+                _list!.add(value);
+              }
+            });
+          }
+        }
+
+        print(
+            "aaaaa \n aaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \n" +
+                _list!.length.toString());
+      });
+      // }
     });
+
     return listUserModelFuture;
   }
+
+// check status
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future<UserModel?> checkStatus =
+  //       UserService().getUserProfile(widget.tokenModel.message);
+  //   checkStatus.then((value) {
+  //     if (value != null) {
+  //       if (value.status.contains('Online'))
+  //         setState(() {
+  //           value = widget.userModel;
+  //         });
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -97,13 +136,11 @@ class _HomePageState extends State<HomePage> {
                               builder: (context, snapshot) {
                                 return ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: playerList == null
-                                      ? 0
-                                      : playerList!.length,
+                                  itemCount: _list == null ? 0 : _list!.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return PlayerCard(
-                                      playerModel: playerList![index],
+                                      playerModel: _list![index],
                                       tokenModel: widget.tokenModel,
                                       userModel: widget.userModel,
                                     );
@@ -147,23 +184,22 @@ class _HomePageState extends State<HomePage> {
                       child: SizedBox(
                           height: 200.0,
                           child: FutureBuilder(
-                              future: loadList(),
+                              //sau nay add ham khac vao
+                              // future: loadList(),
                               builder: (context, snapshot) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: playerList == null
-                                      ? 0
-                                      : playerList!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return PlayerCard(
-                                      playerModel: playerList![index],
-                                      tokenModel: widget.tokenModel,
-                                      userModel: widget.userModel,
-                                    );
-                                  },
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  playerList == null ? 0 : playerList!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return PlayerCard(
+                                  playerModel: _list![index],
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
                                 );
-                              })),
+                              },
+                            );
+                          })),
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,23 +237,21 @@ class _HomePageState extends State<HomePage> {
                       child: SizedBox(
                           height: 200.0,
                           child: FutureBuilder(
-                              future: loadList(),
+                              // future: loadList(),
                               builder: (context, snapshot) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: playerList == null
-                                      ? 0
-                                      : playerList!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return PlayerCard(
-                                      playerModel: playerList![index],
-                                      tokenModel: widget.tokenModel,
-                                      userModel: widget.userModel,
-                                    );
-                                  },
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  playerList == null ? 0 : playerList!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return PlayerCard(
+                                  playerModel: _list![index],
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
                                 );
-                              })),
+                              },
+                            );
+                          })),
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,23 +289,21 @@ class _HomePageState extends State<HomePage> {
                       child: SizedBox(
                           height: 200.0,
                           child: FutureBuilder(
-                              future: loadList(),
+                              // future: loadList(),
                               builder: (context, snapshot) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: playerList == null
-                                      ? 0
-                                      : playerList!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return PlayerCard(
-                                      playerModel: playerList![index],
-                                      tokenModel: widget.tokenModel,
-                                      userModel: widget.userModel,
-                                    );
-                                  },
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  playerList == null ? 0 : playerList!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return PlayerCard(
+                                  playerModel: _list![index],
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
                                 );
-                              })),
+                              },
+                            );
+                          })),
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -78,6 +78,23 @@ class UserService {
     return result;
   }
 
+  Future<PlayerModel?> getPlayerById(String id, dynamic token) async {
+    Response response;
+    PlayerModel? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/$id'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = PlayerModel.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
   Future<UserServiceModel?> getUserServiceById(
       String userId, dynamic token) async {
     Response response;
@@ -89,6 +106,26 @@ class UserService {
       );
       if (response.statusCode == 200) {
         result = UserServiceModel.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<List<GameOfUserModel>?> getGameOfUser(
+      String userId, dynamic token) async {
+    Response response;
+    List<GameOfUserModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/$userId/games'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result =
+            body.map((dynamic item) => GameOfUserModel.fromJson(item)).toList();
       }
     } on Exception {
       rethrow;
