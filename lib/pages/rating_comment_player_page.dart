@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
+import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
+
+import '../models/order_model.dart';
+import '../models/token_model.dart';
+import '../models/user_model.dart';
+import 'home_page.dart';
 
 class RatingAndCommentPage extends StatefulWidget {
-  const RatingAndCommentPage({Key? key}) : super(key: key);
+  final OrderModel? orderModel;
+  final UserModel? userModel;
+  final TokenModel tokenModel;
+
+  const RatingAndCommentPage(
+      {Key? key, this.orderModel, this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   _RatingAndCommentPageState createState() => _RatingAndCommentPageState();
@@ -14,6 +28,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
   String profileLink = "assets/images/defaultprofile.png";
   String comment = "";
   double ratingStar = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,14 +76,14 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
             height: 150,
             width: 150,
             child: CircleAvatar(
-              backgroundImage: AssetImage(profileLink),
+              backgroundImage: NetworkImage(widget.orderModel!.toUser!.avatar),
             ),
           ),
           SizedBox(
             height: 5,
           ),
           Text(
-            "Player name",
+            widget.orderModel!.toUser!.name,
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(
@@ -86,6 +101,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
               color: Colors.amber,
             ),
             onRatingUpdate: (rating) {
+              print(rating.toString());
               ratingStar = rating;
             },
           ),
@@ -112,7 +128,35 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
               ),
             ),
           ),
-          SecondMainButton(text: 'Gửi', onpress: () {}, height: 50, width: 200),
+          SecondMainButton(
+              text: 'Gửi',
+              onpress: () {
+                print(comment);
+                RatingCreateModel rateComment = RatingCreateModel(
+                    rate: 5, comment: comment != "" ? comment : "null comment");
+                Future<bool?> rateFuture = RatingService().createRating(
+                    widget.orderModel!.id,
+                    widget.tokenModel.message,
+                    rateComment);
+                rateFuture.then((rate) {
+                  if (rate == true) {
+                    setState(() {
+                      print("a \n a \n a \n a \n a \n a \n a \n " +
+                          "Rate xong về home nè!!!!");
+                      helper.pushInto(
+                          context,
+                          HomePage(
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!,
+                          ),
+                          true);
+                    });
+                  } else
+                    print("rate lỗi rồi");
+                });
+              },
+              height: 50,
+              width: 200),
         ],
       ),
     );

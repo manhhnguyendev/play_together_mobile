@@ -3,8 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/manage_hiring_page.dart';
+import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
+
+import '../models/order_model.dart';
+import '../services/order_service.dart';
+import '../services/user_service.dart';
 
 class PersonalPage extends StatefulWidget {
   final UserModel userModel;
@@ -21,8 +27,51 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
+  UserModel? lateUser;
+  List<OrderModel>? _listOrder;
+//check status
+  void check() {
+    Future<UserModel?> checkStatus =
+        UserService().getUserProfile(widget.tokenModel.message);
+
+    checkStatus.then((value) {
+      if (value != null) {
+        if (value.status.contains('Online')) {
+          print(value.status);
+          setState(() {
+            lateUser = value;
+            //print("đổi nè");
+          });
+        } else {
+          Future<List<OrderModel>?> checkPlayer = OrderService()
+              .getAllOrdersForPlayer(widget.tokenModel.message, true, "");
+          checkPlayer.then(((order) {
+            setState(() {
+              _listOrder = order;
+              if (_listOrder![0].toUserId == widget.userModel.id) {
+                print(value.status);
+                setState(() {
+                  lateUser = value;
+                  helper.pushInto(
+                      context,
+                      ReceiveRequestPage(
+                          //fromUserModel: _listOrder![0].user,
+                          orderModel: _listOrder![0],
+                          tokenModel: widget.tokenModel,
+                          userModel: lateUser!),
+                      true);
+                });
+              }
+            });
+          }));
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    check();
     return Scaffold(
       body: Column(
         children: [
@@ -58,13 +107,14 @@ class _PersonalPageState extends State<PersonalPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HirerProfilePage(
-                                      userModel: widget.userModel,
-                                      tokenModel: widget.tokenModel)),
-                            );
+                            if (lateUser != null)
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HirerProfilePage(
+                                        userModel: lateUser!,
+                                        tokenModel: widget.tokenModel)),
+                              );
                           },
                           child: Row(
                             children: const [
@@ -114,8 +164,12 @@ class _PersonalPageState extends State<PersonalPage> {
                           height: 5,
                         ),
                         Text(
-                          widget.userModel.userBalance.balance.toString() +
-                              ' vnđ',
+                          lateUser != null
+                              ? lateUser!.userBalance.balance.toString() +
+                                  ' vnđ'
+                              : widget.userModel.userBalance.balance
+                                      .toString() +
+                                  ' vnđ',
                           style: const TextStyle(
                               fontSize: 22, color: Color(0xff320444)),
                         ),

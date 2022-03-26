@@ -3,9 +3,27 @@ import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/widgets/countdown_widget.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
+
+import '../models/game_of_orders_model.dart';
+import '../models/order_model.dart';
+import '../models/token_model.dart';
+import '../models/user_model.dart';
+import '../services/order_service.dart';
+import '../services/user_service.dart';
+import 'home_page.dart';
 
 class HiringPage extends StatefulWidget {
-  const HiringPage({Key? key}) : super(key: key);
+  final OrderModel? orderModel;
+  final UserModel? userModel;
+  final TokenModel tokenModel;
+
+  const HiringPage(
+      {Key? key,
+      this.orderModel,
+      required this.userModel,
+      required this.tokenModel})
+      : super(key: key);
 
   @override
   _HiringPageState createState() => _HiringPageState();
@@ -56,12 +74,59 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         });
   }
 
+  UserModel? lateUser;
+  void check() {
+    Future<UserModel?> checkStatus =
+        UserService().getUserProfile(widget.tokenModel.message);
+    checkStatus.then((value) {
+      if (value != null) {
+        print('Màn hiring status' + value.status);
+        if (value.status.contains('Online')) {
+          //Nếu là user chuyển về màn rating
+          if (widget.orderModel!.userId == widget.userModel!.id) {
+            setState(() {
+              lateUser = value;
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => RatingAndCommentPage(
+                    tokenModel: widget.tokenModel,
+                    userModel: lateUser!,
+                    orderModel: widget.orderModel,
+                  ),
+                ),
+                (route) => false,
+              );
+            });
+          }
+          //nếu là player đưa về màn history detail page
+          //tạm thời đang là về home
+          else {
+            setState(() {
+              lateUser = value;
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => HomePage(
+                      tokenModel: widget.tokenModel, userModel: lateUser!),
+                ),
+                (route) => false,
+              );
+            });
+          }
+        } else
+          setState(() {
+            lateUser = value;
+          });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: hour * 60 * 60),
+      duration: Duration(seconds: widget.orderModel!.totalTimes * 60 * 60),
     );
 
     controller.addListener(() {
@@ -95,6 +160,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
+    check();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
@@ -139,14 +205,15 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage: AssetImage(profileLink),
+                            backgroundImage:
+                                NetworkImage(widget.userModel!.avatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          "Player name",
+                          widget.userModel!.name,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -174,14 +241,20 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage: AssetImage(profileLink),
+                            backgroundImage: NetworkImage(
+                                widget.orderModel!.user!.id ==
+                                        widget.userModel!.id
+                                    ? widget.orderModel!.toUser!.avatar
+                                    : widget.orderModel!.user!.avatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          "Hirer Name",
+                          widget.orderModel!.user!.id == widget.userModel!.id
+                              ? widget.orderModel!.toUser!.name
+                              : widget.orderModel!.user!.name,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -212,7 +285,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                     Spacer(),
                     Text(
-                      '2',
+                      widget.orderModel!.totalTimes.toString(),
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
@@ -232,7 +305,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                     Spacer(),
                     Text(
-                      '1.000.000',
+                      widget.orderModel!.totalPrices.toString(),
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
@@ -264,9 +337,11 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                 padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
                 child: Column(
                   children: List.generate(
-                      listGamesChoosen.length,
-                      (index) =>
-                          buildGamesChoosenField(listGamesChoosen[index])),
+                      widget.orderModel!.gameOfOrderModel != null
+                          ? widget.orderModel!.gameOfOrderModel.length
+                          : 0,
+                      (index) => buildGamesChoosenField(
+                          widget.orderModel!.gameOfOrderModel[index])),
                 ),
               ),
               Container(
@@ -324,13 +399,25 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   height: 50,
                   width: 250),
               SecondMainButton(
-                  text: 'temp forward',
+                  text: 'Test Kết thúc',
                   onpress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RatingAndCommentPage()),
-                    );
+                    Future<bool?> finishFuture = OrderService().finishOrder(
+                        widget.orderModel!.id, widget.tokenModel.message);
+                    finishFuture.then((finish) {
+                      if (finish == true) {
+                        setState(() {
+                          print("a \n a \n a \n a \n a \n a \n a \n " +
+                              "Kết thúc về home nè!!!!");
+                          helper.pushInto(
+                              context,
+                              HomePage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel!,
+                              ),
+                              true);
+                        });
+                      }
+                    });
                   },
                   height: 50,
                   width: 250),
@@ -339,11 +426,11 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         ));
   }
 
-  Widget buildGamesChoosenField(String game) => Container(
+  Widget buildGamesChoosenField(GameOfOrdersModel game) => Container(
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          "- " + game,
+          "- " + game.game.name,
           style: TextStyle(color: Colors.black, fontSize: 15),
         ),
       );

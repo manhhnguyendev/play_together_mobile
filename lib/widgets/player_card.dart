@@ -28,7 +28,7 @@ class PlayerCard extends StatefulWidget {
   _PlayerCardState createState() => _PlayerCardState();
 }
 
-UserModel? playerModel;
+PlayerModel? latePlayer;
 List<GameOfUserModel> listGameAndRank = [];
 RankModel? rank;
 UserServiceModel? userServiceModel;
@@ -48,13 +48,13 @@ class _PlayerCardState extends State<PlayerCard> {
   //   return playerModelFuture;
   // }
 
-  Future getAll() {
-    Future<UserServiceModel?> userServiceModelFuture = UserService()
-        .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
-    userServiceModelFuture.then((userService) {
-      if (userService != null) {
+  void getAll() {
+    Future<PlayerModel?> playerFuture = UserService()
+        .getPlayerById(widget.playerModel.id, widget.tokenModel.message);
+    playerFuture.then((player) {
+      if (player != null) {
         setState(() {
-          userServiceModel = userService;
+          latePlayer = player;
         });
       }
     });
@@ -68,7 +68,7 @@ class _PlayerCardState extends State<PlayerCard> {
       }
     });
 
-    return userServiceModelFuture;
+    // return userServiceModelFuture;
   }
 
   //PlayerModel? playerModel;
@@ -81,7 +81,7 @@ class _PlayerCardState extends State<PlayerCard> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    //getAll();
     return Padding(
         padding: EdgeInsets.only(left: 20 / 375 * size.width),
         child: SizedBox(
