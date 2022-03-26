@@ -57,10 +57,10 @@ class OrderService {
     return result;
   }
 
-  Future<CreateOrderModel?> createOrderRequest(
+  Future<OrderModel?> createOrderRequest(
       String toUserId, CreateOrderModel createOrderModel, dynamic token) async {
     Response response;
-    CreateOrderModel? result;
+    OrderModel? result;
     try {
       response = await post(
         Uri.parse('${apiUrl.users}/orders/$toUserId'),
@@ -68,7 +68,7 @@ class OrderService {
         body: jsonEncode(createOrderModel.toJson()),
       );
       if (response.statusCode == 201) {
-        result = CreateOrderModel.fromJson(json.decode(response.body));
+        result = OrderModel.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;

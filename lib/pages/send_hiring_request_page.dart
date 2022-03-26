@@ -3,9 +3,11 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class SendHiringRequestPage extends StatefulWidget {
   final UserModel userModel;
@@ -26,13 +28,13 @@ class SendHiringRequestPage extends StatefulWidget {
 }
 
 class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
-  CreateOrderModel? createOrderModel;
+  OrderModel? orderModel;
   bool checkFirstTime = true;
   String profileLink = "assets/images/play_together_logo_text.png";
-  int chooseTime = 1;
+  double chooseTime = 1;
   int maxHour = 5;
   String beginMessage = '';
-  List<int> listHour = [];
+  List<double> listHour = [];
   List listGames = ['Liên Minh', 'CSGO', 'Game V'];
   List listGamesCheckBox = [];
   List listGamesChoosen = [];
@@ -51,7 +53,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   }
 
   void createHourList() {
-    for (var i = 1; i <= maxHour; i++) {
+    for (var i = 1.0; i <= widget.playerModel!.maxHourHire; i++) {
       listHour.add(i);
     }
     chooseTime = listHour[0];
@@ -82,6 +84,23 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   //       });
   //     }
   //   });
+  // }
+  GameOrderModel game =
+      GameOrderModel(gameId: "6c211880-ecd9-4975-806e-237fe1bc4294");
+  List<GameOrderModel> games = [];
+  // games.add(game);
+
+  // OrderModel? createOrder() {
+  //   Future<OrderModel?> orderModelFuture = OrderService().createOrderRequest(
+  //       widget.playerModel!.id, createOrderModel, widget.tokenModel.message);
+  //   orderModelFuture.then((order) {
+  //     if (orderModelFuture != null) {
+  //       setState(() {
+  //         orderModel = order;
+  //       });
+  //     }
+  //   });
+  //   return orderModel;
   // }
 
   @override
@@ -161,9 +180,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                             child: Text(item.toString()), value: item);
                       }).toList(),
                       onChanged: (value) {
-                        chooseTime = int.parse(value.toString());
+                        chooseTime = double.parse(value.toString());
                         setState(() {
-                          chooseTime = int.parse(value.toString());
+                          chooseTime = double.parse(value.toString());
                         });
                       },
                     ),
@@ -262,15 +281,45 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             ),
             SecondMainButton(
                 text: 'Gửi yêu cầu',
-                onpress: (widget.playerModel!.pricePerHour * chooseTime) <
+                onpress: (widget.playerModel!.pricePerHour * chooseTime) <=
                         widget.userModel.userBalance.balance
                     ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const HiringNegotiatingPage()),
-                        );
+                        setState(() {
+                          //createOrderModel.totalTimes = chooseTime as int;
+                          games.add(game);
+                          CreateOrderModel createOrderModel = CreateOrderModel(
+                              totalTimes: 1,
+                              message: "test order",
+                              games: games);
+                          // createOrderModel.games = games;
+                          Future<OrderModel?> orderModelFuture = OrderService()
+                              .createOrderRequest(widget.playerModel!.id,
+                                  createOrderModel, widget.tokenModel.message);
+                          orderModelFuture.then((order) {
+                            if (order != null) {
+                              setState(() {
+                                orderModel = order;
+                                print("a \n a \n a \n a \n a \n a \n a \n " +
+                                    orderModel!.id);
+                                helper.pushInto(
+                                    context,
+                                    HiringNegotiatingPage(
+                                        tokenModel: widget.tokenModel,
+                                        userModel: widget.userModel,
+                                        orderModel: orderModel,
+                                        playerModel: widget.playerModel),
+                                    true);
+                              });
+                            }
+                          });
+
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) =>
+                          //            HiringNegotiatingPage()),
+                          // );
+                        });
                       }
                     : () {},
                 height: 50,
