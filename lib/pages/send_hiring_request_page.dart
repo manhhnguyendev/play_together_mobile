@@ -31,10 +31,10 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   OrderModel? orderModel;
   bool checkFirstTime = true;
   String profileLink = "assets/images/play_together_logo_text.png";
-  double chooseTime = 1;
+  int chooseTime = 1;
   int maxHour = 5;
   String beginMessage = '';
-  List<double> listHour = [];
+  List<int> listHour = [];
   List listGames = ['Liên Minh', 'CSGO', 'Game V'];
   List listGamesCheckBox = [];
   List listGamesChoosen = [];
@@ -53,7 +53,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   }
 
   void createHourList() {
-    for (var i = 1.0; i <= widget.playerModel!.maxHourHire; i++) {
+    for (var i = 1; i <= widget.playerModel!.maxHourHire; i++) {
       listHour.add(i);
     }
     chooseTime = listHour[0];
@@ -180,9 +180,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                             child: Text(item.toString()), value: item);
                       }).toList(),
                       onChanged: (value) {
-                        chooseTime = double.parse(value.toString());
+                        chooseTime = int.parse(value.toString());
                         setState(() {
-                          chooseTime = double.parse(value.toString());
+                          chooseTime = int.parse(value.toString());
                         });
                       },
                     ),
@@ -288,8 +288,8 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                           //createOrderModel.totalTimes = chooseTime as int;
                           games.add(game);
                           CreateOrderModel createOrderModel = CreateOrderModel(
-                              totalTimes: 1,
-                              message: "test order",
+                              totalTimes: chooseTime,
+                              message: beginMessage,
                               games: games);
                           // createOrderModel.games = games;
                           Future<OrderModel?> orderModelFuture = OrderService()

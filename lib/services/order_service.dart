@@ -23,16 +23,17 @@ class OrderService {
     return result;
   }
 
-  Future<OrderModel?> getAllOrdersForHirer(dynamic token) async {
+  Future<List<OrderModel>?> getAllOrdersForHirer(dynamic token) async {
     Response response;
-    OrderModel? result;
+    List<OrderModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/orders'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = OrderModel.fromJson(json.decode(response.body));
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
       }
     } on Exception {
       rethrow;
@@ -40,16 +41,19 @@ class OrderService {
     return result;
   }
 
-  Future<OrderModel?> getAllOrdersForPlayer(dynamic token) async {
+  Future<List<OrderModel>?> getAllOrdersForPlayer(
+      dynamic token, bool? isNew, String? status) async {
     Response response;
-    OrderModel? result;
+    List<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders/requests'),
+        Uri.parse(
+            '${apiUrl.users}/orders/requests?Status=$status&IsNew=$isNew'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = OrderModel.fromJson(json.decode(response.body));
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
       }
     } on Exception {
       rethrow;
@@ -81,7 +85,43 @@ class OrderService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.orders}/cancel/$orderId'),
+        Uri.parse('${apiUrl.users}/orders/cancel/$orderId'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> acceptOrderRequest(
+      String orderId, dynamic token, AcceptOrderModel isAccept) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.users}/orders/$orderId/process'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(isAccept.toJson()),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> finishOrder(String orderId, dynamic token) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.orders}/finish/$orderId'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 204) {

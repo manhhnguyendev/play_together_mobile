@@ -114,3 +114,19 @@ class GameOrderModel {
         "gameId": gameId,
       };
 }
+
+class AcceptOrderModel {
+  bool isAccept;
+
+  AcceptOrderModel({
+    required this.isAccept,
+  });
+  factory AcceptOrderModel.fromJson(Map<String, dynamic> json) =>
+      AcceptOrderModel(
+        isAccept: json['isAccept'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "isAccept": isAccept,
+      };
+}

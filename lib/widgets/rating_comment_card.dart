@@ -13,8 +13,8 @@ class RatingCard extends StatefulWidget {
 class _RatingCardState extends State<RatingCard> {
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat('dd/MM/yyyy').format(widget.ratingModel.date);
-    String startTime = DateFormat('hh:mm a').format(widget.ratingModel.date);
+    // String date = DateFormat('dd/MM/yyyy').format(widget.ratingModel.date);
+    // String startTime = DateFormat('hh:mm a').format(widget.ratingModel.date);
 
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -31,8 +31,8 @@ class _RatingCardState extends State<RatingCard> {
                   height: 70,
                   width: 70,
                   child: CircleAvatar(
-                    backgroundImage: AssetImage(widget.ratingModel.avatar),
-                  ),
+                      // backgroundImage: AssetImage(widget.ratingModel.avatar),
+                      ),
                 ),
               ),
               Expanded(
@@ -44,18 +44,20 @@ class _RatingCardState extends State<RatingCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.ratingModel.name,
+                          //widget.ratingModel.name
+                          "",
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                         SizedBox(
                           height: 5,
                         ),
-                        buildRatingStar(widget.ratingModel.rating),
+                        // buildRatingStar(widget.ratingModel.rate),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          date + ', ' + startTime,
+                          // date + ', ' + startTime
+                          "",
                           style: TextStyle(fontSize: 15, color: Colors.grey),
                         ),
                         SizedBox(

@@ -467,8 +467,9 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
               endIndent: 15,
             ),
             Column(
-                children: List.generate(demoRating.length,
-                    (index) => buildRatingList(demoRating[index]))),
+                // children: List.generate(demoRating.length,
+                //     (index) => buildRatingList(demoRating[index]))
+                ),
           ],
         ),
       ),

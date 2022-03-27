@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/pages/testOrder.dart';
+import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/app_bar_home.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
@@ -26,7 +29,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<UserModel>? playerList;
   List<PlayerModel>? _list;
-
+  List<OrderModel>? _listOrder;
+  UserModel? lateUser;
   // List<PlayerFullModel>? _listFull;
   // PlayerFullModel tmp = PlayerFullModel(player: null, games: null);
 
@@ -41,7 +45,7 @@ class _HomePageState extends State<HomePage> {
         playerList = _playerList;
 
         if (_list!.length == 0) {
-          for (var item in _playerList!) {
+          for (var item in playerList!) {
             //get player
             Future<PlayerModel?> playerFuture =
                 UserService().getPlayerById(item.id, widget.tokenModel.message);
@@ -67,22 +71,38 @@ class _HomePageState extends State<HomePage> {
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
+
     checkStatus.then((value) {
       if (value != null) {
-        print('check status nè ');
-        if (value.status.contains('Online'))
+        if (value.status.contains('Online')) {
+          print(value.status);
           setState(() {
-            value = widget.userModel;
+            lateUser = value;
+            //print("đổi nè");
           });
-        else
-          setState(() {
-            value = widget.userModel;
-            helper.pushInto(
-                context,
-                TestOrderPage(
-                    tokenModel: widget.tokenModel, userModel: widget.userModel),
-                true);
-          });
+        } else {
+          Future<List<OrderModel>?> checkPlayer = OrderService()
+              .getAllOrdersForPlayer(widget.tokenModel.message, true, "");
+          checkPlayer.then(((order) {
+            setState(() {
+              _listOrder = order;
+              if (_listOrder![0].toUserId == widget.userModel.id) {
+                print(value.status);
+                setState(() {
+                  lateUser = value;
+                  helper.pushInto(
+                      context,
+                      ReceiveRequestPage(
+                          //fromUserModel: _listOrder![0].user,
+                          orderModel: _listOrder![0],
+                          tokenModel: widget.tokenModel,
+                          userModel: lateUser!),
+                      true);
+                });
+              }
+            });
+          }));
+        }
       }
     });
   }
@@ -158,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                                     return PlayerCard(
                                       playerModel: _list![index],
                                       tokenModel: widget.tokenModel,
-                                      userModel: widget.userModel,
+                                      userModel: lateUser!,
                                     );
                                   },
                                 );

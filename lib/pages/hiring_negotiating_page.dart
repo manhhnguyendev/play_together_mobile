@@ -9,6 +9,7 @@ import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 import '../services/order_service.dart';
+import '../services/user_service.dart';
 
 class HiringNegotiatingPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -32,8 +33,47 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
   String profileLink = "assets/images/defaultprofile.png";
   String profileLink2 = "assets/images/defaultprofile.png";
   List listGamesChoosen = ['Liên Minh', 'CSGO'];
+
+  void check() {
+    Future<UserModel?> checkStatus =
+        UserService().getUserProfile(widget.tokenModel.message);
+    checkStatus.then((value) {
+      if (value != null) {
+        print('check status màn request nè ' + value.status);
+        if (value.status.contains('Hiring')) {
+          setState(() {
+            value = widget.userModel;
+            helper.pushInto(
+                context,
+                HiringPage(
+                  tokenModel: widget.tokenModel,
+                  userModel: value,
+                  orderModel: widget.orderModel,
+                ),
+                true);
+          });
+        } else if (value.status.contains('Online')) {
+          setState(() {
+            value = widget.userModel;
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomePage(
+                    tokenModel: widget.tokenModel, userModel: widget.userModel),
+              ),
+              (route) => false,
+            );
+          });
+        } else
+          setState(() {
+            value = widget.userModel;
+          });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    check();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
@@ -86,7 +126,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
                         height: 5,
                       ),
                       Text(
-                        "Player name",
+                        widget.userModel.name,
                         style: TextStyle(fontSize: 18),
                       ),
                     ],
@@ -129,7 +169,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
                         height: 5,
                       ),
                       Text(
-                        "Player name2",
+                        widget.playerModel!.name,
                         style: TextStyle(fontSize: 18),
                       ),
                     ],
@@ -160,7 +200,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
                   ),
                   Spacer(),
                   Text(
-                    '2',
+                    widget.orderModel!.totalTimes.toString(),
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
@@ -180,7 +220,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
                   ),
                   Spacer(),
                   Text(
-                    '1.000.000',
+                    widget.orderModel!.totalPrices.toString(),
                     style: TextStyle(fontSize: 18),
                   ),
                   Text(
@@ -251,10 +291,10 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
             SecondMainButton(
                 text: 'temp forward',
                 onpress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HiringPage()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => const HiringPage()),
+                  // );
                 },
                 height: 50,
                 width: 250),

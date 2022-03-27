@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/game_model.dart';
+import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
+
+import '../models/order_model.dart';
+import '../models/token_model.dart';
+import '../models/user_model.dart';
+import '../services/order_service.dart';
+import '../services/user_service.dart';
+import 'home_page.dart';
 
 class ReceiveRequestPage extends StatefulWidget {
+  final OrderModel? orderModel;
+  final UserModel userModel;
+  final TokenModel tokenModel;
   //final TestModel testModel;
-  const ReceiveRequestPage({Key? key}) : super(key: key);
+  const ReceiveRequestPage(
+      {Key? key,
+      this.orderModel,
+      required this.userModel,
+      //required this.fromUserModel,
+      required this.tokenModel})
+      : super(key: key);
   @override
   State<ReceiveRequestPage> createState() => _ReceiveRequestPageState();
 }
@@ -15,8 +34,34 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
   String profileLink = "assets/images/defaultprofile.png";
   List listGamesChoosen = ['Liên Minh', 'CSGO'];
 
+  void check() {
+    Future<UserModel?> checkStatus =
+        UserService().getUserProfile(widget.tokenModel.message);
+    checkStatus.then((value) {
+      if (value != null) {
+        print('check status nè ');
+        if (value.status.contains('Online'))
+          setState(() {
+            value = widget.userModel;
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomePage(
+                    tokenModel: widget.tokenModel, userModel: widget.userModel),
+              ),
+              (route) => false,
+            );
+          });
+        else
+          setState(() {
+            value = widget.userModel;
+          });
+      }
+    });
+  }
+
   createAlertDialog(BuildContext context) {
     TextEditingController customController = TextEditingController();
+    check();
     return showDialog(
         context: context,
         builder: (context) {
@@ -37,14 +82,25 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                   elevation: 5.0,
                   child: Text('Có'),
                   onPressed: () {
-                    // // widget.testModel.status = "Denied";
-                    // // widget.testModel.reason = customController.text;
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           TestOrder(testModel: testModel)),
-                    // );
+                    setState(() {
+                      Future<bool?> cancelFuture = OrderService()
+                          .cancelOrderRequest(
+                              widget.orderModel!.id, widget.tokenModel.message);
+                      cancelFuture.then((check) {
+                        if (check == true) {
+                          setState(() {
+                            print("Cancel về Home nè");
+                            helper.pushInto(
+                                context,
+                                HomePage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                                true);
+                          });
+                        }
+                      });
+                    });
                   },
                 ) // MaterialButton
                 // <Widget>[]
@@ -93,7 +149,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                             Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'Hirer Name',
+                                widget.orderModel!.user!.name,
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -108,7 +164,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  '2' + ' giờ',
+                                  widget.orderModel!.totalTimes.toString() +
+                                      ' giờ',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ],
@@ -124,7 +181,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  '1.000.000' + 'đ',
+                                  widget.orderModel!.totalPrices.toString() +
+                                      'đ',
                                   style: TextStyle(fontSize: 16),
                                 )
                               ],
@@ -145,8 +203,12 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 15),
             child: Column(
-              children: List.generate(listGamesChoosen.length,
-                  (index) => buildGamesChoosenField(listGamesChoosen[index])),
+              children: List.generate(
+                  widget.orderModel!.gameOfOrderModel != null
+                      ? widget.orderModel!.gameOfOrderModel.length
+                      : 0,
+                  (index) => buildGamesChoosenField(
+                      widget.orderModel!.gameOfOrderModel[index])),
             ),
           ),
           Padding(
@@ -164,7 +226,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: Text(
-                    firstMessage,
+                    widget.orderModel!.message,
                     style: TextStyle(fontSize: 18),
                   ),
                 )),
@@ -199,11 +261,27 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                 SecondMainButton(
                     text: 'Chấp nhận',
                     onpress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HiringPage()),
-                      );
+                      AcceptOrderModel isAccept =
+                          AcceptOrderModel(isAccept: true);
+                      Future<bool?> acceptFuture = OrderService()
+                          .acceptOrderRequest(widget.orderModel!.id,
+                              widget.tokenModel.message, isAccept);
+                      acceptFuture.then((accept) {
+                        if (accept == true) {
+                          setState(() {
+                            print("a \n a \n a \n a \n a \n a \n a \n " +
+                                "Đồng ý rồi nè!!!!");
+                            helper.pushInto(
+                                context,
+                                HiringPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                  orderModel: widget.orderModel,
+                                ),
+                                true);
+                          });
+                        }
+                      });
                     },
                     height: 50,
                     width: 300),
@@ -222,11 +300,11 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
     );
   }
 
-  Widget buildGamesChoosenField(String game) => Container(
+  Widget buildGamesChoosenField(GameOfOrdersModel game) => Container(
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          "- " + game,
+          "- " + game.game.name,
           style: TextStyle(color: Colors.black, fontSize: 15),
         ),
       );
