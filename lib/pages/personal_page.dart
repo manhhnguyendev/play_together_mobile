@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
 import 'package:play_together_mobile/pages/manage_hiring_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
+import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -187,7 +189,14 @@ class _PersonalPageState extends State<PersonalPage> {
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SelectDepositMethodPage()),
+                            );
+                          },
                           child: Column(
                             children: const [
                               Icon(
@@ -209,7 +218,13 @@ class _PersonalPageState extends State<PersonalPage> {
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EnterWithdrawAmount()),
+                            );
+                          },
                           child: Column(
                             children: const [
                               Icon(
