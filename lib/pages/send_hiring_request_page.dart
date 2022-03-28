@@ -266,7 +266,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   maxLength: 1000,
-                  onSaved: (newValue) => beginMessage = newValue!,
+                  onChanged: (newValue) => beginMessage = newValue,
                   decoration: const InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 0, horizontal: 10.0),

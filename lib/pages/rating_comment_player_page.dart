@@ -115,7 +115,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 maxLength: 1000,
-                onSaved: (newValue) => comment = newValue!,
+                onChanged: (newValue) => comment = newValue,
                 decoration: const InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
@@ -132,27 +132,30 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
               text: 'Gửi',
               onpress: () {
                 print(comment);
+                print(int.parse((ratingStar.round()).toString()));
                 RatingCreateModel rateComment = RatingCreateModel(
-                    rate: 5, comment: comment != "" ? comment : "null comment");
+                    rate: ratingStar.round(),
+                    comment: comment != "" ? comment : "null comment");
                 Future<bool?> rateFuture = RatingService().createRating(
                     widget.orderModel!.id,
                     widget.tokenModel.message,
                     rateComment);
                 rateFuture.then((rate) {
-                  if (rate == true) {
-                    setState(() {
-                      print("a \n a \n a \n a \n a \n a \n a \n " +
-                          "Rate xong về home nè!!!!");
-                      helper.pushInto(
-                          context,
-                          HomePage(
-                            tokenModel: widget.tokenModel,
-                            userModel: widget.userModel!,
-                          ),
-                          true);
-                    });
-                  } else
-                    print("rate lỗi rồi");
+                  // if (rate == true) {
+                  print("a \n a \n a \n a \n a \n a \n a \n " +
+                      "Rate xong về home nè!!!!");
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        HomePage(
+                          tokenModel: widget.tokenModel,
+                          userModel: widget.userModel!,
+                        ),
+                        true);
+                  });
+                  // }
+                  // else
+                  //   print("rate lỗi rồi");
                 });
               },
               height: 50,

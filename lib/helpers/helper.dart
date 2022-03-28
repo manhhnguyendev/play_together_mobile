@@ -25,3 +25,13 @@ void pushInto(BuildContext context, Widget wg, bool isRightToLeft) {
       ),
       (route) => false);
 }
+
+int getDayElapsed(String dateFrom, String dateTo) {
+  DateTime from = DateTime.parse(dateFrom);
+  DateTime to = DateTime.parse(dateTo);
+  from = DateTime(
+      from.year, from.month, from.day, from.hour, from.minute, from.second);
+  to = DateTime(to.year, to.month, to.day, to.hour, to.minute, to.second);
+  int difference = to.difference(from).inSeconds;
+  return difference;
+}

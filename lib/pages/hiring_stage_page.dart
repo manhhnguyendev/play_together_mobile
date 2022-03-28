@@ -58,14 +58,42 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   elevation: 5.0,
                   child: Text('Có'),
                   onPressed: () {
-                    // widget.testModel.status = "EndEarly";
-                    // widget.testModel.reason = customController.text;
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           TestOrder(testModel: testModel)),
-                    // );
+                    Navigator.pop(context);
+                    FinishSoonOrderModel finishSoonModel =
+                        FinishSoonOrderModel(message: "set message");
+                    Future<bool?> finishFuture = OrderService().finishSoonOrder(
+                        widget.orderModel!.id,
+                        widget.tokenModel.message,
+                        finishSoonModel);
+                    finishFuture.then((finish) {
+                      if (finish == true) {
+                        if (widget.userModel!.id ==
+                            widget.orderModel!.toUserId) {
+                          setState(() {
+                            print("a \n a \n a \n a \n a \n a \n a \n " +
+                                "Kết thúc về home nè!!!!");
+
+                            helper.pushInto(
+                                context,
+                                HomePage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel!,
+                                ),
+                                true);
+                          });
+                        } else if (widget.userModel!.id ==
+                            widget.orderModel!.userId) {
+                          helper.pushInto(
+                              context,
+                              RatingAndCommentPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: lateUser!,
+                                orderModel: widget.orderModel,
+                              ),
+                              false);
+                        }
+                      }
+                    });
                   },
                 ) // MaterialButton
                 // <Widget>[]
