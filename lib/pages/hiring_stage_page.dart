@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/widgets/countdown_widget.dart';
@@ -83,6 +85,8 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                           });
                         } else if (widget.userModel!.id ==
                             widget.orderModel!.userId) {
+                          print("a \n a \n a \n a \n a \n a \n a \n " +
+                              "Đến màn Rating nè!!!!");
                           helper.pushInto(
                               context,
                               RatingAndCommentPage(
@@ -90,7 +94,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                                 userModel: lateUser!,
                                 orderModel: widget.orderModel,
                               ),
-                              false);
+                              true);
                         }
                       }
                     });
@@ -114,16 +118,15 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
           if (widget.orderModel!.userId == widget.userModel!.id) {
             setState(() {
               lateUser = value;
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => RatingAndCommentPage(
+              //sleep(Duration(milliseconds: 30));
+              helper.pushInto(
+                  context,
+                  RatingAndCommentPage(
                     tokenModel: widget.tokenModel,
                     userModel: lateUser!,
                     orderModel: widget.orderModel,
                   ),
-                ),
-                (route) => false,
-              );
+                  true);
             });
           }
           //nếu là player đưa về màn history detail page
@@ -131,13 +134,13 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
           else {
             setState(() {
               lateUser = value;
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HomePage(
-                      tokenModel: widget.tokenModel, userModel: lateUser!),
-                ),
-                (route) => false,
-              );
+              helper.pushInto(
+                  context,
+                  HomePage(
+                    tokenModel: widget.tokenModel,
+                    userModel: widget.userModel!,
+                  ),
+                  true);
             });
           }
         } else
