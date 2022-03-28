@@ -18,7 +18,7 @@ class RatingService {
         body: jsonEncode(model.toJson()),
       );
       print(response.statusCode);
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         result = true;
       }
     } on Exception {
