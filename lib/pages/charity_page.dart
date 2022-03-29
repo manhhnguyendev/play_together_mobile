@@ -2,22 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/receive_request_page.dart';
+import 'package:play_together_mobile/services/charity_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
 import 'package:play_together_mobile/widgets/charity_card.dart';
-import 'package:play_together_mobile/helpers/helper.dart' as helper;
-
-import '../models/order_model.dart';
-import '../services/order_service.dart';
-import '../services/user_service.dart';
 
 class CharityPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
-  const CharityPage(
-      {Key? key, required this.userModel, required this.tokenModel})
-      : super(key: key);
+  const CharityPage({
+    Key? key,
+    required this.userModel,
+    required this.tokenModel,
+  }) : super(key: key);
 
   @override
   State<CharityPage> createState() => _CharityPageState();
@@ -26,52 +23,34 @@ class CharityPage extends StatefulWidget {
 class _CharityPageState extends State<CharityPage> {
   late String search;
   var _controller = TextEditingController();
-  UserModel? lateUser;
-  List<OrderModel>? _listOrder;
-//check status
-  void check() {
-    Future<UserModel?> checkStatus =
-        UserService().getUserProfile(widget.tokenModel.message);
+  List<CharityModel>? _listCharity;
 
-    checkStatus.then((value) {
-      if (value != null) {
-        if (value.status.contains('Online')) {
-          print(value.status);
-          setState(() {
-            lateUser = value;
-            //print("đổi nè");
-          });
-        } else {
-          Future<List<OrderModel>?> checkPlayer = OrderService()
-              .getAllOrdersForPlayer(widget.tokenModel.message, true, "");
-          checkPlayer.then(((order) {
-            setState(() {
-              _listOrder = order;
-              if (_listOrder![0].toUserId == widget.userModel.id) {
-                print(value.status);
-                setState(() {
-                  lateUser = value;
-                  helper.pushInto(
-                      context,
-                      ReceiveRequestPage(
-                          //fromUserModel: _listOrder![0].user,
-                          orderModel: _listOrder![0],
-                          tokenModel: widget.tokenModel,
-                          userModel: lateUser!),
-                      true);
-                });
+  Future loadList() {
+    _listCharity ??= [];
+    Future<List<CharityModel>?> listCharityModelFuture =
+        CharityService().getAllCharities(widget.tokenModel.message);
+    listCharityModelFuture.then((_charityList) {
+      setState(() {
+        _listCharity = _charityList;
+        if (_listCharity!.length == 0) {
+          for (var item in _listCharity!) {
+            Future<CharityModel?> charityFuture = CharityService()
+                .getCharityById(item.id, widget.tokenModel.message);
+            charityFuture.then((value) {
+              if (value != null) {
+                _listCharity!.add(value);
               }
             });
-          }));
+          }
         }
-      }
+      });
     });
+    return listCharityModelFuture;
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    check();
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -92,12 +71,7 @@ class _CharityPageState extends State<CharityPage> {
               width: size.width / 25,
             ),
             GestureDetector(
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SearchPage()),
-                // );
-              },
+              onTap: () {},
               child: Container(
                 width: size.width * 0.7,
                 decoration: BoxDecoration(
@@ -108,15 +82,11 @@ class _CharityPageState extends State<CharityPage> {
                   controller: _controller,
                   onChanged: (value) {
                     search = value;
-                    setState(() {
-                      print(search + ' changed');
-                    });
+                    setState(() {});
                   },
                   onSubmitted: (value) {
                     if (search.length != 0 && value.length != 0) {
-                      setState(() {
-                        print(search + ' summit');
-                      });
+                      setState(() {});
                     }
                   },
                   decoration: InputDecoration(
@@ -139,12 +109,42 @@ class _CharityPageState extends State<CharityPage> {
         ),
       ),
       body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-            children: List.generate(demoSearchCharity.length,
-                (index) => buildListSearch(demoSearchCharity[index]))),
-      )),
+        child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: [
+                SingleChildScrollView(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                            height: 812,
+                            child: FutureBuilder(
+                                future: loadList(),
+                                builder: (context, snapshot) {
+                                  return ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: _listCharity == null
+                                        ? 0
+                                        : _listCharity!.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CharityCard(
+                                        charityModel: _listCharity![index],
+                                        tokenModel: widget.tokenModel,
+                                        userModel: widget.userModel,
+                                      );
+                                    },
+                                  );
+                                })),
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+              ],
+            )),
+      ),
       bottomNavigationBar: BottomBar(
         userModel: widget.userModel,
         tokenModel: widget.tokenModel,
@@ -153,6 +153,8 @@ class _CharityPageState extends State<CharityPage> {
     );
   }
 
-  Widget buildListSearch(CharityModel model) =>
-      CharityCard(charityModel: model);
+  // Widget buildListSearch(CharityModel charityModel) => CharityCard(
+  //     charityModel: charityModel,
+  //     tokenModel: widget.tokenModel,
+  //     userModel: widget.userModel);
 }

@@ -1,36 +1,51 @@
 class CharityModel {
-  final int id;
-  final String avatar;
-  final String name;
-  final String address;
-  final String phone;
+  String id;
+  String organizationName;
+  String avatar;
+  String information;
+  String address;
+  String email;
+  String phone;
+  double balance;
+  bool isActive;
+  String createdDate;
 
   CharityModel({
     required this.id,
+    required this.organizationName,
     required this.avatar,
-    required this.name,
+    required this.information,
     required this.address,
+    required this.email,
     required this.phone,
+    required this.balance,
+    required this.isActive,
+    required this.createdDate,
   });
-}
 
-List<CharityModel> demoSearchCharity = [
-  CharityModel(
-      id: 1,
-      name: 'Hội chữ thập đỏ',
-      avatar: "assets/images/defaultprofile.png",
-      address: 'aaaaaaaa',
-      phone: '0243 8224 030'),
-  CharityModel(
-      id: 1,
-      name: 'Phẫu thuật nụ cười',
-      avatar: "assets/images/defaultprofile.png",
-      address: 'bbbbbbbbb',
-      phone: '0243 8224 030'),
-  CharityModel(
-      id: 1,
-      name: 'Từ thiện trẻ em SG',
-      avatar: "assets/images/defaultprofile.png",
-      address: 'ccccccccccccc',
-      phone: '0243 8224 030'),
-];
+  factory CharityModel.fromJson(Map<String, dynamic> json) => CharityModel(
+        id: json['id'] as String,
+        organizationName: json['organizationName'] as String,
+        avatar: json['avatar'] as String,
+        information: json['information'] as String,
+        address: json['address'] as String,
+        email: json['email'] as String,
+        phone: json['phone'] as String,
+        balance: json['balance'] as double,
+        isActive: json['isActive'] as bool,
+        createdDate: json['createdDate'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "organizationName": organizationName,
+        "avatar": avatar,
+        "information": information,
+        "address": address,
+        "email": email,
+        "phone": phone,
+        "balance": balance,
+        "isActive": isActive,
+        "createdDate": createdDate,
+      };
+}

@@ -10,3 +10,5 @@ const String ratings =
     "https://play-together.azurewebsites.net/api/play-together/v1/rating";
 const String images =
     "https://play-together.azurewebsites.net/api/play-together/v1/images";
+const String charities =
+    "https://play-together.azurewebsites.net/api/play-together/v1/charities";
