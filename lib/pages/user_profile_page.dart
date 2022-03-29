@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/personal_page.dart';
+import 'package:play_together_mobile/services/image_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
@@ -27,13 +28,6 @@ class HirerProfilePage extends StatefulWidget {
 }
 
 class _HirerProfilePageState extends State<HirerProfilePage> {
-  String name = "";
-  String description = "";
-  List listPlayerImage = [
-    "assets/images/defaultprofile.png",
-    "assets/images/defaultprofile.png",
-    "assets/images/defaultprofile.png"
-  ];
   final _formKey = GlobalKey<FormState>();
   final initialDate = DateTime.now();
   final List listErrorName = [''];
@@ -51,12 +45,19 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     avatar: "",
     description: "",
   );
+  AddImageModel addImageModel = AddImageModel(userId: "", imageLink: "");
   late String city;
   late DateTime dateOfBirth;
   late bool gender;
+  double val = 0;
+  bool checkFirstTime = true;
+  String name = "";
+  String description = "";
   String? avatar;
   String? urlDownload;
-  bool checkFirstTime = true;
+  File? _imageFile;
+  List<String>? imagesLink = [];
+  List<File>? listImageFile = [];
   ValueNotifier<String> dateDisplay =
       ValueNotifier<String>("Ngày sinh của bạn");
   List<DropdownMenuItem<String>> listDrop = [];
@@ -126,18 +127,47 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     'Yên Bái',
   ];
 
-  File? _imageFile;
+  chooseImagesFromGallery() async {
+    var images = await ImagePicker().pickMultiImage();
+    images!.forEach((_image) {
+      setState(() {
+        listImageFile!.add(File(_image.path));
+        print(_image.path);
+      });
+    });
+  }
 
-  getImageFromGallery() async {
+  chooseAvatarFromGallery() async {
     XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
       _imageFile = File(pickedFile.path);
+      print(File(_imageFile!.path));
     }
   }
 
-  Future uploadImageToFirebase(BuildContext context) async {
+  Future uploadImagesToFirebase(BuildContext context) async {
+    int i = 1;
+    for (var img in listImageFile!) {
+      setState(() {
+        val = i / listImageFile!.length;
+      });
+      String fileName = basename(img.path);
+      Reference firebaseStorageRef =
+          FirebaseStorage.instance.ref().child('images/$fileName');
+      UploadTask uploadTask = firebaseStorageRef.putFile(img);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => img);
+      taskSnapshot.ref.getDownloadURL().then((value) {
+        if (value != null) {
+          imagesLink?.add(value);
+        }
+      });
+      i++;
+    }
+  }
+
+  Future uploadAvatarToFirebase(BuildContext context) async {
     String fileName = basename(_imageFile!.path);
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('avatar/$fileName');
@@ -272,7 +302,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                           right: -25,
                           child: RawMaterialButton(
                             onPressed: () {
-                              getImageFromGallery();
+                              chooseAvatarFromGallery();
                             },
                             elevation: 2.0,
                             fillColor: const Color(0xFFF5F6F9),
@@ -290,14 +320,59 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 alignment: Alignment.centerLeft,
-                child: Row(children: const [
+                child: Row(children: [
                   Text(
-                    'Hình ảnh ',
+                    'Hình ảnh',
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  Icon(Icons.add_box_outlined),
+                  RawMaterialButton(
+                    onPressed: () {
+                      chooseImagesFromGallery();
+                    },
+                    child: Icon(Icons.add_box_outlined),
+                  ),
+                  RawMaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        uploadImagesToFirebase(context);
+                        for (var img in imagesLink!) {
+                          if (imagesLink != null) {
+                            addImageModel.userId = widget.userModel.id;
+                            addImageModel.imageLink = img;
+                            Future<AddImageModel?> listImageModelFuture =
+                                ImageService().addImages(
+                                    addImageModel, widget.tokenModel.message);
+                            listImageModelFuture.then((addImage) {
+                              if (addImage != null) {
+                                addImageModel = addImage;
+                              }
+                              setState(() {
+                                Future<UserModel?> userModelFuture =
+                                    UserService().getUserProfile(
+                                        widget.tokenModel.message);
+                                userModelFuture.then((user) {
+                                  setState(() {
+                                    if (user != null) {
+                                      widget.userModel = user;
+                                      helper.pushInto(
+                                          context,
+                                          PersonalPage(
+                                              userModel: widget.userModel,
+                                              tokenModel: widget.tokenModel),
+                                          false);
+                                    }
+                                  });
+                                });
+                              });
+                            });
+                          }
+                        }
+                      });
+                    },
+                    child: Text('Upload Images'),
+                  ),
                 ]),
               ),
               Padding(
@@ -409,7 +484,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                       listErrorCity.length == 1 &&
                       listErrorBirthday.length == 1) {}
                   setState(() {
-                    uploadImageToFirebase(context);
+                    uploadAvatarToFirebase(context);
                     userUpdateModel.name = nameController.text;
                     userUpdateModel.dateOfBirth = dateOfBirth.toString();
                     userUpdateModel.city = city;
