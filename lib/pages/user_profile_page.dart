@@ -489,7 +489,8 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                     userUpdateModel.dateOfBirth = dateOfBirth.toString();
                     userUpdateModel.city = city;
                     userUpdateModel.gender = gender;
-                    userUpdateModel.avatar = avatar!;
+                    userUpdateModel.avatar = userUpdateModel.avatar =
+                        avatar != null ? avatar! : widget.userModel.avatar;
                     userUpdateModel.description = description;
                     Future<bool?> userUpdateModelFuture = UserService()
                         .updateUserProfile(
