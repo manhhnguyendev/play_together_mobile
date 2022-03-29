@@ -1,4 +1,3 @@
-import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 

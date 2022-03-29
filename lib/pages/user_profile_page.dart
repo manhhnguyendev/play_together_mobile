@@ -54,7 +54,8 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
   late String city;
   late DateTime dateOfBirth;
   late bool gender;
-  late String avatar;
+  String? avatar;
+  String? urlDownload;
   bool checkFirstTime = true;
   ValueNotifier<String> dateDisplay =
       ValueNotifier<String>("Ngày sinh của bạn");
@@ -142,9 +143,11 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
         FirebaseStorage.instance.ref().child('avatar/$fileName');
     UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
     TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => _imageFile);
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-        );
+    taskSnapshot.ref.getDownloadURL().then((value) {
+      if (value != null) {
+        avatar = value;
+      }
+    });
   }
 
   void loadData() {
@@ -212,7 +215,6 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
       checkFirstTime = false;
       dateOfBirth = DateTime.parse(widget.userModel.dateOfBirth);
       descriptionController.text = widget.userModel.description;
-      avatar = widget.userModel.avatar;
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -261,7 +263,8 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                     children: [
                       SizedBox(
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(avatar),
+                          backgroundImage:
+                              NetworkImage(widget.userModel.avatar),
                         ),
                       ),
                       Positioned(
@@ -406,12 +409,12 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                       listErrorCity.length == 1 &&
                       listErrorBirthday.length == 1) {}
                   setState(() {
-                    //uploadImageToFirebase(context);
+                    uploadImageToFirebase(context);
                     userUpdateModel.name = nameController.text;
                     userUpdateModel.dateOfBirth = dateOfBirth.toString();
                     userUpdateModel.city = city;
                     userUpdateModel.gender = gender;
-                    userUpdateModel.avatar = avatar;
+                    userUpdateModel.avatar = avatar!;
                     userUpdateModel.description = description;
                     Future<bool?> userUpdateModelFuture = UserService()
                         .updateUserProfile(
