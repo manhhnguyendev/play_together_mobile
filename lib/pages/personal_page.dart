@@ -6,6 +6,7 @@ import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
 import 'package:play_together_mobile/pages/manage_hiring_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
+import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -252,7 +253,12 @@ class _PersonalPageState extends State<PersonalPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 25, 15, 5),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TransactionPage()),
+                );
+              },
               child: Row(
                 children: const [
                   Text(
@@ -300,6 +306,39 @@ class _PersonalPageState extends State<PersonalPage> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ManageHiringPage(),
+                    ));
+              },
+              child: Row(
+                children: const [
+                  Text(
+                    'Cài đặt sở thích',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Spacer(),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey,
+                    size: 15,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: Divider(
+              thickness: 1,
+              color: Colors.grey,
             ),
           ),
           const Padding(

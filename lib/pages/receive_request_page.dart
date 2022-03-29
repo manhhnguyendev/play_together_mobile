@@ -17,7 +17,7 @@ class ReceiveRequestPage extends StatefulWidget {
   final OrderModel? orderModel;
   final UserModel userModel;
   final TokenModel tokenModel;
-  //final TestModel testModel;
+
   const ReceiveRequestPage(
       {Key? key,
       this.orderModel,
@@ -29,11 +29,15 @@ class ReceiveRequestPage extends StatefulWidget {
   State<ReceiveRequestPage> createState() => _ReceiveRequestPageState();
 }
 
-class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
+class _ReceiveRequestPageState extends State<ReceiveRequestPage>
+    with TickerProviderStateMixin {
   String firstMessage = 'Alo alo?';
   String profileLink = "assets/images/defaultprofile.png";
   List listGamesChoosen = ['Liên Minh', 'CSGO'];
-
+  late AnimationController controller;
+  int time = 5; //5 mins
+  double progress = 1.0;
+  bool isPlaying = false;
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
@@ -107,6 +111,35 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
               ] // AlertDialog
               );
         });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: time * 60),
+    );
+    controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
+    controller.addListener(() {
+      if (controller.value == 0) {
+        // luu lai status order
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  String get countText {
+    Duration count = controller.duration! * controller.value;
+    return controller.isDismissed
+        ? '${controller.duration!.inHours}:${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
+        : '${count.inHours}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
@@ -211,8 +244,34 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage> {
                       widget.orderModel!.gameOfOrderModel[index])),
             ),
           ),
+          Container(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  'Thời gian còn lại:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  child: AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) => Text(
+                      countText,
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Padding(
-            padding: const EdgeInsets.only(left: 15),
+            padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
             child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text('Lời nhắn:', style: TextStyle(fontSize: 18))),
