@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/charity_detail_model.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_detail_page.dart';
 
 class CharityCard extends StatefulWidget {
+  final UserModel userModel;
+  final TokenModel tokenModel;
   final CharityModel charityModel;
-  const CharityCard({Key? key, required this.charityModel}) : super(key: key);
+  const CharityCard(
+      {Key? key,
+      required this.charityModel,
+      required this.userModel,
+      required this.tokenModel})
+      : super(key: key);
 
   @override
   State<CharityCard> createState() => _CharityCardState();
@@ -22,7 +30,9 @@ class _CharityCardState extends State<CharityCard> {
             context,
             MaterialPageRoute(
                 builder: (context) => CharityDetailPage(
-                      charityDetailModel: demoCharityDetailModel,
+                      charityModel: widget.charityModel,
+                      userModel: widget.userModel,
+                      tokenModel: widget.tokenModel,
                     )),
           );
         },
@@ -37,12 +47,12 @@ class _CharityCardState extends State<CharityCard> {
                     child: Container(
                       padding: EdgeInsets.all(1 / 1000 * size.width),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 0.2),
+                        border: Border.all(width: 0.1),
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(0),
                       ),
                       child: ClipRRect(
-                        child: Image.asset(widget.charityModel.avatar,
+                        child: Image.network(widget.charityModel.avatar,
                             fit: BoxFit.cover),
                       ),
                     ),
@@ -59,7 +69,7 @@ class _CharityCardState extends State<CharityCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.charityModel.name,
+                              widget.charityModel.organizationName,
                               style:
                                   TextStyle(fontSize: 18, color: Colors.black),
                             ),

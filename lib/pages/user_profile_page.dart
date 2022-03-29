@@ -132,22 +132,8 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     images!.forEach((_image) {
       setState(() {
         listImageFile!.add(File(_image.path));
-        print(_image.path);
       });
     });
-  }
-
-  chooseAvatarFromGallery() async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      _imageFile = File(pickedFile.path);
-      print(File(_imageFile!.path));
-    }
-  }
-
-  Future uploadImagesToFirebase(BuildContext context) async {
     int i = 1;
     for (var img in listImageFile!) {
       setState(() {
@@ -160,14 +146,23 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => img);
       taskSnapshot.ref.getDownloadURL().then((value) {
         if (value != null) {
-          imagesLink?.add(value);
+          setState(() {
+            imagesLink?.add(value); //la String
+          });
         }
       });
       i++;
     }
   }
 
-  Future uploadAvatarToFirebase(BuildContext context) async {
+  chooseAvatarFromGallery() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      _imageFile = File(pickedFile.path);
+      print(File(_imageFile!.path));
+    }
     String fileName = basename(_imageFile!.path);
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('avatar/$fileName');
@@ -175,7 +170,10 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => _imageFile);
     taskSnapshot.ref.getDownloadURL().then((value) {
       if (value != null) {
-        avatar = value;
+        setState(() {
+          avatar = value;
+          print(avatar);
+        });
       }
     });
   }
@@ -245,6 +243,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
       checkFirstTime = false;
       dateOfBirth = DateTime.parse(widget.userModel.dateOfBirth);
       descriptionController.text = widget.userModel.description;
+      avatar = widget.userModel.avatar;
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -293,8 +292,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                     children: [
                       SizedBox(
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(widget.userModel.avatar),
+                          backgroundImage: NetworkImage(avatar!),
                         ),
                       ),
                       Positioned(
@@ -336,7 +334,6 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                   RawMaterialButton(
                     onPressed: () {
                       setState(() {
-                        uploadImagesToFirebase(context);
                         for (var img in imagesLink!) {
                           if (imagesLink != null) {
                             addImageModel.userId = widget.userModel.id;
@@ -484,12 +481,12 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                       listErrorCity.length == 1 &&
                       listErrorBirthday.length == 1) {}
                   setState(() {
-                    uploadAvatarToFirebase(context);
+                    //uploadAvatarToFirebase(context);
                     userUpdateModel.name = nameController.text;
                     userUpdateModel.dateOfBirth = dateOfBirth.toString();
                     userUpdateModel.city = city;
                     userUpdateModel.gender = gender;
-                    userUpdateModel.avatar = userUpdateModel.avatar =
+                    userUpdateModel.avatar =
                         avatar != null ? avatar! : widget.userModel.avatar;
                     userUpdateModel.description = description;
                     Future<bool?> userUpdateModelFuture = UserService()

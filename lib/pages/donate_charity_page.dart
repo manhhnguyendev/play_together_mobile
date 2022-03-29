@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-import 'package:play_together_mobile/models/charity_detail_model.dart';
+import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 
 class DonateCharityPage extends StatefulWidget {
-  final CharityDetailModel charityDetailModel;
-  const DonateCharityPage({Key? key, required this.charityDetailModel})
+  final CharityModel charityModel;
+  const DonateCharityPage({Key? key, required this.charityModel})
       : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
           ),
           centerTitle: true,
           title: Text(
-            widget.charityDetailModel.name,
+            widget.charityModel.organizationName,
             style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,

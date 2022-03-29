@@ -6,8 +6,6 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 
-import '../services/rank_service.dart';
-
 class PlayerCard extends StatefulWidget {
   final double width, aspectRatio;
   final UserModel userModel;

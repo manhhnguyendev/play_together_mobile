@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/charity_detail_model.dart';
+import 'package:play_together_mobile/models/charity_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/donate_charity_page.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 
 class CharityDetailPage extends StatefulWidget {
-  final CharityDetailModel charityDetailModel;
-  const CharityDetailPage({Key? key, required this.charityDetailModel})
+  final CharityModel charityModel;
+  final UserModel userModel;
+  final TokenModel tokenModel;
+  const CharityDetailPage(
+      {Key? key,
+      required this.charityModel,
+      required this.userModel,
+      required this.tokenModel})
       : super(key: key);
 
   @override
@@ -17,7 +25,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
   String description = "";
   @override
   Widget build(BuildContext context) {
-    description = widget.charityDetailModel.description;
+    description = widget.charityModel.information;
     descriptionController.text = description;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -49,15 +57,14 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                   height: 150,
                   width: 150,
                   child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage(widget.charityDetailModel.avatar),
+                    backgroundImage: NetworkImage(widget.charityModel.avatar),
                   ),
                 ),
                 const SizedBox(
                   height: 5,
                 ),
                 Text(
-                  widget.charityDetailModel.name,
+                  widget.charityModel.organizationName,
                   style: const TextStyle(fontSize: 20),
                 ),
               ],
@@ -74,7 +81,6 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
             child: Container(
-              height: 150,
               //decoration: BoxDecoration(border: Border.all(color: Colors.black)),
               child: TextFormField(
                 style: TextStyle(fontSize: 15),
@@ -82,7 +88,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                 controller: descriptionController,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
-                maxLength: 1000,
+                maxLength: null,
                 onSaved: (newValue) => description = newValue!,
                 onChanged: (value) {
                   description = value;
@@ -117,7 +123,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    widget.charityDetailModel.address,
+                    widget.charityModel.address,
                     style: TextStyle(fontSize: 15),
                     maxLines: 2,
                   ),
@@ -129,21 +135,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        widget.charityDetailModel.phone,
-                        style: TextStyle(fontSize: 15),
-                        maxLines: 2,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "website: ",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        widget.charityDetailModel.website,
+                        widget.charityModel.phone,
                         style: TextStyle(fontSize: 15),
                         maxLines: 2,
                       ),
@@ -157,7 +149,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        widget.charityDetailModel.email,
+                        widget.charityModel.email,
                         style: TextStyle(fontSize: 15),
                         maxLines: 2,
                       ),
@@ -178,7 +170,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => DonateCharityPage(
-                              charityDetailModel: demoCharityDetailModel,
+                              charityModel: widget.charityModel,
                             )),
                   );
                 })),
