@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/widgets/countdown_widget.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -154,25 +155,19 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: widget.orderModel!.totalTimes * 60 * 60),
     );
-
+    controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
-      if (controller.isAnimating) {
-        setState(() {
-          progress = controller.value;
-        });
-      } else {
-        setState(() {
-          progress = 1.0;
-          isPlaying = false;
-        });
+      if (controller.value == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RatingCommentPage()),
+        );
       }
     });
-    controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
   }
 
   @override
@@ -198,17 +193,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: [
-            // Padding(
-            //   padding: const EdgeInsets.all(10.0),
-            //   child: IconButton(
-            //       onPressed: () {},
-            //       icon: const Icon(
-            //         Icons.close,
-            //         color: Colors.black,
-            //       )),
-            // ),
-          ],
+          actions: [],
           centerTitle: true,
           title: Text(
             'Đang thuê...',
