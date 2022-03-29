@@ -17,6 +17,7 @@ class RatingService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         result = true;
       }

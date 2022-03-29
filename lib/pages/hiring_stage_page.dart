@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/widgets/countdown_widget.dart';
@@ -58,14 +60,44 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   elevation: 5.0,
                   child: Text('Có'),
                   onPressed: () {
-                    // widget.testModel.status = "EndEarly";
-                    // widget.testModel.reason = customController.text;
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) =>
-                    //           TestOrder(testModel: testModel)),
-                    // );
+                    Navigator.pop(context);
+                    FinishSoonOrderModel finishSoonModel =
+                        FinishSoonOrderModel(message: "set message");
+                    Future<bool?> finishFuture = OrderService().finishSoonOrder(
+                        widget.orderModel!.id,
+                        widget.tokenModel.message,
+                        finishSoonModel);
+                    finishFuture.then((finish) {
+                      if (finish == true) {
+                        if (widget.userModel!.id ==
+                            widget.orderModel!.toUserId) {
+                          setState(() {
+                            print("a \n a \n a \n a \n a \n a \n a \n " +
+                                "Kết thúc về home nè!!!!");
+
+                            helper.pushInto(
+                                context,
+                                HomePage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel!,
+                                ),
+                                true);
+                          });
+                        } else if (widget.userModel!.id ==
+                            widget.orderModel!.userId) {
+                          print("a \n a \n a \n a \n a \n a \n a \n " +
+                              "Đến màn Rating nè!!!!");
+                          helper.pushInto(
+                              context,
+                              RatingAndCommentPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: lateUser!,
+                                orderModel: widget.orderModel,
+                              ),
+                              true);
+                        }
+                      }
+                    });
                   },
                 ) // MaterialButton
                 // <Widget>[]
@@ -86,16 +118,15 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
           if (widget.orderModel!.userId == widget.userModel!.id) {
             setState(() {
               lateUser = value;
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => RatingAndCommentPage(
+              //sleep(Duration(milliseconds: 30));
+              helper.pushInto(
+                  context,
+                  RatingAndCommentPage(
                     tokenModel: widget.tokenModel,
                     userModel: lateUser!,
                     orderModel: widget.orderModel,
                   ),
-                ),
-                (route) => false,
-              );
+                  true);
             });
           }
           //nếu là player đưa về màn history detail page
@@ -103,13 +134,13 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
           else {
             setState(() {
               lateUser = value;
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HomePage(
-                      tokenModel: widget.tokenModel, userModel: lateUser!),
-                ),
-                (route) => false,
-              );
+              helper.pushInto(
+                  context,
+                  HomePage(
+                    tokenModel: widget.tokenModel,
+                    userModel: widget.userModel!,
+                  ),
+                  true);
             });
           }
         } else

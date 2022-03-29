@@ -130,3 +130,19 @@ class AcceptOrderModel {
         "isAccept": isAccept,
       };
 }
+
+class FinishSoonOrderModel {
+  String message;
+
+  FinishSoonOrderModel({
+    required this.message,
+  });
+  factory FinishSoonOrderModel.fromJson(Map<String, dynamic> json) =>
+      FinishSoonOrderModel(
+        message: json['message'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "message": message,
+      };
+}

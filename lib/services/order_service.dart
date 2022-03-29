@@ -124,7 +124,26 @@ class OrderService {
         Uri.parse('${apiUrl.orders}/finish/$orderId'),
         headers: configJson.headerAuth(token),
       );
-      if (response.statusCode == 204) {
+      if (response.statusCode == 200) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> finishSoonOrder(
+      String orderId, dynamic token, FinishSoonOrderModel model) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.orders}/finish-soon/$orderId'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(model.toJson()),
+      );
+      if (response.statusCode == 200) {
         result = true;
       }
     } on Exception {
