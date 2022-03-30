@@ -132,7 +132,8 @@ class _PlayerCardState extends State<PlayerCard> {
                   const SizedBox(height: 10),
                   Text(
                     widget.playerModel != null
-                        ? widget.playerModel.pricePerHour.toString() + " đ/h"
+                        ? widget.playerModel.pricePerHour.toStringAsFixed(0) +
+                            " đ/h"
                         : "",
                   )
                 ],

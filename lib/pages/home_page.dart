@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Expanded(
                       child: SizedBox(
-                          height: 200.0,
+                          height: 220.0,
                           child: FutureBuilder(
                               future: loadList(),
                               builder: (context, snapshot) {

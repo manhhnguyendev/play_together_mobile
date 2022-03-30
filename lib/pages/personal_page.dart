@@ -168,10 +168,11 @@ class _PersonalPageState extends State<PersonalPage> {
                         ),
                         Text(
                           lateUser != null
-                              ? lateUser!.userBalance.balance.toString() +
+                              ? lateUser!.userBalance.balance
+                                      .toStringAsFixed(0) +
                                   ' vnđ'
                               : widget.userModel.userBalance.balance
-                                      .toString() +
+                                      .toStringAsFixed(0) +
                                   ' vnđ',
                           style: const TextStyle(
                               fontSize: 22, color: Color(0xff320444)),
