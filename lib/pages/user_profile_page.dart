@@ -129,11 +129,11 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
 
   chooseImagesFromGallery() async {
     var images = await ImagePicker().pickMultiImage();
-    images!.forEach((_image) {
+    for (var _image in images!) {
       setState(() {
         listImageFile!.add(File(_image.path));
       });
-    });
+    }
     int i = 1;
     for (var img in listImageFile!) {
       setState(() {
@@ -319,7 +319,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 alignment: Alignment.centerLeft,
                 child: Row(children: [
-                  Text(
+                  const Text(
                     'Hình ảnh',
                     style: TextStyle(
                       fontSize: 18,
@@ -329,7 +329,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                     onPressed: () {
                       chooseImagesFromGallery();
                     },
-                    child: Icon(Icons.add_box_outlined),
+                    child: const Icon(Icons.add_box_outlined),
                   ),
                   RawMaterialButton(
                     onPressed: () {
@@ -368,7 +368,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                         }
                       });
                     },
-                    child: Text('Upload Images'),
+                    child: const Text('Upload Images'),
                   ),
                 ]),
               ),
@@ -481,7 +481,6 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                       listErrorCity.length == 1 &&
                       listErrorBirthday.length == 1) {}
                   setState(() {
-                    //uploadAvatarToFirebase(context);
                     userUpdateModel.name = nameController.text;
                     userUpdateModel.dateOfBirth = dateOfBirth.toString();
                     userUpdateModel.city = city;

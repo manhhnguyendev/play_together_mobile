@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:play_together_mobile/models/search_player_model.dart';
-import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/player_profile_page.dart';
 
 class SearchPlayerCard extends StatefulWidget {
-  final SearchPlayerModel searchPlayerModel;
-  const SearchPlayerCard({Key? key, required this.searchPlayerModel})
+  final PlayerModel playerModel;
+  final UserModel userModel;
+  final TokenModel tokenModel;
+
+  const SearchPlayerCard(
+      {Key? key,
+      required this.playerModel,
+      required this.tokenModel,
+      required this.userModel})
       : super(key: key);
 
   @override
@@ -16,22 +24,33 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
   bool checkFirstTime = true;
   String games = '';
-  void createGamesOfPlayer() {
-    for (var i = 0; i < widget.searchPlayerModel.abilities.length; i++) {
-      games += widget.searchPlayerModel.abilities[i] + ", ";
-    }
-  }
+  // void createGamesOfPlayer() {
+  //   for (var i = 0; i < widget.searchPlayerModel.abilities.length; i++) {
+  //     games += widget.searchPlayerModel.abilities[i] + ", ";
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     if (checkFirstTime) {
-      createGamesOfPlayer();
+      //createGamesOfPlayer();
       checkFirstTime = false;
     }
     return Container(
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PlayerProfilePage(
+                      //listGameAndRank: widget.listGame,
+                      userModel: widget.userModel,
+                      playerModel: widget.playerModel,
+                      tokenModel: widget.tokenModel,
+                    )),
+          );
+        },
         child: Column(
           children: [
             Row(children: [
@@ -45,7 +64,7 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: ClipRRect(
-                    child: Image.asset(widget.searchPlayerModel.avatar,
+                    child: Image.network(widget.playerModel.avatar,
                         fit: BoxFit.cover),
                   ),
                 ),
@@ -62,7 +81,7 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.searchPlayerModel.name,
+                          widget.playerModel.name,
                           style: TextStyle(fontSize: 18, color: Colors.black),
                         ),
                         SizedBox(
@@ -77,14 +96,14 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                         ),
                         Row(
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                '${formatCurrency.format(widget.searchPlayerModel.pricePerHour)}/h',
-                                style: TextStyle(
-                                    fontSize: 15, color: Color(0xff8980FF)),
-                              ),
-                            ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: Text(
+                            //     '${formatCurrency.format(widget.searchPlayerModel.pricePerHour)}/h',
+                            //     style: TextStyle(
+                            //         fontSize: 15, color: Color(0xff8980FF)),
+                            //   ),
+                            // ),
                             Expanded(
                               flex: 1,
                               child: Row(
@@ -93,16 +112,16 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                                     Icons.star,
                                     color: Colors.yellow,
                                   ),
-                                  Text(
-                                    (widget.searchPlayerModel.rating)
-                                        .toString(),
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  Text(
-                                    '(${widget.searchPlayerModel.totalComment})',
-                                    style: TextStyle(
-                                        fontSize: 15, color: Colors.grey),
-                                  ),
+                                  // Text(
+                                  //   (widget.searchPlayerModel.rating)
+                                  //       .toString(),
+                                  //   style: TextStyle(fontSize: 15),
+                                  // ),
+                                  // Text(
+                                  //   '(${widget.searchPlayerModel.totalComment})',
+                                  //   style: TextStyle(
+                                  //       fontSize: 15, color: Colors.grey),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -111,7 +130,7 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                         SizedBox(
                           height: 5,
                         ),
-                        createStatus(widget.searchPlayerModel.status),
+                        createStatus(widget.playerModel.status),
                       ],
                     ),
                   ))

@@ -117,15 +117,21 @@ class _HomePageState extends State<HomePage> {
     check();
     return Scaffold(
       appBar: Appbar(
-          height: 70,
-          titles: "Home",
-          onPressedSearch: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchPage(),
-                ));
-          }),
+        height: 70,
+        titles: "Home",
+        onPressedSearch: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchPage(
+                  tokenModel: widget.tokenModel,
+                  userModel: widget.userModel,
+                ),
+              ));
+        },
+        userModel: widget.userModel,
+        tokenModel: widget.tokenModel,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(

@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
-import 'package:play_together_mobile/models/search_player_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/services/search_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/search_player_card.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  final TokenModel tokenModel;
+
+  final UserModel userModel;
+  const SearchPage(
+      {Key? key, required this.tokenModel, required this.userModel})
+      : super(key: key);
 
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
+  List<UserModel>? playerList;
+  List<PlayerModel>? _list = [];
   bool showHistoryAndRecommendArea = true;
   bool showListSearchArea = false;
   late String search = '';
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
   List<String> listSearchHistory = ['Đàm', 'Hằng', 'Quoc Hung'];
   List<String> listTopGameType = [
     'MOBA',
@@ -64,8 +74,25 @@ class _SearchPageState extends State<SearchPage> {
             controller: _controller,
             onChanged: (value) {
               search = value;
-              print(search + ' changed');
               setState(() {
+                Future<List<UserModel>?> playerModelFuture = SearchService()
+                    .searchUser(search, widget.tokenModel.message);
+                playerModelFuture.then((_playerList) {
+                  setState(() {
+                    playerList = _playerList;
+                    if (_list!.length == 0) {
+                      for (var item in playerList!) {
+                        Future<PlayerModel?> playerFuture = UserService()
+                            .getPlayerById(item.id, widget.tokenModel.message);
+                        playerFuture.then((value) {
+                          if (value != null) {
+                            _list!.add(value);
+                          }
+                        });
+                      }
+                    }
+                  });
+                });
                 if (search.length == 0) {
                   showHistoryAndRecommendArea = true;
                   showListSearchArea = false;
@@ -180,8 +207,8 @@ class _SearchPageState extends State<SearchPage> {
               Visibility(
                   visible: showListSearchArea,
                   child: Column(
-                      children: List.generate(demoSearchPlayer.length,
-                          (index) => buildListSearch(demoSearchPlayer[index]))))
+                      children: List.generate(_list!.length,
+                          (index) => buildListSearch(_list![index]))))
             ],
           ),
         ),
@@ -235,6 +262,9 @@ class _SearchPageState extends State<SearchPage> {
         ),
       );
 
-  Widget buildListSearch(SearchPlayerModel model) =>
-      SearchPlayerCard(searchPlayerModel: model);
+  Widget buildListSearch(PlayerModel playerModel) => SearchPlayerCard(
+        playerModel: playerModel,
+        tokenModel: widget.tokenModel,
+        userModel: widget.userModel,
+      );
 }
