@@ -327,7 +327,8 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   children: [
                     Text(
                       widget.playerModel != null
-                          ? widget.playerModel.pricePerHour.toString() + 'đ/h'
+                          ? widget.playerModel.pricePerHour.toStringAsFixed(0) +
+                              'đ/h'
                           : '0 đ/h',
                       style: TextStyle(fontSize: 22, color: Color(0xff320444)),
                     ),
