@@ -414,29 +414,6 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   },
                   height: 50,
                   width: 250),
-              SecondMainButton(
-                  text: 'Test Kết thúc',
-                  onpress: () {
-                    Future<bool?> finishFuture = OrderService().finishOrder(
-                        widget.orderModel!.id, widget.tokenModel.message);
-                    finishFuture.then((finish) {
-                      if (finish == true) {
-                        setState(() {
-                          print("a \n a \n a \n a \n a \n a \n a \n " +
-                              "Kết thúc về home nè!!!!");
-                          helper.pushInto(
-                              context,
-                              HomePage(
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel!,
-                              ),
-                              true);
-                        });
-                      }
-                    });
-                  },
-                  height: 50,
-                  width: 250),
             ],
           ),
         ));

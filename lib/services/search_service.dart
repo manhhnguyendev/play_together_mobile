@@ -11,7 +11,7 @@ class SearchService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?SearchString=$search'),
+        Uri.parse('${apiUrl.users}?Name=$search'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
