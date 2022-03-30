@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
   List<PlayerModel>? _list = [];
   bool showHistoryAndRecommendArea = true;
   bool showListSearchArea = false;
-  late String search = '';
+
   final _controller = TextEditingController();
   List<String> listSearchHistory = ['Đàm', 'Hằng', 'Quoc Hung'];
   List<String> listTopGameType = [
@@ -73,14 +73,23 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             controller: _controller,
             onChanged: (value) {
-              search = value;
               setState(() {
-                Future<List<UserModel>?> playerModelFuture = SearchService()
-                    .searchUser(search, widget.tokenModel.message);
-                playerModelFuture.then((_playerList) {
-                  setState(() {
+                if (_controller.text.isEmpty) {
+                  _list = [];
+                  showHistoryAndRecommendArea = true;
+                  showListSearchArea = false;
+                }
+              });
+            },
+            onSubmitted: (value) {
+              setState(() {
+                if (_controller.text.isNotEmpty) {
+                  _list = [];
+                  Future<List<UserModel>?> playerModelFuture = SearchService()
+                      .searchUser(_controller.text, widget.tokenModel.message);
+                  playerModelFuture.then((_playerList) {
                     playerList = _playerList;
-                    if (_list!.length == 0) {
+                    if (_list!.isEmpty) {
                       for (var item in playerList!) {
                         Future<PlayerModel?> playerFuture = UserService()
                             .getPlayerById(item.id, widget.tokenModel.message);
@@ -92,21 +101,10 @@ class _SearchPageState extends State<SearchPage> {
                       }
                     }
                   });
-                });
-                if (search.length == 0) {
-                  showHistoryAndRecommendArea = true;
-                  showListSearchArea = false;
-                }
-              });
-            },
-            onSubmitted: (value) {
-              if (search.length != 0 && value.length != 0) {
-                setState(() {
                   showListSearchArea = true;
                   showHistoryAndRecommendArea = false;
-                });
-                print(search + ' summit');
-              }
+                }
+              });
             },
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
@@ -116,7 +114,7 @@ class _SearchPageState extends State<SearchPage> {
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               hintText: "Tìm kiếm",
-              prefixIcon: Icon(
+              prefixIcon: const Icon(
                 Icons.search,
                 color: my_colors.secondary,
               ),
@@ -124,11 +122,12 @@ class _SearchPageState extends State<SearchPage> {
                 onPressed: () {
                   _controller.clear();
                   setState(() {
+                    _list = [];
                     showHistoryAndRecommendArea = true;
                     showListSearchArea = false;
                   });
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.clear,
                   color: Color(0xff8980FF),
                 ),
@@ -139,7 +138,7 @@ class _SearchPageState extends State<SearchPage> {
         actions: <Widget>[
           IconButton(
             iconSize: 30,
-            icon: Icon(Icons.filter_alt_rounded),
+            icon: const Icon(Icons.filter_alt_rounded),
             color: Colors.black,
             onPressed: () {},
           ),
@@ -157,7 +156,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       Container(
                         alignment: Alignment.topLeft,
-                        child: Text(
+                        child: const Text(
                           'Tìm kiếm gần đây',
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
@@ -176,7 +175,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       Container(
                         alignment: Alignment.topLeft,
-                        child: Text(
+                        child: const Text(
                           'Thể loại ưa thích',
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
@@ -190,7 +189,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       Container(
                         alignment: Alignment.topLeft,
-                        child: Text(
+                        child: const Text(
                           'Các tựa game nổi tiếng',
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                         ),
