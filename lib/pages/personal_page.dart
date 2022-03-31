@@ -309,6 +309,13 @@ class _PersonalPageState extends State<PersonalPage> {
               ),
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: Divider(
+              thickness: 1,
+              color: Colors.grey,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
             child: GestureDetector(
@@ -333,13 +340,6 @@ class _PersonalPageState extends State<PersonalPage> {
                   ),
                 ],
               ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
             ),
           ),
           const Padding(

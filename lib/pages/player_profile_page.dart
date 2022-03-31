@@ -407,4 +407,39 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   //         ),
   //       ),
   //     );
+
+  Widget createStatus(String status) {
+    if (status == 'Processing') {
+      return Text(
+        'Đang thuê',
+        style: TextStyle(fontSize: 15, color: Colors.yellow),
+      );
+    }
+
+    if (status == 'Ngu') {
+      return Text(
+        'ngu vc',
+        style: TextStyle(fontSize: 15, color: Colors.red),
+      );
+    }
+
+    if (status == 'Complete') {
+      return Text(
+        'Hoàn thành',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
+    if (status == 'Cancel') {
+      return Text(
+        'Bị từ chối',
+        style: TextStyle(fontSize: 15, color: Colors.grey),
+      );
+    }
+
+    return Text(
+      status,
+      style: TextStyle(fontSize: 15, color: Colors.black),
+    );
+  }
 }
