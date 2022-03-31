@@ -17,14 +17,25 @@ class HistoryHiringDetail extends StatefulWidget {
 
 class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
+  late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
-    String date =
-        DateFormat('dd/MM/yyyy').format(widget.detailHiringModel.startTime);
-    String startTime =
-        DateFormat('hh:mm a').format(widget.detailHiringModel.startTime);
+
+    String date = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel!.timeStart));
+    String startTime = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.orderModel!.timeStart));
+    String endDate = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel!.timeFinish));
+    String endTime = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.orderModel!.timeFinish));
+    checkEndEarly = true;
     var _controller = TextEditingController();
-    _controller.text = widget.detailHiringModel.comment;
+    // _controller.text = widget.orderModel!.message;
+    _controller.text = "aaaaa"; //comment
+    var _reasonController = TextEditingController();
+    // _controller.text = widget.orderModel!.message;
+    _reasonController.text = "Tôi bận";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -182,10 +193,63 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
+                      // widget.orderModel!.timeFinish +
+                      //     ", " +
+                      //     widget.orderModel!.timeStart,
                       date + ", " + startTime,
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                child: Row(
+                  children: [
+                    Text(
+                      'Thời gian kết thúc',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Spacer(),
+                    Text(
+                      // widget.orderModel!.timeFinish +
+                      //     ", " +
+                      //     widget.orderModel!.timeStart,
+                      endDate + ", " + endTime,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: checkEndEarly,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
+                  child: Text(
+                    'Lý do kết thúc sớm:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: checkEndEarly,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  child: Container(
+                    height: 250,
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
+                    child: TextField(
+                      controller: _reasonController,
+                      enabled: false,
+                      decoration: const InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 10.0),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               Divider(
@@ -206,7 +270,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                       color: Colors.yellow,
                     ),
                     Text(
-                      widget.detailHiringModel.rating.toString(),
+                      "5",
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
