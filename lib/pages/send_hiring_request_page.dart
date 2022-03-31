@@ -26,13 +26,9 @@ class SendHiringRequestPage extends StatefulWidget {
   _SendHiringRequestPageState createState() => _SendHiringRequestPageState();
 }
 
-class _SendHiringRequestPageState extends State<SendHiringRequestPage>
-    with TickerProviderStateMixin {
-  late AnimationController controller;
-  int time = 5;
+class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   OrderModel? orderModel;
   bool checkFirstTime = true;
-  String profileLink = "assets/images/play_together_logo_text.png";
   int chooseTime = 1;
   int maxHour = 5;
   String beginMessage = '';
@@ -61,77 +57,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
     chooseTime = listHour[0];
   }
 
-  // Future getUserServiceById() {
-  //   Future<UserServiceModel?> userServiceModelFuture = UserService()
-  //       .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
-  //   userServiceModelFuture.then((userService) {
-  //     if (userService != null) {
-  //       setState(() {
-  //         userServiceModel = userService;
-  //       });
-  //     }
-  //   });
-  //   return userServiceModelFuture;
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future<UserServiceModel?> userServiceModelFuture = UserService()
-  //       .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
-  //   userServiceModelFuture.then((userService) {
-  //     if (userService != null) {
-  //       setState(() {
-  //         userServiceModel = userService;
-  //       });
-  //     }
-  //   });
-  // }
   GameOrderModel game =
       GameOrderModel(gameId: "6c211880-ecd9-4975-806e-237fe1bc4294");
   List<GameOrderModel> games = [];
-  // games.add(game);
-
-  // OrderModel? createOrder() {
-  //   Future<OrderModel?> orderModelFuture = OrderService().createOrderRequest(
-  //       widget.playerModel!.id, createOrderModel, widget.tokenModel.message);
-  //   orderModelFuture.then((order) {
-  //     if (orderModelFuture != null) {
-  //       setState(() {
-  //         orderModel = order;
-  //       });
-  //     }
-  //   });
-  //   return orderModel;
-  // }
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: time * 60),
-    );
-    controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
-    controller.addListener(() {
-      if (controller.value == 0) {
-        // luu lai status order
-        Navigator.pop(context);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  String get countText {
-    Duration count = controller.duration! * controller.value;
-    return controller.isDismissed
-        ? '${controller.duration!.inHours}:${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
-        : '${count.inHours}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,16 +156,16 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
               padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Chi phí tổng ',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     (widget.playerModel!.pricePerHour * chooseTime).toString(),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
-                  Text(
+                  const Text(
                     ' đ',
                     style: TextStyle(fontSize: 18),
                   ),
@@ -271,7 +199,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
             Container(
               alignment: Alignment.topLeft,
               padding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
-              child: Text(
+              child: const Text(
                 'Tựa game bạn chọn ',
                 style: TextStyle(fontSize: 18),
               ),
@@ -286,32 +214,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
                     (index) => buildSingleCheckBox(listGamesCheckBox[index])),
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Text(
-                    'Thời gian còn lại:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    child: AnimatedBuilder(
-                      animation: controller,
-                      builder: (context, child) => Text(
-                        countText,
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
               child: Container(
@@ -324,8 +226,8 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
                   maxLength: 1000,
                   onChanged: (newValue) => beginMessage = newValue,
                   decoration: const InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 10.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                     counterText: "",
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     labelText: "Nhập lời nhắn...",
@@ -341,13 +243,11 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
                         widget.userModel.userBalance.balance
                     ? () {
                         setState(() {
-                          //createOrderModel.totalTimes = chooseTime as int;
                           games.add(game);
                           CreateOrderModel createOrderModel = CreateOrderModel(
                               totalTimes: chooseTime,
                               message: beginMessage,
                               games: games);
-                          // createOrderModel.games = games;
                           Future<OrderModel?> orderModelFuture = OrderService()
                               .createOrderRequest(widget.playerModel!.id,
                                   createOrderModel, widget.tokenModel.message);
@@ -355,8 +255,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
                             if (order != null) {
                               setState(() {
                                 orderModel = order;
-                                print("a \n a \n a \n a \n a \n a \n a \n " +
-                                    orderModel!.id);
+                                print(orderModel!.id);
                                 helper.pushInto(
                                     context,
                                     HiringNegotiatingPage(
@@ -368,13 +267,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
                               });
                             }
                           });
-
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //            HiringNegotiatingPage()),
-                          // );
                         });
                       }
                     : () {},
@@ -386,7 +278,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
 
   Widget buildSingleCheckBox(CheckBoxState cbState) => CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
-        activeColor: Color(0xff8980FF),
+        activeColor: const Color(0xff8980FF),
         value: cbState.value,
         onChanged: (value) => setState(() {
           if (value == true) {
@@ -401,7 +293,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage>
         }),
         title: Text(
           cbState.title,
-          style: TextStyle(fontSize: 15),
+          style: const TextStyle(fontSize: 15),
         ),
       );
 }
