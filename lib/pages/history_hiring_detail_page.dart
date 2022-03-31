@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:play_together_mobile/models/detail_hiring_model.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
-  final DetailHiringModel detailHiringModel;
+  // final DetailHiringModel detailHiringModel;
+  final OrderModel? orderModel;
+  final UserModel? userModel;
+  final TokenModel tokenModel;
 
-  const HistoryHiringDetail({Key? key, required this.detailHiringModel})
+  const HistoryHiringDetail(
+      {Key? key, this.userModel, required this.tokenModel, this.orderModel})
       : super(key: key);
 
   @override
@@ -16,12 +22,12 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
   @override
   Widget build(BuildContext context) {
-    String date =
-        DateFormat('dd/MM/yyyy').format(widget.detailHiringModel.startTime);
-    String startTime =
-        DateFormat('hh:mm a').format(widget.detailHiringModel.startTime);
+    // String date =
+    //     DateFormat('dd/MM/yyyy').format(widget.detailHiringModel.startTime);
+    // String startTime =
+    //     DateFormat('hh:mm a').format(widget.detailHiringModel.startTime);
     var _controller = TextEditingController();
-    _controller.text = widget.detailHiringModel.comment;
+    _controller.text = widget.orderModel!.message;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -29,17 +35,17 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
         child: AppBar(
           backgroundColor: Colors.white,
           elevation: 1,
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
-              child: Icon(
-                Icons.arrow_back_ios,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
+          // leading: Padding(
+          //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          //   child: FlatButton(
+          //     child: Icon(
+          //       Icons.arrow_back_ios,
+          //     ),
+          //     onPressed: () {
+          //       Navigator.pop(context);
+          //     },
+          //   ),
+          // ),
           centerTitle: true,
           title: Text(
             'Chi tiết lượt thuê',
@@ -57,7 +63,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
             children: [
               Container(
                   alignment: Alignment.center,
-                  child: createStatus(widget.detailHiringModel.status)),
+                  child: createStatus(widget.orderModel!.status)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
                 child: Row(
@@ -68,15 +74,15 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage: AssetImage(
-                                widget.detailHiringModel.hirerAvatar),
+                            backgroundImage:
+                                NetworkImage(widget.orderModel!.user!.avatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.detailHiringModel.hirerName,
+                          widget.orderModel!.user!.name,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -104,15 +110,15 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage: AssetImage(
-                                widget.detailHiringModel.playerAvatar),
+                            backgroundImage:
+                                NetworkImage(widget.orderModel!.toUser!.avatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.detailHiringModel.playerName,
+                          widget.orderModel!.toUser!.name,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -143,7 +149,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
-                      widget.detailHiringModel.totalHour.toString(),
+                      widget.orderModel!.totalTimes.toString(),
                       style: TextStyle(fontSize: 15),
                     ),
                     Text(
@@ -163,7 +169,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
-                      '${formatCurrency.format(widget.detailHiringModel.totalPrice)}',
+                      '${formatCurrency.format(widget.orderModel!.totalPrices)}',
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -179,7 +185,9 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
-                      date + ", " + startTime,
+                      widget.orderModel!.timeFinish +
+                          ", " +
+                          widget.orderModel!.timeStart,
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -198,14 +206,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                       'Đánh giá: ',
                       style: TextStyle(fontSize: 15),
                     ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                    ),
-                    Text(
-                      widget.detailHiringModel.rating.toString(),
-                      style: TextStyle(fontSize: 15),
-                    ),
+                    // Icon(
+                    //   Icons.star,
+                    //   color: Colors.yellow,
+                    // ),
+                    // Text(
+                    //   widget.detailHiringModel.rating.toString(),
+                    //   style: TextStyle(fontSize: 15),
+                    // ),
                   ],
                 ),
               ),

@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
-import 'package:play_together_mobile/widgets/countdown_widget.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;

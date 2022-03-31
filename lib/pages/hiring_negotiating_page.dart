@@ -119,7 +119,8 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
                         height: 120,
                         width: 120,
                         child: CircleAvatar(
-                          backgroundImage: AssetImage(profileLink),
+                          backgroundImage:
+                              NetworkImage(widget.orderModel!.user!.avatar),
                         ),
                       ),
                       SizedBox(
@@ -162,7 +163,8 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
                         height: 120,
                         width: 120,
                         child: CircleAvatar(
-                          backgroundImage: AssetImage(profileLink),
+                          backgroundImage:
+                              NetworkImage(widget.orderModel!.toUser!.avatar),
                         ),
                       ),
                       SizedBox(

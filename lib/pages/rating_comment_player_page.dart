@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
+import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -9,7 +10,6 @@ import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import '../models/order_model.dart';
 import '../models/token_model.dart';
 import '../models/user_model.dart';
-import 'home_page.dart';
 
 class RatingAndCommentPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -147,9 +147,10 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                   setState(() {
                     helper.pushInto(
                         context,
-                        HomePage(
+                        HistoryHiringDetail(
                           tokenModel: widget.tokenModel,
                           userModel: widget.userModel!,
+                          orderModel: widget.orderModel!,
                         ),
                         true);
                   });

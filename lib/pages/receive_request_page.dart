@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
+import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -96,7 +96,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                             print("Cancel về Home nè");
                             helper.pushInto(
                                 context,
-                                HomePage(
+                                HistoryPage(
                                   tokenModel: widget.tokenModel,
                                   userModel: widget.userModel,
                                 ),
@@ -169,7 +169,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                       height: 120,
                       width: 120,
                       child: CircleAvatar(
-                        backgroundImage: AssetImage(profileLink),
+                        backgroundImage:
+                            NetworkImage(widget.orderModel!.user!.avatar),
                       ),
                     ),
                   ),
