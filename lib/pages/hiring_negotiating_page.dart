@@ -29,7 +29,10 @@ class HiringNegotiatingPage extends StatefulWidget {
   _HiringNegotiatingPageState createState() => _HiringNegotiatingPageState();
 }
 
-class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
+class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+  int time = 5;
   String profileLink = "assets/images/defaultprofile.png";
   String profileLink2 = "assets/images/defaultprofile.png";
   List listGamesChoosen = ['Liên Minh', 'CSGO'];
@@ -69,6 +72,35 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
           });
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: time * 60),
+    );
+    controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
+    controller.addListener(() {
+      if (controller.value == 0) {
+        // luu lai status order
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  String get countText {
+    Duration count = controller.duration! * controller.value;
+    return controller.isDismissed
+        ? '${controller.duration!.inHours}:${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
+        : '${count.inHours}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
@@ -255,6 +287,32 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage> {
               child: Column(
                 children: List.generate(listGamesChoosen.length,
                     (index) => buildGamesChoosenField(listGamesChoosen[index])),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  Text(
+                    'Thời gian còn lại:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: AnimatedBuilder(
+                      animation: controller,
+                      builder: (context, child) => Text(
+                        countText,
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
