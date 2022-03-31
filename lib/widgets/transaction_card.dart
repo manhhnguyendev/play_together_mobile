@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'dart:core';
 import 'package:play_together_mobile/models/transaction_model.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class TransactionCard extends StatefulWidget {
   final TransactionModel transactionModel;
@@ -14,13 +14,8 @@ class TransactionCard extends StatefulWidget {
 }
 
 class _TransactionCardState extends State<TransactionCard> {
-  String convertMoney = '';
-  MaskedTextController customController = MaskedTextController(
-    mask: '000.000.000.000',
-  );
   @override
   Widget build(BuildContext context) {
-    customController.text = widget.transactionModel.money.toStringAsFixed(0);
     String date =
         DateFormat('dd/MM/yyyy').format(widget.transactionModel.dateTime);
     String startTime =
@@ -106,12 +101,12 @@ class _TransactionCardState extends State<TransactionCard> {
   Widget convertOperation(String operation) {
     if (operation == '-') {
       return Text(
-        '− ' + customController.text + 'đ',
+        '− ' + widget.transactionModel.money.toStringAsFixed(0).toVND() + 'đ',
         style: const TextStyle(fontSize: 18, color: Colors.black),
       );
     } else {
       return Text(
-        '+ ' + customController.text + 'đ',
+        '+ ' + widget.transactionModel.money.toStringAsFixed(0).toVND() + 'đ',
         style: const TextStyle(fontSize: 18, color: Colors.black),
       );
     }

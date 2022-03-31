@@ -5,6 +5,7 @@ import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/send_hiring_request_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class PlayerProfilePage extends StatefulWidget {
   final UserModel userModel;
@@ -327,8 +328,10 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   children: [
                     Text(
                       widget.playerModel != null
-                          ? widget.playerModel.pricePerHour.toStringAsFixed(0) +
-                              'đ/h'
+                          ? widget.playerModel.pricePerHour
+                                  .toStringAsFixed(0)
+                                  .toVND() +
+                              '/h'
                           : '0 đ/h',
                       style: TextStyle(fontSize: 22, color: Color(0xff320444)),
                     ),

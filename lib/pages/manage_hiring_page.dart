@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
@@ -28,10 +28,9 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
 
   @override
   Widget build(BuildContext context) {
-    MaskedTextController customController =
-        MaskedTextController(mask: '000,000,000,000');
-    MaskedTextController convertController =
-        MaskedTextController(mask: '000000000000'); //convert lưu vào DB
+    var displayController = TextEditingController();
+    String money = "";
+    double convertMoney = 0;
     if (checkFirstTime) {
       createHourList();
       checkFirstTime = false;
@@ -158,32 +157,19 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                     //decoration: BoxDecoration(border: Border.all()),
                     width: 120,
                     child: TextField(
+                      inputFormatters: [ThousandsFormatter()],
+                      controller: displayController,
                       onChanged: (value) {
                         setState(() {
-                          if (customController.text.length == 1) {
-                            if (value == '0') {
-                              value = '';
-                              //customController.value = '';
-                              customController.text = '';
-                              convertController.text = customController.text;
-                              print(customController.text + " money");
-                            }
-                          } else {
-                            print(customController.text + " money else");
-                            convertController.text =
-                                customController.text; //lưu giá trị này
-                            print(convertController.text + " convert");
-                          }
+                          money = value; //1 VNĐ
+                          print(money + " gia tri luu");
                         });
                       },
-                      enabled: isPlayer,
-                      style: TextStyle(fontSize: 18),
+                      //textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
                       decoration: InputDecoration(
-                        counter: Container(),
-                      ),
+                          counter: Container(), hintText: " Nhập số tiền"),
                       maxLength: 11,
-                      controller: customController,
-                      inputFormatters: [],
                       keyboardType: TextInputType.number,
                     ),
                   ),
