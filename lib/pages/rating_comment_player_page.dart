@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -147,10 +148,9 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                   setState(() {
                     helper.pushInto(
                         context,
-                        HistoryHiringDetail(
+                        HomePage(
                           tokenModel: widget.tokenModel,
                           userModel: widget.userModel!,
-                          orderModel: widget.orderModel!,
                         ),
                         true);
                   });

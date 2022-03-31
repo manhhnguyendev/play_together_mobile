@@ -3,15 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/models/detail_hiring_model.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
-  // final DetailHiringModel detailHiringModel;
-  final OrderModel? orderModel;
-  final UserModel? userModel;
-  final TokenModel tokenModel;
+  final DetailHiringModel detailHiringModel;
 
-  const HistoryHiringDetail(
-      {Key? key, this.userModel, required this.tokenModel, this.orderModel})
+  const HistoryHiringDetail({Key? key, required this.detailHiringModel})
       : super(key: key);
 
   @override
@@ -23,6 +20,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
+
     String date = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel!.timeStart));
     String startTime = DateFormat('hh:mm a')
@@ -73,7 +71,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
             children: [
               Container(
                   alignment: Alignment.center,
-                  child: createStatus(widget.orderModel!.status)),
+                  child: createStatus(widget.detailHiringModel.status)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
                 child: Row(
@@ -84,15 +82,15 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(widget.orderModel!.user!.avatar),
+                            backgroundImage: AssetImage(
+                                widget.detailHiringModel.hirerAvatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.orderModel!.user!.name,
+                          widget.detailHiringModel.hirerAvatar,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -120,15 +118,15 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(widget.orderModel!.toUser!.avatar),
+                            backgroundImage: AssetImage(
+                                widget.detailHiringModel.playerAvatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.orderModel!.toUser!.name,
+                          widget.detailHiringModel.playerName,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -159,7 +157,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
-                      widget.orderModel!.totalTimes.toString(),
+                      widget.detailHiringModel.totalHour.toString(),
                       style: TextStyle(fontSize: 15),
                     ),
                     Text(
@@ -179,7 +177,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
-                      '${formatCurrency.format(widget.orderModel!.totalPrices)}',
+                      '${formatCurrency.format(widget.detailHiringModel.totalPrice)}',
                       style: TextStyle(fontSize: 15),
                     ),
                   ],

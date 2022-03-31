@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/const.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
-import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 
 class PersonalChangePassword extends StatefulWidget {

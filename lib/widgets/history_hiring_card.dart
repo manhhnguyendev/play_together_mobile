@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:play_together_mobile/models/detail_hiring_model.dart';
 import 'package:play_together_mobile/models/hiring_model.dart';
+import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
 
 class HistoryHiringCard extends StatefulWidget {
   final HistoryHiringModel historyHiringModel;
@@ -23,13 +25,13 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => HistoryHiringDetail(
-          //             detailHiringModel: demoDetailHiring,
-          //           )),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HistoryHiringDetail(
+                      detailHiringModel: demoDetailHiring,
+                    )),
+          );
         },
         child: Column(
           children: [
