@@ -181,6 +181,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_format_money_vietnam:
+    dependency: "direct main"
+    description:
+      name: flutter_format_money_vietnam
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -195,13 +202,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  flutter_masked_text2:
-    dependency: "direct main"
-    description:
-      name: flutter_masked_text2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -394,6 +394,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  pattern_formatter:
+    dependency: "direct main"
+    description:
+      name: pattern_formatter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   petitparser:
     dependency: transitive
     description:

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+//import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class DonateCharityPage extends StatefulWidget {
   final CharityModel charityModel;
@@ -13,12 +15,16 @@ class DonateCharityPage extends StatefulWidget {
 }
 
 class _DonateCharityPageState extends State<DonateCharityPage> {
-  MaskedTextController customController = MaskedTextController(
-    mask: '000.000.000.000',
-  );
-  MaskedTextController convertController = MaskedTextController(
-    mask: '000000000000', //convert lưu vào DB
-  );
+  // MaskedTextController customController = MaskedTextController(
+  //   mask: '000.000.000',
+  // );
+  // MaskedTextController convertController = MaskedTextController(
+  //   mask: '000000000000', //convert lưu vào DB
+  // );
+  //var moneyController = TextEditingController();
+  var displayController = TextEditingController();
+  String money = "";
+  double convertMoney = 0;
   String messages = "";
   @override
   Widget build(BuildContext context) {
@@ -63,31 +69,20 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                 padding: EdgeInsets.only(top: 15),
                 width: 350,
                 child: TextField(
+                  //initialValue: displayMoney,
+                  inputFormatters: [ThousandsFormatter()],
+                  controller: displayController,
                   onChanged: (value) {
                     setState(() {
-                      if (customController.text.length == 1) {
-                        if (value == '0') {
-                          value = '';
-                          //customController.value = '';
-                          customController.text = '';
-                          convertController.text = customController.text;
-                          print(customController.text + " money");
-                        }
-                      } else {
-                        print(customController.text + " money else");
-                        convertController.text =
-                            customController.text; //lưu giá trị này
-                        print(convertController.text + " convert");
-                      }
+                      money = value; //1 VNĐ
+                      print(money + " gia tri luu");
                     });
                   },
-                  textAlign: TextAlign.center,
+                  //textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 20),
                   decoration: InputDecoration(
                       counter: Container(), hintText: " Nhập số tiền"),
                   maxLength: 11,
-                  controller: customController,
-                  inputFormatters: [],
                   keyboardType: TextInputType.number,
                 ),
               ),
@@ -126,7 +121,13 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
             child: AcceptProfileButton(
                 text: 'Gửi tiền từ thiện',
                 onpress: () {
-                  //gửi tiền
+                  if (money.length < 6) {
+                    print("Không đủ điều kiện");
+                  } else {
+                    money = money.replaceAll(",", "");
+                    convertMoney = double.parse(money);
+                    print("Đủ điều kiện: " + convertMoney.toString());
+                  }
                 })),
       ),
     );

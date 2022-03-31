@@ -4,6 +4,7 @@ import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 import '../models/game_of_orders_model.dart';
 import '../models/order_model.dart';
@@ -318,11 +319,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                     Spacer(),
                     Text(
-                      widget.orderModel!.totalPrices.toString(),
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Text(
-                      ' đ',
+                      widget.orderModel!.totalPrices.toString().toVND(),
                       style: TextStyle(fontSize: 18),
                     ),
                   ],

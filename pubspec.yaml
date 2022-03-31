@@ -36,7 +36,7 @@ dependencies:
   #Icon
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.0.0
-  
+
   #Firebase
   firebase_core: ^1.13.1
   firebase_auth: ^3.3.10
@@ -55,7 +55,8 @@ dependencies:
   #Flutter
   flutter_rating_bar: ^4.0.0
   flutter_secure_storage: ^5.0.2
-  flutter_masked_text2: ^0.9.1
+  flutter_format_money_vietnam: ^0.0.2
+  pattern_formatter: ^2.0.0
 
   #Another
   provider: ^6.0.2

@@ -5,6 +5,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class PlayerCard extends StatefulWidget {
   final double width, aspectRatio;
@@ -132,8 +133,10 @@ class _PlayerCardState extends State<PlayerCard> {
                   const SizedBox(height: 10),
                   Text(
                     widget.playerModel != null
-                        ? widget.playerModel.pricePerHour.toStringAsFixed(0) +
-                            " đ/h"
+                        ? widget.playerModel.pricePerHour
+                                .toStringAsFixed(0)
+                                .toVND() +
+                            "/h"
                         : "",
                   )
                 ],

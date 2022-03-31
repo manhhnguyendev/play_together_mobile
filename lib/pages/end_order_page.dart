@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class EndOrderPage extends StatefulWidget {
   const EndOrderPage({Key? key}) : super(key: key);
@@ -177,7 +178,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                       Spacer(),
                       Text(
                         // '${formatCurrency.format(widget.orderModel!.totalPrices)}',
-                        '100.000đ',
+                        '100000'.toVND(),
                         style: TextStyle(fontSize: 15),
                       ),
                     ],

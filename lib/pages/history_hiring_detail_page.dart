@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/models/detail_hiring_model.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
   final DetailHiringModel detailHiringModel;
@@ -20,15 +21,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
-
-    String date = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.orderModel!.timeStart));
-    String startTime = DateFormat('hh:mm a')
-        .format(DateTime.parse(widget.orderModel!.timeStart));
-    String endDate = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.orderModel!.timeFinish));
-    String endTime = DateFormat('hh:mm a')
-        .format(DateTime.parse(widget.orderModel!.timeFinish));
+    // String date = DateFormat('dd/MM/yyyy')
+    //     .format(DateTime.parse(widget.orderModel!.timeStart));
+    // String startTime = DateFormat('hh:mm a')
+    //     .format(DateTime.parse(widget.orderModel!.timeStart));
+    // String endDate = DateFormat('dd/MM/yyyy')
+    //     .format(DateTime.parse(widget.orderModel!.timeFinish));
+    // String endTime = DateFormat('hh:mm a')
+    //     .format(DateTime.parse(widget.orderModel!.timeFinish));
     checkEndEarly = true;
     var _controller = TextEditingController();
     // _controller.text = widget.orderModel!.message;
@@ -177,7 +177,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     Spacer(),
                     Text(
-                      '${formatCurrency.format(widget.detailHiringModel.totalPrice)}',
+                      widget.detailHiringModel.totalPrice.toString().toVND(),
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -196,7 +196,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                       // widget.orderModel!.timeFinish +
                       //     ", " +
                       //     widget.orderModel!.timeStart,
-                      date + ", " + startTime,
+                      // date + ", " + startTime,
+                      "1212121212",
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -215,7 +216,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                       // widget.orderModel!.timeFinish +
                       //     ", " +
                       //     widget.orderModel!.timeStart,
-                      endDate + ", " + endTime,
+                      "121212121212",
                       style: TextStyle(fontSize: 15),
                     ),
                   ],

@@ -7,6 +7,7 @@ import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class SendHiringRequestPage extends StatefulWidget {
   final UserModel userModel;
@@ -162,7 +163,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   ),
                   const Spacer(),
                   Text(
-                    (widget.playerModel!.pricePerHour * chooseTime).toString(),
+                    (widget.playerModel!.pricePerHour * chooseTime)
+                        .toString()
+                        .toVND(),
                     style: const TextStyle(fontSize: 18),
                   ),
                   const Text(

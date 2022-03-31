@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/pages/select_withdraw_method.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 
@@ -11,12 +11,15 @@ class EnterWithdrawAmount extends StatefulWidget {
 }
 
 class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
-  MaskedTextController customController = MaskedTextController(
-    mask: '000.000.000.000',
-  );
-  MaskedTextController convertController = MaskedTextController(
-    mask: '000000000000', //convert lưu vào DB
-  );
+  // MaskedTextController customController = MaskedTextController(
+  //   mask: '000.000.000.000',
+  // );
+  // MaskedTextController convertController = MaskedTextController(
+  //   mask: '000000000000', //convert lưu vào DB
+  // );
+  var displayController = TextEditingController();
+  String money = "";
+  double convertMoney = 0;
   String messages = "";
   @override
   Widget build(BuildContext context) {
@@ -61,31 +64,19 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
                   padding: EdgeInsets.only(top: 15),
                   width: 350,
                   child: TextField(
+                    inputFormatters: [ThousandsFormatter()],
+                    controller: displayController,
                     onChanged: (value) {
                       setState(() {
-                        if (customController.text.length == 1) {
-                          if (value == '0') {
-                            value = '';
-                            //customController.value = '';
-                            customController.text = '';
-                            convertController.text = customController.text;
-                            print(customController.text + " money");
-                          }
-                        } else {
-                          print(customController.text + " money else");
-                          convertController.text =
-                              customController.text; //lưu giá trị này
-                          print(convertController.text + " convert");
-                        }
+                        money = value; //1 VNĐ
+                        print(money + " gia tri luu");
                       });
                     },
-                    textAlign: TextAlign.center,
+                    //textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
                     decoration: InputDecoration(
                         counter: Container(), hintText: " Nhập số tiền"),
                     maxLength: 11,
-                    controller: customController,
-                    inputFormatters: [],
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -101,11 +92,18 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
               child: AcceptProfileButton(
                   text: 'Rút tiền',
                   onpress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectWithdrawMethod()),
-                    );
+                    if (money.length < 6) {
+                      print("Không đủ điều kiện");
+                    } else {
+                      money = money.replaceAll(",", "");
+                      convertMoney = double.parse(money);
+                      print("Đủ điều kiện: " + convertMoney.toString());
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectWithdrawMethod()),
+                      );
+                    }
                   })),
         ));
   }

@@ -10,6 +10,7 @@ import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 import '../models/order_model.dart';
 import '../services/order_service.dart';
@@ -76,388 +77,391 @@ class _PersonalPageState extends State<PersonalPage> {
   Widget build(BuildContext context) {
     check();
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(widget.userModel.avatar),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 150,
+                    width: 150,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(widget.userModel.avatar),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 200,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  SizedBox(
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.userModel.name,
+                            style: const TextStyle(fontSize: 20),
+                            maxLines: 2,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (lateUser != null)
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HirerProfilePage(
+                                          userModel: lateUser!,
+                                          tokenModel: widget.tokenModel)),
+                                );
+                            },
+                            child: Row(
+                              children: const [
+                                Text(
+                                  'Chỉnh sửa tài khoản',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 15,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Số dư trong ví:',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            lateUser != null
+                                ? lateUser!.userBalance.balance
+                                    .toStringAsFixed(0)
+                                    .toVND()
+                                : widget.userModel.userBalance.balance
+                                    .toStringAsFixed(0)
+                                    .toVND(),
+                            style: const TextStyle(
+                                fontSize: 22, color: Color(0xff320444)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      decoration: BoxDecoration(border: Border.all()),
+                      height: 70,
+                      width: 1,
+                    ),
+                    Row(
                       children: [
-                        Text(
-                          widget.userModel.name,
-                          style: const TextStyle(fontSize: 20),
-                          maxLines: 2,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (lateUser != null)
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: GestureDetector(
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HirerProfilePage(
-                                        userModel: lateUser!,
-                                        tokenModel: widget.tokenModel)),
+                                    builder: (context) =>
+                                        SelectDepositMethodPage()),
                               );
-                          },
-                          child: Row(
-                            children: const [
-                              Text(
-                                'Chỉnh sửa tài khoản',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.grey,
+                            },
+                            child: Column(
+                              children: const [
+                                Icon(
+                                  FontAwesomeIcons.wallet,
+                                  size: 30,
                                 ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 15,
-                                color: Colors.grey,
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 0,
+                                ),
+                                Text(
+                                  'Nạp tiền',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Color(0xff320444)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EnterWithdrawAmount()),
+                              );
+                            },
+                            child: Column(
+                              children: const [
+                                Icon(
+                                  FontAwesomeIcons.moneyBill,
+                                  size: 30,
+                                ),
+                                SizedBox(
+                                  height: 0,
+                                ),
+                                Text(
+                                  'Rút tiền',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Color(0xff320444)),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.black)),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Số dư trong ví:',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          lateUser != null
-                              ? lateUser!.userBalance.balance
-                                      .toStringAsFixed(0) +
-                                  ' vnđ'
-                              : widget.userModel.userBalance.balance
-                                      .toStringAsFixed(0) +
-                                  ' vnđ',
-                          style: const TextStyle(
-                              fontSize: 22, color: Color(0xff320444)),
-                        ),
-                      ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 25, 15, 5),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TransactionPage()),
+                  );
+                },
+                child: Row(
+                  children: const [
+                    Text(
+                      'Lịch sử Giao dịch',
+                      style: TextStyle(fontSize: 20),
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    decoration: BoxDecoration(border: Border.all()),
-                    height: 70,
-                    width: 1,
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SelectDepositMethodPage()),
-                            );
-                          },
-                          child: Column(
-                            children: const [
-                              Icon(
-                                FontAwesomeIcons.wallet,
-                                size: 30,
-                              ),
-                              SizedBox(
-                                height: 0,
-                              ),
-                              Text(
-                                'Nạp tiền',
-                                style: TextStyle(
-                                    fontSize: 15, color: Color(0xff320444)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EnterWithdrawAmount()),
-                            );
-                          },
-                          child: Column(
-                            children: const [
-                              Icon(
-                                FontAwesomeIcons.moneyBill,
-                                size: 30,
-                              ),
-                              SizedBox(
-                                height: 0,
-                              ),
-                              Text(
-                                'Rút tiền',
-                                style: TextStyle(
-                                    fontSize: 15, color: Color(0xff320444)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 25, 15, 5),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TransactionPage()),
-                );
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    'Lịch sử Giao dịch',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ManageHiringPage(),
-                    ));
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    'Quản lý nhận thuê',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ManageHiringPage(),
+                      ));
+                },
+                child: Row(
+                  children: const [
+                    Text(
+                      'Quản lý nhận thuê',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ManageHiringPage(),
-                    ));
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    'Cài đặt sở thích',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: GestureDetector(
-              onTap: () {},
-              child: Row(
-                children: const [
-                  Text(
-                    'Thay đổi mật khẩu',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ManageHiringPage(),
+                      ));
+                },
+                child: Row(
+                  children: const [
+                    Text(
+                      'Cài đặt sở thích',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: GestureDetector(
-              onTap: () {},
-              child: Row(
-                children: const [
-                  Text(
-                    'Chính sách',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: GestureDetector(
-              onTap: () {},
-              child: Row(
-                children: const [
-                  Text(
-                    'Trung tâm hỗ trợ',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: const [
+                    Text(
+                      'Thay đổi mật khẩu',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: GestureDetector(
-              onTap: () {},
-              child: Row(
-                children: const [
-                  Text(
-                    'Đăng xuất',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Spacer(),
-                  Icon(
-                    Icons.logout,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: Divider(
-              thickness: 1,
-              color: Colors.grey,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: const [
+                    Text(
+                      'Chính sách',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: const [
+                    Text(
+                      'Trung tâm hỗ trợ',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+              child: GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: const [
+                    Text(
+                      'Đăng xuất',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.logout,
+                      color: Colors.grey,
+                      size: 15,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                thickness: 1,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomBar(
         userModel: widget.userModel,

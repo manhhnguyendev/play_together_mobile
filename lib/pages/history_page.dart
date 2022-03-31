@@ -69,14 +69,11 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     check();
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: AppBar(
-          bottomOpacity: 0,
-          toolbarOpacity: 1,
-          toolbarHeight: 65,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 1,
           leading: CircleAvatar(
@@ -93,25 +90,65 @@ class _HistoryPageState extends State<HistoryPage> {
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
+          bottom: TabBar(
+              indicatorColor: Colors.grey,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.black,
+              tabs: [
+                Tab(
+                  child: Text(
+                    'Đi thuê',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal),
+                  ),
+                ),
+                Tab(
+                  child: Text('Được thuê',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal)),
+                )
+              ]),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Column(
-            children: List.generate(demoHistoryHiring.length,
-                (index) => buildListHistory(demoHistoryHiring[index])),
+        body: TabBarView(children: [
+          SingleChildScrollView(
+            //đi thuê
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: List.generate(demoHistoryHiring.length,
+                    (index) => buildListHistory(demoHistoryHiring[index])),
+              ),
+            ),
           ),
+          SingleChildScrollView(
+            //được thuê
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: List.generate(demoHistoryHiring.length,
+                    (index) => buildListHistory(demoHistoryHiring[index])),
+              ),
+            ),
+          ),
+        ]),
+        bottomNavigationBar: BottomBar(
+          userModel: widget.userModel,
+          tokenModel: widget.tokenModel,
+          bottomBarIndex: 1,
         ),
-      ),
-      bottomNavigationBar: BottomBar(
-        userModel: widget.userModel,
-        tokenModel: widget.tokenModel,
-        bottomBarIndex: 1,
       ),
     );
   }
 
-  Widget buildListHistory(HistoryHiringModel model) =>
-      HistoryHiringCard(historyHiringModel: model);
+  Widget buildListHistory(HistoryHiringModel model) {
+    return HistoryHiringCard(historyHiringModel: model);
+  }
+
+  Widget buildListHistory2(HistoryHiringModel model) {
+    return HistoryHiringCard(historyHiringModel: model);
+  }
 }
