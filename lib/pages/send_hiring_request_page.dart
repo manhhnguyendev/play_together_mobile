@@ -4,7 +4,6 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
-import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -27,7 +26,10 @@ class SendHiringRequestPage extends StatefulWidget {
   _SendHiringRequestPageState createState() => _SendHiringRequestPageState();
 }
 
-class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
+class _SendHiringRequestPageState extends State<SendHiringRequestPage>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+  int time = 5;
   OrderModel? orderModel;
   bool checkFirstTime = true;
   String profileLink = "assets/images/play_together_logo_text.png";
@@ -102,6 +104,34 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   //   });
   //   return orderModel;
   // }
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: time * 60),
+    );
+    controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
+    controller.addListener(() {
+      if (controller.value == 0) {
+        // luu lai status order
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  String get countText {
+    Duration count = controller.duration! * controller.value;
+    return controller.isDismissed
+        ? '${controller.duration!.inHours}:${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
+        : '${count.inHours}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,6 +284,32 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                         ? listGamesCheckBox.length
                         : 0,
                     (index) => buildSingleCheckBox(listGamesCheckBox[index])),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  Text(
+                    'Thời gian còn lại:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    child: AnimatedBuilder(
+                      animation: controller,
+                      builder: (context, child) => Text(
+                        countText,
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
