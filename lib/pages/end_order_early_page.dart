@@ -5,6 +5,7 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class EndOrderEarlyPage extends StatefulWidget {
@@ -30,8 +31,36 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   UserModel? lateUser;
   bool checkReason = true;
   String reason = "";
+
+  void check() {
+    Future<UserModel?> checkStatus =
+        UserService().getUserProfile(widget.tokenModel.message);
+    checkStatus.then((value) {
+      if (value != null) {
+        if (value.status.contains('Online')) {
+          setState(() {
+            lateUser = value;
+            helper.pushInto(
+                context,
+                EndOrderPage(
+                  tokenModel: widget.tokenModel,
+                  userModel: widget.userModel!,
+                  orderModel: widget.orderModel,
+                ),
+                true);
+          });
+        } else {
+          setState(() {
+            lateUser = value;
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    check();
     reasonController.text = "";
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -254,28 +283,16 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                       finishSoonModel);
                   finishFuture.then((finish) {
                     if (finish == true) {
-                      if (widget.userModel!.id == widget.orderModel!.toUserId) {
-                        setState(() {
-                          helper.pushInto(
-                              context,
-                              EndOrderPage(
-                                orderModel: widget.orderModel!,
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel!,
-                              ),
-                              true);
-                        });
-                      } else if (widget.userModel!.id ==
-                          widget.orderModel!.userId) {
+                      setState(() {
                         helper.pushInto(
                             context,
                             EndOrderPage(
-                              orderModel: widget.orderModel!,
+                              orderModel: widget.orderModel,
                               tokenModel: widget.tokenModel,
                               userModel: widget.userModel!,
                             ),
                             true);
-                      }
+                      });
                     }
                   });
                 },

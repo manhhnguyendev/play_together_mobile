@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
-import 'package:play_together_mobile/pages/end_order_page.dart';
-import 'package:play_together_mobile/pages/home_page.dart';
-import 'package:play_together_mobile/pages/report_page.dart';
+import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -127,7 +125,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                     setState(() {
                       helper.pushInto(
                           context,
-                          HomePage(
+                          HistoryPage(
                             tokenModel: widget.tokenModel,
                             userModel: widget.userModel!,
                           ),
