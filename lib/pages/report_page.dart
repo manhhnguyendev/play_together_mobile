@@ -14,6 +14,7 @@ class _ReportPageState extends State<ReportPage> {
     String profileLink = "assets/images/defaultprofile.png";
     String reason = "";
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: Padding(
@@ -36,7 +37,7 @@ class _ReportPageState extends State<ReportPage> {
           child: Column(
         children: [
           SizedBox(
-            height: 15,
+            height: 75,
           ),
           SizedBox(
             height: 150,
@@ -78,12 +79,15 @@ class _ReportPageState extends State<ReportPage> {
               ),
             ),
           ),
-          SizedBox(
-            height: 25,
-          ),
-          SecondMainButton(text: 'Gửi', onpress: () {}, height: 50, width: 200),
         ],
       )),
+      bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: SecondMainButton(
+                text: 'Gửi', onpress: () {}, height: 50, width: 200),
+          )),
     );
   }
 }

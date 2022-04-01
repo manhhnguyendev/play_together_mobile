@@ -12,14 +12,21 @@ class UserCategoriesPage extends StatefulWidget {
 
 class _UserCategoriesPageState extends State<UserCategoriesPage> {
   final _formKey = GlobalKey<FormState>();
-  List listCategories = ['Ca hát', 'Chơi game', 'Trò chuyện'];
-  List listCategoriesCheckBox = [];
-  List listCategoriesChoosen = [];
+  List listGames = [
+    'Liên Minh Huyền Thoại',
+    'CS:GO',
+    'PUBG',
+    'Among us',
+    'FIFA ONLINE 4',
+    'Chess'
+  ];
+  List listGamesCheckBox = [];
+  List listGamesChoosen = [];
   bool firstTimeInit = false;
   void createAListCheckBox() {
     if (!firstTimeInit) {
-      for (var i = 0; i < listCategories.length; i++) {
-        listCategoriesCheckBox.add(CheckBoxState(title: listCategories[i]));
+      for (var i = 0; i < listGames.length; i++) {
+        listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
       }
       firstTimeInit = true;
     }
@@ -52,7 +59,7 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                   child: Column(
                     children: [
                       Text(
-                        'Bạn thích hoạt động nào (Chọn 2 trên 3):',
+                        'Bạn thích tựa game nào (Chọn ít nhất 1 tựa game):',
                         style: TextStyle(fontSize: 17),
                       ),
                       const SizedBox(
@@ -62,26 +69,36 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                         padding: const EdgeInsets.all(0.0),
                         child: Column(
                           children: List.generate(
-                              listCategoriesCheckBox.length,
+                              listGamesCheckBox.length,
                               (index) => buildSingleCheckBox(
-                                  listCategoriesCheckBox[index])),
+                                  listGamesCheckBox[index])),
                         ),
                       ),
-                      MainButton(
-                        text: "TIẾP TỤC",
-                        onpress: () {
-                          if (_formKey.currentState == null) {
-                            print("_formKey.currentState is null!");
-                          } else if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                          }
-                        },
-                      ),
-                      GoBackButton(text: "QUAY LẠI", onpress: () {})
+
+                      //GoBackButton(text: "QUAY LẠI", onpress: () {})
                     ],
                   )),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+            child: MainButton(
+              text: "TIẾP TỤC",
+              onpress: () {
+                if (listGamesChoosen.length == 0) {
+                  print("ko đc");
+                } else {
+                  print("YES");
+                }
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -92,7 +109,17 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
         activeColor: Colors.black,
         value: cbState.value,
         onChanged: (value) => setState(
-          () => cbState.value = value!,
+          () {
+            if (cbState.value) {
+              listGamesChoosen.remove(cbState.title);
+              cbState.value = value!;
+              print((listGamesChoosen));
+            } else {
+              listGamesChoosen.add(cbState.title);
+              cbState.value = value!;
+              print((listGamesChoosen));
+            }
+          },
         ),
         title: Text(
           cbState.title,

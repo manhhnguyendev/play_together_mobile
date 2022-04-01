@@ -51,5 +51,12 @@ List<TransactionModel> demoListTransaction = [
       type: 'Order',
       operation: '-',
       money: 100000,
+      dateTime: DateTime.parse('2022-03-03 20:00:00')),
+  TransactionModel(
+      id: 6,
+      referenceTransactionId: 1,
+      type: 'Order - Refund',
+      operation: '+',
+      money: 100000,
       dateTime: DateTime.parse('2022-03-03 20:00:00'))
 ];

@@ -70,167 +70,175 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       checkFirstTime = false;
     }
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: FlatButton(
-                child: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+            child: FlatButton(
+              child: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 150,
-                    width: 150,
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(widget.playerModel!.avatar),
-                    ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          SizedBox(
+            height: 60,
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 150,
+                  width: 150,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(widget.playerModel!.avatar),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    widget.playerModel!.name,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  createStatus(widget.playerModel!.status),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  widget.playerModel!.name,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                createStatus(widget.playerModel!.status),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-              child: Row(
-                children: [
-                  const Text(
-                    'Thời lượng thuê: ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: 80,
-                    child: DropdownButton(
-                      isExpanded: true,
-                      value: chooseTime,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      items: listHour.map((item) {
-                        return DropdownMenuItem(
-                            child: Text(item.toString()), value: item);
-                      }).toList(),
-                      onChanged: (value) {
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+            child: Row(
+              children: [
+                const Text(
+                  'Thời lượng thuê: ',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 80,
+                  child: DropdownButton(
+                    isExpanded: true,
+                    value: chooseTime,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: listHour.map((item) {
+                      return DropdownMenuItem(
+                          child: Text(item.toString()), value: item);
+                    }).toList(),
+                    onChanged: (value) {
+                      chooseTime = int.parse(value.toString());
+                      setState(() {
                         chooseTime = int.parse(value.toString());
-                        setState(() {
-                          chooseTime = int.parse(value.toString());
-                        });
-                      },
-                    ),
+                      });
+                    },
                   ),
-                  const Text(
-                    ' giờ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
+                ),
+                const Text(
+                  ' giờ',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-              child: Row(
-                children: [
-                  const Text(
-                    'Chi phí tổng ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const Spacer(),
-                  Text(
-                    (widget.playerModel!.pricePerHour * chooseTime)
-                        .toStringAsFixed(0)
-                        .toVND(),
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+            child: Row(
+              children: [
+                const Text(
+                  'Chi phí tổng ',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const Spacer(),
+                Text(
+                  (widget.playerModel!.pricePerHour * chooseTime)
+                      .toStringAsFixed(0)
+                      .toVND(),
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-              child: Row(
-                children: [
-                  const Text(
-                    'Số dư hiện tại ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.add_circle_outline)),
-                  Text(
-                    widget.userModel.userBalance.balance
-                        .toStringAsFixed(0)
-                        .toVND(),
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+            child: Row(
+              children: [
+                const Text(
+                  'Số dư hiện tại ',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const Spacer(),
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add_circle_outline)),
+                Text(
+                  widget.userModel.userBalance.balance
+                      .toStringAsFixed(0)
+                      .toVND(),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
-              child: const Text(
-                'Tựa game bạn chọn ',
-                style: TextStyle(fontSize: 18),
-              ),
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
+            child: const Text(
+              'Tựa game bạn chọn ',
+              style: TextStyle(fontSize: 18),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-              child: Column(
-                children: List.generate(
-                    widget.listGameAndRank != null
-                        ? listGamesCheckBox.length
-                        : 0,
-                    (index) => buildSingleCheckBox(listGamesCheckBox[index])),
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+            child: Column(
+              children: List.generate(
+                  widget.listGameAndRank != null ? listGamesCheckBox.length : 0,
+                  (index) => buildSingleCheckBox(listGamesCheckBox[index])),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
-              child: Container(
-                height: 250,
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
-                child: TextFormField(
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  maxLength: 1000,
-                  onChanged: (newValue) => beginMessage = newValue,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                    counterText: "",
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    labelText: "Nhập lời nhắn...",
-                    hintText: "Nhập vào lời nhắn của bạn",
-                    border: InputBorder.none,
-                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
+            child: Container(
+              height: 250,
+              decoration:
+                  BoxDecoration(border: Border.all(color: Colors.black)),
+              child: TextFormField(
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                maxLength: 1000,
+                onChanged: (newValue) => beginMessage = newValue,
+                decoration: const InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                  counterText: "",
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  labelText: "Nhập lời nhắn...",
+                  hintText: "Nhập vào lời nhắn của bạn",
+                  border: InputBorder.none,
                 ),
               ),
             ),
-            SecondMainButton(
+          ),
+        ]),
+      ),
+      bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: SecondMainButton(
                 text: 'Gửi yêu cầu',
                 onpress: (widget.playerModel!.pricePerHour * chooseTime) <=
                         widget.userModel.userBalance.balance
@@ -264,9 +272,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                       }
                     : () {},
                 height: 50,
-                width: 200),
-          ]),
-        ));
+                width: 150),
+          )),
+    );
   }
 
   Widget buildSingleCheckBox(CheckBoxState cbState) => CheckboxListTile(

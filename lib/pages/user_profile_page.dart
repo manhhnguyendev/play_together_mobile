@@ -246,6 +246,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
       avatar = widget.userModel.avatar;
     }
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -279,7 +280,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
           child: Column(
             children: [
               const SizedBox(
-                height: 15,
+                height: 75,
               ),
               Container(
                 alignment: Alignment.center,
