@@ -302,12 +302,12 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                padding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
                 child: SecondMainButton(
-                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 250),
+                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 100),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                padding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
                 child: DeclineButton(
                     text: 'Hủy yêu cầu',
                     onpress: () {
@@ -331,7 +331,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                       });
                     },
                     height: 50,
-                    width: 250),
+                    width: 100),
               ),
             ],
           ),
