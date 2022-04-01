@@ -36,7 +36,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   List<int> listHour = [];
   List listGames = [];
   List listGamesCheckBox = [];
+  List listGameId = [];
   List listGamesChoosen = [];
+  List<GameOrderModel> games = [];
   late double totalTimes;
 
   void createAListCheckBox() {
@@ -44,10 +46,11 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       for (var i = 0; i < listGames.length; i++) {
         listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
       }
-    }
-    for (var i = 0; i < widget.listGameAndRank!.length; i++) {
-      listGamesCheckBox
-          .add(CheckBoxState(title: widget.listGameAndRank![i].game.name));
+    } else {
+      for (var i = 0; i < widget.listGameAndRank!.length; i++) {
+        listGamesCheckBox
+            .add(CheckBoxState(title: widget.listGameAndRank![i].game.name));
+      }
     }
   }
 
@@ -57,10 +60,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
     }
     chooseTime = listHour[0];
   }
-
-  GameOrderModel game =
-      GameOrderModel(gameId: "6c211880-ecd9-4975-806e-237fe1bc4294");
-  List<GameOrderModel> games = [];
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +243,15 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                         widget.userModel.userBalance.balance
                     ? () {
                         setState(() {
-                          games.add(game);
+                          for (var item in listGamesChoosen) {
+                            for (var game in widget.listGameAndRank!) {
+                              if (game.game.name.contains(item)) {
+                                GameOrderModel gameOfOrder =
+                                    GameOrderModel(gameId: game.gameId);
+                                games.add(gameOfOrder);
+                              }
+                            }
+                          }
                           CreateOrderModel createOrderModel = CreateOrderModel(
                               totalTimes: chooseTime,
                               message: beginMessage,
@@ -256,7 +263,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                             if (order != null) {
                               setState(() {
                                 orderModel = order;
-                                print(orderModel!.id);
+                                print('OrderId: ' + orderModel!.id);
                                 helper.pushInto(
                                     context,
                                     HiringNegotiatingPage(

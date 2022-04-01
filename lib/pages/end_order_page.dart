@@ -200,11 +200,11 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Column(
                     children: List.generate(
-                        widget.orderModel!.gameOfOrderModel != null
-                            ? widget.orderModel!.gameOfOrderModel.length
+                        widget.orderModel!.gameOfOrders != null
+                            ? widget.orderModel!.gameOfOrders.length
                             : 0,
                         (index) => buildGamesChoosenField(
-                            widget.orderModel!.gameOfOrderModel[index])),
+                            widget.orderModel!.gameOfOrders[index])),
                   ),
                 ),
                 Padding(

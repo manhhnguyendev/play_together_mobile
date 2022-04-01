@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -262,8 +263,12 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
             child: Column(
-              children: List.generate(listGamesChoosen.length,
-                  (index) => buildGamesChoosenField(listGamesChoosen[index])),
+              children: List.generate(
+                  widget.orderModel!.gameOfOrders != null
+                      ? widget.orderModel!.gameOfOrders.length
+                      : 0,
+                  (index) => buildGamesChoosenField(
+                      widget.orderModel!.gameOfOrders[index])),
             ),
           ),
           Container(
@@ -332,11 +337,11 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
     );
   }
 
-  Widget buildGamesChoosenField(String game) => Container(
+  Widget buildGamesChoosenField(GameOfOrdersModel game) => Container(
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          "- " + game,
+          "- " + game.game.name,
           style: const TextStyle(color: Colors.black, fontSize: 15),
         ),
       );

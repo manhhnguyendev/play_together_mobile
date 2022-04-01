@@ -7,7 +7,7 @@ class OrderModel {
   UserModel? user;
   String toUserId;
   UserModel? toUser;
-  List<GameOfOrdersModel> gameOfOrderModel;
+  List<GameOfOrdersModel> gameOfOrders;
   String message;
   String reason;
   int totalTimes;
@@ -23,7 +23,7 @@ class OrderModel {
     required this.user,
     required this.toUserId,
     required this.toUser,
-    required this.gameOfOrderModel,
+    required this.gameOfOrders,
     required this.message,
     required this.reason,
     required this.totalTimes,
@@ -42,8 +42,8 @@ class OrderModel {
         toUser: (json['toUser']) != null
             ? UserModel.fromJson(json['toUser'])
             : null,
-        gameOfOrderModel: (json['gameOfOrderModel'] as List<dynamic>?) != null
-            ? (json['gameOfOrderModel'] as List<dynamic>)
+        gameOfOrders: (json['gameOfOrders'] as List<dynamic>?) != null
+            ? (json['gameOfOrders'] as List<dynamic>)
                 .map((games) => GameOfOrdersModel.fromJson(games))
                 .toList()
             : <GameOfOrdersModel>[],
@@ -63,7 +63,7 @@ class OrderModel {
         "user": user,
         "toUserId": toUserId,
         "toUser": toUser,
-        "gameOfOrderModel": gameOfOrderModel,
+        "gameOfOrders": gameOfOrders,
         "message": message,
         "reason": reason,
         "totalTimes": totalTimes,
