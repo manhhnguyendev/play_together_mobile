@@ -238,10 +238,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   widget.orderModel!.totalPrices.toStringAsFixed(0).toVND(),
                   style: const TextStyle(fontSize: 18),
                 ),
-                const Text(
-                  ' đ',
-                  style: TextStyle(fontSize: 18),
-                ),
               ],
             ),
           ),
@@ -300,16 +296,18 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
                 child: SecondMainButton(
-                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 100),
+                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 200),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
                 child: DeclineButton(
-                    text: 'Hủy yêu cầu',
+                    text: 'Hủy thuê',
                     onpress: () {
                       setState(() {
                         Future<bool?> cancelFuture = OrderService()
@@ -331,7 +329,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                       });
                     },
                     height: 50,
-                    width: 100),
+                    width: 200),
               ),
             ],
           ),
