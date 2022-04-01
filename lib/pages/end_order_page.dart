@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -286,8 +287,9 @@ class _EndOrderPageState extends State<EndOrderPage> {
                       setState(() {
                         helper.pushInto(
                             context,
-                            HomePage(
+                            RatingAndCommentPage(
                               tokenModel: widget.tokenModel,
+                              orderModel: widget.orderModel!,
                               userModel: widget.userModel!,
                             ),
                             true);
