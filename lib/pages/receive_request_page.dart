@@ -316,47 +316,6 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
             indent: 15,
             endIndent: 15,
           ),
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-          //   child: Column(
-          //     children: [
-          //       SecondMainButton(
-          //           text: 'Chấp nhận',
-          //           onpress: () {
-          //             AcceptOrderModel isAccept =
-          //                 AcceptOrderModel(isAccept: true);
-          //             Future<bool?> acceptFuture = OrderService()
-          //                 .acceptOrderRequest(widget.orderModel!.id,
-          //                     widget.tokenModel.message, isAccept);
-          //             acceptFuture.then((accept) {
-          //               if (accept == true) {
-          //                 setState(() {
-          //                   print("a \n a \n a \n a \n a \n a \n a \n " +
-          //                       "Đồng ý rồi nè!!!!");
-          //                   helper.pushInto(
-          //                       context,
-          //                       HiringPage(
-          //                         tokenModel: widget.tokenModel,
-          //                         userModel: widget.userModel,
-          //                         orderModel: widget.orderModel,
-          //                       ),
-          //                       true);
-          //                 });
-          //               }
-          //             });
-          //           },
-          //           height: 50,
-          //           width: 300),
-          //       DeclineButton(
-          //           text: 'Từ chối',
-          //           onpress: () {
-          //             createAlertDialog(context);
-          //           },
-          //           height: 50,
-          //           width: 300)
-          //     ],
-          //   ),
-          // )
         ],
       )),
       bottomNavigationBar: BottomAppBar(

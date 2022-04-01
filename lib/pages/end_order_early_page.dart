@@ -77,15 +77,20 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                         height: 120,
                         width: 120,
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(widget.orderModel!.toUser!.avatar),
+                          backgroundImage: NetworkImage(
+                              widget.orderModel!.user!.id ==
+                                      widget.userModel!.id
+                                  ? widget.orderModel!.user!.avatar
+                                  : widget.orderModel!.toUser!.avatar),
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        widget.orderModel!.toUser!.name,
+                        widget.orderModel!.user!.id == widget.userModel!.id
+                            ? widget.orderModel!.user!.name
+                            : widget.orderModel!.toUser!.name,
                         style: const TextStyle(fontSize: 18),
                       ),
                     ],

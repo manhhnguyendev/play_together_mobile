@@ -380,13 +380,13 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
       ),
       bottomNavigationBar: BottomAppBar(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SecondMainButton(
-                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 200),
+                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 180),
               DeclineButton(
                   text: 'Kết thúc',
                   onpress: () {
@@ -402,7 +402,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     );
                   },
                   height: 50,
-                  width: 200),
+                  width: 180),
             ],
           ),
         ),
