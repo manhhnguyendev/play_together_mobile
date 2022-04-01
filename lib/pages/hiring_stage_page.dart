@@ -331,11 +331,11 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
               padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
               child: Column(
                 children: List.generate(
-                    widget.orderModel!.gameOfOrderModel != null
-                        ? widget.orderModel!.gameOfOrderModel.length
+                    widget.orderModel!.gameOfOrders != null
+                        ? widget.orderModel!.gameOfOrders.length
                         : 0,
                     (index) => buildGamesChoosenField(
-                        widget.orderModel!.gameOfOrderModel[index])),
+                        widget.orderModel!.gameOfOrders[index])),
               ),
             ),
             Container(
@@ -386,7 +386,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SecondMainButton(
-                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 180),
+                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 183),
               DeclineButton(
                   text: 'Kết thúc',
                   onpress: () {
@@ -402,7 +402,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     );
                   },
                   height: 50,
-                  width: 180),
+                  width: 183),
             ],
           ),
         ),

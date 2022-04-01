@@ -240,11 +240,11 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 15),
             child: Column(
               children: List.generate(
-                  widget.orderModel!.gameOfOrderModel != null
-                      ? widget.orderModel!.gameOfOrderModel.length
+                  widget.orderModel!.gameOfOrders != null
+                      ? widget.orderModel!.gameOfOrders.length
                       : 0,
                   (index) => buildGamesChoosenField(
-                      widget.orderModel!.gameOfOrderModel[index])),
+                      widget.orderModel!.gameOfOrders[index])),
             ),
           ),
           Container(
@@ -351,14 +351,14 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                     });
                   },
                   height: 50,
-                  width: 200),
+                  width: 183),
               DeclineButton(
                   text: 'Từ chối',
                   onpress: () {
                     createAlertDialog(context);
                   },
                   height: 50,
-                  width: 200)
+                  width: 183)
             ],
           ),
         ),

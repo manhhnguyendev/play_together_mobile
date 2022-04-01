@@ -32,7 +32,7 @@ class SecondMainButton extends StatelessWidget {
               onPressed: onpress,
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.white, fontSize: 18.0),
+                style: const TextStyle(color: Colors.white, fontSize: 16.0),
               )),
         ),
       ),
