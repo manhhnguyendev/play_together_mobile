@@ -124,7 +124,6 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
     controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
       if (controller.value == 0) {
-        // luu lai status order
         Navigator.pop(context);
       }
     });

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/end_order_early_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
-import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
+
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -46,9 +46,9 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
               lateUser = value;
               helper.pushInto(
                   context,
-                  RatingAndCommentPage(
+                  EndOrderPage(
                     tokenModel: widget.tokenModel,
-                    userModel: lateUser!,
+                    userModel: widget.userModel!,
                     orderModel: widget.orderModel,
                   ),
                   true);

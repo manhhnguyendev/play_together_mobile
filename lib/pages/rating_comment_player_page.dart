@@ -118,7 +118,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                 onpress: () {
                   RatingCreateModel rateComment = RatingCreateModel(
                       rate: ratingStar.round(),
-                      comment: comment != "" ? comment : "null comment");
+                      comment: comment != "" ? comment : comment);
                   Future<bool?> rateFuture = RatingService().createRating(
                       widget.orderModel!.id,
                       widget.tokenModel.message,
