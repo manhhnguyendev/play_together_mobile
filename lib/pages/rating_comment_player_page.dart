@@ -30,6 +30,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,93 +59,101 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
               fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 15,
-          ),
-          SizedBox(
-            height: 150,
-            width: 150,
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(widget.orderModel!.toUser!.avatar),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 75,
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            widget.orderModel!.toUser!.name,
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          RatingBar.builder(
-            initialRating: ratingStar,
-            minRating: 1,
-            direction: Axis.horizontal,
-            allowHalfRating: false,
-            itemCount: 5,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: Colors.amber,
+            SizedBox(
+              height: 150,
+              width: 150,
+              child: CircleAvatar(
+                backgroundImage:
+                    NetworkImage(widget.orderModel!.toUser!.avatar),
+              ),
             ),
-            onRatingUpdate: (rating) {
-              ratingStar = rating;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-            child: Container(
-              height: 300,
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: TextFormField(
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                maxLength: 1000,
-                onChanged: (newValue) => comment = newValue,
-                decoration: const InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  counterText: "",
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  labelText: "Nhập đánh giá của bạn...",
-                  hintText: "Nhập vào đánh giá người chơi của bạn",
-                  border: InputBorder.none,
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              widget.orderModel!.toUser!.name,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            RatingBar.builder(
+              initialRating: ratingStar,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: false,
+              itemCount: 5,
+              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => const Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rating) {
+                ratingStar = rating;
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
+              child: Container(
+                height: 300,
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: TextFormField(
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  maxLength: 1000,
+                  onChanged: (newValue) => comment = newValue,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                    counterText: "",
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    labelText: "Nhập đánh giá của bạn...",
+                    hintText: "Nhập vào đánh giá người chơi của bạn",
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),
-          ),
-          SecondMainButton(
-              text: 'Gửi',
-              onpress: () {
-                RatingCreateModel rateComment = RatingCreateModel(
-                    rate: ratingStar.round(),
-                    comment: comment != "" ? comment : "null comment");
-                Future<bool?> rateFuture = RatingService().createRating(
-                    widget.orderModel!.id,
-                    widget.tokenModel.message,
-                    rateComment);
-                rateFuture.then((rate) {
-                  setState(() {
-                    helper.pushInto(
-                        context,
-                        EndOrderPage(
-                          tokenModel: widget.tokenModel,
-                          userModel: widget.userModel!,
-                          orderModel: widget.orderModel!,
-                        ),
-                        true);
-                  });
-                });
-              },
-              height: 50,
-              width: 200),
-        ],
+          ],
+        ),
       ),
+      bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: SecondMainButton(
+                text: 'Gửi',
+                onpress: () {
+                  RatingCreateModel rateComment = RatingCreateModel(
+                      rate: ratingStar.round(),
+                      comment: comment != "" ? comment : "null comment");
+                  Future<bool?> rateFuture = RatingService().createRating(
+                      widget.orderModel!.id,
+                      widget.tokenModel.message,
+                      rateComment);
+                  rateFuture.then((rate) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          EndOrderPage(
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!,
+                            orderModel: widget.orderModel!,
+                          ),
+                          true);
+                    });
+                  });
+                },
+                height: 50,
+                width: 200),
+          )),
     );
   }
 }

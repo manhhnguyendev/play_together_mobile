@@ -47,6 +47,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
         future: getGameOfUser(),
         builder: (context, snapshot) {
           return Scaffold(
+            extendBodyBehindAppBar: true,
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             appBar: PreferredSize(
@@ -68,6 +69,9 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 60,
+                  ),
                   Container(
                     alignment: Alignment.center,
                     child: Column(

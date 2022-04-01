@@ -13,7 +13,7 @@ class _TransactionPageState extends State<TransactionPage> {
   bool checkDeposit = false;
   bool checkWithdraw = false;
   bool checkDonate = false;
-  bool checkIncome = false;
+  bool checkIncome = false; //income tính luôn cái vụ refund - thối tiền
   bool checkOutcome = false;
   bool checkAll = true;
   @override

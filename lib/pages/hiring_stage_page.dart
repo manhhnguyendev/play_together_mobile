@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/pages/end_order_early_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -175,195 +176,92 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     check();
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: const [],
-          centerTitle: true,
-          title: const Text(
-            'Đang thuê...',
-            style: TextStyle(
-                fontSize: 18, color: Colors.red, fontWeight: FontWeight.normal),
-          ),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: const [],
+        centerTitle: true,
+        title: const Text(
+          'Đang thuê...',
+          style: TextStyle(
+              fontSize: 18, color: Colors.red, fontWeight: FontWeight.normal),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 120,
-                          width: 120,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(widget.userModel!.avatar),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          widget.userModel!.name,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        Container(
-                          alignment: Alignment.topCenter,
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/play_together_logo_no_text.png"),
-                                  fit: BoxFit.cover)),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 120,
-                          width: 120,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                widget.orderModel!.user!.id ==
-                                        widget.userModel!.id
-                                    ? widget.orderModel!.toUser!.avatar
-                                    : widget.orderModel!.user!.avatar),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          widget.orderModel!.user!.id == widget.userModel!.id
-                              ? widget.orderModel!.toUser!.name
-                              : widget.orderModel!.user!.name,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: Container(
-                  height: 1,
-                  decoration: const BoxDecoration(
-                      border: Border(
-                    top: BorderSide(
-                      color: Colors.grey,
-                      width: 0.15,
-                    ),
-                  )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Thời lượng thuê ',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const Spacer(),
-                    Text(
-                      widget.orderModel!.totalTimes.toString(),
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const Text(
-                      ' giờ',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Tổng chi phí ',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const Spacer(),
-                    Text(
-                      widget.orderModel!.totalPrices.toStringAsFixed(0).toVND(),
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 1,
-                decoration: const BoxDecoration(
-                    border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 0.15,
-                  ),
-                )),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                child: const Text(
-                  'Tựa game đã chọn: ',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-                child: Column(
-                  children: List.generate(
-                      widget.orderModel!.gameOfOrderModel != null
-                          ? widget.orderModel!.gameOfOrderModel.length
-                          : 0,
-                      (index) => buildGamesChoosenField(
-                          widget.orderModel!.gameOfOrderModel[index])),
-                ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    const Text(
-                      'Thời gian còn lại:',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    AnimatedBuilder(
-                      animation: controller,
-                      builder: (context, child) => Text(
-                        countText,
-                        style: const TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.normal,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(widget.userModel!.avatar),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        widget.userModel!.name,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      Container(
+                        alignment: Alignment.topCenter,
+                        width: 60,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/play_together_logo_no_text.png"),
+                                fit: BoxFit.cover)),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              widget.orderModel!.user!.id ==
+                                      widget.userModel!.id
+                                  ? widget.orderModel!.toUser!.avatar
+                                  : widget.orderModel!.user!.avatar),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        widget.orderModel!.user!.id == widget.userModel!.id
+                            ? widget.orderModel!.toUser!.name
+                            : widget.orderModel!.user!.name,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Container(
                 height: 1,
                 decoration: const BoxDecoration(
                     border: Border(
@@ -373,24 +271,146 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   ),
                 )),
               ),
-              const SizedBox(
-                height: 40,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+              child: Row(
+                children: [
+                  const Text(
+                    'Thời lượng thuê ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const Spacer(),
+                  Text(
+                    widget.orderModel!.totalTimes.toString(),
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const Text(
+                    ' giờ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
               ),
-              SecondMainButton(
-                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 250),
-              const SizedBox(
-                height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+              child: Row(
+                children: [
+                  const Text(
+                    'Tổng chi phí ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const Spacer(),
+                  Text(
+                    widget.orderModel!.totalPrices.toStringAsFixed(0).toVND(),
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ],
               ),
-              DeclineButton(
-                  text: 'Kết thúc sớm',
-                  onpress: () {
-                    createAlertDialog(context);
-                  },
-                  height: 50,
-                  width: 250),
+            ),
+            Container(
+              height: 1,
+              decoration: const BoxDecoration(
+                  border: Border(
+                top: BorderSide(
+                  color: Colors.grey,
+                  width: 0.15,
+                ),
+              )),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
+              child: const Text(
+                'Tựa game đã chọn: ',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+              child: Column(
+                children: List.generate(
+                    widget.orderModel!.gameOfOrderModel != null
+                        ? widget.orderModel!.gameOfOrderModel.length
+                        : 0,
+                    (index) => buildGamesChoosenField(
+                        widget.orderModel!.gameOfOrderModel[index])),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  const Text(
+                    'Thời gian còn lại:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) => Text(
+                      countText,
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: 1,
+              decoration: const BoxDecoration(
+                  border: Border(
+                top: BorderSide(
+                  color: Colors.grey,
+                  width: 0.15,
+                ),
+              )),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                child: SecondMainButton(
+                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 250),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                child: DeclineButton(
+                    text: 'Kết thúc sớm',
+                    onpress: () {
+                      //createAlertDialog(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EndOrderEarlyPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: lateUser!,
+                                  orderModel: widget.orderModel,
+                                )),
+                      );
+                    },
+                    height: 50,
+                    width: 250),
+              ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget buildGamesChoosenField(GameOfOrdersModel game) => Container(

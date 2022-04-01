@@ -71,6 +71,13 @@ class _TransactionCardState extends State<TransactionCard> {
       );
     }
 
+    if (type == 'Order - Refund') {
+      return Text(
+        'Hoàn tiền từ giao dịch',
+        style: TextStyle(fontSize: 18),
+      );
+    }
+
     if (type == 'Order' && operation == '+') {
       return Text(
         'Nhận tiền từ giao dịch',

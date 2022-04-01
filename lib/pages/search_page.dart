@@ -48,7 +48,6 @@ class _SearchPageState extends State<SearchPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      //appBar: SearchBar(height: 70, onPressedSearch: () {}),
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Colors.white,
@@ -144,7 +143,6 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
       ),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
