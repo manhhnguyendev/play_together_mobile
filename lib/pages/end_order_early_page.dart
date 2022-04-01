@@ -14,10 +14,11 @@ class EndOrderEarlyPage extends StatefulWidget {
   final UserModel? userModel;
   final PlayerModel? playerModel;
   final TokenModel tokenModel;
+
   const EndOrderEarlyPage(
       {Key? key,
       this.orderModel,
-      required this.userModel,
+      this.userModel,
       this.playerModel,
       required this.tokenModel})
       : super(key: key);
@@ -27,47 +28,9 @@ class EndOrderEarlyPage extends StatefulWidget {
 }
 
 class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
-  var reasonController = new TextEditingController();
+  var reasonController = TextEditingController();
   UserModel? lateUser;
   bool checkReason = true;
-  void check() {
-    Future<UserModel?> checkStatus =
-        UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
-      if (value != null) {
-        if (value.status.contains('Online')) {
-          if (widget.orderModel!.userId == widget.userModel!.id) {
-            setState(() {
-              lateUser = value;
-              helper.pushInto(
-                  context,
-                  RatingAndCommentPage(
-                    tokenModel: widget.tokenModel,
-                    userModel: lateUser!,
-                    orderModel: widget.orderModel,
-                  ),
-                  true);
-            });
-          } else {
-            setState(() {
-              lateUser = value;
-              helper.pushInto(
-                  context,
-                  EndOrderPage(
-                    tokenModel: widget.tokenModel,
-                    userModel: widget.userModel,
-                  ),
-                  true);
-            });
-          }
-        } else {
-          setState(() {
-            lateUser = value;
-          });
-        }
-      }
-    });
-  }
 
   String reason = "";
   @override
@@ -84,7 +47,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: FlatButton(
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios,
             ),
             onPressed: () {
@@ -101,7 +64,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
             Padding(
@@ -115,14 +78,14 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                         width: 120,
                         child: CircleAvatar(
                           backgroundImage:
-                              NetworkImage(widget.userModel!.avatar),
+                              NetworkImage(widget.orderModel!.toUser!.avatar),
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        widget.userModel!.name,
+                        widget.orderModel!.toUser!.name,
                         style: const TextStyle(fontSize: 18),
                       ),
                     ],
@@ -294,9 +257,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                           helper.pushInto(
                               context,
                               EndOrderPage(
-                                orderModel: widget.orderModel,
+                                orderModel: widget.orderModel!,
                                 tokenModel: widget.tokenModel,
-                                userModel: widget.userModel,
+                                userModel: widget.userModel!,
                               ),
                               true);
                         });
