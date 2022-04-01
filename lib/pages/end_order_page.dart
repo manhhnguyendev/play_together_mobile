@@ -1,35 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
-import 'package:intl/intl.dart';
+import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:intl/intl.dart';
 
 class EndOrderPage extends StatefulWidget {
-  const EndOrderPage({Key? key}) : super(key: key);
+  final UserModel? userModel;
+  final OrderModel? orderModel;
+  final TokenModel tokenModel;
+  const EndOrderPage(
+      {Key? key, this.userModel, this.orderModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<EndOrderPage> createState() => _EndOrderPageState();
 }
 
 class _EndOrderPageState extends State<EndOrderPage> {
-  // String date = DateFormat('dd/MM/yyyy')
-  //       .format(DateTime.parse(widget.orderModel!.timeStart));
-  //   String startTime = DateFormat('hh:mm a')
-  //       .format(DateTime.parse(widget.orderModel!.timeStart));
-  //   String endDate = DateFormat('dd/MM/yyyy')
-  //       .format(DateTime.parse(widget.orderModel!.timeFinish));
-  //   String endTime = DateFormat('hh:mm a')
-  //       .format(DateTime.parse(widget.orderModel!.timeFinish));
   late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
+    String date = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel!.timeStart));
+    String startTime = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.orderModel!.timeStart));
+    String endDate = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel!.timeFinish));
+    String endTime = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.orderModel!.timeFinish));
     checkEndEarly = true;
-    var _controller = TextEditingController();
-    // _controller.text = widget.orderModel!.message;
-    _controller.text = "aaaaa";
     var _reasonController = TextEditingController();
-    // _controller.text = widget.orderModel!.message;
-    _reasonController.text = "Tôi bận";
+    _reasonController.text = widget.orderModel!.reason;
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
@@ -54,15 +61,17 @@ class _EndOrderPageState extends State<EndOrderPage> {
             ),
           ],
           centerTitle: true,
-          title: Text(
+          title: const Text(
             'Chi tiết thuê',
             style: TextStyle(
-                fontSize: 18, color: Colors.red, fontWeight: FontWeight.normal),
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
           ),
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(),
             child: Column(
               children: [
                 Container(
@@ -78,21 +87,19 @@ class _EndOrderPageState extends State<EndOrderPage> {
                             height: 120,
                             width: 120,
                             child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    "assets/images/defaultprofile.png")
-                                // NetworkImage(widget.orderModel!.user!.avatar),
-                                ),
+                                backgroundImage: NetworkImage(
+                                    widget.orderModel!.user!.avatar)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
-                            "USER NAME",
-                            style: TextStyle(fontSize: 18),
+                            widget.orderModel!.user!.name,
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Row(
                         children: [
                           Container(
@@ -108,25 +115,22 @@ class _EndOrderPageState extends State<EndOrderPage> {
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Column(
                         children: [
                           SizedBox(
                             height: 120,
                             width: 120,
                             child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    "assets/images/defaultprofile.png")
-                                //NetworkImage(widget.orderModel!.toUser!.avatar),
-                                ),
+                                backgroundImage: NetworkImage(
+                                    widget.orderModel!.toUser!.avatar)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
-                            // widget.orderModel!.toUser!.name,
-                            "TO USERNAME",
-                            style: TextStyle(fontSize: 18),
+                            widget.orderModel!.toUser!.name,
+                            style: const TextStyle(fontSize: 18),
                           ),
                         ],
                       ),
@@ -137,7 +141,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   padding: const EdgeInsets.only(top: 5),
                   child: Container(
                     height: 1,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         border: Border(
                       top: BorderSide(
                         color: Colors.grey,
@@ -150,17 +154,16 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         'Thời lượng thuê ',
                         style: TextStyle(fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
-                        // widget.orderModel!.totalTimes.toString(),
-                        "2",
-                        style: TextStyle(fontSize: 15),
+                        widget.orderModel!.totalTimes.toString(),
+                        style: const TextStyle(fontSize: 15),
                       ),
-                      Text(
+                      const Text(
                         ' giờ',
                         style: TextStyle(fontSize: 15),
                       ),
@@ -171,51 +174,51 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         'Tổng chi phí ',
                         style: TextStyle(fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
-                        // '${formatCurrency.format(widget.orderModel!.totalPrices)}',
-                        '100000'.toVND(),
-                        style: TextStyle(fontSize: 15),
+                        (widget.orderModel!.totalPrices
+                            .toStringAsFixed(0)
+                            .toVND()),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ],
                   ),
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                  child: Text(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: const Text(
                     'Tựa game đã chọn: ',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-                //   child: Column(
-                //     children: List.generate(
-                //         widget.orderModel!.gameOfOrderModel != null
-                //             ? widget.orderModel!.gameOfOrderModel.length
-                //             : 0,
-                //         (index) => buildGamesChoosenField(
-                //             widget.orderModel!.gameOfOrderModel[index])),
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Column(
+                    children: List.generate(
+                        widget.orderModel!.gameOfOrderModel != null
+                            ? widget.orderModel!.gameOfOrderModel.length
+                            : 0,
+                        (index) => buildGamesChoosenField(
+                            widget.orderModel!.gameOfOrderModel[index])),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         'Thời gian bắt đầu',
                         style: TextStyle(fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
-                        "12/12/2022, 00:00:00",
-                        //date + ", " + startTime,
-                        style: TextStyle(fontSize: 15),
+                        date + ", " + startTime,
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ],
                   ),
@@ -224,48 +227,42 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         'Thời gian kết thúc',
                         style: TextStyle(fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
-                        // widget.orderModel!.timeFinish +
-                        //     ", " +
-                        //     widget.orderModel!.timeStart,
-                        "13/12/2022, 02:00:00",
-                        //endDate + ", " + endTime,
-                        style: TextStyle(fontSize: 15),
+                        endDate + ", " + endTime,
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ],
                   ),
                 ),
-
                 Visibility(
                   visible: checkEndEarly,
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                    child: Text(
+                    padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+                    child: const Text(
                       'Lý do kết thúc sớm:',
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ),
-
                 Visibility(
                   visible: checkEndEarly,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
                     child: Container(
-                      height: 250,
+                      height: 100,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black)),
                       child: TextField(
                         controller: _reasonController,
                         enabled: false,
                         decoration: const InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
+                          contentPadding: EdgeInsets.symmetric(
                               vertical: 0, horizontal: 10.0),
                           border: InputBorder.none,
                         ),
@@ -273,48 +270,21 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     ),
                   ),
                 ),
-
-                Divider(
-                  thickness: 1,
-                  indent: 15,
-                  endIndent: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Đánh giá: ',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                      ),
-                      Text(
-                        "5",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                  child: Container(
-                    height: 250,
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: TextField(
-                      controller: _controller,
-                      enabled: false,
-                      decoration: const InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10.0),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
+                SecondMainButton(
+                    text: 'Kết thúc',
+                    onpress: () {
+                      setState(() {
+                        helper.pushInto(
+                            context,
+                            HomePage(
+                              tokenModel: widget.tokenModel,
+                              userModel: widget.userModel!,
+                            ),
+                            true);
+                      });
+                    },
+                    height: 50,
+                    width: 200),
               ],
             ),
           ),
@@ -323,21 +293,21 @@ class _EndOrderPageState extends State<EndOrderPage> {
 
   Widget createStatus(String status) {
     if (status == 'Processing') {
-      return Text(
+      return const Text(
         'Đang thuê',
         style: TextStyle(fontSize: 15, color: Colors.yellow),
       );
     }
 
     if (status == 'Complete') {
-      return Text(
+      return const Text(
         'Hoàn thành',
         style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }
 
     if (status == 'Cancel') {
-      return Text(
+      return const Text(
         'Bị từ chối',
         style: TextStyle(fontSize: 15, color: Colors.grey),
       );
@@ -345,7 +315,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
 
     return Text(
       status,
-      style: TextStyle(fontSize: 15, color: Colors.black),
+      style: const TextStyle(fontSize: 15, color: Colors.black),
     );
   }
 
@@ -354,7 +324,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "- " + game.game.name,
-          style: TextStyle(color: Colors.black, fontSize: 15),
+          style: const TextStyle(color: Colors.black, fontSize: 15),
         ),
       );
 }

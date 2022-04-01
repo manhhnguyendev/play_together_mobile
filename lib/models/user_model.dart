@@ -1,5 +1,6 @@
 import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
 
 class UserModel {
@@ -139,12 +140,14 @@ class GameOfUserModel {
   String gameId;
   GameModel game;
   String rankId;
+  RankModel rank;
 
   GameOfUserModel({
     required this.id,
     required this.gameId,
     required this.game,
     required this.rankId,
+    required this.rank,
   });
 
   factory GameOfUserModel.fromJson(Map<String, dynamic> json) =>
@@ -155,6 +158,9 @@ class GameOfUserModel {
             ? GameModel.fromJson(json['game'])
             : GameModel.fromJson(json),
         rankId: json['rankId'] as String,
+        rank: (json['rank']) != null
+            ? RankModel.fromJson(json['rank'])
+            : RankModel.fromJson(json),
       );
 
   Map<String, dynamic> toJson() => {
@@ -162,6 +168,7 @@ class GameOfUserModel {
         "gameId": gameId,
         "game": game,
         "rankId": rankId,
+        "rank": rank,
       };
 }
 
@@ -177,6 +184,7 @@ class PlayerModel {
   List<ImageModel> images;
   String description;
   double rate;
+  int numOfRate;
   String status;
   bool isActive;
   double pricePerHour;
@@ -194,6 +202,7 @@ class PlayerModel {
       required this.images,
       required this.description,
       required this.rate,
+      required this.numOfRate,
       required this.status,
       required this.isActive,
       required this.pricePerHour,
@@ -215,6 +224,7 @@ class PlayerModel {
             : <ImageModel>[],
         description: json['description'] as String,
         rate: json['rate'] as double,
+        numOfRate: json['numOfRate'] as int,
         status: json['status'] as String,
         isActive: json['isActive'] as bool,
         pricePerHour: json['pricePerHour'] as double,
@@ -233,6 +243,7 @@ class PlayerModel {
         "images": images,
         "description": description,
         "rate": rate,
+        "numOfRate": numOfRate,
         "status": status,
         "isActive": isActive,
         "pricePerHour": pricePerHour,
