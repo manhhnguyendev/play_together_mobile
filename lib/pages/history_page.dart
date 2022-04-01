@@ -6,10 +6,9 @@ import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/widgets/history_hiring_card.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
-
-import '../models/order_model.dart';
-import '../services/order_service.dart';
-import '../services/user_service.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 
 class HistoryPage extends StatefulWidget {
   final UserModel userModel;
@@ -26,18 +25,15 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
-//check status
+
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          print(value.status);
           setState(() {
             lateUser = value;
-            //print("đổi nè");
           });
         } else {
           Future<List<OrderModel>?> checkPlayer = OrderService()
@@ -46,13 +42,11 @@ class _HistoryPageState extends State<HistoryPage> {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
-                print(value.status);
                 setState(() {
                   lateUser = value;
                   helper.pushInto(
                       context,
                       ReceiveRequestPage(
-                          //fromUserModel: _listOrder![0].user,
                           orderModel: _listOrder![0],
                           tokenModel: widget.tokenModel,
                           userModel: lateUser!),
@@ -76,21 +70,21 @@ class _HistoryPageState extends State<HistoryPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 1,
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             radius: 27,
             backgroundColor: Colors.white,
             backgroundImage:
                 AssetImage("assets/images/play_together_logo_no_text.png"),
           ),
           centerTitle: true,
-          title: Text(
+          title: const Text(
             'Lịch sử hoạt động',
             style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
               indicatorColor: Colors.grey,
               labelColor: Colors.black,
               unselectedLabelColor: Colors.black,

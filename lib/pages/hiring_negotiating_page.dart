@@ -56,13 +56,11 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         } else if (value.status.contains('Online')) {
           setState(() {
             value = widget.userModel;
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (BuildContext context) => HomePage(
+            helper.pushInto(
+                context,
+                HomePage(
                     tokenModel: widget.tokenModel, userModel: widget.userModel),
-              ),
-              (route) => false,
-            );
+                false);
           });
         } else {
           setState(() {
@@ -120,7 +118,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 60,
           ),
           Padding(

@@ -90,7 +90,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 60,
           ),
           Container(
@@ -307,13 +307,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
     if (status == 'Online') {
       return const Text(
         'Có thể thuê',
-        style: TextStyle(fontSize: 15, color: Colors.green),
-      );
-    }
-
-    if (status == 'Offline') {
-      return const Text(
-        'Đang Offline',
         style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }

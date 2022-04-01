@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/end_order_early_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
-import 'package:play_together_mobile/pages/home_page.dart';
-
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -42,30 +40,17 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          if (widget.orderModel!.userId == widget.userModel!.id) {
-            setState(() {
-              lateUser = value;
-              helper.pushInto(
-                  context,
-                  EndOrderPage(
-                    tokenModel: widget.tokenModel,
-                    userModel: widget.userModel!,
-                    orderModel: widget.orderModel,
-                  ),
-                  true);
-            });
-          } else {
-            setState(() {
-              lateUser = value;
-              helper.pushInto(
-                  context,
-                  HomePage(
-                    tokenModel: widget.tokenModel,
-                    userModel: widget.userModel!,
-                  ),
-                  true);
-            });
-          }
+          setState(() {
+            lateUser = value;
+            helper.pushInto(
+                context,
+                EndOrderPage(
+                  tokenModel: widget.tokenModel,
+                  userModel: widget.userModel!,
+                  orderModel: widget.orderModel,
+                ),
+                true);
+          });
         } else {
           setState(() {
             lateUser = value;
@@ -339,7 +324,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                       MaterialPageRoute(
                           builder: (context) => EndOrderEarlyPage(
                                 tokenModel: widget.tokenModel,
-                                userModel: lateUser!,
+                                userModel: widget.userModel!,
                                 orderModel: widget.orderModel,
                               )),
                     );

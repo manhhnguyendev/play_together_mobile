@@ -3,7 +3,7 @@ import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -285,14 +285,27 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     text: 'Kết thúc',
                     onpress: () {
                       setState(() {
-                        helper.pushInto(
-                            context,
-                            RatingAndCommentPage(
-                              tokenModel: widget.tokenModel,
-                              orderModel: widget.orderModel!,
-                              userModel: widget.userModel!,
-                            ),
-                            true);
+                        if (widget.userModel!.id == widget.orderModel!.userId) {
+                          setState(() {
+                            helper.pushInto(
+                                context,
+                                RatingAndCommentPage(
+                                  orderModel: widget.orderModel,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel!,
+                                ),
+                                true);
+                          });
+                        } else if (widget.userModel!.id ==
+                            widget.orderModel!.toUserId) {
+                          helper.pushInto(
+                              context,
+                              HistoryPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel!,
+                              ),
+                              true);
+                        }
                       });
                     },
                     height: 50,
