@@ -272,10 +272,10 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                           widget.orderModel!.userId) {
                         helper.pushInto(
                             context,
-                            RatingAndCommentPage(
+                            EndOrderPage(
+                              orderModel: widget.orderModel!,
                               tokenModel: widget.tokenModel,
-                              userModel: lateUser!,
-                              orderModel: widget.orderModel,
+                              userModel: widget.userModel!,
                             ),
                             true);
                       }

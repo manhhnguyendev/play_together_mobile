@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -36,22 +37,6 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ReportPage()),
-                  );
-                },
-                icon: const Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.black,
-                )),
-          ),
-        ],
         centerTitle: true,
         title: const Text(
           'Kết thúc thuê',
@@ -142,10 +127,9 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                     setState(() {
                       helper.pushInto(
                           context,
-                          EndOrderPage(
+                          HomePage(
                             tokenModel: widget.tokenModel,
                             userModel: widget.userModel!,
-                            orderModel: widget.orderModel!,
                           ),
                           true);
                     });
