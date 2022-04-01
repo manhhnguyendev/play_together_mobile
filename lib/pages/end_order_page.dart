@@ -88,13 +88,18 @@ class _EndOrderPageState extends State<EndOrderPage> {
                             width: 120,
                             child: CircleAvatar(
                                 backgroundImage: NetworkImage(
-                                    widget.orderModel!.user!.avatar)),
+                                    widget.orderModel!.user!.id ==
+                                            widget.userModel!.id
+                                        ? widget.orderModel!.user!.avatar
+                                        : widget.orderModel!.toUser!.avatar)),
                           ),
                           const SizedBox(
                             height: 5,
                           ),
                           Text(
-                            widget.orderModel!.user!.name,
+                            widget.orderModel!.user!.id == widget.userModel!.id
+                                ? widget.orderModel!.user!.name
+                                : widget.orderModel!.toUser!.name,
                             style: const TextStyle(fontSize: 18),
                           ),
                         ],
@@ -123,13 +128,18 @@ class _EndOrderPageState extends State<EndOrderPage> {
                             width: 120,
                             child: CircleAvatar(
                                 backgroundImage: NetworkImage(
-                                    widget.orderModel!.toUser!.avatar)),
+                                    widget.orderModel!.user!.id ==
+                                            widget.userModel!.id
+                                        ? widget.orderModel!.toUser!.avatar
+                                        : widget.orderModel!.user!.avatar)),
                           ),
                           const SizedBox(
                             height: 5,
                           ),
                           Text(
-                            widget.orderModel!.toUser!.name,
+                            widget.orderModel!.user!.id == widget.userModel!.id
+                                ? widget.orderModel!.toUser!.name
+                                : widget.orderModel!.user!.name,
                             style: const TextStyle(fontSize: 18),
                           ),
                         ],
@@ -260,7 +270,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                           border: Border.all(color: Colors.black)),
                       child: TextField(
                         controller: _reasonController,
-                        enabled: false,
+                        enabled: true,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 0, horizontal: 10.0),

@@ -135,17 +135,17 @@ class AcceptOrderModel {
 }
 
 class FinishSoonOrderModel {
-  String message;
+  String reason;
 
   FinishSoonOrderModel({
-    required this.message,
+    required this.reason,
   });
   factory FinishSoonOrderModel.fromJson(Map<String, dynamic> json) =>
       FinishSoonOrderModel(
-        message: json['message'] as String,
+        reason: json['reason'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        "message": message,
+        "reason": reason,
       };
 }

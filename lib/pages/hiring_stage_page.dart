@@ -9,7 +9,6 @@ import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
@@ -35,66 +34,6 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   int hour = 2;
   double progress = 1.0;
   UserModel? lateUser;
-  createAlertDialog(BuildContext context) {
-    TextEditingController customController = TextEditingController();
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: const Text("Kết thúc sớm đơn thuê này ?"),
-              content: TextField(
-                controller: customController,
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  elevation: 5.0,
-                  child: const Text('Không'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                MaterialButton(
-                  elevation: 5.0,
-                  child: const Text('Có'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    FinishSoonOrderModel finishSoonModel =
-                        FinishSoonOrderModel(message: "set message");
-                    Future<bool?> finishFuture = OrderService().finishSoonOrder(
-                        widget.orderModel!.id,
-                        widget.tokenModel.message,
-                        finishSoonModel);
-                    finishFuture.then((finish) {
-                      if (finish == true) {
-                        if (widget.userModel!.id ==
-                            widget.orderModel!.toUserId) {
-                          setState(() {
-                            helper.pushInto(
-                                context,
-                                EndOrderPage(
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel!,
-                                ),
-                                true);
-                          });
-                        } else if (widget.userModel!.id ==
-                            widget.orderModel!.userId) {
-                          helper.pushInto(
-                              context,
-                              RatingAndCommentPage(
-                                tokenModel: widget.tokenModel,
-                                userModel: lateUser!,
-                                orderModel: widget.orderModel,
-                              ),
-                              true);
-                        }
-                      }
-                    });
-                  },
-                )
-              ]);
-        });
-  }
 
   void check() {
     Future<UserModel?> checkStatus =
@@ -149,9 +88,9 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => RatingAndCommentPage(
+              builder: (context) => EndOrderPage(
                     tokenModel: widget.tokenModel,
-                    userModel: lateUser!,
+                    userModel: widget.userModel!,
                     orderModel: widget.orderModel,
                   )),
         );
@@ -203,15 +142,20 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                         height: 120,
                         width: 120,
                         child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(widget.userModel!.avatar),
+                          backgroundImage: NetworkImage(
+                              widget.orderModel!.user!.id ==
+                                      widget.userModel!.id
+                                  ? widget.orderModel!.user!.avatar
+                                  : widget.orderModel!.toUser!.avatar),
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        widget.userModel!.name,
+                        widget.orderModel!.user!.id == widget.userModel!.id
+                            ? widget.orderModel!.user!.name
+                            : widget.orderModel!.toUser!.name,
                         style: const TextStyle(fontSize: 18),
                       ),
                     ],
@@ -390,7 +334,6 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
               DeclineButton(
                   text: 'Kết thúc',
                   onpress: () {
-                    //createAlertDialog(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
