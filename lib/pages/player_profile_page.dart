@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
 import 'package:play_together_mobile/pages/send_hiring_request_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -11,16 +11,12 @@ class PlayerProfilePage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
   final PlayerModel playerModel;
-  //final List<GameOfUserModel>? listGameAndRank;
-  //final UserServiceModel? userServiceModel;
 
   const PlayerProfilePage({
     Key? key,
     required this.userModel,
     required this.playerModel,
     required this.tokenModel,
-    // required this.listGameAndRank,
-    // required this.userServiceModel
   }) : super(key: key);
 
   @override
@@ -28,15 +24,9 @@ class PlayerProfilePage extends StatefulWidget {
 }
 
 class _PlayerProfilePageState extends State<PlayerProfilePage> {
-  List listPlayerImage = []; //gan list images tu model vao
-
-  List listTopHirer = [
-    'Vu Quoc Hung',
-    'Son Tung',
-    'Bich Phuong',
-  ];
-
+  List listPlayerImage = [];
   List<GameOfUserModel>? listGameAndRank;
+
   Future getGameOfUser() {
     listGameAndRank ??= [];
     Future<List<GameOfUserModel>?> gameOfUserFuture = UserService()
@@ -50,36 +40,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
     });
     return gameOfUserFuture;
   }
-  // Future getUserServiceById() {
-  //   Future<UserServiceModel?> userServiceModelFuture = UserService()
-  //       .getUserServiceById(widget.playerModel.id, widget.tokenModel.message);
-  //   userServiceModelFuture.then((userService) {
-  //     if (userService != null) {
-  //       setState(() {
-  //         userServiceModel = userService;
-  //       });
-  //     }
-  //   });
-  //   return userServiceModelFuture;
-  // }
-  // PlayerModel? _playerModel;
-  // Future getPlayer() {
-  //   Future<PlayerModel?> playerFuture = UserService()
-  //       .getPlayerById(widget.playerModel.id, widget.tokenModel.message);
-  //   playerFuture.then((value) {
-  //     if (value != null) {
-  //       _playerModel = value;
-  //     }
-  //   });
-
-  //   return playerFuture;
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -130,10 +90,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                         const SizedBox(
                           height: 2,
                         ),
-                        Text(
-                          widget.playerModel.status,
-                          style: const TextStyle(fontSize: 10),
-                        ),
+                        createStatus(widget.playerModel.status),
                       ],
                     ),
                   ),
@@ -183,29 +140,42 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     )),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RatingCommentPage()),
+                      );
+                    },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 10, 0, 15),
                       child: Row(
                         children: [
                           Row(
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 'Đánh giá',
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.normal),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.star,
                                 color: Colors.yellow,
                               ),
                               Text(
-                                '4.5',
-                                style: TextStyle(fontSize: 15),
+                                (widget.playerModel.rate.toStringAsFixed(1)),
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                "(" +
+                                    widget.playerModel.numOfRate.toString() +
+                                    ")",
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -215,7 +185,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                             child: Row(
                               children: const [
                                 Text(
-                                  'Xem chi tiết',
+                                  'Chi tiết đánh giá',
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.grey),
                                 ),
@@ -258,9 +228,9 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
                     child: Container(
                       alignment: Alignment.topLeft,
-                      child: const Text(
-                        'Description ở đây',
-                        style: TextStyle(
+                      child: Text(
+                        (widget.playerModel.description),
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.normal),
                       ),
                     ),
@@ -270,7 +240,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     decoration: const BoxDecoration(
                         border: Border(
                       top: BorderSide(
-                        //                   <--- left side
                         color: Colors.grey,
                         width: 0.1,
                       ),
@@ -309,7 +278,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     decoration: const BoxDecoration(
                         border: Border(
                       top: BorderSide(
-                        //                   <--- left side
                         color: Colors.grey,
                         width: 0.1,
                       ),
@@ -333,7 +301,8 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                                   .toVND() +
                               '/h'
                           : '0 đ/h',
-                      style: TextStyle(fontSize: 22, color: Color(0xff320444)),
+                      style: const TextStyle(
+                          fontSize: 22, color: Color(0xff320444)),
                     ),
                     const Spacer(),
                     SecondMainButton(
@@ -368,8 +337,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                  image: NetworkImage(imageLink),
-                  fit: BoxFit.cover)), //sua asset image thanh network
+                  image: NetworkImage(imageLink), fit: BoxFit.cover)),
         ),
       );
 
@@ -379,11 +347,21 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           alignment: Alignment.topLeft,
           child: Column(
             children: [
-              Text(
-                gameOfUser.game.name + ":" + " rank",
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
+              Row(children: [
+                Text(
+                  gameOfUser.game.name,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                    gameOfUser.rankId != ""
+                        ? (gameOfUser.rank != null
+                            ? " : " + gameOfUser.rank.name
+                            : '')
+                        : '',
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold)),
+              ]),
               const SizedBox(
                 height: 5,
               )
@@ -392,57 +370,24 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
         ),
       );
 
-  // Widget buildTopHirers(String hirerName, int count) => Padding(
-  //       padding: const EdgeInsets.only(left: 10),
-  //       child: Container(
-  //         alignment: Alignment.topLeft,
-  //         child: Column(
-  //           children: [
-  //             Text(
-  //               '#' + count.toString() + '. ' + hirerName,
-  //               style: const TextStyle(
-  //                   fontSize: 15, fontWeight: FontWeight.normal),
-  //             ),
-  //             const SizedBox(
-  //               height: 5,
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     );
-
   Widget createStatus(String status) {
-    if (status == 'Processing') {
-      return Text(
-        'Đang thuê',
-        style: TextStyle(fontSize: 15, color: Colors.yellow),
-      );
-    }
-
-    if (status == 'Ngu') {
-      return Text(
-        'ngu vc',
-        style: TextStyle(fontSize: 15, color: Colors.red),
-      );
-    }
-
-    if (status == 'Complete') {
-      return Text(
-        'Hoàn thành',
+    if (status == 'Online') {
+      return const Text(
+        'Có thể thuê',
         style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }
 
-    if (status == 'Cancel') {
-      return Text(
-        'Bị từ chối',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+    if (status == 'Offline') {
+      return const Text(
+        'Đang Offline',
+        style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }
 
     return Text(
       status,
-      style: TextStyle(fontSize: 15, color: Colors.black),
+      style: const TextStyle(fontSize: 15, color: Colors.black),
     );
   }
 }

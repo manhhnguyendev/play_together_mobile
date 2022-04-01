@@ -7,9 +7,9 @@ import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
-
-import '../services/order_service.dart';
-import '../services/user_service.dart';
+import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class HiringNegotiatingPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -33,16 +33,13 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
     with TickerProviderStateMixin {
   late AnimationController controller;
   int time = 5;
-  String profileLink = "assets/images/defaultprofile.png";
-  String profileLink2 = "assets/images/defaultprofile.png";
-  List listGamesChoosen = ['Liên Minh', 'CSGO'];
+  List listGamesChoosen = [];
 
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
     checkStatus.then((value) {
       if (value != null) {
-        print('check status màn request nè ' + value.status);
         if (value.status.contains('Hiring')) {
           setState(() {
             value = widget.userModel;
@@ -66,10 +63,11 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
               (route) => false,
             );
           });
-        } else
+        } else {
           setState(() {
             value = widget.userModel;
           });
+        }
       }
     });
   }
@@ -84,7 +82,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
     controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
       if (controller.value == 0) {
-        // luu lai status order
         Navigator.pop(context);
       }
     });
@@ -112,19 +109,8 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: [
-            // Padding(
-            //   padding: const EdgeInsets.all(10.0),
-            //   child: IconButton(
-            //       onPressed: () {},
-            //       icon: const Icon(
-            //         Icons.close,
-            //         color: Colors.black,
-            //       )),
-            // ),
-          ],
           centerTitle: true,
-          title: Text(
+          title: const Text(
             'Đang chờ chấp thuận...',
             style: TextStyle(
                 fontSize: 18,
@@ -134,13 +120,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         ),
         body: Column(
           children: [
-            // Container(
-            //   alignment: Alignment.center,
-            //   child: Text(
-            //     'Đang chờ chấp thuận...',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            // ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
               child: Row(
@@ -155,19 +134,19 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                               NetworkImage(widget.orderModel!.user!.avatar),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         widget.userModel.name,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         ' •  •  ',
                         style: TextStyle(fontSize: 15, color: Colors.grey),
                       ),
@@ -182,13 +161,13 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                                     "assets/images/play_together_logo_no_text.png"),
                                 fit: BoxFit.cover)),
                       ),
-                      Text(
+                      const Text(
                         ' •  • ',
                         style: TextStyle(fontSize: 15, color: Colors.grey),
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Column(
                     children: [
                       SizedBox(
@@ -199,12 +178,12 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                               NetworkImage(widget.orderModel!.toUser!.avatar),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         widget.playerModel!.name,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ],
                   ),
@@ -215,7 +194,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
               padding: const EdgeInsets.only(top: 15),
               child: Container(
                 height: 1,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border: Border(
                   top: BorderSide(
                     color: Colors.grey,
@@ -228,16 +207,16 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
               padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Thời lượng thuê ',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     widget.orderModel!.totalTimes.toString(),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
-                  Text(
+                  const Text(
                     ' giờ',
                     style: TextStyle(fontSize: 18),
                   ),
@@ -248,16 +227,16 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
               padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     'Tổng chi phí ',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
-                    widget.orderModel!.totalPrices.toString(),
-                    style: TextStyle(fontSize: 18),
+                    widget.orderModel!.totalPrices.toStringAsFixed(0).toVND(),
+                    style: const TextStyle(fontSize: 18),
                   ),
-                  Text(
+                  const Text(
                     ' đ',
                     style: TextStyle(fontSize: 18),
                   ),
@@ -266,7 +245,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
             ),
             Container(
               height: 1,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   border: Border(
                 top: BorderSide(
                   color: Colors.grey,
@@ -277,7 +256,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-              child: Text(
+              child: const Text(
                 'Tựa game đã chọn: ',
                 style: TextStyle(fontSize: 18),
               ),
@@ -293,34 +272,32 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Thời gian còn lại:',
                     style: TextStyle(fontSize: 18),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
-                  Container(
-                    child: AnimatedBuilder(
-                      animation: controller,
-                      builder: (context, child) => Text(
-                        countText,
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.normal,
-                        ),
+                  AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) => Text(
+                      countText,
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             SecondMainButton(
                 text: 'Nhắn tin', onpress: () {}, height: 50, width: 250),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             DeclineButton(
@@ -333,7 +310,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     cancelFuture.then((check) {
                       if (check == true) {
                         setState(() {
-                          print("Cancel về Home nè");
                           helper.pushInto(
                               context,
                               HomePage(
@@ -348,16 +324,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                 },
                 height: 50,
                 width: 250),
-            SecondMainButton(
-                text: 'temp forward',
-                onpress: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const HiringPage()),
-                  // );
-                },
-                height: 50,
-                width: 250),
           ],
         ));
   }
@@ -367,7 +333,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "- " + game,
-          style: TextStyle(color: Colors.black, fontSize: 15),
+          style: const TextStyle(color: Colors.black, fontSize: 15),
         ),
       );
 }

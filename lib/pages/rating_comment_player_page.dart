@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
-import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
-import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
-
-import '../models/order_model.dart';
-import '../models/token_model.dart';
-import '../models/user_model.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 
 class RatingAndCommentPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -26,7 +24,6 @@ class RatingAndCommentPage extends StatefulWidget {
 }
 
 class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
-  String profileLink = "assets/images/defaultprofile.png";
   String comment = "";
   double ratingStar = 0;
 
@@ -55,7 +52,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
           ),
         ],
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Kết thúc thuê',
           style: TextStyle(
               fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
@@ -63,14 +60,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
       ),
       body: Column(
         children: [
-          // Container(
-          //   alignment: Alignment.center,
-          //   child: Text(
-          //     'Kết thúc thuê',
-          //     style: TextStyle(fontSize: 20),
-          //   ),
-          // ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           SizedBox(
@@ -80,14 +70,14 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
               backgroundImage: NetworkImage(widget.orderModel!.toUser!.avatar),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             widget.orderModel!.toUser!.name,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           RatingBar.builder(
@@ -96,13 +86,12 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
             direction: Axis.horizontal,
             allowHalfRating: false,
             itemCount: 5,
-            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => Icon(
+            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => const Icon(
               Icons.star,
               color: Colors.amber,
             ),
             onRatingUpdate: (rating) {
-              print(rating.toString());
               ratingStar = rating;
             },
           ),
@@ -119,7 +108,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                 onChanged: (newValue) => comment = newValue,
                 decoration: const InputDecoration(
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                   counterText: "",
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: "Nhập đánh giá của bạn...",
@@ -132,8 +121,6 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
           SecondMainButton(
               text: 'Gửi',
               onpress: () {
-                print(comment);
-                print(int.parse((ratingStar.round()).toString()));
                 RatingCreateModel rateComment = RatingCreateModel(
                     rate: ratingStar.round(),
                     comment: comment != "" ? comment : "null comment");
@@ -142,21 +129,16 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                     widget.tokenModel.message,
                     rateComment);
                 rateFuture.then((rate) {
-                  // if (rate == true) {
-                  print("a \n a \n a \n a \n a \n a \n a \n " +
-                      "Rate xong về home nè!!!!");
                   setState(() {
                     helper.pushInto(
                         context,
-                        HomePage(
+                        EndOrderPage(
                           tokenModel: widget.tokenModel,
                           userModel: widget.userModel!,
+                          orderModel: widget.orderModel!,
                         ),
                         true);
                   });
-                  // }
-                  // else
-                  //   print("rate lỗi rồi");
                 });
               },
               height: 50,

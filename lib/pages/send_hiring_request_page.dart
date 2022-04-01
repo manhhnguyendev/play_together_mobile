@@ -34,7 +34,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   int maxHour = 5;
   String beginMessage = '';
   List<int> listHour = [];
-  List listGames = ['Liên Minh', 'CSGO', 'Game V'];
+  List listGames = [];
   List listGamesCheckBox = [];
   List listGamesChoosen = [];
   late double totalTimes;
@@ -44,11 +44,11 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       for (var i = 0; i < listGames.length; i++) {
         listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
       }
-    } else
-      for (var i = 0; i < widget.listGameAndRank!.length; i++) {
-        listGamesCheckBox
-            .add(CheckBoxState(title: widget.listGameAndRank![i].game.name));
-      }
+    }
+    for (var i = 0; i < widget.listGameAndRank!.length; i++) {
+      listGamesCheckBox
+          .add(CheckBoxState(title: widget.listGameAndRank![i].game.name));
+    }
   }
 
   void createHourList() {
@@ -111,10 +111,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   const SizedBox(
                     height: 2,
                   ),
-                  Text(
-                    widget.playerModel!.status,
-                    style: const TextStyle(fontSize: 10),
-                  ),
+                  createStatus(widget.playerModel!.status),
                 ],
               ),
             ),
@@ -130,7 +127,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   SizedBox(
                     width: 80,
                     child: DropdownButton(
-                      //underline: SizedBox.shrink(),
                       isExpanded: true,
                       value: chooseTime,
                       icon: const Icon(Icons.keyboard_arrow_down),
@@ -164,13 +160,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   const Spacer(),
                   Text(
                     (widget.playerModel!.pricePerHour * chooseTime)
-                        .toString()
+                        .toStringAsFixed(0)
                         .toVND(),
                     style: const TextStyle(fontSize: 18),
-                  ),
-                  const Text(
-                    ' đ',
-                    style: TextStyle(fontSize: 18),
                   ),
                 ],
               ),
@@ -188,13 +180,11 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                       onPressed: () {},
                       icon: const Icon(Icons.add_circle_outline)),
                   Text(
-                    widget.userModel.userBalance.balance.toString(),
+                    widget.userModel.userBalance.balance
+                        .toStringAsFixed(0)
+                        .toVND(),
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    ' đ',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -287,11 +277,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
           if (value == true) {
             cbState.value = value!;
             listGamesChoosen.add(cbState.title);
-            print(listGamesChoosen.toString());
           } else {
             cbState.value = value!;
             listGamesChoosen.remove(cbState.title);
-            print(listGamesChoosen.toString());
           }
         }),
         title: Text(
@@ -299,4 +287,25 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
           style: const TextStyle(fontSize: 15),
         ),
       );
+
+  Widget createStatus(String status) {
+    if (status == 'Online') {
+      return const Text(
+        'Có thể thuê',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
+    if (status == 'Offline') {
+      return const Text(
+        'Đang Offline',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
+    return Text(
+      status,
+      style: const TextStyle(fontSize: 15, color: Colors.black),
+    );
+  }
 }

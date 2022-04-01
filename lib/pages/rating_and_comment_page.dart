@@ -104,27 +104,27 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                             ],
                           ),
@@ -191,7 +191,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                               Expanded(
@@ -199,7 +199,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                               Expanded(
@@ -207,7 +207,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                               Expanded(
@@ -215,7 +215,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                             ],
@@ -283,7 +283,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                               Expanded(
@@ -291,7 +291,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                               Expanded(
@@ -299,7 +299,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                             ],
@@ -365,12 +365,12 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
-                                size: 9,
+                                size: 8,
                               ),
                             ],
                           ),
@@ -437,7 +437,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 child: Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 9,
+                                  size: 8,
                                 ),
                               ),
                             ],

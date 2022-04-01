@@ -9,6 +9,7 @@ class OrderModel {
   UserModel? toUser;
   List<GameOfOrdersModel> gameOfOrderModel;
   String message;
+  String reason;
   int totalTimes;
   double totalPrices;
   String status;
@@ -24,6 +25,7 @@ class OrderModel {
     required this.toUser,
     required this.gameOfOrderModel,
     required this.message,
+    required this.reason,
     required this.totalTimes,
     required this.totalPrices,
     required this.status,
@@ -46,6 +48,7 @@ class OrderModel {
                 .toList()
             : <GameOfOrdersModel>[],
         message: json['message'] as String,
+        reason: json['reason'] as String,
         totalTimes: json['totalTimes'] as int,
         totalPrices: json['totalPrices'] as double,
         status: json['status'] as String,
@@ -62,6 +65,7 @@ class OrderModel {
         "toUser": toUser,
         "gameOfOrderModel": gameOfOrderModel,
         "message": message,
+        "reason": reason,
         "totalTimes": totalTimes,
         "totalPrices": totalPrices,
         "status": status,
