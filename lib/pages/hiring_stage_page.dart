@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/pages/end_order_early_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 
 import 'package:play_together_mobile/widgets/decline_button.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -58,8 +59,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
               lateUser = value;
               helper.pushInto(
                   context,
-                  EndOrderPage(
-                    orderModel: widget.orderModel,
+                  HomePage(
                     tokenModel: widget.tokenModel,
                     userModel: widget.userModel!,
                   ),
