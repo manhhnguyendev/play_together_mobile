@@ -11,7 +11,7 @@ import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class EndOrderEarlyPage extends StatefulWidget {
   final OrderModel? orderModel;
-  final UserModel userModel;
+  final UserModel? userModel;
   final PlayerModel? playerModel;
   final TokenModel tokenModel;
   const EndOrderEarlyPage(
@@ -29,14 +29,14 @@ class EndOrderEarlyPage extends StatefulWidget {
 class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   var reasonController = new TextEditingController();
   UserModel? lateUser;
-  bool checkReason = false;
+  bool checkReason = true;
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          if (widget.orderModel!.userId == widget.userModel.id) {
+          if (widget.orderModel!.userId == widget.userModel!.id) {
             setState(() {
               lateUser = value;
               helper.pushInto(
@@ -81,6 +81,17 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: FlatButton(
+            child: Icon(
+              Icons.arrow_back_ios,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         title: const Text(
           'Kết thúc thuê sớm',
           style: TextStyle(
@@ -90,6 +101,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(
+              height: 60,
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
               child: Row(
@@ -101,14 +115,14 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                         width: 120,
                         child: CircleAvatar(
                           backgroundImage:
-                              NetworkImage(widget.userModel.avatar),
+                              NetworkImage(widget.userModel!.avatar),
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        widget.userModel.name,
+                        widget.userModel!.name,
                         style: const TextStyle(fontSize: 18),
                       ),
                     ],
@@ -137,7 +151,8 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                         width: 120,
                         child: CircleAvatar(
                           backgroundImage: NetworkImage(
-                              widget.orderModel!.user!.id == widget.userModel.id
+                              widget.orderModel!.user!.id ==
+                                      widget.userModel!.id
                                   ? widget.orderModel!.toUser!.avatar
                                   : widget.orderModel!.user!.avatar),
                         ),
@@ -146,7 +161,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                         height: 5,
                       ),
                       Text(
-                        widget.orderModel!.user!.id == widget.userModel.id
+                        widget.orderModel!.user!.id == widget.userModel!.id
                             ? widget.orderModel!.toUser!.name
                             : widget.orderModel!.user!.name,
                         style: const TextStyle(fontSize: 18),
@@ -154,19 +169,6 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                     ],
                   ),
                 ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Container(
-                height: 1,
-                decoration: const BoxDecoration(
-                    border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 0.15,
-                  ),
-                )),
               ),
             ),
             Row(
@@ -261,9 +263,12 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
             ),
             Visibility(
               visible: checkReason,
-              child: TextField(
-                controller: reasonController,
-                style: TextStyle(fontSize: 15),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                child: TextField(
+                  controller: reasonController,
+                  style: TextStyle(fontSize: 15),
+                ),
               ),
             )
           ],
@@ -284,17 +289,18 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                       finishSoonModel);
                   finishFuture.then((finish) {
                     if (finish == true) {
-                      if (widget.userModel.id == widget.orderModel!.toUserId) {
+                      if (widget.userModel!.id == widget.orderModel!.toUserId) {
                         setState(() {
                           helper.pushInto(
                               context,
                               EndOrderPage(
+                                orderModel: widget.orderModel,
                                 tokenModel: widget.tokenModel,
                                 userModel: widget.userModel,
                               ),
                               true);
                         });
-                      } else if (widget.userModel.id ==
+                      } else if (widget.userModel!.id ==
                           widget.orderModel!.userId) {
                         helper.pushInto(
                             context,
