@@ -299,38 +299,32 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
-                child: SecondMainButton(
-                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 200),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
-                child: DeclineButton(
-                    text: 'Hủy thuê',
-                    onpress: () {
-                      setState(() {
-                        Future<bool?> cancelFuture = OrderService()
-                            .cancelOrderRequest(widget.orderModel!.id,
-                                widget.tokenModel.message);
-                        cancelFuture.then((check) {
-                          if (check == true) {
-                            setState(() {
-                              helper.pushInto(
-                                  context,
-                                  HomePage(
-                                    tokenModel: widget.tokenModel,
-                                    userModel: widget.userModel,
-                                  ),
-                                  true);
-                            });
-                          }
-                        });
+              SecondMainButton(
+                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 180),
+              DeclineButton(
+                  text: 'Hủy thuê',
+                  onpress: () {
+                    setState(() {
+                      Future<bool?> cancelFuture = OrderService()
+                          .cancelOrderRequest(
+                              widget.orderModel!.id, widget.tokenModel.message);
+                      cancelFuture.then((check) {
+                        if (check == true) {
+                          setState(() {
+                            helper.pushInto(
+                                context,
+                                HomePage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                                true);
+                          });
+                        }
                       });
-                    },
-                    height: 50,
-                    width: 200),
-              ),
+                    });
+                  },
+                  height: 50,
+                  width: 180),
             ],
           ),
         ),
