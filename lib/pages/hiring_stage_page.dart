@@ -120,6 +120,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
               helper.pushInto(
                   context,
                   EndOrderPage(
+                    orderModel: widget.orderModel,
                     tokenModel: widget.tokenModel,
                     userModel: widget.userModel!,
                   ),
@@ -379,33 +380,29 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
       ),
       bottomNavigationBar: BottomAppBar(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+          padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                child: SecondMainButton(
-                    text: 'Nhắn tin', onpress: () {}, height: 50, width: 250),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                child: DeclineButton(
-                    text: 'Kết thúc sớm',
-                    onpress: () {
-                      //createAlertDialog(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EndOrderEarlyPage(
-                                  tokenModel: widget.tokenModel,
-                                  userModel: lateUser!,
-                                  orderModel: widget.orderModel,
-                                )),
-                      );
-                    },
-                    height: 50,
-                    width: 250),
-              ),
+              SecondMainButton(
+                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 200),
+              DeclineButton(
+                  text: 'Kết thúc',
+                  onpress: () {
+                    //createAlertDialog(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EndOrderEarlyPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: lateUser!,
+                                orderModel: widget.orderModel,
+                              )),
+                    );
+                  },
+                  height: 50,
+                  width: 200),
             ],
           ),
         ),
