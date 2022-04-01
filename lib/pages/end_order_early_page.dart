@@ -3,9 +3,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
-import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
-import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
@@ -31,7 +29,6 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   var reasonController = TextEditingController();
   UserModel? lateUser;
   bool checkReason = true;
-
   String reason = "";
   @override
   Widget build(BuildContext context) {
@@ -235,7 +232,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
                 child: TextField(
                   controller: reasonController,
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
             )
@@ -250,7 +247,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 text: 'Kết thúc',
                 onpress: () {
                   FinishSoonOrderModel finishSoonModel =
-                      FinishSoonOrderModel(message: "set message");
+                      FinishSoonOrderModel(reason: reason);
                   Future<bool?> finishFuture = OrderService().finishSoonOrder(
                       widget.orderModel!.id,
                       widget.tokenModel.message,
