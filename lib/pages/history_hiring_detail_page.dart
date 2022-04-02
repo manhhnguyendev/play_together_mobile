@@ -35,7 +35,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
     _controller.text = widget.orderModel.message;
     var _reasonController = TextEditingController();
     // _controller.text = widget.orderModel!.message;
-    _reasonController.text = widget.orderModel.reason;
+    _reasonController.text =
+        widget.orderModel.reason != null ? widget.orderModel.reason! : "";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(

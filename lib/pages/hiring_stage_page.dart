@@ -11,6 +11,8 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
+import '../services/order_service.dart';
+
 class HiringPage extends StatefulWidget {
   final OrderModel? orderModel;
   final UserModel? userModel;
@@ -33,6 +35,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   int hour = 2;
   double progress = 1.0;
   UserModel? lateUser;
+  OrderModel? lateOrder;
 
   void check() {
     Future<UserModel?> checkStatus =
@@ -40,16 +43,24 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          setState(() {
-            lateUser = value;
-            helper.pushInto(
-                context,
-                EndOrderPage(
-                  tokenModel: widget.tokenModel,
-                  userModel: widget.userModel!,
-                  orderModel: widget.orderModel,
-                ),
-                true);
+          Future<OrderModel?> checkStatusOrder = OrderService()
+              .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
+          checkStatusOrder.then((order) {
+            if (order != null) {
+              setState(() {
+                lateOrder = order;
+                lateUser = value;
+                helper.pushInto(
+                    context,
+                    EndOrderPage(
+                      tokenModel: widget.tokenModel,
+                      userModel: lateUser != null ? lateUser : widget.userModel,
+                      orderModel:
+                          lateOrder != null ? lateOrder : widget.orderModel,
+                    ),
+                    true);
+              });
+            }
           });
         } else {
           setState(() {
@@ -324,7 +335,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                       MaterialPageRoute(
                           builder: (context) => EndOrderEarlyPage(
                                 tokenModel: widget.tokenModel,
-                                userModel: widget.userModel!,
+                                userModel: lateUser!,
                                 orderModel: widget.orderModel,
                               )),
                     );
