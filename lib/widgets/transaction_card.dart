@@ -16,6 +16,10 @@ class TransactionCard extends StatefulWidget {
 class _TransactionCardState extends State<TransactionCard> {
   @override
   Widget build(BuildContext context) {
+    String date = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.transactionModel.createdDate));
+    String startTime = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.transactionModel.createdDate));
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: Column(
@@ -35,7 +39,7 @@ class _TransactionCardState extends State<TransactionCard> {
                     height: 5,
                   ),
                   Text(
-                    "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+                    date + ', ' + startTime,
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
