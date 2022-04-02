@@ -61,6 +61,42 @@ class OrderService {
     return result;
   }
 
+  Future<List<OrderModel>?> getAllOrdersFromCreateUser(dynamic token) async {
+    Response response;
+    List<OrderModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/orders'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<List<OrderModel>?> getAllOrdersFromReceivedUser(dynamic token) async {
+    Response response;
+    List<OrderModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/orders/requests'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
   Future<OrderModel?> createOrderRequest(
       String toUserId, CreateOrderModel createOrderModel, dynamic token) async {
     Response response;

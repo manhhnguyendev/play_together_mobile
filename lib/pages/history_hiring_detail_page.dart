@@ -7,9 +7,10 @@ import 'package:play_together_mobile/models/detail_hiring_model.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
-  final DetailHiringModel detailHiringModel;
-
-  const HistoryHiringDetail({Key? key, required this.detailHiringModel})
+  final OrderModel orderModel;
+  final TokenModel tokenModel;
+  const HistoryHiringDetail(
+      {Key? key, required this.orderModel, required this.tokenModel})
       : super(key: key);
 
   @override
@@ -21,21 +22,20 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
-    // String date = DateFormat('dd/MM/yyyy')
-    //     .format(DateTime.parse(widget.orderModel!.timeStart));
-    // String startTime = DateFormat('hh:mm a')
-    //     .format(DateTime.parse(widget.orderModel!.timeStart));
-    // String endDate = DateFormat('dd/MM/yyyy')
-    //     .format(DateTime.parse(widget.orderModel!.timeFinish));
-    // String endTime = DateFormat('hh:mm a')
-    //     .format(DateTime.parse(widget.orderModel!.timeFinish));
-    checkEndEarly = true;
+    String date = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel.timeStart));
+    String startTime = DateFormat('hh:mm:ss a')
+        .format(DateTime.parse(widget.orderModel.timeStart));
+    String endDate = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel.timeFinish));
+    String endTime = DateFormat('hh:mm:ss a')
+        .format(DateTime.parse(widget.orderModel.timeFinish));
+    checkEndEarly = false;
     var _controller = TextEditingController();
-    // _controller.text = widget.orderModel!.message;
-    _controller.text = "aaaaa"; //comment
+    _controller.text = widget.orderModel.message;
     var _reasonController = TextEditingController();
     // _controller.text = widget.orderModel!.message;
-    _reasonController.text = "Tôi bận";
+    _reasonController.text = widget.orderModel.reason;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -71,7 +71,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
             children: [
               Container(
                   alignment: Alignment.center,
-                  child: createStatus(widget.detailHiringModel.status)),
+                  child: createStatus(widget.orderModel.status)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
                 child: Row(
@@ -82,15 +82,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage: AssetImage(
-                                widget.detailHiringModel.hirerAvatar),
-                          ),
+                              backgroundImage:
+                                  NetworkImage(widget.orderModel.user!.avatar)),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.detailHiringModel.hirerAvatar,
+                          widget.orderModel.user!.name,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -118,15 +117,15 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage: AssetImage(
-                                widget.detailHiringModel.playerAvatar),
+                            backgroundImage:
+                                NetworkImage(widget.orderModel.toUser!.avatar),
                           ),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.detailHiringModel.playerName,
+                          widget.orderModel.toUser!.name,
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -152,12 +151,12 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 child: Row(
                   children: [
                     Text(
-                      'Thời lượng thuê ',
+                      'Thời lượng thuê: ',
                       style: TextStyle(fontSize: 15),
                     ),
                     Spacer(),
                     Text(
-                      widget.detailHiringModel.totalHour.toString(),
+                      widget.orderModel.totalTimes.toString(),
                       style: TextStyle(fontSize: 15),
                     ),
                     Text(
@@ -172,12 +171,12 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 child: Row(
                   children: [
                     Text(
-                      'Tổng chi phí ',
+                      'Tổng chi phí: ',
                       style: TextStyle(fontSize: 15),
                     ),
                     Spacer(),
                     Text(
-                      widget.detailHiringModel.totalPrice.toString().toVND(),
+                      widget.orderModel.totalPrices.toStringAsFixed(0).toVND(),
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -188,16 +187,13 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 child: Row(
                   children: [
                     Text(
-                      'Thời gian bắt đầu',
+                      'Thời gian bắt đầu:',
                       style: TextStyle(fontSize: 15),
                     ),
                     Spacer(),
                     Text(
-                      // widget.orderModel!.timeFinish +
-                      //     ", " +
-                      //     widget.orderModel!.timeStart,
-                      // date + ", " + startTime,
-                      "1212121212",
+                      date + ", " + startTime,
+                      //"1212121212",
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -208,15 +204,12 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 child: Row(
                   children: [
                     Text(
-                      'Thời gian kết thúc',
+                      'Thời gian kết thúc:',
                       style: TextStyle(fontSize: 15),
                     ),
                     Spacer(),
                     Text(
-                      // widget.orderModel!.timeFinish +
-                      //     ", " +
-                      //     widget.orderModel!.timeStart,
-                      "121212121212",
+                      endDate + ", " + endTime,
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -229,37 +222,27 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
                   child: Text(
                     'Lý do kết thúc sớm:',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
               Visibility(
                 visible: checkEndEarly,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                  child: Container(
-                    height: 250,
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: TextField(
-                      controller: _reasonController,
-                      enabled: false,
-                      decoration: const InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10.0),
-                        border: InputBorder.none,
-                      ),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: TextField(
+                    controller: _reasonController,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10.0),
+                      border: InputBorder.none,
                     ),
                   ),
                 ),
               ),
-              Divider(
-                thickness: 1,
-                indent: 15,
-                endIndent: 15,
-              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                padding: const EdgeInsets.fromLTRB(15, 0, 25, 10),
                 child: Row(
                   children: [
                     Text(
@@ -280,7 +263,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
                 child: Container(
-                  height: 250,
+                  height: 200,
                   decoration:
                       BoxDecoration(border: Border.all(color: Colors.black)),
                   child: TextField(
@@ -305,11 +288,18 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
     if (status == 'Processing') {
       return Text(
         'Đang thuê',
+        style: TextStyle(fontSize: 15, color: Colors.red),
+      );
+    }
+
+    if (status == 'Starting') {
+      return Text(
+        'Đang thương lượng',
         style: TextStyle(fontSize: 15, color: Colors.yellow),
       );
     }
 
-    if (status == 'Complete') {
+    if (status == 'Finish') {
       return Text(
         'Hoàn thành',
         style: TextStyle(fontSize: 15, color: Colors.green),
@@ -318,7 +308,36 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
 
     if (status == 'Cancel') {
       return Text(
+        'Hủy yêu cầu',
+        style: TextStyle(fontSize: 15, color: Colors.grey),
+      );
+    }
+
+    if (status == 'Finish soon') {
+      checkEndEarly = true;
+      return Text(
+        'Kết thúc sớm',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
+    if (status == 'OverTime') {
+      return Text(
+        'Quá giờ chấp nhận',
+        style: TextStyle(fontSize: 15, color: Colors.grey),
+      );
+    }
+
+    if (status == 'Reject') {
+      return Text(
         'Bị từ chối',
+        style: TextStyle(fontSize: 15, color: Colors.grey),
+      );
+    }
+
+    if (status == 'Interrupt') {
+      return Text(
+        'Người dùng bị khóa',
         style: TextStyle(fontSize: 15, color: Colors.grey),
       );
     }

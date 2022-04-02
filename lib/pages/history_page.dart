@@ -25,6 +25,54 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
+  List<OrderModel>? _listReceiveOrder;
+  bool checkEmptyOrder = false;
+  bool checkEmptyReceiveOrder = false;
+  Future loadListFromCreateUser() {
+    _listOrder ??= [];
+    Future<List<OrderModel>?> listOrderFromCreateUserModelFuture =
+        OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
+    listOrderFromCreateUserModelFuture.then((_orderList) {
+      setState(() {
+        _listOrder = _orderList;
+        if (_listOrder!.isEmpty) {
+          for (var item in _listOrder!) {
+            Future<OrderModel?> orderFuture =
+                OrderService().getOrderById(item.id, widget.tokenModel.message);
+            orderFuture.then((value) {
+              if (value != null) {
+                _listOrder!.add(value);
+              }
+            });
+          }
+        }
+      });
+    });
+    return listOrderFromCreateUserModelFuture;
+  }
+
+  Future loadListFromReceiveUser() {
+    _listReceiveOrder ??= [];
+    Future<List<OrderModel>?> listOrderFromReceiveUserModelFuture =
+        OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
+    listOrderFromReceiveUserModelFuture.then((_orderList) {
+      setState(() {
+        _listReceiveOrder = _orderList;
+        if (_listReceiveOrder!.isEmpty) {
+          for (var item in _listReceiveOrder!) {
+            Future<OrderModel?> orderFuture =
+                OrderService().getOrderById(item.id, widget.tokenModel.message);
+            orderFuture.then((value) {
+              if (value != null) {
+                _listReceiveOrder!.add(value);
+              }
+            });
+          }
+        }
+      });
+    });
+    return listOrderFromReceiveUserModelFuture;
+  }
 
   void check() {
     Future<UserModel?> checkStatus =
@@ -109,25 +157,55 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
         body: TabBarView(children: [
           SingleChildScrollView(
-            //đi thuê
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: List.generate(demoHistoryHiring.length,
-                    (index) => buildListHistory(demoHistoryHiring[index])),
-              ),
-            ),
-          ),
+              child: FutureBuilder(
+                  future: loadListFromCreateUser(),
+                  builder: (context, snapshot) {
+                    if (_listOrder!.length == 0) {
+                      checkEmptyOrder = true;
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: List.generate(
+                                _listOrder == null ? 0 : _listOrder!.length,
+                                (index) =>
+                                    buildListHistory(_listOrder![index])),
+                          ),
+                          Visibility(
+                              visible: checkEmptyOrder,
+                              child: Text('Không có kết quả'))
+                        ],
+                      ),
+                    );
+                  })),
           SingleChildScrollView(
-            //được thuê
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: List.generate(demoHistoryHiring.length,
-                    (index) => buildListHistory(demoHistoryHiring[index])),
-              ),
-            ),
-          ),
+              child: FutureBuilder(
+                  future: loadListFromReceiveUser(),
+                  builder: (context, snapshot) {
+                    if (_listReceiveOrder!.length == 0) {
+                      checkEmptyReceiveOrder = true;
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: List.generate(
+                                _listReceiveOrder == null
+                                    ? 0
+                                    : _listReceiveOrder!.length,
+                                (index) => buildListHistory(
+                                    _listReceiveOrder![index])),
+                          ),
+                          Visibility(
+                              visible: checkEmptyReceiveOrder,
+                              child: Text('Không có dữ liệu'))
+                        ],
+                      ),
+                    );
+                  })),
         ]),
         bottomNavigationBar: BottomBar(
           userModel: widget.userModel,
@@ -138,11 +216,10 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget buildListHistory(HistoryHiringModel model) {
-    return HistoryHiringCard(historyHiringModel: model);
-  }
-
-  Widget buildListHistory2(HistoryHiringModel model) {
-    return HistoryHiringCard(historyHiringModel: model);
+  Widget buildListHistory(OrderModel model) {
+    return HistoryHiringCard(
+      orderModel: model,
+      tokenModel: widget.tokenModel,
+    );
   }
 }
