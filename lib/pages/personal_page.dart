@@ -7,6 +7,7 @@ import 'package:play_together_mobile/pages/manage_hiring_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/pages/transaction_page.dart';
+import 'package:play_together_mobile/pages/update_hobbies_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -260,7 +261,11 @@ class _PersonalPageState extends State<PersonalPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TransactionPage()),
+                    MaterialPageRoute(
+                        builder: (context) => TransactionPage(
+                              tokenModel: widget.tokenModel,
+                              userModel: widget.userModel,
+                            )),
                   );
                 },
                 child: Row(
@@ -326,7 +331,7 @@ class _PersonalPageState extends State<PersonalPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ManageHiringPage(),
+                        builder: (context) => UpdateHobbiesPage(),
                       ));
                 },
                 child: Row(
