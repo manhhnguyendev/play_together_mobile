@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/transaction_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/services/transaction_service.dart';
 import 'package:play_together_mobile/widgets/transaction_card.dart';
 
 class TransactionPage extends StatefulWidget {
-  const TransactionPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+  const TransactionPage(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();
@@ -16,6 +23,29 @@ class _TransactionPageState extends State<TransactionPage> {
   bool checkIncome = false; //income tính luôn cái vụ refund - thối tiền
   bool checkOutcome = false;
   bool checkAll = true;
+  List<TransactionModel>? listAllTransaction;
+  List<TransactionModel>? listDepositTransaction;
+  List<TransactionModel>? listWithdrawTransaction;
+  List<TransactionModel>? listIncomeTransaction;
+  List<TransactionModel>? listOutcomeTransaction;
+  List<TransactionModel>? listDonateTransaction;
+  bool checkExistTransaction = false;
+  bool checkExistDeposit = false;
+  bool checkExistWithdraw = false;
+  bool checkExistDonate = false;
+  bool checkExistIncome = false; //income tính luôn cái vụ refund - thối tiền
+  bool checkExistOutcome = false;
+
+  Future loadListAllTransaction() {
+    listAllTransaction ??= [];
+    Future<List<TransactionModel>?> listAllTransactionModelFuture =
+        TransactionService().getAllTransaction(widget.tokenModel.message);
+    listAllTransactionModelFuture.then((_transactionList) {
+      listAllTransaction = _transactionList;
+    });
+    return listAllTransactionModelFuture;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -303,16 +333,33 @@ class _TransactionPageState extends State<TransactionPage> {
             thickness: 1,
           ),
           SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: List.generate(
-                    demoListTransaction.length,
-                    (index) =>
-                        buildListTransaction(demoListTransaction[index])),
-              ),
-            ),
-          ),
+              child: FutureBuilder(
+                  future: loadListAllTransaction(),
+                  builder: (context, snapshot) {
+                    if (listAllTransaction!.length == 0) {
+                      checkExistTransaction = true;
+                    } else {
+                      checkExistTransaction = false;
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: List.generate(
+                                listAllTransaction == null
+                                    ? 0
+                                    : listAllTransaction!.length,
+                                (index) => buildListTransaction(
+                                    listAllTransaction![index])),
+                          ),
+                          Visibility(
+                              visible: checkExistTransaction,
+                              child: Text('Không có dữ liệu'))
+                        ],
+                      ),
+                    );
+                  })),
         ],
       )),
     );

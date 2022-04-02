@@ -16,10 +16,6 @@ class TransactionCard extends StatefulWidget {
 class _TransactionCardState extends State<TransactionCard> {
   @override
   Widget build(BuildContext context) {
-    String date =
-        DateFormat('dd/MM/yyyy').format(widget.transactionModel.dateTime);
-    String startTime =
-        DateFormat('hh:mm a').format(widget.transactionModel.dateTime);
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: Column(
@@ -32,19 +28,39 @@ class _TransactionCardState extends State<TransactionCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  createTransactionTitle(widget.transactionModel.type,
+                  createTransactionTitle(
+                      widget.transactionModel.typeOfTransaction,
                       widget.transactionModel.operation),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    date + ', ' + startTime,
+                    "xxxxxxxxxxxxxxxxxxxxxxxxxx",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),
-              const Spacer(),
-              convertOperation(widget.transactionModel.operation),
+              // const Spacer(),
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   children: [
+              //     convertOperation(widget.transactionModel.operation),
+              //   ],
+              // ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  convertOperation(widget.transactionModel.operation),
+                ],
+              ),
             ],
           ),
           const Divider(
@@ -108,13 +124,15 @@ class _TransactionCardState extends State<TransactionCard> {
   Widget convertOperation(String operation) {
     if (operation == '-') {
       return Text(
-        '− ' + widget.transactionModel.money.toStringAsFixed(0).toVND() + 'đ',
-        style: const TextStyle(fontSize: 18, color: Colors.black),
+        '−' + widget.transactionModel.money.toStringAsFixed(0).toVND(),
+        style: const TextStyle(
+            fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
       );
     } else {
       return Text(
-        '+ ' + widget.transactionModel.money.toStringAsFixed(0).toVND() + 'đ',
-        style: const TextStyle(fontSize: 18, color: Colors.black),
+        '+' + widget.transactionModel.money.toStringAsFixed(0).toVND(),
+        style: const TextStyle(
+            fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
       );
     }
   }
