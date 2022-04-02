@@ -35,11 +35,14 @@ class _TransactionPageState extends State<TransactionPage> {
   bool checkExistDonate = false;
   bool checkExistIncome = false; //income tính luôn cái vụ refund - thối tiền
   bool checkExistOutcome = false;
+  String type = '';
+  String operation = '';
 
   Future loadListAllTransaction() {
     listAllTransaction ??= [];
     Future<List<TransactionModel>?> listAllTransactionModelFuture =
-        TransactionService().getAllTransaction(widget.tokenModel.message);
+        TransactionService()
+            .getAllTransaction(type, operation, widget.tokenModel.message);
     listAllTransactionModelFuture.then((_transactionList) {
       listAllTransaction = _transactionList;
     });
@@ -110,6 +113,8 @@ class _TransactionPageState extends State<TransactionPage> {
                             checkIncome = false;
                             checkOutcome = false;
                             checkWithdraw = false;
+                            type = '';
+                            operation = '';
                           }
                         });
                       },
@@ -137,21 +142,27 @@ class _TransactionPageState extends State<TransactionPage> {
                     child: FlatButton(
                       onPressed: () {
                         setState(() {
-                          if (!checkIncome) {
-                            checkAll = false;
-                            checkDeposit = false;
-                            checkDonate = false;
-                            checkIncome = true;
-                            checkOutcome = false;
-                            checkWithdraw = false;
-                          } else {
-                            checkAll = true;
-                            checkDeposit = false;
-                            checkDonate = false;
-                            checkIncome = false;
-                            checkOutcome = false;
-                            checkWithdraw = false;
-                          }
+                          setState(() {
+                            if (!checkIncome) {
+                              checkAll = false;
+                              checkDeposit = false;
+                              checkDonate = false;
+                              checkIncome = true;
+                              checkOutcome = false;
+                              checkWithdraw = false;
+                              type = 'Order';
+                              operation = '+';
+                            } else {
+                              type = '';
+                              operation = '';
+                              checkAll = true;
+                              checkDeposit = false;
+                              checkDonate = false;
+                              checkIncome = false;
+                              checkOutcome = false;
+                              checkWithdraw = false;
+                            }
+                          });
                         });
                       },
                       child: Text(
@@ -185,7 +196,11 @@ class _TransactionPageState extends State<TransactionPage> {
                             checkIncome = false;
                             checkOutcome = true;
                             checkWithdraw = false;
+                            type = 'Order';
+                            operation = '-';
                           } else {
+                            type = '';
+                            operation = '';
                             checkAll = true;
                             checkDeposit = false;
                             checkDonate = false;
@@ -226,7 +241,11 @@ class _TransactionPageState extends State<TransactionPage> {
                             checkIncome = false;
                             checkOutcome = false;
                             checkWithdraw = false;
+                            type = 'Deposit';
+                            operation = '';
                           } else {
+                            type = '';
+                            operation = '';
                             checkAll = true;
                             checkDeposit = false;
                             checkDonate = false;
@@ -267,7 +286,11 @@ class _TransactionPageState extends State<TransactionPage> {
                             checkIncome = false;
                             checkOutcome = false;
                             checkWithdraw = true;
+                            type = 'Withdraw';
+                            operation = '';
                           } else {
+                            type = '';
+                            operation = '';
                             checkAll = true;
                             checkDeposit = false;
                             checkDonate = false;
@@ -308,7 +331,11 @@ class _TransactionPageState extends State<TransactionPage> {
                             checkIncome = false;
                             checkOutcome = false;
                             checkWithdraw = false;
+                            type = 'Donate';
+                            operation = '';
                           } else {
+                            type = '';
+                            operation = '';
                             checkAll = true;
                             checkDeposit = false;
                             checkDonate = false;

@@ -4,6 +4,7 @@ class TransactionModel {
   double money;
   String typeOfTransaction;
   String referenceTransactionId;
+  String createdDate;
 
   TransactionModel({
     required this.id,
@@ -11,6 +12,7 @@ class TransactionModel {
     required this.money,
     required this.typeOfTransaction,
     required this.referenceTransactionId,
+    required this.createdDate,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +22,7 @@ class TransactionModel {
         money: json['money'] as double,
         typeOfTransaction: json['typeOfTransaction'] as String,
         referenceTransactionId: json['referenceTransactionId'] as String,
+        createdDate: json['createdDate'] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +31,7 @@ class TransactionModel {
         "money": money,
         "typeOfTransaction": typeOfTransaction,
         "referenceTransactionId": referenceTransactionId,
+        "createdDate": createdDate,
       };
 }
 
