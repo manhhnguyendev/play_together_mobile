@@ -44,7 +44,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 context,
                 EndOrderPage(
                   tokenModel: widget.tokenModel,
-                  userModel: widget.userModel!,
+                  userModel: lateUser!,
                   orderModel: widget.orderModel,
                 ),
                 true);
@@ -289,7 +289,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             EndOrderPage(
                               orderModel: widget.orderModel,
                               tokenModel: widget.tokenModel,
-                              userModel: widget.userModel!,
+                              userModel: lateUser!,
                             ),
                             true);
                       });
