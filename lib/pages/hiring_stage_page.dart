@@ -342,7 +342,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          "- " + game.game.name,
+          "• " + game.game.name,
           style: const TextStyle(color: Colors.black, fontSize: 15),
         ),
       );

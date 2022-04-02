@@ -453,7 +453,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          "- " + game,
+          "• " + game,
           style: TextStyle(color: Colors.black, fontSize: 15),
         ),
       );

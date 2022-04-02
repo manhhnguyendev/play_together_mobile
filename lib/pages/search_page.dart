@@ -19,8 +19,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<UserModel>? playerList;
-  List<PlayerModel>? _list = [];
+  List<UserModel>? listPlayerSearch;
+  List<PlayerModel>? _listPlayerSearch = [];
   bool showHistoryAndRecommendArea = true;
   bool showListSearchArea = false;
 
@@ -57,7 +57,7 @@ class _SearchPageState extends State<SearchPage> {
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: FlatButton(
-            child: Icon(Icons.arrow_back_ios),
+            child: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -74,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
             onChanged: (value) {
               setState(() {
                 if (_controller.text.isEmpty) {
-                  _list = [];
+                  _listPlayerSearch = [];
                   showHistoryAndRecommendArea = true;
                   showListSearchArea = false;
                 }
@@ -83,18 +83,19 @@ class _SearchPageState extends State<SearchPage> {
             onSubmitted: (value) {
               setState(() {
                 if (_controller.text.isNotEmpty) {
-                  _list = [];
-                  Future<List<UserModel>?> playerModelFuture = SearchService()
-                      .searchUser(_controller.text, widget.tokenModel.message);
-                  playerModelFuture.then((_playerList) {
-                    playerList = _playerList;
-                    if (_list!.isEmpty) {
-                      for (var item in playerList!) {
+                  _listPlayerSearch = [];
+                  Future<List<UserModel>?> listPlayerSearchModelFuture =
+                      SearchService().searchUser(
+                          _controller.text, widget.tokenModel.message);
+                  listPlayerSearchModelFuture.then((_playerList) {
+                    listPlayerSearch = _playerList;
+                    if (_listPlayerSearch!.isEmpty) {
+                      for (var item in listPlayerSearch!) {
                         Future<PlayerModel?> playerFuture = UserService()
                             .getPlayerById(item.id, widget.tokenModel.message);
                         playerFuture.then((value) {
                           if (value != null) {
-                            _list!.add(value);
+                            _listPlayerSearch!.add(value);
                           }
                         });
                       }
@@ -121,7 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                 onPressed: () {
                   _controller.clear();
                   setState(() {
-                    _list = [];
+                    _listPlayerSearch = [];
                     showHistoryAndRecommendArea = true;
                     showListSearchArea = false;
                   });
@@ -204,8 +205,10 @@ class _SearchPageState extends State<SearchPage> {
               Visibility(
                   visible: showListSearchArea,
                   child: Column(
-                      children: List.generate(_list!.length,
-                          (index) => buildListSearch(_list![index]))))
+                      children: List.generate(
+                          _listPlayerSearch!.length,
+                          (index) =>
+                              buildListSearch(_listPlayerSearch![index]))))
             ],
           ),
         ),
