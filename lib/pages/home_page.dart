@@ -254,162 +254,162 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
               ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Các người chơi mới",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SingleChildScrollView(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                          height: 220.0,
-                          child: FutureBuilder(
-                              future: loadListUserByIsNewAccount(),
-                              builder: (context, snapshot) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _listPlayerIsNewAccount == null
-                                      ? 0
-                                      : _listPlayerIsNewAccount!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return PlayerCard(
-                                      playerModel:
-                                          _listPlayerIsNewAccount![index],
-                                      tokenModel: widget.tokenModel,
-                                      userModel: lateUser!,
-                                    );
-                                  },
-                                );
-                              })),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Có thể bạn thích",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SingleChildScrollView(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                          height: 220.0,
-                          child: FutureBuilder(
-                              future: loadListUserByIsSameHobbies(),
-                              builder: (context, snapshot) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _listPlayerIsSameHobbies == null
-                                      ? 0
-                                      : _listPlayerIsSameHobbies!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return PlayerCard(
-                                      playerModel:
-                                          _listPlayerIsSameHobbies![index],
-                                      tokenModel: widget.tokenModel,
-                                      userModel: lateUser!,
-                                    );
-                                  },
-                                );
-                              })),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Thuê lại",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SingleChildScrollView(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                          height: 220.0,
-                          child: FutureBuilder(
-                              future: loadListUserByIsRecentOrder(),
-                              builder: (context, snapshot) {
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _listPlayerIsRecentOrder == null
-                                      ? 0
-                                      : _listPlayerIsRecentOrder!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return PlayerCard(
-                                      playerModel:
-                                          _listPlayerIsRecentOrder![index],
-                                      tokenModel: widget.tokenModel,
-                                      userModel: lateUser!,
-                                    );
-                                  },
-                                );
-                              })),
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-              ),
+              // Padding(
+              //   padding:
+              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+              //   child: Row(children: [
+              //     Text(
+              //       "Các người chơi mới",
+              //       style: TextStyle(
+              //         fontSize: 18 / 400 * size.width,
+              //         color: Colors.black,
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 10,
+              //     ),
+              //     GestureDetector(
+              //       child: const Icon(Icons.arrow_circle_down_outlined),
+              //     ),
+              //   ]),
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // SingleChildScrollView(
+              //   child: Row(
+              //     children: <Widget>[
+              //       Expanded(
+              //         child: SizedBox(
+              //             height: 220.0,
+              //             child: FutureBuilder(
+              //                 future: loadListUserByIsNewAccount(),
+              //                 builder: (context, snapshot) {
+              //                   return ListView.builder(
+              //                     scrollDirection: Axis.horizontal,
+              //                     itemCount: _listPlayerIsNewAccount == null
+              //                         ? 0
+              //                         : _listPlayerIsNewAccount!.length,
+              //                     itemBuilder:
+              //                         (BuildContext context, int index) {
+              //                       return PlayerCard(
+              //                         playerModel:
+              //                             _listPlayerIsNewAccount![index],
+              //                         tokenModel: widget.tokenModel,
+              //                         userModel: lateUser!,
+              //                       );
+              //                     },
+              //                   );
+              //                 })),
+              //       ),
+              //     ],
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   ),
+              // ),
+              // Padding(
+              //   padding:
+              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+              //   child: Row(children: [
+              //     Text(
+              //       "Có thể bạn thích",
+              //       style: TextStyle(
+              //         fontSize: 18 / 400 * size.width,
+              //         color: Colors.black,
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 10,
+              //     ),
+              //     GestureDetector(
+              //       child: const Icon(Icons.arrow_circle_down_outlined),
+              //     ),
+              //   ]),
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // SingleChildScrollView(
+              //   child: Row(
+              //     children: <Widget>[
+              //       Expanded(
+              //         child: SizedBox(
+              //             height: 220.0,
+              //             child: FutureBuilder(
+              //                 future: loadListUserByIsSameHobbies(),
+              //                 builder: (context, snapshot) {
+              //                   return ListView.builder(
+              //                     scrollDirection: Axis.horizontal,
+              //                     itemCount: _listPlayerIsSameHobbies == null
+              //                         ? 0
+              //                         : _listPlayerIsSameHobbies!.length,
+              //                     itemBuilder:
+              //                         (BuildContext context, int index) {
+              //                       return PlayerCard(
+              //                         playerModel:
+              //                             _listPlayerIsSameHobbies![index],
+              //                         tokenModel: widget.tokenModel,
+              //                         userModel: lateUser!,
+              //                       );
+              //                     },
+              //                   );
+              //                 })),
+              //       ),
+              //     ],
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   ),
+              // ),
+              // Padding(
+              //   padding:
+              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+              //   child: Row(children: [
+              //     Text(
+              //       "Thuê lại",
+              //       style: TextStyle(
+              //         fontSize: 18 / 400 * size.width,
+              //         color: Colors.black,
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 10,
+              //     ),
+              //     GestureDetector(
+              //       child: const Icon(Icons.arrow_circle_down_outlined),
+              //     ),
+              //   ]),
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // SingleChildScrollView(
+              //   child: Row(
+              //     children: <Widget>[
+              //       Expanded(
+              //         child: SizedBox(
+              //             height: 220.0,
+              //             child: FutureBuilder(
+              //                 future: loadListUserByIsRecentOrder(),
+              //                 builder: (context, snapshot) {
+              //                   return ListView.builder(
+              //                     scrollDirection: Axis.horizontal,
+              //                     itemCount: _listPlayerIsRecentOrder == null
+              //                         ? 0
+              //                         : _listPlayerIsRecentOrder!.length,
+              //                     itemBuilder:
+              //                         (BuildContext context, int index) {
+              //                       return PlayerCard(
+              //                         playerModel:
+              //                             _listPlayerIsRecentOrder![index],
+              //                         tokenModel: widget.tokenModel,
+              //                         userModel: lateUser!,
+              //                       );
+              //                     },
+              //                   );
+              //                 })),
+              //       ),
+              //     ],
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   ),
+              // ),
             ]),
       ),
       bottomNavigationBar: BottomBar(
