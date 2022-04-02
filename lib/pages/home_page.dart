@@ -3,6 +3,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
+import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
 import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
@@ -184,7 +185,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SearchPage(
+                builder: (context) => SearchHistoryAndRecommendPage(
                   tokenModel: widget.tokenModel,
                   userModel: widget.userModel,
                 ),
