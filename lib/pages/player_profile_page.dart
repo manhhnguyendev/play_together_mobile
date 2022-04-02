@@ -69,7 +69,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 60,
                   ),
                   Container(
@@ -89,7 +89,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                         ),
                         Text(
                           widget.playerModel.name,
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 22),
                         ),
                         const SizedBox(
                           height: 2,
@@ -105,7 +105,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                         Text(
                           'Hình ảnh',
                           style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.normal),
+                              fontSize: 20, fontWeight: FontWeight.normal),
                         ),
                         SizedBox(
                           width: 5,
@@ -160,7 +160,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                               const Text(
                                 'Đánh giá',
                                 style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.normal),
                               ),
                               const SizedBox(
@@ -224,7 +224,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       child: const Text(
                         'Thông tin',
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 20, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -259,7 +259,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       child: const Text(
                         'Kỹ năng',
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 20, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -324,7 +324,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                           );
                         },
                         height: 50,
-                        width: 150),
+                        width: 140),
                   ],
                 ),
               ),
@@ -353,9 +353,8 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
             children: [
               Row(children: [
                 Text(
-                  gameOfUser.game.name,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.bold),
+                  ('• ' + gameOfUser.game.name),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
                     gameOfUser.rankId != ""
@@ -363,8 +362,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                             ? " : " + gameOfUser.rank.name
                             : '')
                         : '',
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontSize: 15)),
               ]),
               const SizedBox(
                 height: 5,
