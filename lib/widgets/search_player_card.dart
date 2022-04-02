@@ -23,7 +23,7 @@ class SearchPlayerCard extends StatefulWidget {
 
 class _SearchPlayerCardState extends State<SearchPlayerCard> {
   List<GameOfUserModel>? listGameAndRank;
-
+  //String games = "";
   Future getGameOfUser() {
     listGameAndRank ??= [];
     Future<List<GameOfUserModel>?> gameOfUserFuture = UserService()
@@ -61,16 +61,10 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                 Row(children: [
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      padding: EdgeInsets.all(1 / 1000 * size.width),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 0.2),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: ClipRRect(
-                        child: Image.network(widget.playerModel.avatar,
-                            fit: BoxFit.cover),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image(
+                        image: NetworkImage(widget.playerModel.avatar),
                       ),
                     ),
                   ),
@@ -94,17 +88,10 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                               height: 5,
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                               child: Container(
                                 alignment: Alignment.topLeft,
-                                child: Column(
-                                  children: List.generate(
-                                      listGameAndRank != null
-                                          ? listGameAndRank!.length
-                                          : 0,
-                                      (index) => buildGameAndRankPlayer(
-                                          listGameAndRank![index])),
-                                ),
+                                child: buildGamesString(listGameAndRank!),
                               ),
                             ),
                             const SizedBox(
@@ -190,6 +177,23 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
           ),
         ),
       );
+
+  Widget buildGamesString(List<GameOfUserModel> gamesOfUserModel) {
+    print("xERROR");
+    String games = "";
+    if (gamesOfUserModel == null) {
+      return Text('');
+    } else {
+      for (var i = 0; i < gamesOfUserModel.length; i++) {
+        if (i < gamesOfUserModel.length - 1) {
+          games = games + gamesOfUserModel[i].game.name + ", ";
+        } else {
+          games = games + gamesOfUserModel[i].game.name;
+        }
+      }
+      return Text("Games: " + games);
+    }
+  }
 
   Widget createStatus(String status) {
     if (status == 'Hiring') {

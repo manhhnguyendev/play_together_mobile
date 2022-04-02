@@ -8,10 +8,15 @@ import 'package:play_together_mobile/widgets/search_player_card.dart';
 
 class SearchPage extends StatefulWidget {
   final TokenModel tokenModel;
-
   final UserModel userModel;
+  final List<PlayerModel>? listSearch;
+  final String? searchValue;
   const SearchPage(
-      {Key? key, required this.tokenModel, required this.userModel})
+      {Key? key,
+      required this.tokenModel,
+      required this.userModel,
+      this.listSearch,
+      this.searchValue})
       : super(key: key);
 
   @override
@@ -21,48 +26,49 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   List<UserModel>? listPlayerSearch;
   List<PlayerModel>? _listPlayerSearch = [];
-  bool showHistoryAndRecommendArea = true;
-  bool showListSearchArea = false;
 
   final _controller = TextEditingController();
-  List<String> listSearchHistory = ['Đàm', 'Hằng', 'Quoc Hung'];
-  List<String> listTopGameType = [
-    'MOBA',
-    'FPS',
-    'Sinh Tồn',
-    'Thể thao',
-    'Chiến thuật',
-    'Battle',
-    'Kinh dị'
-  ];
-  List<String> listTopGame = [
-    'LOL',
-    'CSGO',
-    'Liên quân',
-    'FIFA',
-    'PUBG',
-    'XXX'
-  ];
+
+  Future loadPlayerList() {
+    _listPlayerSearch ??= [];
+    Future<List<UserModel>?> listOrderFromCreateUserModelFuture =
+        SearchService().searchUser(
+            widget.searchValue.toString(), widget.tokenModel.message);
+    listOrderFromCreateUserModelFuture.then((_userList) {
+      setState(() {
+        listPlayerSearch = _userList;
+        if (_listPlayerSearch!.isEmpty) {
+          for (var item in listPlayerSearch!) {
+            Future<PlayerModel?> playerFuture =
+                UserService().getPlayerById(item.id, widget.tokenModel.message);
+            playerFuture.then((value) {
+              if (value != null) {
+                _listPlayerSearch!.add(value);
+              }
+            });
+          }
+        }
+      });
+    });
+    return listOrderFromCreateUserModelFuture;
+  }
+
   @override
   Widget build(BuildContext context) {
+    _controller.text = widget.searchValue.toString();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Colors.white,
-        bottomOpacity: 0,
-        toolbarOpacity: 1,
-        toolbarHeight: 65,
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: FlatButton(
-            child: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+        leading: FlatButton(
+          child: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
+
         title: Container(
           width: size.width,
           decoration: BoxDecoration(
@@ -72,40 +78,36 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             controller: _controller,
             onChanged: (value) {
-              setState(() {
-                if (_controller.text.isEmpty) {
-                  _listPlayerSearch = [];
-                  showHistoryAndRecommendArea = true;
-                  showListSearchArea = false;
-                }
-              });
+              if (_controller.text.length == 0) {
+                Navigator.pop(context);
+              }
             },
-            onSubmitted: (value) {
-              setState(() {
-                if (_controller.text.isNotEmpty) {
-                  _listPlayerSearch = [];
-                  Future<List<UserModel>?> listPlayerSearchModelFuture =
-                      SearchService().searchUser(
-                          _controller.text, widget.tokenModel.message);
-                  listPlayerSearchModelFuture.then((_playerList) {
-                    listPlayerSearch = _playerList;
-                    if (_listPlayerSearch!.isEmpty) {
-                      for (var item in listPlayerSearch!) {
-                        Future<PlayerModel?> playerFuture = UserService()
-                            .getPlayerById(item.id, widget.tokenModel.message);
-                        playerFuture.then((value) {
-                          if (value != null) {
-                            _listPlayerSearch!.add(value);
-                          }
-                        });
-                      }
-                    }
-                  });
-                  showListSearchArea = true;
-                  showHistoryAndRecommendArea = false;
-                }
-              });
-            },
+            // onSubmitted: (value) {
+            //   // setState(() {
+            //   //   if (_controller.text.isNotEmpty) {
+            //   //     _listPlayerSearch = [];
+            //   //     Future<List<UserModel>?> listPlayerSearchModelFuture =
+            //   //         SearchService().searchUser(
+            //   //             _controller.text, widget.tokenModel.message);
+            //   //     listPlayerSearchModelFuture.then((_playerList) {
+            //   //       listPlayerSearch = _playerList;
+            //   //       if (_listPlayerSearch!.isEmpty) {
+            //   //         for (var item in listPlayerSearch!) {
+            //   //           Future<PlayerModel?> playerFuture = UserService()
+            //   //               .getPlayerById(item.id, widget.tokenModel.message);
+            //   //           playerFuture.then((value) {
+            //   //             if (value != null) {
+            //   //               _listPlayerSearch!.add(value);
+            //   //             }
+            //   //           });
+            //   //         }
+            //   //       }
+            //   //     });
+            //   //     // showListSearchArea = true;
+            //   //     // showHistoryAndRecommendArea = false;
+            //   //   }
+            //   // });
+            // },
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   horizontal: 40 / 375 * size.width,
@@ -121,11 +123,7 @@ class _SearchPageState extends State<SearchPage> {
               suffixIcon: IconButton(
                 onPressed: () {
                   _controller.clear();
-                  setState(() {
-                    _listPlayerSearch = [];
-                    showHistoryAndRecommendArea = true;
-                    showListSearchArea = false;
-                  });
+                  Navigator.pop(context);
                 },
                 icon: const Icon(
                   Icons.clear,
@@ -135,132 +133,33 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            iconSize: 30,
-            icon: const Icon(Icons.filter_alt_rounded),
-            color: Colors.black,
-            onPressed: () {},
-          ),
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     iconSize: 30,
+        //     icon: const Icon(Icons.filter_alt_rounded),
+        //     color: Colors.black,
+        //     onPressed: () {},
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-          child: Column(
-            children: [
-              Visibility(
-                  visible: showHistoryAndRecommendArea,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: const Text(
-                          'Tìm kiếm gần đây',
-                          style: TextStyle(color: Colors.grey, fontSize: 15),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            children: List.generate(
-                                listSearchHistory.length,
-                                (index) => buildSearchHistory(
-                                    listSearchHistory[index])),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: const Text(
-                          'Thể loại ưa thích',
-                          style: TextStyle(color: Colors.grey, fontSize: 15),
-                        ),
-                      ),
-                      GridView.count(
-                        shrinkWrap: true,
-                        childAspectRatio: (120 / 50),
-                        crossAxisCount: 3,
-                        children: List.generate(listTopGameType.length,
-                            (index) => buildTopGameTag(listTopGameType[index])),
-                      ),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: const Text(
-                          'Các tựa game nổi tiếng',
-                          style: TextStyle(color: Colors.grey, fontSize: 15),
-                        ),
-                      ),
-                      GridView.count(
-                        shrinkWrap: true,
-                        childAspectRatio: (120 / 50),
-                        crossAxisCount: 3,
-                        children: List.generate(listTopGame.length,
-                            (index) => buildTopGameTag(listTopGame[index])),
-                      ),
-                    ],
-                  )),
-              Visibility(
-                  visible: showListSearchArea,
-                  child: Column(
-                      children: List.generate(
-                          _listPlayerSearch!.length,
-                          (index) =>
-                              buildListSearch(_listPlayerSearch![index]))))
-            ],
-          ),
-        ),
-      ),
+          child: FutureBuilder(
+              future: loadPlayerList(),
+              builder: (context, snapshot) {
+                return Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Column(
+                        children: List.generate(
+                            widget.listSearch!.length,
+                            (index) =>
+                                buildListSearch(widget.listSearch![index]))
+                        // List.generate(_listPlayerSearch!.length,
+                        //     (index) => buildListSearch(_listPlayerSearch![index]))
+
+                        ));
+              })),
     );
   }
-
-  Widget buildSearchHistory(String search) => GestureDetector(
-        onTap: () {
-          print(search);
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Container(
-            alignment: Alignment.topLeft,
-            child: Column(
-              children: [
-                Text(
-                  search,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-
-  Widget buildTopGameTag(String gameType) => Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GestureDetector(
-          onTap: () {
-            print(gameType);
-          },
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Color(0xff8980FF),
-              ),
-              color: Color(0xff8980FF).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Text(
-              gameType,
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
-        ),
-      );
 
   Widget buildListSearch(PlayerModel playerModel) => SearchPlayerCard(
         playerModel: playerModel,
