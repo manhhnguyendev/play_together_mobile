@@ -26,58 +26,121 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<UserModel>? playerList;
-  List<PlayerModel>? _list;
+  List<UserModel>? playerListIsOrderByRating;
+  List<UserModel>? playerListIsNewAccount;
+  List<UserModel>? playerListIsSameHobbies;
+  List<UserModel>? playerListIsRecentOrder;
+  List<PlayerModel>? _listPlayerIsOrderByRating;
+  List<PlayerModel>? _listPlayerIsNewAccount;
+  List<PlayerModel>? _listPlayerIsSameHobbies;
+  List<PlayerModel>? _listPlayerIsRecentOrder;
   List<OrderModel>? _listOrder;
   UserModel? lateUser;
-  // List<PlayerFullModel>? _listFull;
-  // PlayerFullModel tmp = PlayerFullModel(player: null, games: null);
 
-  Future loadList() {
-    playerList ??= [];
-    _list ??= [];
-    Future<List<UserModel>?> listUserModelFuture =
-        UserService().getAllUsers(widget.tokenModel.message);
-    listUserModelFuture.then((_playerList) {
-      // if (mounted) {
+  Future loadListUserByIsOrderByRating() {
+    playerListIsOrderByRating ??= [];
+    _listPlayerIsOrderByRating ??= [];
+    Future<List<UserModel>?> listUserIsOrderByRatingModelFuture =
+        UserService().getAllUsersIsOrderByRating(widget.tokenModel.message);
+    listUserIsOrderByRatingModelFuture.then((_playerList) {
       setState(() {
-        playerList = _playerList;
-
-        if (_list!.length == 0) {
-          for (var item in playerList!) {
-            //get player
+        playerListIsOrderByRating = _playerList;
+        if (_listPlayerIsOrderByRating!.isEmpty) {
+          for (var item in playerListIsOrderByRating!) {
             Future<PlayerModel?> playerFuture =
                 UserService().getPlayerById(item.id, widget.tokenModel.message);
             playerFuture.then((value) {
               if (value != null) {
-                _list!.add(value);
+                _listPlayerIsOrderByRating!.add(value);
               }
             });
           }
         }
-
-        // print(
-        //     "aaaaa \n aaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \naaaaa \n" +
-        //         _list!.length.toString());
       });
-      // }
     });
-
-    return listUserModelFuture;
+    return listUserIsOrderByRatingModelFuture;
   }
 
-//check status
+  Future loadListUserByIsNewAccount() {
+    playerListIsNewAccount ??= [];
+    _listPlayerIsNewAccount ??= [];
+    Future<List<UserModel>?> listUserIsNewAccountModelFuture =
+        UserService().getAllUsersIsNewAccount(widget.tokenModel.message);
+    listUserIsNewAccountModelFuture.then((_playerList) {
+      setState(() {
+        playerListIsNewAccount = _playerList;
+        if (_listPlayerIsNewAccount!.isEmpty) {
+          for (var item in playerListIsNewAccount!) {
+            Future<PlayerModel?> playerFuture =
+                UserService().getPlayerById(item.id, widget.tokenModel.message);
+            playerFuture.then((value) {
+              if (value != null) {
+                _listPlayerIsNewAccount!.add(value);
+              }
+            });
+          }
+        }
+      });
+    });
+    return listUserIsNewAccountModelFuture;
+  }
+
+  Future loadListUserByIsSameHobbies() {
+    playerListIsSameHobbies ??= [];
+    _listPlayerIsSameHobbies ??= [];
+    Future<List<UserModel>?> listUserIsSameHobbiesModelFuture =
+        UserService().getAllUsersIsSameHobbies(widget.tokenModel.message);
+    listUserIsSameHobbiesModelFuture.then((_playerList) {
+      setState(() {
+        playerListIsSameHobbies = _playerList;
+        if (_listPlayerIsSameHobbies!.isEmpty) {
+          for (var item in playerListIsSameHobbies!) {
+            Future<PlayerModel?> playerFuture =
+                UserService().getPlayerById(item.id, widget.tokenModel.message);
+            playerFuture.then((value) {
+              if (value != null) {
+                _listPlayerIsSameHobbies!.add(value);
+              }
+            });
+          }
+        }
+      });
+    });
+    return listUserIsSameHobbiesModelFuture;
+  }
+
+  Future loadListUserByIsRecentOrder() {
+    playerListIsRecentOrder ??= [];
+    _listPlayerIsRecentOrder ??= [];
+    Future<List<UserModel>?> listUserIsRecentOrderModelFuture =
+        UserService().getAllUsersIsRecentOrder(widget.tokenModel.message);
+    listUserIsRecentOrderModelFuture.then((_playerList) {
+      setState(() {
+        playerListIsRecentOrder = _playerList;
+        if (_listPlayerIsRecentOrder!.isEmpty) {
+          for (var item in playerListIsRecentOrder!) {
+            Future<PlayerModel?> playerFuture =
+                UserService().getPlayerById(item.id, widget.tokenModel.message);
+            playerFuture.then((value) {
+              if (value != null) {
+                _listPlayerIsRecentOrder!.add(value);
+              }
+            });
+          }
+        }
+      });
+    });
+    return listUserIsRecentOrderModelFuture;
+  }
+
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          print(value.status);
           setState(() {
             lateUser = value;
-            //print("đổi nè");
           });
         } else {
           Future<List<OrderModel>?> checkPlayer = OrderService()
@@ -86,13 +149,11 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
-                print(value.status);
                 setState(() {
                   lateUser = value;
                   helper.pushInto(
                       context,
                       ReceiveRequestPage(
-                          //fromUserModel: _listOrder![0].user,
                           orderModel: _listOrder![0],
                           tokenModel: widget.tokenModel,
                           userModel: lateUser!),
@@ -138,18 +199,15 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 10, left: 10),
-              ),
               const SizedBox(
-                height: 5,
+                height: 10,
               ),
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
                 child: Row(children: [
                   Text(
-                    "Thuê lại lần nữa",
+                    "Top người chơi ưa thích",
                     style: TextStyle(
                       fontSize: 18 / 400 * size.width,
                       color: Colors.black,
@@ -173,15 +231,18 @@ class _HomePageState extends State<HomePage> {
                       child: SizedBox(
                           height: 220.0,
                           child: FutureBuilder(
-                              future: loadList(),
+                              future: loadListUserByIsOrderByRating(),
                               builder: (context, snapshot) {
                                 return ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: _list == null ? 0 : _list!.length,
+                                  itemCount: _listPlayerIsOrderByRating == null
+                                      ? 0
+                                      : _listPlayerIsOrderByRating!.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return PlayerCard(
-                                      playerModel: _list![index],
+                                      playerModel:
+                                          _listPlayerIsOrderByRating![index],
                                       tokenModel: widget.tokenModel,
                                       userModel: lateUser!,
                                     );
@@ -193,165 +254,161 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
               ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+                child: Row(children: [
+                  Text(
+                    "Các người chơi mới",
+                    style: TextStyle(
+                      fontSize: 18 / 400 * size.width,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ]),
+              ),
               const SizedBox(
                 height: 10,
               ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-              //   child: Row(children: [
-              //     Text(
-              //       "Có thể bạn sẽ thích",
-              //       style: TextStyle(
-              //         fontSize: 18 / 400 * size.width,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       child: const Icon(Icons.arrow_circle_down_outlined),
-              //     ),
-              //   ]),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SingleChildScrollView(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Expanded(
-              //         child: SizedBox(
-              //             height: 200.0,
-              //             child: FutureBuilder(
-              //                 //sau nay add ham khac vao
-              //                 // future: loadList(),
-              //                 builder: (context, snapshot) {
-              //               return ListView.builder(
-              //                 scrollDirection: Axis.horizontal,
-              //                 itemCount:
-              //                     playerList == null ? 0 : playerList!.length,
-              //                 itemBuilder: (BuildContext context, int index) {
-              //                   return PlayerCard(
-              //                     playerModel: _list![index],
-              //                     tokenModel: widget.tokenModel,
-              //                     userModel: widget.userModel,
-              //                   );
-              //                 },
-              //               );
-              //             })),
-              //       ),
-              //     ],
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-              //   child: Row(children: [
-              //     Text(
-              //       "Đề xuất cho bạn",
-              //       style: TextStyle(
-              //         fontSize: 18 / 400 * size.width,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       child: const Icon(Icons.arrow_circle_down_outlined),
-              //     ),
-              //   ]),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SingleChildScrollView(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Expanded(
-              //         child: SizedBox(
-              //             height: 200.0,
-              //             child: FutureBuilder(
-              //                 // future: loadList(),
-              //                 builder: (context, snapshot) {
-              //               return ListView.builder(
-              //                 scrollDirection: Axis.horizontal,
-              //                 itemCount:
-              //                     playerList == null ? 0 : playerList!.length,
-              //                 itemBuilder: (BuildContext context, int index) {
-              //                   return PlayerCard(
-              //                     playerModel: _list![index],
-              //                     tokenModel: widget.tokenModel,
-              //                     userModel: widget.userModel,
-              //                   );
-              //                 },
-              //               );
-              //             })),
-              //       ),
-              //     ],
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-              //   child: Row(children: [
-              //     Text(
-              //       "Top ưa thích",
-              //       style: TextStyle(
-              //         fontSize: 18 / 400 * size.width,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       child: const Icon(Icons.arrow_circle_down_outlined),
-              //     ),
-              //   ]),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SingleChildScrollView(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Expanded(
-              //         child: SizedBox(
-              //             height: 200.0,
-              //             child: FutureBuilder(
-              //                 // future: loadList(),
-              //                 builder: (context, snapshot) {
-              //               return ListView.builder(
-              //                 scrollDirection: Axis.horizontal,
-              //                 itemCount:
-              //                     playerList == null ? 0 : playerList!.length,
-              //                 itemBuilder: (BuildContext context, int index) {
-              //                   return PlayerCard(
-              //                     playerModel: _list![index],
-              //                     tokenModel: widget.tokenModel,
-              //                     userModel: widget.userModel,
-              //                   );
-              //                 },
-              //               );
-              //             })),
-              //       ),
-              //     ],
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   ),
-              // ),
+              SingleChildScrollView(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                          height: 220.0,
+                          child: FutureBuilder(
+                              future: loadListUserByIsNewAccount(),
+                              builder: (context, snapshot) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _listPlayerIsNewAccount == null
+                                      ? 0
+                                      : _listPlayerIsNewAccount!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return PlayerCard(
+                                      playerModel:
+                                          _listPlayerIsNewAccount![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                    );
+                                  },
+                                );
+                              })),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+                child: Row(children: [
+                  Text(
+                    "Có thể bạn thích",
+                    style: TextStyle(
+                      fontSize: 18 / 400 * size.width,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ]),
+              ),
               const SizedBox(
                 height: 10,
+              ),
+              SingleChildScrollView(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                          height: 220.0,
+                          child: FutureBuilder(
+                              future: loadListUserByIsSameHobbies(),
+                              builder: (context, snapshot) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _listPlayerIsSameHobbies == null
+                                      ? 0
+                                      : _listPlayerIsSameHobbies!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return PlayerCard(
+                                      playerModel:
+                                          _listPlayerIsSameHobbies![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                    );
+                                  },
+                                );
+                              })),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+                child: Row(children: [
+                  Text(
+                    "Thuê lại",
+                    style: TextStyle(
+                      fontSize: 18 / 400 * size.width,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ]),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                          height: 220.0,
+                          child: FutureBuilder(
+                              future: loadListUserByIsRecentOrder(),
+                              builder: (context, snapshot) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _listPlayerIsRecentOrder == null
+                                      ? 0
+                                      : _listPlayerIsRecentOrder!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return PlayerCard(
+                                      playerModel:
+                                          _listPlayerIsRecentOrder![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                    );
+                                  },
+                                );
+                              })),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
               ),
             ]),
       ),

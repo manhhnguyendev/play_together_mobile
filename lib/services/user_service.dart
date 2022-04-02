@@ -61,6 +61,78 @@ class UserService {
     return result;
   }
 
+  Future<List<UserModel>?> getAllUsersIsNewAccount(dynamic token) async {
+    Response response;
+    List<UserModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}?IsNewAccount=true'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<List<UserModel>?> getAllUsersIsSameHobbies(dynamic token) async {
+    Response response;
+    List<UserModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}?IsSameHobbies=true'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<List<UserModel>?> getAllUsersIsOrderByRating(dynamic token) async {
+    Response response;
+    List<UserModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}?IsOrderByRating=true'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<List<UserModel>?> getAllUsersIsRecentOrder(dynamic token) async {
+    Response response;
+    List<UserModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}?IsRecentOrder=true'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
   Future<UserModel?> getUserById(String userId, dynamic token) async {
     Response response;
     UserModel? result;
