@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class HistoryHiringCard extends StatefulWidget {
   final TokenModel tokenModel;
+  final UserModel userModel;
   final OrderModel orderModel;
 
   const HistoryHiringCard(
-      {Key? key, required this.orderModel, required this.tokenModel})
+      {Key? key,
+      required this.orderModel,
+      required this.tokenModel,
+      required this.userModel})
       : super(key: key);
 
   @override
@@ -35,6 +40,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
             MaterialPageRoute(
                 builder: (context) => HistoryHiringDetail(
                       orderModel: widget.orderModel,
+                      userModel: widget.userModel,
                       tokenModel: widget.tokenModel,
                     )),
           );

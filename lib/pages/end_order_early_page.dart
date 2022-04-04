@@ -29,6 +29,7 @@ class EndOrderEarlyPage extends StatefulWidget {
 class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   var reasonController = TextEditingController();
   UserModel? lateUser;
+  OrderModel? lateOrder;
   bool checkReason = true;
   String reason = "";
 
@@ -38,16 +39,23 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          setState(() {
-            lateUser = value;
-            helper.pushInto(
-                context,
-                EndOrderPage(
-                  tokenModel: widget.tokenModel,
-                  userModel: lateUser!,
-                  orderModel: widget.orderModel,
-                ),
-                true);
+          Future<OrderModel?> checkStatusOrder = OrderService()
+              .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
+          checkStatusOrder.then((order) {
+            if (order != null) {
+              setState(() {
+                lateOrder = order;
+                lateUser = value;
+                helper.pushInto(
+                    context,
+                    EndOrderPage(
+                      tokenModel: widget.tokenModel,
+                      userModel: lateUser ?? widget.userModel,
+                      orderModel: lateOrder ?? widget.orderModel,
+                    ),
+                    true);
+              });
+            }
           });
         } else {
           setState(() {
@@ -283,15 +291,23 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                       finishSoonModel);
                   finishFuture.then((finish) {
                     if (finish == true) {
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            EndOrderPage(
-                              orderModel: widget.orderModel,
-                              tokenModel: widget.tokenModel,
-                              userModel: lateUser!,
-                            ),
-                            true);
+                      Future<OrderModel?> checkStatusOrder = OrderService()
+                          .getOrderById(
+                              widget.orderModel!.id, widget.tokenModel.message);
+                      checkStatusOrder.then((order) {
+                        if (order != null) {
+                          setState(() {
+                            lateOrder = order;
+                            helper.pushInto(
+                                context,
+                                EndOrderPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: lateUser ?? widget.userModel,
+                                  orderModel: lateOrder ?? widget.orderModel,
+                                ),
+                                true);
+                          });
+                        }
                       });
                     }
                   });

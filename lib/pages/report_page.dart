@@ -82,7 +82,7 @@ class _ReportPageState extends State<ReportPage> {
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 maxLength: 1000,
-                onSaved: (newValue) => reportMessage = newValue!,
+                onChanged: (newValue) => reportMessage = newValue,
                 decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
@@ -112,15 +112,17 @@ class _ReportPageState extends State<ReportPage> {
                       widget.tokenModel.message,
                       reportCreateModel);
                   reportFuture.then((rate) {
-                    setState(() {
-                      helper.pushInto(
-                          context,
-                          HistoryPage(
-                            tokenModel: widget.tokenModel,
-                            userModel: widget.userModel!,
-                          ),
-                          true);
-                    });
+                    if (rate == true) {
+                      setState(() {
+                        helper.pushInto(
+                            context,
+                            HistoryPage(
+                              tokenModel: widget.tokenModel,
+                              userModel: widget.userModel!,
+                            ),
+                            true);
+                      });
+                    }
                   });
                 },
                 height: 50,

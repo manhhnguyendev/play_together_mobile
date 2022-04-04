@@ -8,6 +8,7 @@ class CharityCard extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
   final CharityModel charityModel;
+
   const CharityCard(
       {Key? key,
       required this.charityModel,
@@ -22,7 +23,6 @@ class CharityCard extends StatefulWidget {
 class _CharityCardState extends State<CharityCard> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         Navigator.push(

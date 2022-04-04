@@ -279,7 +279,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                           border: Border.all(color: Colors.black)),
                       child: TextField(
                         controller: _reasonController,
-                        enabled: true,
+                        enabled: false,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 0, horizontal: 10.0),
