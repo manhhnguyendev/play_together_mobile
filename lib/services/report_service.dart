@@ -16,7 +16,6 @@ class ReportService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
-
       if (response.statusCode == 200) {
         result = true;
       }

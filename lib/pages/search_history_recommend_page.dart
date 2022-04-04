@@ -76,8 +76,8 @@ class _SearchHistoryAndRecommendPageState
                 Future<List<UserModel>?> listPlayerSearchModelFuture =
                     SearchService().searchUser(
                         _controller.text, widget.tokenModel.message);
-                listPlayerSearchModelFuture.then((_playerList) {
-                  listPlayerSearch = _playerList;
+                listPlayerSearchModelFuture.then((_playerSearchList) {
+                  listPlayerSearch = _playerSearchList;
                   if (_listPlayerSearch!.isEmpty) {
                     for (var item in listPlayerSearch!) {
                       Future<PlayerModel?> playerFuture = UserService()

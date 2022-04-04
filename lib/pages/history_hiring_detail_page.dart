@@ -3,13 +3,18 @@ import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
   final OrderModel orderModel;
+  final UserModel userModel;
   final TokenModel tokenModel;
 
   const HistoryHiringDetail(
-      {Key? key, required this.orderModel, required this.tokenModel})
+      {Key? key,
+      required this.orderModel,
+      required this.tokenModel,
+      required this.userModel})
       : super(key: key);
 
   @override
@@ -81,14 +86,19 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(widget.orderModel.user!.avatar)),
+                              backgroundImage: NetworkImage(
+                                  widget.orderModel.user!.id ==
+                                          widget.userModel.id
+                                      ? widget.orderModel.user!.avatar
+                                      : widget.orderModel.toUser!.avatar)),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.orderModel.user!.name,
+                          widget.orderModel.user!.id == widget.userModel.id
+                              ? widget.orderModel.user!.name
+                              : widget.orderModel.toUser!.name,
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
@@ -116,15 +126,20 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(widget.orderModel.toUser!.avatar),
+                            backgroundImage: NetworkImage(
+                                widget.orderModel.user!.id ==
+                                        widget.userModel.id
+                                    ? widget.orderModel.toUser!.avatar
+                                    : widget.orderModel.user!.avatar),
                           ),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.orderModel.toUser!.name,
+                          widget.orderModel.user!.id == widget.userModel.id
+                              ? widget.orderModel.toUser!.name
+                              : widget.orderModel.user!.name,
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],

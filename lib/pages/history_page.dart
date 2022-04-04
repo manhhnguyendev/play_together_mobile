@@ -219,6 +219,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget buildListHistory(OrderModel _orderModel) {
     return HistoryHiringCard(
       orderModel: _orderModel,
+      userModel: widget.userModel,
       tokenModel: widget.tokenModel,
     );
   }
