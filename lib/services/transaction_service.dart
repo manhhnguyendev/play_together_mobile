@@ -13,7 +13,7 @@ class TransactionService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}/transactions?Type=$type&Operation=$operation'),
+            '${apiUrl.users}/transactions?IsNew=true&Type=$type&Operation=$operation'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

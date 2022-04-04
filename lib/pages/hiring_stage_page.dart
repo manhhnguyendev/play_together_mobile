@@ -9,9 +9,8 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:play_together_mobile/services/order_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
-
-import '../services/order_service.dart';
 
 class HiringPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -54,9 +53,8 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     context,
                     EndOrderPage(
                       tokenModel: widget.tokenModel,
-                      userModel: lateUser != null ? lateUser : widget.userModel,
-                      orderModel:
-                          lateOrder != null ? lateOrder : widget.orderModel,
+                      userModel: lateUser ?? widget.userModel,
+                      orderModel: lateOrder ?? widget.orderModel,
                     ),
                     true);
               });

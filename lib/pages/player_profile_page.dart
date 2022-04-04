@@ -33,9 +33,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
         .getGameOfUser(widget.playerModel.id, widget.tokenModel.message);
     gameOfUserFuture.then((value) {
       if (value != null) {
-        setState(() {
-          listGameAndRank = value;
-        });
+        listGameAndRank = value;
       }
     });
     return gameOfUserFuture;

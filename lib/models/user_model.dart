@@ -250,26 +250,3 @@ class PlayerModel {
         "maxHourHire": maxHourHire
       };
 }
-
-class PlayerFullModel {
-  PlayerModel? player;
-  List<GameOfUserModel>? games;
-
-  PlayerFullModel({required this.player, required this.games});
-
-  // factory PlayerFullModel.fromJson(Map<String, dynamic> json) =>
-  //     PlayerFullModel(
-  //       player: json['player'] != null
-  //           ? PlayerModel.fromJson(json['player'])
-  //           : PlayerModel.fromJson(json),
-  //       games: (json['games'] as List<dynamic>?) != null
-  //           ? (json['games'] as List<dynamic>)
-  //               .map((balance) => GameOfUserModel.fromJson(balance))
-  //               .toList()
-  //           : <GameOfUserModel>[],
-
-  //     );
-
-  // Map<String, dynamic> toJson() =>
-  //     {"player": player, "games": games};
-}

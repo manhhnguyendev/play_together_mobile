@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/hiring_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
@@ -25,28 +24,27 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
+  List<OrderModel>? _listCreateOrder;
   List<OrderModel>? _listReceiveOrder;
-  bool checkEmptyOrder = false;
+  bool checkEmptyCreateOrder = false;
   bool checkEmptyReceiveOrder = false;
   Future loadListFromCreateUser() {
-    _listOrder ??= [];
+    _listCreateOrder ??= [];
     Future<List<OrderModel>?> listOrderFromCreateUserModelFuture =
         OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
-    listOrderFromCreateUserModelFuture.then((_orderList) {
-      setState(() {
-        _listOrder = _orderList;
-        if (_listOrder!.isEmpty) {
-          for (var item in _listOrder!) {
-            Future<OrderModel?> orderFuture =
-                OrderService().getOrderById(item.id, widget.tokenModel.message);
-            orderFuture.then((value) {
-              if (value != null) {
-                _listOrder!.add(value);
-              }
-            });
-          }
+    listOrderFromCreateUserModelFuture.then((_createOrderList) {
+      _listCreateOrder = _createOrderList;
+      if (_listCreateOrder!.isEmpty) {
+        for (var item in _listCreateOrder!) {
+          Future<OrderModel?> orderFuture =
+              OrderService().getOrderById(item.id, widget.tokenModel.message);
+          orderFuture.then((value) {
+            if (value != null) {
+              _listCreateOrder!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listOrderFromCreateUserModelFuture;
   }
@@ -55,21 +53,19 @@ class _HistoryPageState extends State<HistoryPage> {
     _listReceiveOrder ??= [];
     Future<List<OrderModel>?> listOrderFromReceiveUserModelFuture =
         OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
-    listOrderFromReceiveUserModelFuture.then((_orderList) {
-      setState(() {
-        _listReceiveOrder = _orderList;
-        if (_listReceiveOrder!.isEmpty) {
-          for (var item in _listReceiveOrder!) {
-            Future<OrderModel?> orderFuture =
-                OrderService().getOrderById(item.id, widget.tokenModel.message);
-            orderFuture.then((value) {
-              if (value != null) {
-                _listReceiveOrder!.add(value);
-              }
-            });
-          }
+    listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
+      _listReceiveOrder = _receiveOrderList;
+      if (_listReceiveOrder!.isEmpty) {
+        for (var item in _listReceiveOrder!) {
+          Future<OrderModel?> orderFuture =
+              OrderService().getOrderById(item.id, widget.tokenModel.message);
+          orderFuture.then((value) {
+            if (value != null) {
+              _listReceiveOrder!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listOrderFromReceiveUserModelFuture;
   }
@@ -90,16 +86,14 @@ class _HistoryPageState extends State<HistoryPage> {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
-                setState(() {
-                  lateUser = value;
-                  helper.pushInto(
-                      context,
-                      ReceiveRequestPage(
-                          orderModel: _listOrder![0],
-                          tokenModel: widget.tokenModel,
-                          userModel: lateUser!),
-                      true);
-                });
+                lateUser = value;
+                helper.pushInto(
+                    context,
+                    ReceiveRequestPage(
+                        orderModel: _listOrder![0],
+                        tokenModel: widget.tokenModel,
+                        userModel: lateUser!),
+                    true);
               }
             });
           }));
@@ -160,8 +154,10 @@ class _HistoryPageState extends State<HistoryPage> {
               child: FutureBuilder(
                   future: loadListFromCreateUser(),
                   builder: (context, snapshot) {
-                    if (_listOrder!.length == 0) {
-                      checkEmptyOrder = true;
+                    if (_listCreateOrder!.isEmpty) {
+                      checkEmptyCreateOrder = true;
+                    } else {
+                      checkEmptyCreateOrder = false;
                     }
                     return Padding(
                       padding: const EdgeInsets.only(top: 10),
@@ -169,13 +165,15 @@ class _HistoryPageState extends State<HistoryPage> {
                         children: [
                           Column(
                             children: List.generate(
-                                _listOrder == null ? 0 : _listOrder!.length,
+                                _listCreateOrder == null
+                                    ? 0
+                                    : _listCreateOrder!.length,
                                 (index) =>
-                                    buildListHistory(_listOrder![index])),
+                                    buildListHistory(_listCreateOrder![index])),
                           ),
                           Visibility(
-                              visible: checkEmptyOrder,
-                              child: Text('Không có kết quả'))
+                              visible: checkEmptyCreateOrder,
+                              child: const Text('Không có dữ liệu'))
                         ],
                       ),
                     );
@@ -184,8 +182,10 @@ class _HistoryPageState extends State<HistoryPage> {
               child: FutureBuilder(
                   future: loadListFromReceiveUser(),
                   builder: (context, snapshot) {
-                    if (_listReceiveOrder!.length == 0) {
+                    if (_listReceiveOrder!.isEmpty) {
                       checkEmptyReceiveOrder = true;
+                    } else {
+                      checkEmptyReceiveOrder = false;
                     }
                     return Padding(
                       padding: const EdgeInsets.only(top: 10),
@@ -201,7 +201,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           ),
                           Visibility(
                               visible: checkEmptyReceiveOrder,
-                              child: Text('Không có dữ liệu'))
+                              child: const Text('Không có dữ liệu'))
                         ],
                       ),
                     );
@@ -216,9 +216,9 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget buildListHistory(OrderModel model) {
+  Widget buildListHistory(OrderModel _orderModel) {
     return HistoryHiringCard(
-      orderModel: model,
+      orderModel: _orderModel,
       tokenModel: widget.tokenModel,
     );
   }

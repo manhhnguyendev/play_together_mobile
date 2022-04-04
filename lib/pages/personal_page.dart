@@ -11,11 +11,10 @@ import 'package:play_together_mobile/pages/update_hobbies_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
-
-import '../models/order_model.dart';
-import '../services/order_service.dart';
-import '../services/user_service.dart';
 
 class PersonalPage extends StatefulWidget {
   final UserModel userModel;
@@ -34,18 +33,15 @@ class PersonalPage extends StatefulWidget {
 class _PersonalPageState extends State<PersonalPage> {
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
-//check status
+
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          print(value.status);
           setState(() {
             lateUser = value;
-            //print("đổi nè");
           });
         } else {
           Future<List<OrderModel>?> checkPlayer = OrderService()
@@ -54,18 +50,14 @@ class _PersonalPageState extends State<PersonalPage> {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
-                print(value.status);
-                setState(() {
-                  lateUser = value;
-                  helper.pushInto(
-                      context,
-                      ReceiveRequestPage(
-                          //fromUserModel: _listOrder![0].user,
-                          orderModel: _listOrder![0],
-                          tokenModel: widget.tokenModel,
-                          userModel: lateUser!),
-                      true);
-                });
+                lateUser = value;
+                helper.pushInto(
+                    context,
+                    ReceiveRequestPage(
+                        orderModel: _listOrder![0],
+                        tokenModel: widget.tokenModel,
+                        userModel: lateUser!),
+                    true);
               }
             });
           }));
@@ -113,7 +105,7 @@ class _PersonalPageState extends State<PersonalPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (lateUser != null)
+                              if (lateUser != null) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -121,6 +113,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                           userModel: lateUser!,
                                           tokenModel: widget.tokenModel)),
                                 );
+                              }
                             },
                             child: Row(
                               children: const [
