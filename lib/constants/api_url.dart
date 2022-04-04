@@ -8,6 +8,8 @@ const String ranks =
     "https://play-together.azurewebsites.net/api/play-together/v1/rank";
 const String ratings =
     "https://play-together.azurewebsites.net/api/play-together/v1/rating";
+const String reports =
+    "https://play-together.azurewebsites.net/api/play-together/v1/reports";
 const String images =
     "https://play-together.azurewebsites.net/api/play-together/v1/images";
 const String charities =

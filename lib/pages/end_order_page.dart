@@ -57,7 +57,10 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ReportPage()),
+                          builder: (context) => ReportPage(
+                              orderModel: widget.orderModel,
+                              tokenModel: widget.tokenModel,
+                              userModel: widget.userModel!)),
                     );
                   },
                   icon: const Icon(
