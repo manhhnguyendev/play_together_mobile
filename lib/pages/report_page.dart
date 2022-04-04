@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/report_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/history_page.dart';
+import 'package:play_together_mobile/services/report_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class ReportPage extends StatefulWidget {
-  const ReportPage({Key? key}) : super(key: key);
+  final OrderModel? orderModel;
+  final UserModel? userModel;
+  final TokenModel tokenModel;
+
+  const ReportPage(
+      {Key? key, this.orderModel, this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<ReportPage> createState() => _ReportPageState();
 }
 
 class _ReportPageState extends State<ReportPage> {
+  String reportMessage = "";
   @override
   Widget build(BuildContext context) {
-    String profileLink = "assets/images/defaultprofile.png";
-    String reason = "";
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -20,40 +32,44 @@ class _ReportPageState extends State<ReportPage> {
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: FlatButton(
-            child: Icon(Icons.arrow_back_ios),
+            child: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
         ),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Tố cáo',
           style: TextStyle(
               fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
         ),
       ),
-      body: Container(
-          child: Column(
+      body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 75,
           ),
           SizedBox(
             height: 150,
             width: 150,
             child: CircleAvatar(
-              backgroundImage: AssetImage(profileLink),
+              backgroundImage: NetworkImage(
+                  widget.orderModel!.user!.id == widget.userModel!.id
+                      ? widget.orderModel!.user!.avatar
+                      : widget.orderModel!.toUser!.avatar),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
-            "Player name",
-            style: TextStyle(fontSize: 20),
+            widget.orderModel!.user!.id == widget.userModel!.id
+                ? widget.orderModel!.user!.name
+                : widget.orderModel!.toUser!.name,
+            style: const TextStyle(fontSize: 20),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           Padding(
@@ -66,10 +82,10 @@ class _ReportPageState extends State<ReportPage> {
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 maxLength: 1000,
-                onSaved: (newValue) => reason = newValue!,
+                onSaved: (newValue) => reportMessage = newValue!,
                 decoration: const InputDecoration(
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                   counterText: "",
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: "Nhập lý do tố cáo của bạn...",
@@ -80,13 +96,35 @@ class _ReportPageState extends State<ReportPage> {
             ),
           ),
         ],
-      )),
+      ),
       bottomNavigationBar: BottomAppBar(
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: SecondMainButton(
-                text: 'Gửi', onpress: () {}, height: 50, width: 200),
+                text: 'Gửi',
+                onpress: () {
+                  ReportCreateModel reportCreateModel = ReportCreateModel(
+                      reportMessage:
+                          reportMessage != "" ? reportMessage : reportMessage);
+                  Future<bool?> reportFuture = ReportService().createReport(
+                      widget.orderModel!.id,
+                      widget.tokenModel.message,
+                      reportCreateModel);
+                  reportFuture.then((rate) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          HistoryPage(
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!,
+                          ),
+                          true);
+                    });
+                  });
+                },
+                height: 50,
+                width: 200),
           )),
     );
   }

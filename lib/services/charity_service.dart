@@ -11,7 +11,7 @@ class CharityService {
     List<CharityModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.charities}&IsActive=true'),
+        Uri.parse('${apiUrl.charities}?IsActive=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
