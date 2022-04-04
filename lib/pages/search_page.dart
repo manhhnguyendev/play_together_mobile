@@ -11,6 +11,7 @@ class SearchPage extends StatefulWidget {
   final UserModel userModel;
   final List<PlayerModel>? listSearch;
   final String? searchValue;
+
   const SearchPage(
       {Key? key,
       required this.tokenModel,
@@ -35,20 +36,18 @@ class _SearchPageState extends State<SearchPage> {
         SearchService().searchUser(
             widget.searchValue.toString(), widget.tokenModel.message);
     listOrderFromCreateUserModelFuture.then((_userList) {
-      setState(() {
-        listPlayerSearch = _userList;
-        if (_listPlayerSearch!.isEmpty) {
-          for (var item in listPlayerSearch!) {
-            Future<PlayerModel?> playerFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            playerFuture.then((value) {
-              if (value != null) {
-                _listPlayerSearch!.add(value);
-              }
-            });
-          }
+      listPlayerSearch = _userList;
+      if (_listPlayerSearch!.isEmpty) {
+        for (var item in listPlayerSearch!) {
+          Future<PlayerModel?> playerFuture =
+              UserService().getPlayerById(item.id, widget.tokenModel.message);
+          playerFuture.then((value) {
+            if (value != null) {
+              _listPlayerSearch!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listOrderFromCreateUserModelFuture;
   }
@@ -68,7 +67,6 @@ class _SearchPageState extends State<SearchPage> {
             Navigator.pop(context);
           },
         ),
-
         title: Container(
           width: size.width,
           decoration: BoxDecoration(
@@ -78,36 +76,10 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             controller: _controller,
             onChanged: (value) {
-              if (_controller.text.length == 0) {
+              if (_controller.text.isEmpty) {
                 Navigator.pop(context);
               }
             },
-            // onSubmitted: (value) {
-            //   // setState(() {
-            //   //   if (_controller.text.isNotEmpty) {
-            //   //     _listPlayerSearch = [];
-            //   //     Future<List<UserModel>?> listPlayerSearchModelFuture =
-            //   //         SearchService().searchUser(
-            //   //             _controller.text, widget.tokenModel.message);
-            //   //     listPlayerSearchModelFuture.then((_playerList) {
-            //   //       listPlayerSearch = _playerList;
-            //   //       if (_listPlayerSearch!.isEmpty) {
-            //   //         for (var item in listPlayerSearch!) {
-            //   //           Future<PlayerModel?> playerFuture = UserService()
-            //   //               .getPlayerById(item.id, widget.tokenModel.message);
-            //   //           playerFuture.then((value) {
-            //   //             if (value != null) {
-            //   //               _listPlayerSearch!.add(value);
-            //   //             }
-            //   //           });
-            //   //         }
-            //   //       }
-            //   //     });
-            //   //     // showListSearchArea = true;
-            //   //     // showHistoryAndRecommendArea = false;
-            //   //   }
-            //   // });
-            // },
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   horizontal: 40 / 375 * size.width,
@@ -133,14 +105,6 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
         ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     iconSize: 30,
-        //     icon: const Icon(Icons.filter_alt_rounded),
-        //     color: Colors.black,
-        //     onPressed: () {},
-        //   ),
-        // ],
       ),
       body: SingleChildScrollView(
           child: FutureBuilder(
@@ -152,17 +116,13 @@ class _SearchPageState extends State<SearchPage> {
                         children: List.generate(
                             widget.listSearch!.length,
                             (index) =>
-                                buildListSearch(widget.listSearch![index]))
-                        // List.generate(_listPlayerSearch!.length,
-                        //     (index) => buildListSearch(_listPlayerSearch![index]))
-
-                        ));
+                                buildListSearch(widget.listSearch![index]))));
               })),
     );
   }
 
-  Widget buildListSearch(PlayerModel playerModel) => SearchPlayerCard(
-        playerModel: playerModel,
+  Widget buildListSearch(PlayerModel _playerModel) => SearchPlayerCard(
+        playerModel: _playerModel,
         tokenModel: widget.tokenModel,
         userModel: widget.userModel,
       );

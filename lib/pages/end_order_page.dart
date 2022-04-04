@@ -6,7 +6,6 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/pages/rating_comment_player_page.dart';
 import 'package:play_together_mobile/pages/report_page.dart';
-import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
@@ -16,6 +15,7 @@ class EndOrderPage extends StatefulWidget {
   final UserModel? userModel;
   final OrderModel? orderModel;
   final TokenModel tokenModel;
+
   const EndOrderPage(
       {Key? key, this.userModel, this.orderModel, required this.tokenModel})
       : super(key: key);
@@ -26,8 +26,6 @@ class EndOrderPage extends StatefulWidget {
 
 class _EndOrderPageState extends State<EndOrderPage> {
   late bool checkEndEarly;
-
-  void getOrder() {}
 
   @override
   Widget build(BuildContext context) {

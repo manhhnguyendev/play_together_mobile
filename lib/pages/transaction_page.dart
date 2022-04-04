@@ -8,6 +8,7 @@ import 'package:play_together_mobile/widgets/transaction_card.dart';
 class TransactionPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const TransactionPage(
       {Key? key, required this.userModel, required this.tokenModel})
       : super(key: key);
@@ -17,24 +18,24 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+  bool checkAll = true;
   bool checkDeposit = false;
   bool checkWithdraw = false;
   bool checkDonate = false;
-  bool checkIncome = false; //income tính luôn cái vụ refund - thối tiền
+  bool checkIncome = false;
   bool checkOutcome = false;
-  bool checkAll = true;
+  bool checkExistTransaction = false;
+  bool checkExistDeposit = false;
+  bool checkExistWithdraw = false;
+  bool checkExistDonate = false;
+  bool checkExistIncome = false;
+  bool checkExistOutcome = false;
   List<TransactionModel>? listAllTransaction;
   List<TransactionModel>? listDepositTransaction;
   List<TransactionModel>? listWithdrawTransaction;
   List<TransactionModel>? listIncomeTransaction;
   List<TransactionModel>? listOutcomeTransaction;
   List<TransactionModel>? listDonateTransaction;
-  bool checkExistTransaction = false;
-  bool checkExistDeposit = false;
-  bool checkExistWithdraw = false;
-  bool checkExistDonate = false;
-  bool checkExistIncome = false; //income tính luôn cái vụ refund - thối tiền
-  bool checkExistOutcome = false;
   String type = '';
   String operation = '';
 
@@ -82,7 +83,7 @@ class _TransactionPageState extends State<TransactionPage> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           GridView.count(
@@ -96,11 +97,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       color: checkAll
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: FlatButton(
@@ -118,7 +119,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Tất cả',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.normal),
@@ -132,11 +133,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       color: checkIncome
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: FlatButton(
@@ -151,7 +152,7 @@ class _TransactionPageState extends State<TransactionPage> {
                               checkOutcome = false;
                               checkWithdraw = false;
                               type = 'Order';
-                              operation = '+';
+                              operation = 'Add';
                             } else {
                               type = '';
                               operation = '';
@@ -165,7 +166,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           });
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Nhận tiền',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.normal),
@@ -179,11 +180,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       color: checkOutcome
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: FlatButton(
@@ -197,7 +198,7 @@ class _TransactionPageState extends State<TransactionPage> {
                             checkOutcome = true;
                             checkWithdraw = false;
                             type = 'Order';
-                            operation = '-';
+                            operation = 'Sub';
                           } else {
                             type = '';
                             operation = '';
@@ -210,7 +211,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Trừ tiền',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.normal),
@@ -224,11 +225,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       color: checkDeposit
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: FlatButton(
@@ -255,7 +256,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Nạp tiền',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.normal),
@@ -269,11 +270,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       color: checkWithdraw
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: FlatButton(
@@ -300,7 +301,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Rút tiền',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.normal),
@@ -314,11 +315,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       color: checkDonate
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: FlatButton(
@@ -345,7 +346,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: Text(
+                      child: const Text(
                         'Donate',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.normal),
@@ -354,7 +355,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   ),
                 ),
               ]),
-          Divider(
+          const Divider(
             indent: 10,
             endIndent: 10,
             thickness: 1,
@@ -363,7 +364,7 @@ class _TransactionPageState extends State<TransactionPage> {
               child: FutureBuilder(
                   future: loadListAllTransaction(),
                   builder: (context, snapshot) {
-                    if (listAllTransaction!.length == 0) {
+                    if (listAllTransaction!.isEmpty) {
                       checkExistTransaction = true;
                     } else {
                       checkExistTransaction = false;
@@ -382,7 +383,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           ),
                           Visibility(
                               visible: checkExistTransaction,
-                              child: Text('Không có dữ liệu'))
+                              child: const Text('Không có dữ liệu'))
                         ],
                       ),
                     );
@@ -392,6 +393,6 @@ class _TransactionPageState extends State<TransactionPage> {
     );
   }
 
-  Widget buildListTransaction(TransactionModel model) =>
-      TransactionCard(transactionModel: model);
+  Widget buildListTransaction(TransactionModel _transactionModel) =>
+      TransactionCard(transactionModel: _transactionModel);
 }

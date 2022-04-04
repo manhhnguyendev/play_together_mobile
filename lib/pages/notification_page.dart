@@ -6,10 +6,9 @@ import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/widgets/notification_card.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
-
-import '../models/order_model.dart';
-import '../services/order_service.dart';
-import '../services/user_service.dart';
+import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 
 class NotificationsPage extends StatefulWidget {
   final UserModel userModel;
@@ -26,18 +25,14 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
-//check status
   void check() {
     Future<UserModel?> checkStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
-          print(value.status);
           setState(() {
             lateUser = value;
-            //print("đổi nè");
           });
         } else {
           Future<List<OrderModel>?> checkPlayer = OrderService()
@@ -46,18 +41,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
-                print(value.status);
-                setState(() {
-                  lateUser = value;
-                  helper.pushInto(
-                      context,
-                      ReceiveRequestPage(
-                          //fromUserModel: _listOrder![0].user,
-                          orderModel: _listOrder![0],
-                          tokenModel: widget.tokenModel,
-                          userModel: lateUser!),
-                      true);
-                });
+                lateUser = value;
+                helper.pushInto(
+                    context,
+                    ReceiveRequestPage(
+                        orderModel: _listOrder![0],
+                        tokenModel: widget.tokenModel,
+                        userModel: lateUser!),
+                    true);
               }
             });
           }));
