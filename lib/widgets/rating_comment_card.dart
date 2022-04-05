@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
 
 class RatingCard extends StatefulWidget {
-  final RatingModel ratingModel;
-  const RatingCard({Key? key, required this.ratingModel}) : super(key: key);
+  final RatingModel? ratingModel;
+  final TokenModel tokenModel;
+  const RatingCard({Key? key, this.ratingModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<RatingCard> createState() => _RatingCardState();
@@ -13,9 +16,12 @@ class RatingCard extends StatefulWidget {
 class _RatingCardState extends State<RatingCard> {
   @override
   Widget build(BuildContext context) {
-    // String date = DateFormat('dd/MM/yyyy').format(widget.ratingModel.date);
-    // String startTime = DateFormat('hh:mm a').format(widget.ratingModel.date);
-
+    // String date = DateFormat('dd/MM/yyyy').format(widget.ratingModel!.createdDate);
+    // String startTime = DateFormat('hh:mm a').format(widget.ratingModel!.date);
+    String date = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.ratingModel!.createdDate));
+    String startTime = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.ratingModel!.createdDate));
     Size size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -30,9 +36,13 @@ class _RatingCardState extends State<RatingCard> {
                 child: SizedBox(
                   height: 70,
                   width: 70,
-                  child: CircleAvatar(
-                      // backgroundImage: AssetImage(widget.ratingModel.avatar),
-                      ),
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(widget.ratingModel!.user!.avatar),
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -44,27 +54,25 @@ class _RatingCardState extends State<RatingCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          //widget.ratingModel.name
-                          "",
+                          widget.ratingModel!.user!.name,
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                         SizedBox(
                           height: 5,
                         ),
-                        // buildRatingStar(widget.ratingModel.rate),
+                        buildRatingStar(widget.ratingModel!.rate),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          // date + ', ' + startTime
-                          "",
+                          date + ', ' + startTime,
                           style: TextStyle(fontSize: 15, color: Colors.grey),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.ratingModel.comment,
+                          widget.ratingModel!.comment,
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         )
                       ],
