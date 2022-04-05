@@ -1,11 +1,11 @@
 import 'package:play_together_mobile/models/user_model.dart';
 
 class RatingModel {
-  final String id;
-  final UserModel? user;
-  final int rate;
-  final String createdDate;
-  final String comment;
+  String id;
+  UserModel? user;
+  int rate;
+  String createdDate;
+  String comment;
 
   RatingModel({
     required this.id,

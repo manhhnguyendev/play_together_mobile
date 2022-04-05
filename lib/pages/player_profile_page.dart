@@ -146,7 +146,11 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RatingCommentPage()),
+                            builder: (context) => RatingCommentPage(
+                                  userModel: widget.userModel,
+                                  tokenModel: widget.tokenModel,
+                                  playerModel: widget.playerModel,
+                                )),
                       );
                     },
                     child: Padding(

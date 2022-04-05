@@ -334,11 +334,11 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                           child: GestureDetector(
                             onTap: () {
                               print("tap tap");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RatingCommentPage()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => RatingCommentPage()),
+                              // );
                             },
                             child: Column(
                               children: [
