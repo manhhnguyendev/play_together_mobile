@@ -250,3 +250,24 @@ class PlayerModel {
         "maxHourHire": maxHourHire
       };
 }
+
+class MakeDonateModel {
+  double money;
+  String message;
+
+  MakeDonateModel({
+    required this.money,
+    required this.message,
+  });
+
+  factory MakeDonateModel.fromJson(Map<String, dynamic> json) =>
+      MakeDonateModel(
+        money: json['money'] as double,
+        message: json['message'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "money": money,
+        "message": message,
+      };
+}

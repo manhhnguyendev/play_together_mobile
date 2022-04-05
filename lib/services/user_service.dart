@@ -205,4 +205,23 @@ class UserService {
     }
     return result;
   }
+
+  Future<bool?> makeDonateToCharity(
+      String charityId, dynamic token, MakeDonateModel model) async {
+    Response response;
+    bool? result;
+    try {
+      response = await post(
+        Uri.parse('${apiUrl.users}/donates/$charityId'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(model.toJson()),
+      );
+      if (response.statusCode == 200) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
 }

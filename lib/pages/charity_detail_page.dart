@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/donate_charity_page.dart';
+import 'package:play_together_mobile/pages/charity_donate_page.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 
 class CharityDetailPage extends StatefulWidget {
   final CharityModel charityModel;
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const CharityDetailPage(
       {Key? key,
       required this.charityModel,
@@ -73,41 +74,38 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: Text(
+            child: const Text(
               "Giới thiệu",
               style: TextStyle(fontSize: 18),
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
-            child: Container(
-              //decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-              child: TextFormField(
-                style: TextStyle(fontSize: 15),
-                enabled: false,
-                controller: descriptionController,
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                maxLength: null,
-                onSaved: (newValue) => description = newValue!,
-                onChanged: (value) {
-                  description = value;
-                },
-                decoration: const InputDecoration(
-                  counterText: "",
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  labelText: "Giới thiệu sơ lược",
-                  hintText: "Giới thiệu bản thân bạn ...",
-                  border: InputBorder.none,
-                ),
+            child: TextFormField(
+              style: const TextStyle(fontSize: 15),
+              enabled: false,
+              controller: descriptionController,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              maxLength: null,
+              onSaved: (newValue) => description = newValue!,
+              onChanged: (value) {
+                description = value;
+              },
+              decoration: const InputDecoration(
+                counterText: "",
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                labelText: "Giới thiệu sơ lược",
+                hintText: "Giới thiệu bản thân bạn ...",
+                border: InputBorder.none,
               ),
             ),
           ),
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: Text(
+            child: const Text(
               "Thông tin liên hệ",
               style: TextStyle(fontSize: 18),
             ),
@@ -118,39 +116,39 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     "Địa chỉ:",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     widget.charityModel.address,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                     maxLines: 2,
                   ),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         "Điện thoại: ",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         widget.charityModel.phone,
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                         maxLines: 2,
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         "Email: ",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         widget.charityModel.email,
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                         maxLines: 2,
                       ),
                     ],
@@ -171,6 +169,8 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                     MaterialPageRoute(
                         builder: (context) => DonateCharityPage(
                               charityModel: widget.charityModel,
+                              tokenModel: widget.tokenModel,
+                              userModel: widget.userModel,
                             )),
                   );
                 })),
