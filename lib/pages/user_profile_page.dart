@@ -280,7 +280,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
           child: Column(
             children: [
               const SizedBox(
-                height: 75,
+                height: 100,
               ),
               Container(
                 alignment: Alignment.center,

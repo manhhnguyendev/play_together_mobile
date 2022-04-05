@@ -251,25 +251,23 @@ class PlayerModel {
       };
 }
 
-class PlayerFullModel {
-  PlayerModel? player;
-  List<GameOfUserModel>? games;
+class MakeDonateModel {
+  double money;
+  String message;
 
-  PlayerFullModel({required this.player, required this.games});
+  MakeDonateModel({
+    required this.money,
+    required this.message,
+  });
 
-  // factory PlayerFullModel.fromJson(Map<String, dynamic> json) =>
-  //     PlayerFullModel(
-  //       player: json['player'] != null
-  //           ? PlayerModel.fromJson(json['player'])
-  //           : PlayerModel.fromJson(json),
-  //       games: (json['games'] as List<dynamic>?) != null
-  //           ? (json['games'] as List<dynamic>)
-  //               .map((balance) => GameOfUserModel.fromJson(balance))
-  //               .toList()
-  //           : <GameOfUserModel>[],
+  factory MakeDonateModel.fromJson(Map<String, dynamic> json) =>
+      MakeDonateModel(
+        money: json['money'] as double,
+        message: json['message'] as String,
+      );
 
-  //     );
-
-  // Map<String, dynamic> toJson() =>
-  //     {"player": player, "games": games};
+  Map<String, dynamic> toJson() => {
+        "money": money,
+        "message": message,
+      };
 }

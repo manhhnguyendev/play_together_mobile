@@ -4,7 +4,6 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
-import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/app_bar_home.dart';
@@ -44,20 +43,18 @@ class _HomePageState extends State<HomePage> {
     Future<List<UserModel>?> listUserIsOrderByRatingModelFuture =
         UserService().getAllUsersIsOrderByRating(widget.tokenModel.message);
     listUserIsOrderByRatingModelFuture.then((_playerList) {
-      setState(() {
-        playerListIsOrderByRating = _playerList;
-        if (_listPlayerIsOrderByRating!.isEmpty) {
-          for (var item in playerListIsOrderByRating!) {
-            Future<PlayerModel?> playerFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            playerFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsOrderByRating!.add(value);
-              }
-            });
-          }
+      playerListIsOrderByRating = _playerList;
+      if (_listPlayerIsOrderByRating!.isEmpty) {
+        for (var item in playerListIsOrderByRating!) {
+          Future<PlayerModel?> playerFuture =
+              UserService().getPlayerById(item.id, widget.tokenModel.message);
+          playerFuture.then((value) {
+            if (value != null) {
+              _listPlayerIsOrderByRating!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listUserIsOrderByRatingModelFuture;
   }
@@ -68,20 +65,18 @@ class _HomePageState extends State<HomePage> {
     Future<List<UserModel>?> listUserIsNewAccountModelFuture =
         UserService().getAllUsersIsNewAccount(widget.tokenModel.message);
     listUserIsNewAccountModelFuture.then((_playerList) {
-      setState(() {
-        playerListIsNewAccount = _playerList;
-        if (_listPlayerIsNewAccount!.isEmpty) {
-          for (var item in playerListIsNewAccount!) {
-            Future<PlayerModel?> playerFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            playerFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsNewAccount!.add(value);
-              }
-            });
-          }
+      playerListIsNewAccount = _playerList;
+      if (_listPlayerIsNewAccount!.isEmpty) {
+        for (var item in playerListIsNewAccount!) {
+          Future<PlayerModel?> playerFuture =
+              UserService().getPlayerById(item.id, widget.tokenModel.message);
+          playerFuture.then((value) {
+            if (value != null) {
+              _listPlayerIsNewAccount!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listUserIsNewAccountModelFuture;
   }
@@ -92,20 +87,18 @@ class _HomePageState extends State<HomePage> {
     Future<List<UserModel>?> listUserIsSameHobbiesModelFuture =
         UserService().getAllUsersIsSameHobbies(widget.tokenModel.message);
     listUserIsSameHobbiesModelFuture.then((_playerList) {
-      setState(() {
-        playerListIsSameHobbies = _playerList;
-        if (_listPlayerIsSameHobbies!.isEmpty) {
-          for (var item in playerListIsSameHobbies!) {
-            Future<PlayerModel?> playerFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            playerFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsSameHobbies!.add(value);
-              }
-            });
-          }
+      playerListIsSameHobbies = _playerList;
+      if (_listPlayerIsSameHobbies!.isEmpty) {
+        for (var item in playerListIsSameHobbies!) {
+          Future<PlayerModel?> playerFuture =
+              UserService().getPlayerById(item.id, widget.tokenModel.message);
+          playerFuture.then((value) {
+            if (value != null) {
+              _listPlayerIsSameHobbies!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listUserIsSameHobbiesModelFuture;
   }
@@ -116,20 +109,18 @@ class _HomePageState extends State<HomePage> {
     Future<List<UserModel>?> listUserIsRecentOrderModelFuture =
         UserService().getAllUsersIsRecentOrder(widget.tokenModel.message);
     listUserIsRecentOrderModelFuture.then((_playerList) {
-      setState(() {
-        playerListIsRecentOrder = _playerList;
-        if (_listPlayerIsRecentOrder!.isEmpty) {
-          for (var item in playerListIsRecentOrder!) {
-            Future<PlayerModel?> playerFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            playerFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsRecentOrder!.add(value);
-              }
-            });
-          }
+      playerListIsRecentOrder = _playerList;
+      if (_listPlayerIsRecentOrder!.isEmpty) {
+        for (var item in playerListIsRecentOrder!) {
+          Future<PlayerModel?> playerFuture =
+              UserService().getPlayerById(item.id, widget.tokenModel.message);
+          playerFuture.then((value) {
+            if (value != null) {
+              _listPlayerIsRecentOrder!.add(value);
+            }
+          });
         }
-      });
+      }
     });
     return listUserIsRecentOrderModelFuture;
   }
@@ -150,16 +141,14 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
-                setState(() {
-                  lateUser = value;
-                  helper.pushInto(
-                      context,
-                      ReceiveRequestPage(
-                          orderModel: _listOrder![0],
-                          tokenModel: widget.tokenModel,
-                          userModel: lateUser!),
-                      true);
-                });
+                lateUser = value;
+                helper.pushInto(
+                    context,
+                    ReceiveRequestPage(
+                        orderModel: _listOrder![0],
+                        tokenModel: widget.tokenModel,
+                        userModel: lateUser!),
+                    true);
               }
             });
           }));
@@ -255,162 +244,162 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
               ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-              //   child: Row(children: [
-              //     Text(
-              //       "Các người chơi mới",
-              //       style: TextStyle(
-              //         fontSize: 18 / 400 * size.width,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       child: const Icon(Icons.arrow_circle_down_outlined),
-              //     ),
-              //   ]),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SingleChildScrollView(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Expanded(
-              //         child: SizedBox(
-              //             height: 220.0,
-              //             child: FutureBuilder(
-              //                 future: loadListUserByIsNewAccount(),
-              //                 builder: (context, snapshot) {
-              //                   return ListView.builder(
-              //                     scrollDirection: Axis.horizontal,
-              //                     itemCount: _listPlayerIsNewAccount == null
-              //                         ? 0
-              //                         : _listPlayerIsNewAccount!.length,
-              //                     itemBuilder:
-              //                         (BuildContext context, int index) {
-              //                       return PlayerCard(
-              //                         playerModel:
-              //                             _listPlayerIsNewAccount![index],
-              //                         tokenModel: widget.tokenModel,
-              //                         userModel: lateUser!,
-              //                       );
-              //                     },
-              //                   );
-              //                 })),
-              //       ),
-              //     ],
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   ),
-              // ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-              //   child: Row(children: [
-              //     Text(
-              //       "Có thể bạn thích",
-              //       style: TextStyle(
-              //         fontSize: 18 / 400 * size.width,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       child: const Icon(Icons.arrow_circle_down_outlined),
-              //     ),
-              //   ]),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SingleChildScrollView(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Expanded(
-              //         child: SizedBox(
-              //             height: 220.0,
-              //             child: FutureBuilder(
-              //                 future: loadListUserByIsSameHobbies(),
-              //                 builder: (context, snapshot) {
-              //                   return ListView.builder(
-              //                     scrollDirection: Axis.horizontal,
-              //                     itemCount: _listPlayerIsSameHobbies == null
-              //                         ? 0
-              //                         : _listPlayerIsSameHobbies!.length,
-              //                     itemBuilder:
-              //                         (BuildContext context, int index) {
-              //                       return PlayerCard(
-              //                         playerModel:
-              //                             _listPlayerIsSameHobbies![index],
-              //                         tokenModel: widget.tokenModel,
-              //                         userModel: lateUser!,
-              //                       );
-              //                     },
-              //                   );
-              //                 })),
-              //       ),
-              //     ],
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   ),
-              // ),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-              //   child: Row(children: [
-              //     Text(
-              //       "Thuê lại",
-              //       style: TextStyle(
-              //         fontSize: 18 / 400 * size.width,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //     const SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       child: const Icon(Icons.arrow_circle_down_outlined),
-              //     ),
-              //   ]),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SingleChildScrollView(
-              //   child: Row(
-              //     children: <Widget>[
-              //       Expanded(
-              //         child: SizedBox(
-              //             height: 220.0,
-              //             child: FutureBuilder(
-              //                 future: loadListUserByIsRecentOrder(),
-              //                 builder: (context, snapshot) {
-              //                   return ListView.builder(
-              //                     scrollDirection: Axis.horizontal,
-              //                     itemCount: _listPlayerIsRecentOrder == null
-              //                         ? 0
-              //                         : _listPlayerIsRecentOrder!.length,
-              //                     itemBuilder:
-              //                         (BuildContext context, int index) {
-              //                       return PlayerCard(
-              //                         playerModel:
-              //                             _listPlayerIsRecentOrder![index],
-              //                         tokenModel: widget.tokenModel,
-              //                         userModel: lateUser!,
-              //                       );
-              //                     },
-              //                   );
-              //                 })),
-              //       ),
-              //     ],
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   ),
-              // ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+                child: Row(children: [
+                  Text(
+                    "Các người chơi mới",
+                    style: TextStyle(
+                      fontSize: 18 / 400 * size.width,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ]),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                          height: 220.0,
+                          child: FutureBuilder(
+                              future: loadListUserByIsNewAccount(),
+                              builder: (context, snapshot) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _listPlayerIsNewAccount == null
+                                      ? 0
+                                      : _listPlayerIsNewAccount!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return PlayerCard(
+                                      playerModel:
+                                          _listPlayerIsNewAccount![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                    );
+                                  },
+                                );
+                              })),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+                child: Row(children: [
+                  Text(
+                    "Có thể bạn thích",
+                    style: TextStyle(
+                      fontSize: 18 / 400 * size.width,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ]),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                          height: 220.0,
+                          child: FutureBuilder(
+                              future: loadListUserByIsSameHobbies(),
+                              builder: (context, snapshot) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _listPlayerIsSameHobbies == null
+                                      ? 0
+                                      : _listPlayerIsSameHobbies!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return PlayerCard(
+                                      playerModel:
+                                          _listPlayerIsSameHobbies![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                    );
+                                  },
+                                );
+                              })),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
+                child: Row(children: [
+                  Text(
+                    "Thuê lại",
+                    style: TextStyle(
+                      fontSize: 18 / 400 * size.width,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ]),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SingleChildScrollView(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                          height: 220.0,
+                          child: FutureBuilder(
+                              future: loadListUserByIsRecentOrder(),
+                              builder: (context, snapshot) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _listPlayerIsRecentOrder == null
+                                      ? 0
+                                      : _listPlayerIsRecentOrder!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return PlayerCard(
+                                      playerModel:
+                                          _listPlayerIsRecentOrder![index],
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                    );
+                                  },
+                                );
+                              })),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
             ]),
       ),
       bottomNavigationBar: BottomBar(

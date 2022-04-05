@@ -66,7 +66,7 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsNewAccount=true'),
+        Uri.parse('${apiUrl.users}?IsNewAccount=true&PageNumber=0&PageSize=4'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -84,7 +84,7 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsSameHobbies=true'),
+        Uri.parse('${apiUrl.users}?IsSameHobbies=true&PageNumber=0&PageSize=4'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -102,7 +102,8 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsOrderByRating=true'),
+        Uri.parse(
+            '${apiUrl.users}?IsOrderByRating=true&PageNumber=0&PageSize=4'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -120,7 +121,7 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsRecentOrder=true'),
+        Uri.parse('${apiUrl.users}?IsRecentOrder=true&PageNumber=0&PageSize=4'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -198,6 +199,25 @@ class UserService {
         List<dynamic> body = jsonDecode(response.body);
         result =
             body.map((dynamic item) => GameOfUserModel.fromJson(item)).toList();
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> makeDonateToCharity(
+      String charityId, dynamic token, MakeDonateModel model) async {
+    Response response;
+    bool? result;
+    try {
+      response = await post(
+        Uri.parse('${apiUrl.users}/donates/$charityId'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(model.toJson()),
+      );
+      if (response.statusCode == 200) {
+        result = true;
       }
     } on Exception {
       rethrow;

@@ -23,16 +23,14 @@ class SearchPlayerCard extends StatefulWidget {
 
 class _SearchPlayerCardState extends State<SearchPlayerCard> {
   List<GameOfUserModel>? listGameAndRank;
-  //String games = "";
+
   Future getGameOfUser() {
     listGameAndRank ??= [];
     Future<List<GameOfUserModel>?> gameOfUserFuture = UserService()
         .getGameOfUser(widget.playerModel.id, widget.tokenModel.message);
     gameOfUserFuture.then((value) {
       if (value != null) {
-        setState(() {
-          listGameAndRank = value;
-        });
+        listGameAndRank = value;
       }
     });
     return gameOfUserFuture;
@@ -40,7 +38,6 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return FutureBuilder(
         future: getGameOfUser(),
         builder: (context, snapshot) {
@@ -179,10 +176,9 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
       );
 
   Widget buildGamesString(List<GameOfUserModel> gamesOfUserModel) {
-    print("xERROR");
     String games = "";
     if (gamesOfUserModel == null) {
-      return Text('');
+      return const Text('');
     } else {
       for (var i = 0; i < gamesOfUserModel.length; i++) {
         if (i < gamesOfUserModel.length - 1) {

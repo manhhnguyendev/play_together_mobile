@@ -5,12 +5,11 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
-import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class SearchHistoryAndRecommendPage extends StatefulWidget {
   final TokenModel tokenModel;
-
   final UserModel userModel;
+
   const SearchHistoryAndRecommendPage(
       {Key? key, required this.tokenModel, required this.userModel})
       : super(key: key);
@@ -24,8 +23,6 @@ class _SearchHistoryAndRecommendPageState
     extends State<SearchHistoryAndRecommendPage> {
   List<UserModel>? listPlayerSearch;
   List<PlayerModel>? _listPlayerSearch = [];
-  // bool showHistoryAndRecommendArea = true;
-  // bool showListSearchArea = false;
   final _controller = TextEditingController();
   List<String> listSearchHistory = ['Đàm', 'Hằng', 'Quoc Hung'];
   List<String> listTopGameType = [
@@ -45,7 +42,7 @@ class _SearchHistoryAndRecommendPageState
     'PUBG',
     'XXX'
   ];
-  String xSearch = "";
+  String searchValue = "";
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -74,14 +71,13 @@ class _SearchHistoryAndRecommendPageState
             controller: _controller,
             onSubmitted: (value) {
               if (_controller.text.isNotEmpty) {
-                xSearch = _controller.text;
-                print(_controller.text + "abcdef");
+                searchValue = _controller.text;
                 _listPlayerSearch = [];
                 Future<List<UserModel>?> listPlayerSearchModelFuture =
                     SearchService().searchUser(
                         _controller.text, widget.tokenModel.message);
-                listPlayerSearchModelFuture.then((_playerList) {
-                  listPlayerSearch = _playerList;
+                listPlayerSearchModelFuture.then((_playerSearchList) {
+                  listPlayerSearch = _playerSearchList;
                   if (_listPlayerSearch!.isEmpty) {
                     for (var item in listPlayerSearch!) {
                       Future<PlayerModel?> playerFuture = UserService()
@@ -92,7 +88,6 @@ class _SearchHistoryAndRecommendPageState
                         }
                       });
                     }
-                    print(xSearch + "abcdefghikiege");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -100,13 +95,12 @@ class _SearchHistoryAndRecommendPageState
                             tokenModel: widget.tokenModel,
                             userModel: widget.userModel,
                             listSearch: _listPlayerSearch,
-                            searchValue: xSearch,
+                            searchValue: searchValue,
                           ),
                         ));
                   }
                 });
               }
-              //});
             },
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
@@ -123,11 +117,6 @@ class _SearchHistoryAndRecommendPageState
               suffixIcon: IconButton(
                 onPressed: () {
                   _controller.clear();
-                  setState(() {
-                    // _listPlayerSearch = [];
-                    // showHistoryAndRecommendArea = true;
-                    // showListSearchArea = false;
-                  });
                 },
                 icon: const Icon(
                   Icons.clear,
@@ -214,9 +203,10 @@ class _SearchHistoryAndRecommendPageState
               children: [
                 Text(
                   search,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.normal),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 )
               ],
@@ -235,14 +225,14 @@ class _SearchHistoryAndRecommendPageState
             alignment: Alignment.center,
             decoration: BoxDecoration(
               border: Border.all(
-                color: Color(0xff8980FF),
+                color: const Color(0xff8980FF),
               ),
-              color: Color(0xff8980FF).withOpacity(0.1),
+              color: const Color(0xff8980FF).withOpacity(0.1),
               borderRadius: BorderRadius.circular(25),
             ),
             child: Text(
               gameType,
-              style: TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15),
             ),
           ),
         ),
