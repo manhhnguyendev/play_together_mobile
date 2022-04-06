@@ -36,7 +36,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   List<int> listHour = [];
   List listGames = [];
   List listGamesCheckBox = [];
-  List listGameId = [];
+  //List listGameId = [];
   List listGamesChoosen = [];
   List<GameOrderModel> games = [];
   late double totalTimes;

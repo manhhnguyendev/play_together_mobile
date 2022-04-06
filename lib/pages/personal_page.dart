@@ -324,7 +324,10 @@ class _PersonalPageState extends State<PersonalPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UpdateHobbiesPage(),
+                        builder: (context) => UpdateHobbiesPage(
+                          tokenModel: widget.tokenModel,
+                          userModel: widget.userModel,
+                        ),
                       ));
                 },
                 child: Row(
