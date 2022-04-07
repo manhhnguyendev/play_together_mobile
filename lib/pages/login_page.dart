@@ -106,34 +106,32 @@ class _LoginPageState extends State<LoginPage> {
                                   UserService().getUserProfile(value.message);
                               hirerModelFuture.then((hirer) {
                                 if (hirer != null) {
-                                  setState(() {
-                                    userModel = hirer;
-                                    Future<List<HobbiesModel>?> hobbiesFuture =
-                                        HobbiesService().getHobbiesOfUser(
-                                            userModel.id, tokenModel.message);
-                                    hobbiesFuture.then((listHobbies) {
-                                      if (listHobbies!.isNotEmpty) {
-                                        setState(() {
-                                          helper.pushInto(
-                                              context,
-                                              HomePage(
-                                                userModel: userModel,
-                                                tokenModel: tokenModel,
-                                              ),
-                                              true);
-                                        });
-                                      } else if (listHobbies.isEmpty) {
-                                        setState(() {
-                                          helper.pushInto(
-                                              context,
-                                              UserCategoriesPage(
-                                                userModel: userModel,
-                                                tokenModel: tokenModel,
-                                              ),
-                                              true);
-                                        });
-                                      }
-                                    });
+                                  userModel = hirer;
+                                  Future<List<HobbiesModel>?> hobbiesFuture =
+                                      HobbiesService().getHobbiesOfUser(
+                                          userModel.id, tokenModel.message);
+                                  hobbiesFuture.then((listHobbies) {
+                                    if (listHobbies!.isNotEmpty) {
+                                      setState(() {
+                                        helper.pushInto(
+                                            context,
+                                            HomePage(
+                                              userModel: userModel,
+                                              tokenModel: tokenModel,
+                                            ),
+                                            true);
+                                      });
+                                    } else if (listHobbies.isEmpty) {
+                                      setState(() {
+                                        helper.pushInto(
+                                            context,
+                                            UserCategoriesPage(
+                                              userModel: userModel,
+                                              tokenModel: tokenModel,
+                                            ),
+                                            true);
+                                      });
+                                    }
                                   });
                                   print('Đăng nhập thành công');
                                 }

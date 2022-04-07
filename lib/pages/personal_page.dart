@@ -471,9 +471,9 @@ class _PersonalPageState extends State<PersonalPage> {
                       return GestureDetector(
                         onTap: () {
                           Future<bool?> logoutModelFuture =
-                              LogoutService().logout(widget.tokenModel);
+                              LogoutService().logout(widget.tokenModel.message);
                           logoutModelFuture.then((value) {
-                            if (value != true) {
+                            if (value == true) {
                               setState(() {
                                 _googleSignIn.signOut();
                                 helper.pushInto(

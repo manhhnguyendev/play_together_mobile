@@ -29,13 +29,13 @@ class _EndOrderPageState extends State<EndOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat('dd/MM/yyyy')
+    String dateStart = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel!.timeStart));
-    String startTime = DateFormat('hh:mm a')
+    String timeStart = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel!.timeStart));
-    String endDate = DateFormat('dd/MM/yyyy')
+    String dateFinish = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel!.timeFinish));
-    String endTime = DateFormat('hh:mm a')
+    String timeFinish = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel!.timeFinish));
     checkEndEarly = true;
     var _reasonController = TextEditingController();
@@ -234,8 +234,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                       ),
                       const Spacer(),
                       Text(
-                        date + ", " + startTime,
-                        // "time bắt đầu bị null",
+                        dateStart + ", " + timeStart,
                         style: const TextStyle(fontSize: 15),
                       ),
                     ],
@@ -251,8 +250,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                       ),
                       const Spacer(),
                       Text(
-                        endDate + ", " + endTime,
-                        // "time kết thúc bị null",
+                        dateFinish + ", " + timeFinish,
                         style: const TextStyle(fontSize: 15),
                       ),
                     ],
@@ -292,20 +290,20 @@ class _EndOrderPageState extends State<EndOrderPage> {
                 SecondMainButton(
                     text: 'Kết thúc',
                     onpress: () {
-                      setState(() {
-                        if (widget.userModel!.id == widget.orderModel!.userId) {
-                          setState(() {
-                            helper.pushInto(
-                                context,
-                                RatingAndCommentPage(
-                                  orderModel: widget.orderModel,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel!,
-                                ),
-                                true);
-                          });
-                        } else if (widget.userModel!.id ==
-                            widget.orderModel!.toUserId) {
+                      if (widget.userModel!.id == widget.orderModel!.userId) {
+                        setState(() {
+                          helper.pushInto(
+                              context,
+                              RatingAndCommentPage(
+                                orderModel: widget.orderModel,
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel!,
+                              ),
+                              true);
+                        });
+                      } else if (widget.userModel!.id ==
+                          widget.orderModel!.toUserId) {
+                        setState(() {
                           helper.pushInto(
                               context,
                               HistoryPage(
@@ -313,8 +311,8 @@ class _EndOrderPageState extends State<EndOrderPage> {
                                 userModel: widget.userModel!,
                               ),
                               true);
-                        }
-                      });
+                        });
+                      }
                     },
                     height: 50,
                     width: 200),

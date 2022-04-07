@@ -300,11 +300,14 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                             register.city = city!;
                             Future<RegisterModel?> registerModelFuture =
                                 RegisterService().register(register);
-                            registerModelFuture.then((hirer) {
-                              setState(() {
-                                helper.pushInto(
-                                    context, const LoginPage(), true);
-                              });
+                            registerModelFuture.then((registerModel) {
+                              if (registerModel != null) {
+                                setState(() {
+                                  helper.pushInto(
+                                      context, const LoginPage(), true);
+                                });
+                                print("Đăng kí thành công");
+                              }
                             });
                           }
                         }

@@ -26,14 +26,18 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat('dd/MM/yyyy')
+    String dateStart = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel.timeStart));
-    String startTime = DateFormat('hh:mm:ss a')
+    String timeStart = DateFormat('hh:mm:ss a')
         .format(DateTime.parse(widget.orderModel.timeStart));
-    String endDate = DateFormat('dd/MM/yyyy')
+    String dateFinish = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel.timeFinish));
-    String endTime = DateFormat('hh:mm:ss a')
+    String timeFinish = DateFormat('hh:mm:ss a')
         .format(DateTime.parse(widget.orderModel.timeFinish));
+    String dateExpired = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.orderModel.processExpired));
+    String timeExpired = DateFormat('hh:mm:ss a')
+        .format(DateTime.parse(widget.orderModel.processExpired));
     checkEndEarly = false;
     var _controller = TextEditingController();
     _controller.text = widget.orderModel.message;
@@ -206,8 +210,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     const Spacer(),
                     Text(
-                      date + ", " + startTime,
-                      //"1212121212",
+                      dateStart + ", " + timeStart,
                       style: const TextStyle(fontSize: 15),
                     ),
                   ],
@@ -223,7 +226,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     const Spacer(),
                     Text(
-                      endDate + ", " + endTime,
+                      dateFinish + ", " + timeFinish,
                       style: const TextStyle(fontSize: 15),
                     ),
                   ],

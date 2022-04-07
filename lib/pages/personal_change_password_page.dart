@@ -142,7 +142,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                           PasswordService().changePassword(
                               changePasswordModel, widget.tokenModel.message);
                       changePasswordModelFuture.then((_changePasswordModel) {
-                        if (_changePasswordModel != true) {
+                        if (_changePasswordModel == true) {
                           setState(() {
                             helper.pushInto(
                                 context,
@@ -152,6 +152,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                                 ),
                                 true);
                           });
+                          print("Thay đổi mật khẩu thành công");
                         }
                       });
                     }
@@ -211,7 +212,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                 size: 25,
                 color: Colors.black,
               ))),
-      obscureText: passObsecure,
+      obscureText: oldPassObsecure,
     );
   }
 

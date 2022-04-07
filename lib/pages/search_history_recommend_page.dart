@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/models/search_history_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/search_page.dart';
+import 'package:play_together_mobile/services/search_history_service.dart';
 import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 
@@ -21,10 +23,11 @@ class SearchHistoryAndRecommendPage extends StatefulWidget {
 
 class _SearchHistoryAndRecommendPageState
     extends State<SearchHistoryAndRecommendPage> {
+  final _controller = TextEditingController();
   List<UserModel>? listPlayerSearch;
   List<PlayerModel>? _listPlayerSearch = [];
-  final _controller = TextEditingController();
-  List<String> listSearchHistory = ['Đàm', 'Hằng', 'Quoc Hung'];
+  String searchValue = "";
+  List<SearchHistoryModel> listSearchHistory = [];
   List<String> listTopGameType = [
     'MOBA',
     'FPS',
@@ -42,7 +45,19 @@ class _SearchHistoryAndRecommendPageState
     'PUBG',
     'XXX'
   ];
-  String searchValue = "";
+
+  Future loadListSearchHistory() {
+    listSearchHistory = [];
+    Future<List<SearchHistoryModel>?> listSearchHistoryModelFuture =
+        SearchHistoryService().getAllSearchHistories(widget.tokenModel.message);
+    listSearchHistoryModelFuture.then((_listSearchHistory) {
+      if (_listSearchHistory != null) {
+        listSearchHistory = _listSearchHistory;
+      }
+    });
+    return listSearchHistoryModelFuture;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -149,12 +164,19 @@ class _SearchHistoryAndRecommendPageState
             ),
             Padding(
               padding: const EdgeInsets.all(5.0),
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  children: List.generate(listSearchHistory.length,
-                      (index) => buildSearchHistory(listSearchHistory[index])),
-                ),
+              child: FutureBuilder(
+                future: loadListSearchHistory(),
+                builder: (context, snapshot) {
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      children: List.generate(
+                          listSearchHistory.length,
+                          (index) => buildSearchHistory(
+                              listSearchHistory[index].searchString)),
+                    ),
+                  );
+                },
               ),
             ),
             Container(
@@ -191,9 +213,9 @@ class _SearchHistoryAndRecommendPageState
     );
   }
 
-  Widget buildSearchHistory(String search) => GestureDetector(
+  Widget buildSearchHistory(String searchHistory) => GestureDetector(
         onTap: () {
-          print(search);
+          print(searchHistory);
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 20),
@@ -202,7 +224,7 @@ class _SearchHistoryAndRecommendPageState
             child: Column(
               children: [
                 Text(
-                  search,
+                  searchHistory,
                   style: const TextStyle(
                       fontSize: 15, fontWeight: FontWeight.normal),
                 ),
