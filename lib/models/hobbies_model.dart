@@ -28,3 +28,20 @@ class HobbiesModel {
         "game": game,
       };
 }
+
+class CreateHobbiesModel {
+  String gameId;
+
+  CreateHobbiesModel({
+    required this.gameId,
+  });
+
+  factory CreateHobbiesModel.fromJson(Map<String, dynamic> json) =>
+      CreateHobbiesModel(
+        gameId: json['gameId'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "gameId": gameId,
+      };
+}

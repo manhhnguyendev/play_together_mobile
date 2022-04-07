@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/login_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/login_google_page.dart';
@@ -7,6 +8,8 @@ import 'package:play_together_mobile/constants/const.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/forgot_password_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/take_user_categories_page.dart';
+import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/services/login_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
@@ -30,13 +33,6 @@ class _LoginPageState extends State<LoginPage> {
   bool obsecure = true;
 
   LoginModel login = LoginModel(email: "", password: "");
-
-  Widget getScreen() {
-    return HomePage(
-      userModel: userModel,
-      tokenModel: tokenModel,
-    );
-  }
 
   void addError({String? error}) {
     if (!listError.contains(error)) {
@@ -98,38 +94,54 @@ class _LoginPageState extends State<LoginPage> {
                         print("_formKey.currentState is null!");
                       } else if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        if (listError.length == 1) {}
-                      }
-                      setState(() {
-                        login.email = email;
-                        login.password = password;
-                        Future<TokenModel?> loginModelFuture =
-                            LoginService().login(login);
-                        loginModelFuture.then((value) {
-                          if (value != null) {
-                            tokenModel = value;
-                            setState(() {
-                              if (value != null) {
-                                Future<UserModel?> hirerModelFuture =
-                                    UserService().getUserProfile(value.message);
-                                print(value.message);
-                                hirerModelFuture.then((hirer) {
+                        if (listError.length == 1) {
+                          login.email = email;
+                          login.password = password;
+                          Future<TokenModel?> loginModelFuture =
+                              LoginService().login(login);
+                          loginModelFuture.then((value) {
+                            if (value != null) {
+                              tokenModel = value;
+                              Future<UserModel?> hirerModelFuture =
+                                  UserService().getUserProfile(value.message);
+                              hirerModelFuture.then((hirer) {
+                                if (hirer != null) {
                                   setState(() {
-                                    if (hirer != null) {
-                                      userModel = hirer;
-                                      helper.pushInto(
-                                          context, getScreen(), true);
-                                    }
+                                    userModel = hirer;
+                                    Future<List<HobbiesModel>?> hobbiesFuture =
+                                        HobbiesService().getHobbiesOfUser(
+                                            userModel.id, tokenModel.message);
+                                    hobbiesFuture.then((listHobbies) {
+                                      if (listHobbies!.isNotEmpty) {
+                                        setState(() {
+                                          helper.pushInto(
+                                              context,
+                                              HomePage(
+                                                userModel: userModel,
+                                                tokenModel: tokenModel,
+                                              ),
+                                              true);
+                                        });
+                                      } else if (listHobbies.isEmpty) {
+                                        setState(() {
+                                          helper.pushInto(
+                                              context,
+                                              UserCategoriesPage(
+                                                userModel: userModel,
+                                                tokenModel: tokenModel,
+                                              ),
+                                              true);
+                                        });
+                                      }
+                                    });
                                   });
-                                });
-                              } else {
-                                print(
-                                    "Tên đăng nhập hoặc mật khẩu không chính xác");
-                              }
-                            });
-                          }
-                        });
-                      });
+                                  print('Đăng nhập thành công');
+                                }
+                              });
+                            }
+                          });
+                        }
+                      }
                     },
                   ),
                 ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
-import 'package:play_together_mobile/models/total_comment_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/rating_comment_card.dart';
@@ -10,6 +9,7 @@ class RatingCommentPage extends StatefulWidget {
   final UserModel? userModel;
   final TokenModel tokenModel;
   final PlayerModel? playerModel;
+
   const RatingCommentPage(
       {Key? key, this.userModel, required this.tokenModel, this.playerModel})
       : super(key: key);
@@ -43,14 +43,14 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(50),
         child: AppBar(
           backgroundColor: Colors.white,
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: FlatButton(
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back_ios,
               ),
               onPressed: () {
@@ -59,7 +59,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
             ),
           ),
           centerTitle: true,
-          title: Text(
+          title: const Text(
             'Chi tiết đánh giá',
             style: TextStyle(
                 fontSize: 18,
@@ -82,7 +82,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -95,16 +95,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check3star = false;
                             check2star = false;
                             check1star = false;
-                            print(check5star.toString() +
-                                '5' +
-                                check4star.toString() +
-                                '4' +
-                                check3star.toString() +
-                                '3' +
-                                check2star.toString() +
-                                '2' +
-                                check1star.toString() +
-                                '1');
                             vote = 5;
                           } else {
                             check5star = false;
@@ -113,17 +103,15 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check2star = false;
                             check1star = false;
                             vote = 0;
-                            //load lai list tong
                           }
                         });
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //crossAxisAlignment: CrossAxisAlignment.s,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
@@ -151,26 +139,17 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               ),
                             ],
                           ),
-                          // Text(
-                          //   '(' +
-                          //       demoListTotalComment[4]
-                          //           .totalComment
-                          //           .toString() +
-                          //       ')',
-                          //   style: TextStyle(
-                          //       fontSize: 10, fontWeight: FontWeight.normal),
-                          // ),
                         ],
                       ),
                       color: check5star
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -184,16 +163,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check2star = false;
                             check1star = false;
                             vote = 4;
-                            print(check5star.toString() +
-                                '5' +
-                                check4star.toString() +
-                                '4' +
-                                check3star.toString() +
-                                '3' +
-                                check2star.toString() +
-                                '2' +
-                                check1star.toString() +
-                                '1');
                           } else {
                             check5star = false;
                             check4star = false;
@@ -201,7 +170,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check2star = false;
                             check1star = false;
                             vote = 0;
-                            //load lai list tong
                           }
                         });
                       },
@@ -210,7 +178,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Expanded(
                                 flex: 1,
                                 child: Icon(
@@ -245,26 +213,17 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               ),
                             ],
                           ),
-                          // Text(
-                          //   '(' +
-                          //       demoListTotalComment[3]
-                          //           .totalComment
-                          //           .toString() +
-                          //       ')',
-                          //   style: TextStyle(
-                          //       fontSize: 10, fontWeight: FontWeight.normal),
-                          // ),
                         ],
                       ),
                       color: check4star
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -278,16 +237,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check2star = false;
                             check1star = false;
                             vote = 3;
-                            print(check5star.toString() +
-                                '5' +
-                                check4star.toString() +
-                                '4' +
-                                check3star.toString() +
-                                '3' +
-                                check2star.toString() +
-                                '2' +
-                                check1star.toString() +
-                                '1');
                           } else {
                             check5star = false;
                             check4star = false;
@@ -295,7 +244,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check2star = false;
                             check1star = false;
                             vote = 0;
-                            //load lai list tong
                           }
                         });
                       },
@@ -304,7 +252,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Expanded(
                                 flex: 1,
                                 child: Icon(
@@ -331,26 +279,17 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               ),
                             ],
                           ),
-                          // Text(
-                          //   '(' +
-                          //       demoListTotalComment[2]
-                          //           .totalComment
-                          //           .toString() +
-                          //       ')',
-                          //   style: TextStyle(
-                          //       fontSize: 10, fontWeight: FontWeight.normal),
-                          // ),
                         ],
                       ),
                       color: check3star
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -364,16 +303,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check5star = false;
                             check1star = false;
                             vote = 2;
-                            print(check5star.toString() +
-                                '5' +
-                                check4star.toString() +
-                                '4' +
-                                check3star.toString() +
-                                '3' +
-                                check2star.toString() +
-                                '2' +
-                                check1star.toString() +
-                                '1');
                           } else {
                             vote = 0;
                             check5star = false;
@@ -381,7 +310,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check3star = false;
                             check2star = false;
                             check1star = false;
-                            //load lai list tong
                           }
                         });
                       },
@@ -390,7 +318,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Icon(
                                 Icons.star,
                                 color: Colors.yellow,
@@ -403,26 +331,17 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               ),
                             ],
                           ),
-                          // Text(
-                          //   '(' +
-                          //       demoListTotalComment[1]
-                          //           .totalComment
-                          //           .toString() +
-                          //       ')',
-                          //   style: TextStyle(
-                          //       fontSize: 10, fontWeight: FontWeight.normal),
-                          // ),
                         ],
                       ),
                       color: check2star
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff8980FF),
+                        color: const Color(0xff8980FF),
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -436,16 +355,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check2star = false;
                             check5star = false;
                             vote = 1;
-                            print(check5star.toString() +
-                                '5' +
-                                check4star.toString() +
-                                '4' +
-                                check3star.toString() +
-                                '3' +
-                                check2star.toString() +
-                                '2' +
-                                check1star.toString() +
-                                '1');
                           } else {
                             vote = 0;
                             check5star = false;
@@ -453,7 +362,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             check3star = false;
                             check2star = false;
                             check1star = false;
-                            //load lai list tong
                           }
                         });
                       },
@@ -462,7 +370,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Expanded(
                                 flex: 1,
                                 child: Icon(
@@ -473,39 +381,25 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               ),
                             ],
                           ),
-                          // Text(
-                          //   '(' +
-                          //       demoListTotalComment[0]
-                          //           .totalComment
-                          //           .toString() +
-                          //       ')',
-                          //   style: TextStyle(
-                          //       fontSize: 10, fontWeight: FontWeight.normal),
-                          // ),
                         ],
                       ),
                       color: check1star
-                          ? Color(0xff8980FF).withOpacity(1)
-                          : Color(0xff8980FF).withOpacity(0.1),
+                          ? const Color(0xff8980FF).withOpacity(1)
+                          : const Color(0xff8980FF).withOpacity(0.1),
                     ),
                   ),
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 0.5,
               indent: 15,
               endIndent: 15,
             ),
-            // Column(
-            //     // children: List.generate(demoRating.length,
-            //     //     (index) => buildRatingList(demoRating[index]))
-
-            //     ),
             FutureBuilder(
                 future: loadListRating(),
                 builder: (context, snapshot) {
-                  if (listAllRating!.length == 0) {
+                  if (listAllRating!.isEmpty) {
                     checkExist = true;
                   } else {
                     checkExist = false;
@@ -522,7 +416,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         ),
                         Visibility(
                             visible: checkExist,
-                            child: Text('Không có dữ liệu'))
+                            child: const Text('Không có dữ liệu'))
                       ],
                     ),
                   );
@@ -533,8 +427,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
     );
   }
 
-  Widget buildRatingList(RatingModel model) => RatingCard(
-        ratingModel: model,
+  Widget buildRatingList(RatingModel _ratingModel) => RatingCard(
+        ratingModel: _ratingModel,
         tokenModel: widget.tokenModel,
       );
 }

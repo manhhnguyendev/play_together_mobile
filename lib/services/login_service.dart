@@ -7,14 +7,14 @@ import 'package:play_together_mobile/models/login_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 
 class LoginService {
-  Future<TokenModel?> login(LoginModel login) async {
+  Future<TokenModel?> login(LoginModel loginModel) async {
     Response response;
     TokenModel? result;
     try {
       response = await post(
         Uri.parse('${apiUrl.accounts}/login-user'),
         headers: configJson.header(),
-        body: jsonEncode(login.toJson()),
+        body: jsonEncode(loginModel.toJson()),
       );
       if (response.statusCode == 200) {
         result = TokenModel.fromJson(json.decode(response.body));

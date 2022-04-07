@@ -201,22 +201,23 @@ class _RegisterPageState extends State<RegisterPage> {
                           if (listErrorEmail.length == 1 &&
                               listErrorPass.length == 1 &&
                               listErrorConfirm.length == 1 &&
-                              listErrorOTP.length == 1) {}
-                          setState(() {
+                              listErrorOTP.length == 1) {
                             tempRegisterModel.email = emailController.text;
                             tempRegisterModel.confirmEmail = confirmEmail;
                             tempRegisterModel.password =
                                 passwordController.text;
                             tempRegisterModel.confirmPassword =
                                 confirmPasswordController.text;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CompleteRegisterPage(
-                                        tempRegisterModel: tempRegisterModel,
-                                      )),
-                            );
-                          });
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CompleteRegisterPage(
+                                          tempRegisterModel: tempRegisterModel,
+                                        )),
+                              );
+                            });
+                          }
                         }
                       },
                     ),

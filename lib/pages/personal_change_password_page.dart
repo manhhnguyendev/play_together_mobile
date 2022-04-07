@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/models/password_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/personal_page.dart';
+import 'package:play_together_mobile/services/password_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class PersonalChangePassword extends StatefulWidget {
-  const PersonalChangePassword({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+
+  const PersonalChangePassword(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<PersonalChangePassword> createState() => _PersonalChangePasswordState();
@@ -12,15 +23,21 @@ class PersonalChangePassword extends StatefulWidget {
 
 class _PersonalChangePasswordState extends State<PersonalChangePassword> {
   final _formKey = GlobalKey<FormState>();
+  final List listErrorOldPass = [''];
+  final List listErrorPass = [''];
+  final List listErrorConfirm = [''];
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmNewPasswordController = TextEditingController();
   String oldPassword = "";
   String password = "";
   String confirmPass = "";
   bool oldPassObsecure = true;
   bool passObsecure = true;
   bool confirmObsecure = true;
-  final List listErrorOldPass = [''];
-  final List listErrorPass = [''];
-  final List listErrorConfirm = [''];
+
+  ChangePasswordModel changePasswordModel = ChangePasswordModel(
+      email: '', currentPassword: '', newPassword: '', confirmNewPassword: '');
 
   void addError(List inputListError, {String? error}) {
     if (!inputListError.contains(error)) {
@@ -105,7 +122,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
             child: AcceptProfileButton(
                 text: 'Cập nhật',
                 onpress: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Cập nhật thành công"),
                   ));
                   if (_formKey.currentState == null) {
@@ -114,7 +131,29 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                     _formKey.currentState!.save();
                     if (listErrorPass.length == 1 &&
                         listErrorConfirm.length == 1) {
-                      print("VALID");
+                      changePasswordModel.email = widget.userModel.email;
+                      changePasswordModel.currentPassword = changePasswordModel
+                          .newPassword = currentPasswordController.text;
+                      changePasswordModel.newPassword =
+                          newPasswordController.text;
+                      changePasswordModel.confirmNewPassword =
+                          confirmNewPasswordController.text;
+                      Future<bool?> changePasswordModelFuture =
+                          PasswordService().changePassword(
+                              changePasswordModel, widget.tokenModel.message);
+                      changePasswordModelFuture.then((_changePasswordModel) {
+                        if (_changePasswordModel != true) {
+                          setState(() {
+                            helper.pushInto(
+                                context,
+                                PersonalPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                                true);
+                          });
+                        }
+                      });
                     }
                   }
                 })),
@@ -124,6 +163,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
 
   TextFormField buildOldPasswordField() {
     return TextFormField(
+      controller: currentPasswordController,
       onSaved: (newValue) => oldPassword = newValue!,
       onChanged: (value) {
         oldPassword = value;
@@ -177,6 +217,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
 
   TextFormField buildPasswordField() {
     return TextFormField(
+      controller: newPasswordController,
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
         password = value;
@@ -230,6 +271,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
 
   TextFormField buildConfirmField() {
     return TextFormField(
+      controller: confirmNewPasswordController,
       onSaved: (newValue) => confirmPass = newValue!,
       onChanged: (value) {
         confirmPass = value;
@@ -237,7 +279,6 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
           removeError(listErrorConfirm, error: confirmNullError);
         } else if (password == value) {
           removeError(listErrorConfirm, error: matchPassError);
-          print(password + "-remove");
         }
         return;
       },
@@ -248,7 +289,6 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
         } else if (password != value &&
             !listErrorConfirm.contains(matchPassError)) {
           addError(listErrorConfirm, error: matchPassError);
-          print(password + "-add");
           return "";
         }
         return null;
