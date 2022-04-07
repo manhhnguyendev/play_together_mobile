@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_model.dart';
+import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/services/game_service.dart';
+import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
-import 'package:play_together_mobile/widgets/main_go_back_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class UserCategoriesPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const UserCategoriesPage(
       {Key? key, required this.userModel, required this.tokenModel})
       : super(key: key);
@@ -21,16 +25,23 @@ class UserCategoriesPage extends StatefulWidget {
 class _UserCategoriesPageState extends State<UserCategoriesPage> {
   final _formKey = GlobalKey<FormState>();
   List<GamesModel>? listGames;
+  List<CreateHobbiesModel> listCreateHobbies = [];
   List listGamesCheckBox = [];
   List listGamesChoosen = [];
+  bool checkFirstTime = true;
 
-  Future getAllgames() {
+  Future getAllGames() {
     listGames ??= [];
     Future<List<GamesModel>?> gameFuture =
         GameService().getAllGames(widget.tokenModel.message);
     gameFuture.then((value) {
       if (value != null) {
-        listGames = value;
+        if (checkFirstTime) {
+          setState(() {
+            listGames = value;
+            checkFirstTime = false;
+          });
+        }
       }
     });
     return gameFuture;
@@ -45,22 +56,12 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
     }
   }
 
-  //bool firstTimeInit = false;
-  // void createAListCheckBox() {
-  //  if (!firstTimeInit) {
-  //   //   for (var i = 0; i < listGames.length; i++) {
-  //   //     listGamesCheckBox.add(CheckBoxState(title: listGames[i]));
-  //   //   }
-  //   //   firstTimeInit = true;
-  //   // } //
-  // }
-
   @override
   Widget build(BuildContext context) {
     createAListCheckBox();
     Size size = MediaQuery.of(context).size;
     return FutureBuilder(
-        future: getAllgames(),
+        future: getAllGames(),
         builder: (context, snapshot) {
           return Scaffold(
             resizeToAvoidBottomInset: true,
@@ -79,12 +80,12 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                             fit: BoxFit.cover)),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Form(
                         key: _formKey,
                         child: Column(
                           children: [
-                            Text(
+                            const Text(
                               'Bạn thích tựa game nào (Chọn ít nhất 1 tựa game):',
                               style: TextStyle(fontSize: 17),
                             ),
@@ -100,7 +101,6 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                                         listGamesCheckBox[index])),
                               ),
                             ),
-
                             //GoBackButton(text: "QUAY LẠI", onpress: () {})
                           ],
                         )),
@@ -115,12 +115,34 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: MainButton(
-                    text: "TIẾP TỤC",
+                    text: "HOÀN TẤT",
                     onpress: () {
-                      if (listGamesChoosen.length == 0) {
-                        print("ko đc");
-                      } else {
-                        print("YES");
+                      if (listGamesChoosen.isNotEmpty) {
+                        for (var gameChoose in listGamesChoosen) {
+                          for (var game in listGames!) {
+                            if (game.name.contains(gameChoose)) {
+                              CreateHobbiesModel createHobbies =
+                                  CreateHobbiesModel(gameId: game.id);
+                              listCreateHobbies.add(createHobbies);
+                            }
+                          }
+                        }
+                        Future<bool?> createHobbiesFuture = HobbiesService()
+                            .createHobbies(
+                                listCreateHobbies, widget.tokenModel.message);
+                        createHobbiesFuture.then((_listCreateHobbies) {
+                          if (_listCreateHobbies == true) {
+                            setState(() {
+                              helper.pushInto(
+                                  context,
+                                  HomePage(
+                                    userModel: widget.userModel,
+                                    tokenModel: widget.tokenModel,
+                                  ),
+                                  true);
+                            });
+                          }
+                        });
                       }
                     },
                   ),

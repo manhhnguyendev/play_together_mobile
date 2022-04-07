@@ -6,6 +6,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 class RatingCard extends StatefulWidget {
   final RatingModel? ratingModel;
   final TokenModel tokenModel;
+
   const RatingCard({Key? key, this.ratingModel, required this.tokenModel})
       : super(key: key);
 
@@ -16,15 +17,12 @@ class RatingCard extends StatefulWidget {
 class _RatingCardState extends State<RatingCard> {
   @override
   Widget build(BuildContext context) {
-    // String date = DateFormat('dd/MM/yyyy').format(widget.ratingModel!.createdDate);
-    // String startTime = DateFormat('hh:mm a').format(widget.ratingModel!.date);
     String date = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.ratingModel!.createdDate));
     String startTime = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.ratingModel!.createdDate));
-    Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: Column(
         children: [
           Row(
@@ -55,25 +53,28 @@ class _RatingCardState extends State<RatingCard> {
                       children: [
                         Text(
                           widget.ratingModel!.user!.name,
-                          style: TextStyle(fontSize: 15, color: Colors.black),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         buildRatingStar(widget.ratingModel!.rate),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
                           date + ', ' + startTime,
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style:
+                              const TextStyle(fontSize: 15, color: Colors.grey),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
                           widget.ratingModel!.comment,
-                          style: TextStyle(fontSize: 15, color: Colors.black),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.black),
                         )
                       ],
                     ),
@@ -82,13 +83,13 @@ class _RatingCardState extends State<RatingCard> {
                   flex: 1,
                   child: IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.report_gmailerrorred_rounded,
                         color: Colors.black,
                       )))
             ],
           ),
-          Divider(
+          const Divider(
             thickness: 1,
           )
         ],
@@ -99,7 +100,7 @@ class _RatingCardState extends State<RatingCard> {
   Widget buildRatingStar(int rating) {
     switch (rating) {
       case 1:
-        return Row(children: [
+        return Row(children: const [
           Icon(
             Icons.star,
             color: Colors.yellow,
@@ -108,7 +109,7 @@ class _RatingCardState extends State<RatingCard> {
         ]);
 
       case 2:
-        return Row(children: [
+        return Row(children: const [
           Icon(
             Icons.star,
             color: Colors.yellow,
@@ -122,7 +123,7 @@ class _RatingCardState extends State<RatingCard> {
         ]);
 
       case 3:
-        return Row(children: [
+        return Row(children: const [
           Icon(
             Icons.star,
             color: Colors.yellow,
@@ -141,7 +142,7 @@ class _RatingCardState extends State<RatingCard> {
         ]);
 
       case 4:
-        return Row(children: [
+        return Row(children: const [
           Icon(
             Icons.star,
             color: Colors.yellow,
@@ -165,7 +166,7 @@ class _RatingCardState extends State<RatingCard> {
         ]);
 
       case 5:
-        return Row(children: [
+        return Row(children: const [
           Icon(
             Icons.star,
             color: Colors.yellow,
@@ -194,7 +195,7 @@ class _RatingCardState extends State<RatingCard> {
         ]);
 
       default:
-        return Text('unknown');
+        return const Text('unknown');
     }
   }
 }

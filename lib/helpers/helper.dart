@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// chuyen huong man hinh
 void pushInto(BuildContext context, Widget wg, bool isRightToLeft) {
   Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder(

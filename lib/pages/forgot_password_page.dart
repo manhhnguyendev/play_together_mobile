@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/models/password_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/change_password_page.dart';
+import 'package:play_together_mobile/services/password_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:email_auth/email_auth.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -13,11 +18,16 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final emailController = TextEditingController();
+  final otpController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String email = "";
-  String otpCode = "";
+  final EmailModel _emailModel = EmailModel(email: "");
   final List listErrorEmail = [''];
   final List listErrorOTP = [''];
+  late TokenModel tokenModel;
+  String email = "";
+  String otpCode = "";
+  bool submitValid = false;
 
   void addError(List inputListError, {String? error}) {
     if (!inputListError.contains(error)) {
@@ -31,6 +41,32 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (inputListError.contains(error)) {
       setState(() {
         inputListError.remove(error);
+      });
+    }
+  }
+
+  EmailAuth? emailAuth;
+  @override
+  void initState() {
+    super.initState();
+    emailAuth = EmailAuth(
+      sessionName: "Play Together",
+    );
+    //emailAuth!.config(remoteServerConfiguration);
+  }
+
+  bool verify() {
+    return emailAuth!.validateOtp(
+        recipientMail: emailController.value.text,
+        userOtp: otpController.value.text);
+  }
+
+  void sendOtp() async {
+    bool result = await emailAuth!
+        .sendOtp(recipientMail: emailController.value.text, otpLength: 5);
+    if (result) {
+      setState(() {
+        submitValid = true;
       });
     }
   }
@@ -55,7 +91,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       fit: BoxFit.cover)),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -83,7 +119,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          //sendOtp();
+                                          sendOtp();
                                         },
                                         child: const Text("Lấy mã OTP",
                                             style: TextStyle(
@@ -119,7 +155,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          //verify();
+                                          verify();
                                         },
                                         child: const Text("Xác thực",
                                             style: TextStyle(
@@ -145,12 +181,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           _formKey.currentState!.save();
                           if (listErrorEmail.length == 1 &&
                               listErrorOTP.length == 1) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ChangePasswordPage()),
-                            );
+                            _emailModel.email = emailController.text;
+                            Future<TokenModel?> resetPasswordModelFuture =
+                                PasswordService()
+                                    .resetPasswordToken(_emailModel);
+                            resetPasswordModelFuture.then((value) {
+                              if (value != null) {
+                                tokenModel = value;
+                                print(tokenModel.message);
+                                setState(() {
+                                  helper.pushInto(
+                                      context,
+                                      ChangePasswordPage(
+                                        emailModel: _emailModel,
+                                        tokenModel: tokenModel,
+                                      ),
+                                      true);
+                                });
+                              }
+                            });
                           }
                         }
                       },
@@ -185,12 +234,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   TextFormField buildEmailField() {
     return TextFormField(
+      controller: emailController,
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue!,
       onChanged: (value) {
         email = value;
         if (value.isNotEmpty && listErrorEmail.contains(emailNullError)) {
-          //removeError(inputListError: listErrorEmail, error: emailNullError);
           removeError(listErrorEmail, error: emailNullError);
         } else if (emailValidatorRegExp.hasMatch(value) &&
             listErrorEmail.contains(invalidEmailError)) {

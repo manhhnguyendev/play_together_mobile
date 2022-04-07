@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
+import 'package:play_together_mobile/pages/login_page.dart';
 import 'package:play_together_mobile/pages/manage_hiring_page.dart';
+import 'package:play_together_mobile/pages/personal_change_password_page.dart';
+import 'package:play_together_mobile/pages/policies_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/pages/update_hobbies_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
+import 'package:play_together_mobile/services/logout_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/models/order_model.dart';
@@ -31,8 +38,10 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
+  late GoogleSignIn _googleSignIn;
 
   void check() {
     Future<UserModel?> checkStatus =
@@ -356,7 +365,16 @@ class _PersonalPageState extends State<PersonalPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PersonalChangePassword(
+                          tokenModel: widget.tokenModel,
+                          userModel: widget.userModel,
+                        ),
+                      ));
+                },
                 child: Row(
                   children: const [
                     Text(
@@ -383,7 +401,13 @@ class _PersonalPageState extends State<PersonalPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PoliciesPage(),
+                      ));
+                },
                 child: Row(
                   children: const [
                     Text(
@@ -436,23 +460,47 @@ class _PersonalPageState extends State<PersonalPage> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-              child: GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: const [
-                    Text(
-                      'Đăng xuất',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Spacer(),
-                    Icon(
-                      Icons.logout,
-                      color: Colors.grey,
-                      size: 15,
-                    ),
-                  ],
-                ),
-              ),
+              child: FutureBuilder(
+                  future: _initialization,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      _googleSignIn = GoogleSignIn();
+                      return GestureDetector(
+                        onTap: () {
+                          Future<bool?> logoutModelFuture =
+                              LogoutService().logout(widget.tokenModel);
+                          logoutModelFuture.then((value) {
+                            if (value != true) {
+                              setState(() {
+                                _googleSignIn.signOut();
+                                helper.pushInto(
+                                    context, const LoginPage(), true);
+                              });
+                              print('Đăng xuất thành công');
+                            }
+                          });
+                        },
+                        child: Row(
+                          children: const [
+                            Text(
+                              'Đăng xuất',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Spacer(),
+                            Icon(
+                              Icons.logout,
+                              color: Colors.grey,
+                              size: 15,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return const CircularProgressIndicator();
+                  }),
             ),
             const Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

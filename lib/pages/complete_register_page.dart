@@ -19,7 +19,6 @@ class CompleteRegisterPage extends StatefulWidget {
 }
 
 class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
-  String name = "";
   final _formKey = GlobalKey<FormState>();
   final initialDate = DateTime.now();
   final List listErrorName = [''];
@@ -27,6 +26,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
   final List listErrorProvince = [''];
   final nameController = TextEditingController();
   final dateOfBirthController = TextEditingController();
+  late DateTime dateOfBirth;
   RegisterModel register = RegisterModel(
       email: "",
       password: "",
@@ -36,7 +36,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
       dateOfBirth: "",
       gender: false,
       confirmEmail: false);
-  late DateTime dateOfBirth;
+  String name = "";
   String? city;
   bool gender = true;
   bool checkFirstTime = true;
@@ -286,25 +286,28 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                           _formKey.currentState!.save();
                           if (listErrorName.length == 1 &&
                               listErrorProvince.length == 1 &&
-                              listErrorBirthday.length == 1) {}
+                              listErrorBirthday.length == 1) {
+                            register.email = widget.tempRegisterModel.email;
+                            register.confirmEmail =
+                                widget.tempRegisterModel.confirmEmail;
+                            register.password =
+                                widget.tempRegisterModel.password;
+                            register.confirmPassword =
+                                widget.tempRegisterModel.confirmPassword;
+                            register.name = nameController.text;
+                            register.dateOfBirth = dateOfBirth.toString();
+                            register.gender = gender;
+                            register.city = city!;
+                            Future<RegisterModel?> registerModelFuture =
+                                RegisterService().register(register);
+                            registerModelFuture.then((hirer) {
+                              setState(() {
+                                helper.pushInto(
+                                    context, const LoginPage(), true);
+                              });
+                            });
+                          }
                         }
-                        setState(() {
-                          register.email = widget.tempRegisterModel.email;
-                          register.confirmEmail =
-                              widget.tempRegisterModel.confirmEmail;
-                          register.password = widget.tempRegisterModel.password;
-                          register.confirmPassword =
-                              widget.tempRegisterModel.confirmPassword;
-                          register.name = nameController.text;
-                          register.dateOfBirth = dateOfBirth.toString();
-                          register.gender = gender;
-                          register.city = city!;
-                          Future<RegisterModel?> registerModelFuture =
-                              RegisterService().register(register);
-                          registerModelFuture.then((hirer) {
-                            helper.pushInto(context, const LoginPage(), true);
-                          });
-                        });
                       }),
                   GoBackButton(
                       text: "QUAY LẠI ",

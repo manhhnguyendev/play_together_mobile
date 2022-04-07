@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class TransactionCard extends StatefulWidget {
   final TransactionModel transactionModel;
+
   const TransactionCard({Key? key, required this.transactionModel})
       : super(key: key);
 
