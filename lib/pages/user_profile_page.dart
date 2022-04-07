@@ -480,8 +480,7 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                   _formKey.currentState!.save();
                   if (listErrorName.length == 1 &&
                       listErrorCity.length == 1 &&
-                      listErrorBirthday.length == 1) {}
-                  setState(() {
+                      listErrorBirthday.length == 1) {
                     userUpdateModel.name = nameController.text;
                     userUpdateModel.dateOfBirth = dateOfBirth.toString();
                     userUpdateModel.city = city;
@@ -493,28 +492,25 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                         .updateUserProfile(
                             userUpdateModel, widget.tokenModel.message);
                     userUpdateModelFuture.then((userUpdate) {
-                      if (userUpdate != true) {
-                        userUpdateModel = userUpdate as UserUpdateModel;
-                      }
-                      setState(() {
+                      if (userUpdate == true) {
                         Future<UserModel?> userModelFuture = UserService()
                             .getUserProfile(widget.tokenModel.message);
                         userModelFuture.then((user) {
-                          setState(() {
-                            if (user != null) {
-                              widget.userModel = user;
+                          if (user != null) {
+                            widget.userModel = user;
+                            setState(() {
                               helper.pushInto(
                                   context,
                                   PersonalPage(
                                       userModel: widget.userModel,
                                       tokenModel: widget.tokenModel),
                                   false);
-                            }
-                          });
+                            });
+                          }
                         });
-                      });
+                      }
                     });
-                  });
+                  }
                 }
               }),
         ),

@@ -30,7 +30,6 @@ class _RegisterPageState extends State<RegisterPage> {
   String password = "";
   String confirmPass = "";
   String otpCode = "";
-  String verifyEmail = "";
   bool submitValid = false;
   bool passObsecure = true;
   bool confirmObsecure = true;
@@ -208,15 +207,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                 passwordController.text;
                             tempRegisterModel.confirmPassword =
                                 confirmPasswordController.text;
-                            setState(() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CompleteRegisterPage(
-                                          tempRegisterModel: tempRegisterModel,
-                                        )),
-                              );
-                            });
+                            if (confirmEmail == true) {
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CompleteRegisterPage(
+                                            tempRegisterModel:
+                                                tempRegisterModel,
+                                          )),
+                                );
+                              });
+                            } else {
+                              print('Check lại OTP đi kìa');
+                            }
                           }
                         }
                       },

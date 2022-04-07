@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/login_google_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/take_user_categories_page.dart';
+import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/services/login_google_service.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/services/user_service.dart';
@@ -25,13 +28,6 @@ class _GoogleButtonState extends State<LoginGooglePage> {
 
   LoginGoogleModel loginGoogle =
       LoginGoogleModel(idToken: "", providerName: "");
-
-  Widget getScreen() {
-    return HomePage(
-      userModel: userModel,
-      tokenModel: tokenModel,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,36 +58,52 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                       child: FlatButton(
                         color: const Color.fromRGBO(219, 68, 50, 1),
                         onPressed: () {
-                          setState(() {
-                            _googleSignIn.signIn().then((result) {
-                              result!.authentication.then((googleKey) {
-                                loginGoogle.providerName = providerName;
-                                loginGoogle.idToken = googleKey.idToken!;
-                                Future<TokenModel?> loginGoogleModelFuture =
-                                    LoginGoogleService()
-                                        .loginGoogle(loginGoogle);
-                                print("Id Token: " + googleKey.idToken!);
-                                loginGoogleModelFuture.then((value) {
-                                  if (value != null) {
-                                    tokenModel = value;
-                                    setState(() {
-                                      Future<UserModel?> hirerModelFuture =
-                                          UserService()
-                                              .getUserProfile(value.message);
-                                      print("Đăng nhập thành công " +
-                                          value.message);
-                                      hirerModelFuture.then((hirer) {
-                                        setState(() {
-                                          if (hirer != null) {
-                                            userModel = hirer;
+                          _googleSignIn.signIn().then((result) {
+                            result!.authentication.then((googleKey) {
+                              loginGoogle.providerName = providerName;
+                              loginGoogle.idToken = googleKey.idToken!;
+                              Future<TokenModel?> loginGoogleModelFuture =
+                                  LoginGoogleService().loginGoogle(loginGoogle);
+                              loginGoogleModelFuture.then((value) {
+                                if (value != null) {
+                                  tokenModel = value;
+                                  Future<UserModel?> hirerModelFuture =
+                                      UserService()
+                                          .getUserProfile(value.message);
+                                  hirerModelFuture.then((hirer) {
+                                    if (hirer != null) {
+                                      userModel = hirer;
+                                      Future<List<HobbiesModel>?>
+                                          hobbiesFuture =
+                                          HobbiesService().getHobbiesOfUser(
+                                              userModel.id, tokenModel.message);
+                                      hobbiesFuture.then((listHobbies) {
+                                        if (listHobbies!.isNotEmpty) {
+                                          setState(() {
                                             helper.pushInto(
-                                                context, getScreen(), true);
-                                          }
-                                        });
+                                                context,
+                                                HomePage(
+                                                  userModel: userModel,
+                                                  tokenModel: tokenModel,
+                                                ),
+                                                true);
+                                          });
+                                        } else if (listHobbies.isEmpty) {
+                                          setState(() {
+                                            helper.pushInto(
+                                                context,
+                                                UserCategoriesPage(
+                                                  userModel: userModel,
+                                                  tokenModel: tokenModel,
+                                                ),
+                                                true);
+                                          });
+                                        }
                                       });
-                                    });
-                                  }
-                                });
+                                      print('Đăng nhập thành công');
+                                    }
+                                  });
+                                }
                               });
                             });
                           });

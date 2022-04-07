@@ -122,15 +122,17 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                       widget.tokenModel.message,
                       rateComment);
                   rateFuture.then((rate) {
-                    setState(() {
-                      helper.pushInto(
-                          context,
-                          HistoryPage(
-                            tokenModel: widget.tokenModel,
-                            userModel: widget.userModel!,
-                          ),
-                          true);
-                    });
+                    if (rate == true) {
+                      setState(() {
+                        helper.pushInto(
+                            context,
+                            HistoryPage(
+                              tokenModel: widget.tokenModel,
+                              userModel: widget.userModel!,
+                            ),
+                            true);
+                      });
+                    }
                   });
                 },
                 height: 50,

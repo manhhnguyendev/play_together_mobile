@@ -12,7 +12,7 @@ class LogoutService {
         Uri.parse('${apiUrl.accounts}/logout'),
         headers: configJson.headerAuth(token),
       );
-      if (response.statusCode == 204) {
+      if (response.statusCode == 200) {
         result = true;
       }
     } on Exception {

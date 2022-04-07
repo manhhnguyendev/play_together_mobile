@@ -28,6 +28,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String email = "";
   String otpCode = "";
   bool submitValid = false;
+  bool verifyEmail = false;
 
   void addError(List inputListError, {String? error}) {
     if (!inputListError.contains(error)) {
@@ -50,7 +51,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   void initState() {
     super.initState();
     emailAuth = EmailAuth(
-      sessionName: "Play Together",
+      sessionName: "Play Together Application",
     );
     //emailAuth!.config(remoteServerConfiguration);
   }
@@ -155,7 +156,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          verify();
+                                          verifyEmail = verify();
                                         },
                                         child: const Text("Xác thực",
                                             style: TextStyle(
@@ -188,16 +189,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             resetPasswordModelFuture.then((value) {
                               if (value != null) {
                                 tokenModel = value;
-                                print(tokenModel.message);
-                                setState(() {
-                                  helper.pushInto(
-                                      context,
-                                      ChangePasswordPage(
-                                        emailModel: _emailModel,
-                                        tokenModel: tokenModel,
-                                      ),
-                                      true);
-                                });
+                                if (verifyEmail == true) {
+                                  setState(() {
+                                    helper.pushInto(
+                                        context,
+                                        ChangePasswordPage(
+                                          emailModel: _emailModel,
+                                          tokenModel: tokenModel,
+                                        ),
+                                        true);
+                                  });
+                                } else {
+                                  print('Check lại OTP đi kìa');
+                                }
                               }
                             });
                           }
@@ -280,6 +284,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   TextFormField buildOTPField() {
     return TextFormField(
+      controller: otpController,
       onSaved: (newValue) => otpCode = newValue!,
       maxLength: 6,
       onChanged: (value) {
