@@ -15,19 +15,19 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 
-class HirerProfilePage extends StatefulWidget {
-  late UserModel userModel;
+class UserProfilePage extends StatefulWidget {
+  final UserModel userModel;
   final TokenModel tokenModel;
 
-  HirerProfilePage(
+  const UserProfilePage(
       {Key? key, required this.userModel, required this.tokenModel})
       : super(key: key);
 
   @override
-  _HirerProfilePageState createState() => _HirerProfilePageState();
+  _UserProfilePageState createState() => _UserProfilePageState();
 }
 
-class _HirerProfilePageState extends State<HirerProfilePage> {
+class _UserProfilePageState extends State<UserProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final initialDate = DateTime.now();
   final List listErrorName = [''];
@@ -128,28 +128,23 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
   ];
 
   chooseImagesFromGallery() async {
+    int i = 1;
     var images = await ImagePicker().pickMultiImage();
     for (var _image in images!) {
-      setState(() {
-        listImageFile!.add(File(_image.path));
-      });
+      listImageFile!.add(File(_image.path));
     }
-    int i = 1;
     for (var img in listImageFile!) {
-      setState(() {
-        val = i / listImageFile!.length;
-      });
+      val = i / listImageFile!.length;
       String fileName = basename(img.path);
       Reference firebaseStorageRef =
           FirebaseStorage.instance.ref().child('images/$fileName');
       UploadTask uploadTask = firebaseStorageRef.putFile(img);
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => img);
       taskSnapshot.ref.getDownloadURL().then((value) {
-        if (value != null) {
-          setState(() {
-            imagesLink?.add(value); //la String
-          });
-        }
+        setState(() {
+          imagesLink?.add(value);
+          print(imagesLink);
+        });
       });
       i++;
     }
@@ -161,7 +156,6 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     );
     if (pickedFile != null) {
       _imageFile = File(pickedFile.path);
-      print(File(_imageFile!.path));
     }
     String fileName = basename(_imageFile!.path);
     Reference firebaseStorageRef =
@@ -169,12 +163,9 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
     UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
     TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => _imageFile);
     taskSnapshot.ref.getDownloadURL().then((value) {
-      if (value != null) {
-        setState(() {
-          avatar = value;
-          print(avatar);
-        });
-      }
+      setState(() {
+        avatar = value;
+      });
     });
   }
 
@@ -334,40 +325,30 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                   ),
                   RawMaterialButton(
                     onPressed: () {
-                      setState(() {
-                        for (var img in imagesLink!) {
-                          if (imagesLink != null) {
-                            addImageModel.userId = widget.userModel.id;
-                            addImageModel.imageLink = img;
-                            Future<AddImageModel?> listImageModelFuture =
-                                ImageService().addImages(
-                                    addImageModel, widget.tokenModel.message);
-                            listImageModelFuture.then((addImage) {
-                              if (addImage != null) {
-                                addImageModel = addImage;
-                              }
-                              setState(() {
-                                Future<UserModel?> userModelFuture =
-                                    UserService().getUserProfile(
-                                        widget.tokenModel.message);
-                                userModelFuture.then((user) {
-                                  setState(() {
-                                    if (user != null) {
-                                      widget.userModel = user;
-                                      helper.pushInto(
-                                          context,
-                                          PersonalPage(
-                                              userModel: widget.userModel,
-                                              tokenModel: widget.tokenModel),
-                                          false);
-                                    }
-                                  });
-                                });
-                              });
+                      for (var img in imagesLink!) {
+                        if (imagesLink != null) {
+                          addImageModel.userId = widget.userModel.id;
+                          addImageModel.imageLink = img;
+                          Future<AddImageModel?> listImageModelFuture =
+                              ImageService().addImages(
+                                  addImageModel, widget.tokenModel.message);
+                          listImageModelFuture.then((_addImageModel) {});
+                        }
+                        Future<UserModel?> userModelFuture = UserService()
+                            .getUserProfile(widget.tokenModel.message);
+                        userModelFuture.then((_userModel) {
+                          if (_userModel != null) {
+                            setState(() {
+                              helper.pushInto(
+                                  context,
+                                  PersonalPage(
+                                      userModel: _userModel,
+                                      tokenModel: widget.tokenModel),
+                                  true);
                             });
                           }
-                        }
-                      });
+                        });
+                      }
                     },
                     child: const Text('Upload Images'),
                   ),
@@ -491,20 +472,19 @@ class _HirerProfilePageState extends State<HirerProfilePage> {
                     Future<bool?> userUpdateModelFuture = UserService()
                         .updateUserProfile(
                             userUpdateModel, widget.tokenModel.message);
-                    userUpdateModelFuture.then((userUpdate) {
-                      if (userUpdate == true) {
+                    userUpdateModelFuture.then((_userUpdateModel) {
+                      if (_userUpdateModel == true) {
                         Future<UserModel?> userModelFuture = UserService()
                             .getUserProfile(widget.tokenModel.message);
-                        userModelFuture.then((user) {
-                          if (user != null) {
-                            widget.userModel = user;
+                        userModelFuture.then((_userModel) {
+                          if (_userModel != null) {
                             setState(() {
                               helper.pushInto(
                                   context,
                                   PersonalPage(
-                                      userModel: widget.userModel,
+                                      userModel: _userModel,
                                       tokenModel: widget.tokenModel),
-                                  false);
+                                  true);
                             });
                           }
                         });

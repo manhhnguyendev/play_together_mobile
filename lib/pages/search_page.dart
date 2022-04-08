@@ -33,7 +33,7 @@ class _SearchPageState extends State<SearchPage> {
   Future loadPlayerList() {
     _listPlayerSearch ??= [];
     Future<List<UserModel>?> listOrderFromCreateUserModelFuture =
-        SearchService().searchUser(
+        SearchService().searchUserByName(
             widget.searchValue.toString(), widget.tokenModel.message);
     listOrderFromCreateUserModelFuture.then((_userList) {
       listPlayerSearch = _userList;

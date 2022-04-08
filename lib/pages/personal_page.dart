@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -53,9 +52,9 @@ class _PersonalPageState extends State<PersonalPage> {
             lateUser = value;
           });
         } else {
-          Future<List<OrderModel>?> checkPlayer = OrderService()
-              .getAllOrdersForPlayer(widget.tokenModel.message, true, "");
-          checkPlayer.then(((order) {
+          Future<List<OrderModel>?> checkOrderPlayer =
+              OrderService().getOrderOfPlayer(widget.tokenModel.message);
+          checkOrderPlayer.then(((order) {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
@@ -114,15 +113,13 @@ class _PersonalPageState extends State<PersonalPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if (lateUser != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HirerProfilePage(
-                                          userModel: lateUser!,
-                                          tokenModel: widget.tokenModel)),
-                                );
-                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserProfilePage(
+                                        userModel: widget.userModel,
+                                        tokenModel: widget.tokenModel)),
+                              );
                             },
                             child: Row(
                               children: const [

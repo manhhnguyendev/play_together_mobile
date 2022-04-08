@@ -47,7 +47,7 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsNewAccount=true&PageNumber=0&PageSize=4'),
+        Uri.parse('${apiUrl.users}?IsNewAccount=true&PageSize=4&IsPlayer=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -65,7 +65,8 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsSameHobbies=true&PageNumber=0&PageSize=4'),
+        Uri.parse(
+            '${apiUrl.users}?IsSameHobbies=true&PageSize=4&IsPlayer=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -84,7 +85,7 @@ class UserService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?IsOrderByRating=true&PageNumber=0&PageSize=4'),
+            '${apiUrl.users}?IsOrderByRating=true&PageSize=4&IsPlayer=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -102,7 +103,8 @@ class UserService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsRecentOrder=true&PageNumber=0&PageSize=4'),
+        Uri.parse(
+            '${apiUrl.users}?IsRecentOrder=true&PageSize=4&IsPlayer=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

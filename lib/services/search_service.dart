@@ -13,7 +13,7 @@ class SearchService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?Name=$search'),
+        Uri.parse('${apiUrl.users}?Name=$search&IsPlayer=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -31,7 +31,7 @@ class SearchService {
     List<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?Search=$search'),
+        Uri.parse('${apiUrl.users}?Search=$search&IsPlayer=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

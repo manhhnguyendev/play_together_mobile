@@ -23,6 +23,7 @@ class GamesModel {
   String name;
   String displayName;
   String otherName;
+
   GamesModel({
     required this.id,
     required this.name,

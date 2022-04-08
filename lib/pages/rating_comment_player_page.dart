@@ -46,7 +46,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
         child: Column(
           children: [
             const SizedBox(
-              height: 75,
+              height: 80,
             ),
             SizedBox(
               height: 150,
