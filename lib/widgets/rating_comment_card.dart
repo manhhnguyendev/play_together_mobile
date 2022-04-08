@@ -32,10 +32,9 @@ class _RatingCardState extends State<RatingCard> {
               Expanded(
                 flex: 1,
                 child: SizedBox(
-                  height: 70,
-                  width: 70,
+                  height: 80,
+                  width: 80,
                   child: FittedBox(
-                    fit: BoxFit.fill,
                     child: CircleAvatar(
                       backgroundImage:
                           NetworkImage(widget.ratingModel!.user!.avatar),

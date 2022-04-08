@@ -35,9 +35,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
             lateUser = value;
           });
         } else {
-          Future<List<OrderModel>?> checkPlayer = OrderService()
-              .getAllOrdersForPlayer(widget.tokenModel.message, true, "");
-          checkPlayer.then(((order) {
+          Future<List<OrderModel>?> checkOrderPlayer =
+              OrderService().getOrderOfPlayer(widget.tokenModel.message);
+          checkOrderPlayer.then(((order) {
             setState(() {
               _listOrder = order;
               if (_listOrder![0].toUserId == widget.userModel.id) {
