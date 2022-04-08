@@ -160,7 +160,7 @@ class OrderService {
         Uri.parse('${apiUrl.orders}/finish/$orderId'),
         headers: configJson.headerAuth(token),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {
@@ -179,7 +179,7 @@ class OrderService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {

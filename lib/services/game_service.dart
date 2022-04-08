@@ -11,7 +11,7 @@ class GameService {
     List<GamesModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.games}/?PageSize=100'),
+        Uri.parse('${apiUrl.games}?PageSize=50'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

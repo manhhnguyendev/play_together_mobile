@@ -33,7 +33,6 @@ class UserService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(userUpdateModel.toJson()),
       );
-
       if (response.statusCode == 204) {
         result = true;
       }
