@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
+import 'package:play_together_mobile/pages/update_game_skills_page.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class ManageHiringPage extends StatefulWidget {
-  const ManageHiringPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+  const ManageHiringPage(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<ManageHiringPage> createState() => _ManageHiringPageState();
@@ -166,7 +173,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                         });
                       },
                       //textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 15),
                       decoration: InputDecoration(
                           counter: Container(), hintText: " Nhập số tiền"),
                       maxLength: 11,
@@ -201,11 +208,14 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                   Spacer(),
                   GestureDetector(
                     onTap: () {
-                      //   Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => const ()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UpdateGameSkillsPage(
+                                  userModel: widget.userModel,
+                                  tokenModel: widget.tokenModel,
+                                )),
+                      );
                     },
                     child: Text(
                       'Chỉnh sửa',

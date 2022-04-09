@@ -27,10 +27,20 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
   bool checkReorder = false;
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.orderModel.timeStart));
-    String startTime = DateFormat('hh:mm a')
-        .format(DateTime.parse(widget.orderModel.timeStart));
+    String date = "";
+    String time = "";
+    if (widget.orderModel.timeStart != "0001-01-01T00:00:00") {
+      date = DateFormat('dd/MM/yyyy')
+          .format(DateTime.parse(widget.orderModel.timeStart));
+      time = DateFormat('hh:mm a')
+          .format(DateTime.parse(widget.orderModel.timeStart));
+    } else {
+      date = DateFormat('dd/MM/yyyy')
+          .format(DateTime.parse(widget.orderModel.processExpired));
+      time = DateFormat('hh:mm a')
+          .format(DateTime.parse(widget.orderModel.processExpired));
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: GestureDetector(
@@ -59,7 +69,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      date + ', ' + startTime,
+                      date + ', ' + time,
                       style: const TextStyle(fontSize: 15, color: Colors.grey),
                     )
                   ],
@@ -145,7 +155,15 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       );
     }
 
-    if (status == 'Finish soon') {
+    if (status == 'Hirer Finish soon') {
+      checkReorder = true;
+      return const Text(
+        'Kết thúc sớm',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
+    if (status == 'Player Finish soon') {
       checkReorder = true;
       return const Text(
         'Kết thúc sớm',
