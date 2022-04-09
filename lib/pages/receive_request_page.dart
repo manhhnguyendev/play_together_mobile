@@ -33,10 +33,10 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   late AnimationController controller;
   int time = 5;
 
-  void check() {
-    Future<UserModel?> checkStatus =
+  Future checkStatus() {
+    Future<UserModel?> getUserStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
+    getUserStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
           value = widget.userModel;
@@ -48,12 +48,14 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                 false);
           });
         } else {
+          if (!mounted) return;
           setState(() {
             value = widget.userModel;
           });
         }
       }
     });
+    return getUserStatus;
   }
 
   @override
@@ -86,267 +88,276 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
 
   @override
   Widget build(BuildContext context) {
-    check();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Yêu cầu nhận được',
-          style: TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
-        ),
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 120,
-                      width: 120,
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(widget.orderModel!.user!.avatar),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 15, 0),
-                        child: Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                widget.orderModel!.user!.name,
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Thời lượng: ',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  widget.orderModel!.totalTimes.toString() +
-                                      ' giờ',
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Chi phí: ',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  widget.orderModel!.totalPrices
-                                      .toStringAsFixed(0)
-                                      .toVND(),
-                                  style: const TextStyle(fontSize: 16),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
-              )),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-            child: const Text(
-              'Tựa game đã chọn: ',
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 25, 15),
-            child: Column(
-              children: List.generate(
-                  widget.orderModel!.gameOfOrders != null
-                      ? widget.orderModel!.gameOfOrders.length
-                      : 0,
-                  (index) => buildGamesChoosenField(
-                      widget.orderModel!.gameOfOrders[index])),
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                const Text(
-                  'Thời gian còn lại:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) => Text(
-                    countText,
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
-            child: Container(
-                alignment: Alignment.centerLeft,
-                child: const Text('Lời nhắn:', style: TextStyle(fontSize: 18))),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
-            child: Container(
-                height: 150,
-                width: double.infinity,
-                decoration: BoxDecoration(border: Border.all()),
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    widget.orderModel!.message,
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                )),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Text('Nhắn tin ',
-                      style: TextStyle(
-                          fontSize: 18, decoration: TextDecoration.underline)),
-                  Icon(
-                    Icons.message_outlined,
-                    size: 30,
-                  ),
-                ],
+    return FutureBuilder(
+        future: checkStatus(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              centerTitle: true,
+              title: const Text(
+                'Yêu cầu nhận được',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal),
               ),
             ),
-          ),
-          const Divider(
-            thickness: 1,
-            indent: 15,
-            endIndent: 15,
-          ),
-        ],
-      )),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SecondMainButton(
-                  text: 'Chấp nhận',
-                  onpress: () {
-                    AcceptOrderModel isAccept =
-                        AcceptOrderModel(isAccept: true);
-                    Future<bool?> acceptFuture = OrderService()
-                        .acceptOrderRequest(widget.orderModel!.id,
-                            widget.tokenModel.message, isAccept);
-                    acceptFuture.then((accept) {
-                      if (accept == true) {
-                        setState(() {
-                          helper.pushInto(
-                              context,
-                              HiringPage(
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel,
-                                orderModel: widget.orderModel,
+            body: SingleChildScrollView(
+                child: Column(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            height: 120,
+                            width: 120,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(widget.orderModel!.user!.avatar),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 15, 0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      widget.orderModel!.user!.name,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Thời lượng: ',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        widget.orderModel!.totalTimes
+                                                .toString() +
+                                            ' giờ',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Chi phí: ',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        widget.orderModel!.totalPrices
+                                            .toStringAsFixed(0)
+                                            .toVND(),
+                                        style: const TextStyle(fontSize: 16),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
-                              true);
-                        });
-                      }
-                    });
-                  },
-                  height: 50,
-                  width: 183),
-              DeclineButton(
-                  text: 'Từ chối',
-                  onpress: () {
-                    createAlertDialog(context);
-                  },
-                  height: 50,
-                  width: 183)
-            ],
-          ),
-        ),
-      ),
-    );
+                            ))
+                      ],
+                    )),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
+                  child: const Text(
+                    'Tựa game đã chọn: ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 25, 15),
+                  child: Column(
+                    children: List.generate(
+                        widget.orderModel!.gameOfOrders != null
+                            ? widget.orderModel!.gameOfOrders.length
+                            : 0,
+                        (index) => buildGamesChoosenField(
+                            widget.orderModel!.gameOfOrders[index])),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Thời gian còn lại:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      AnimatedBuilder(
+                        animation: controller,
+                        builder: (context, child) => Text(
+                          countText,
+                          style: const TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
+                  child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text('Lời nhắn:',
+                          style: TextStyle(fontSize: 18))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+                  child: Container(
+                      height: 150,
+                      width: double.infinity,
+                      decoration: BoxDecoration(border: Border.all()),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Text(
+                          widget.orderModel!.message,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text('Nhắn tin ',
+                            style: TextStyle(
+                                fontSize: 18,
+                                decoration: TextDecoration.underline)),
+                        Icon(
+                          Icons.message_outlined,
+                          size: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Divider(
+                  thickness: 1,
+                  indent: 15,
+                  endIndent: 15,
+                ),
+              ],
+            )),
+            bottomNavigationBar: BottomAppBar(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SecondMainButton(
+                        text: 'Chấp nhận',
+                        onpress: () {
+                          AcceptOrderModel isAccept =
+                              AcceptOrderModel(isAccept: true);
+                          Future<bool?> acceptFuture = OrderService()
+                              .acceptOrderRequest(widget.orderModel!.id,
+                                  widget.tokenModel.message, isAccept);
+                          acceptFuture.then((accept) {
+                            if (accept == true) {
+                              setState(() {
+                                helper.pushInto(
+                                    context,
+                                    HiringPage(
+                                      tokenModel: widget.tokenModel,
+                                      userModel: widget.userModel,
+                                      orderModel: widget.orderModel,
+                                    ),
+                                    true);
+                              });
+                            }
+                          });
+                        },
+                        height: 50,
+                        width: 183),
+                    DeclineButton(
+                        text: 'Từ chối',
+                        onpress: () {
+                          createAlertDialog(context);
+                        },
+                        height: 50,
+                        width: 183)
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   createAlertDialog(BuildContext context) {
     TextEditingController customController = TextEditingController();
-    check();
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-              title: const Text("Từ chối nhận đơn thuê này?"),
-              content: TextField(
-                controller: customController,
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  elevation: 5.0,
-                  child: const Text('Không'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                MaterialButton(
-                  elevation: 5.0,
-                  child: const Text('Có'),
-                  onPressed: () {
-                    setState(() {
-                      Future<bool?> cancelFuture = OrderService()
-                          .cancelOrderRequest(
-                              widget.orderModel!.id, widget.tokenModel.message);
-                      cancelFuture.then((check) {
-                        if (check == true) {
-                          setState(() {
-                            helper.pushInto(
-                                context,
-                                HomePage(
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                ),
-                                true);
+          return FutureBuilder(
+              future: checkStatus(),
+              builder: (context, snapshot) {
+                return AlertDialog(
+                    title: const Text("Từ chối nhận đơn thuê này?"),
+                    content: TextField(
+                      controller: customController,
+                    ),
+                    actions: <Widget>[
+                      MaterialButton(
+                        elevation: 5.0,
+                        child: const Text('Không'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      MaterialButton(
+                        elevation: 5.0,
+                        child: const Text('Có'),
+                        onPressed: () {
+                          Future<bool?> cancelFuture = OrderService()
+                              .cancelOrderRequest(widget.orderModel!.id,
+                                  widget.tokenModel.message);
+                          cancelFuture.then((check) {
+                            if (check == true) {
+                              setState(() {
+                                helper.pushInto(
+                                    context,
+                                    HomePage(
+                                      tokenModel: widget.tokenModel,
+                                      userModel: widget.userModel,
+                                    ),
+                                    true);
+                              });
+                            }
                           });
-                        }
-                      });
-                    });
-                  },
-                )
-              ]);
+                        },
+                      )
+                    ]);
+              });
         });
   }
 

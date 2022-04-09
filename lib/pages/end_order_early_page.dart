@@ -33,19 +33,19 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   bool checkReason = true;
   String reason = "";
 
-  void check() {
-    Future<UserModel?> checkStatus =
+  Future checkStatus() {
+    Future<UserModel?> getUserStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
+    getUserStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
           Future<OrderModel?> checkStatusOrder = OrderService()
               .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
           checkStatusOrder.then((order) {
             if (order != null) {
+              lateOrder = order;
+              lateUser = value;
               setState(() {
-                lateOrder = order;
-                lateUser = value;
                 helper.pushInto(
                     context,
                     EndOrderPage(
@@ -58,264 +58,272 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
             }
           });
         } else {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });
         }
       }
     });
+    return getUserStatus;
   }
 
   @override
   Widget build(BuildContext context) {
-    check();
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: FlatButton(
-            child: const Icon(
-              Icons.arrow_back_ios,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        title: const Text(
-          'Kết thúc thuê sớm',
-          style: TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              widget.orderModel!.user!.id ==
-                                      widget.userModel!.id
-                                  ? widget.orderModel!.user!.avatar
-                                  : widget.orderModel!.toUser!.avatar),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.orderModel!.user!.id == widget.userModel!.id
-                            ? widget.orderModel!.user!.name
-                            : widget.orderModel!.toUser!.name,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.topCenter,
-                        width: 60,
-                        height: 60,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/play_together_logo_no_text.png"),
-                                fit: BoxFit.cover)),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              widget.orderModel!.user!.id ==
-                                      widget.userModel!.id
-                                  ? widget.orderModel!.toUser!.avatar
-                                  : widget.orderModel!.user!.avatar),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.orderModel!.user!.id == widget.userModel!.id
-                            ? widget.orderModel!.toUser!.name
-                            : widget.orderModel!.user!.name,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                Radio<String>(
-                    activeColor: const Color(0xff320444),
-                    value: "Có việc bận đột xuất",
-                    groupValue: reason,
-                    onChanged: (value) {
-                      setState(() {
-                        reason = value!;
-                        checkReason = false;
-                      });
-                    }),
-                const Text(
-                  "Có việc bận đột xuất",
-                  style: TextStyle(fontSize: 15),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Radio<String>(
-                    activeColor: const Color(0xff320444),
-                    value: "Thông tin không chính xác",
-                    groupValue: reason,
-                    onChanged: (value) {
-                      setState(() {
-                        reason = value!;
-                        checkReason = false;
-                      });
-                    }),
-                const Text(
-                  "Thông tin không chính xác",
-                  style: TextStyle(fontSize: 15),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Radio<String>(
-                    activeColor: const Color(0xff320444),
-                    value: "Ngôn ngữ lăng mạ",
-                    groupValue: reason,
-                    onChanged: (value) {
-                      setState(() {
-                        reason = value!;
-                        checkReason = false;
-                      });
-                    }),
-                const Text(
-                  "Ngôn ngữ lăng mạ",
-                  style: TextStyle(fontSize: 15),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Radio<String>(
-                    activeColor: const Color(0xff320444),
-                    value: "Cố tình AFK",
-                    groupValue: reason,
-                    onChanged: (value) {
-                      setState(() {
-                        reason = value!;
-                        checkReason = false;
-                      });
-                    }),
-                const Text(
-                  "Cố tình AFK",
-                  style: TextStyle(fontSize: 15),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Radio<String>(
-                    activeColor: const Color(0xff320444),
-                    value: _controller.text,
-                    groupValue: reason,
-                    onChanged: (value) {
-                      setState(() {
-                        reason = value!;
-                        checkReason = true;
-                      });
-                    }),
-                const Text(
-                  "Lý do khác",
-                  style: TextStyle(fontSize: 15),
-                )
-              ],
-            ),
-            Visibility(
-              visible: checkReason,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
-                child: TextField(
-                  controller: _controller,
-                  onChanged: (value) {
-                    setState(() {
-                      reason = _controller.text;
-                      checkReason = true;
-                    });
-                  },
-                  style: const TextStyle(fontSize: 15),
+    return FutureBuilder(
+      future: checkStatus(),
+      builder: (context, snapshot) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            leading: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: FlatButton(
+                child: const Icon(
+                  Icons.arrow_back_ios,
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-            child: SecondMainButton(
-                text: 'Kết thúc',
-                onpress: () {
-                  FinishSoonOrderModel finishSoonModel =
-                      FinishSoonOrderModel(reason: reason);
-                  Future<bool?> finishFuture = OrderService().finishSoonOrder(
-                      widget.orderModel!.id,
-                      widget.tokenModel.message,
-                      finishSoonModel);
-                  finishFuture.then((finish) {
-                    if (finish == true) {
-                      Future<OrderModel?> checkStatusOrder = OrderService()
-                          .getOrderById(
-                              widget.orderModel!.id, widget.tokenModel.message);
-                      checkStatusOrder.then((order) {
-                        if (order != null) {
+            ),
+            title: const Text(
+              'Kết thúc thuê sớm',
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 120,
+                            width: 120,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  widget.orderModel!.user!.id ==
+                                          widget.userModel!.id
+                                      ? widget.orderModel!.user!.avatar
+                                      : widget.orderModel!.toUser!.avatar),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            widget.orderModel!.user!.id == widget.userModel!.id
+                                ? widget.orderModel!.user!.name
+                                : widget.orderModel!.toUser!.name,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Container(
+                            alignment: Alignment.topCenter,
+                            width: 60,
+                            height: 60,
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/play_together_logo_no_text.png"),
+                                    fit: BoxFit.cover)),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 120,
+                            width: 120,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  widget.orderModel!.user!.id ==
+                                          widget.userModel!.id
+                                      ? widget.orderModel!.toUser!.avatar
+                                      : widget.orderModel!.user!.avatar),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            widget.orderModel!.user!.id == widget.userModel!.id
+                                ? widget.orderModel!.toUser!.name
+                                : widget.orderModel!.user!.name,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                        activeColor: const Color(0xff320444),
+                        value: "Có việc bận đột xuất",
+                        groupValue: reason,
+                        onChanged: (value) {
                           setState(() {
-                            lateOrder = order;
-                            helper.pushInto(
-                                context,
-                                EndOrderPage(
-                                  tokenModel: widget.tokenModel,
-                                  userModel: lateUser ?? widget.userModel,
-                                  orderModel: lateOrder ?? widget.orderModel,
-                                ),
-                                true);
+                            reason = value!;
+                            checkReason = false;
+                          });
+                        }),
+                    const Text(
+                      "Có việc bận đột xuất",
+                      style: TextStyle(fontSize: 15),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                        activeColor: const Color(0xff320444),
+                        value: "Thông tin không chính xác",
+                        groupValue: reason,
+                        onChanged: (value) {
+                          setState(() {
+                            reason = value!;
+                            checkReason = false;
+                          });
+                        }),
+                    const Text(
+                      "Thông tin không chính xác",
+                      style: TextStyle(fontSize: 15),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                        activeColor: const Color(0xff320444),
+                        value: "Ngôn ngữ lăng mạ",
+                        groupValue: reason,
+                        onChanged: (value) {
+                          setState(() {
+                            reason = value!;
+                            checkReason = false;
+                          });
+                        }),
+                    const Text(
+                      "Ngôn ngữ lăng mạ",
+                      style: TextStyle(fontSize: 15),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                        activeColor: const Color(0xff320444),
+                        value: "Cố tình AFK",
+                        groupValue: reason,
+                        onChanged: (value) {
+                          setState(() {
+                            reason = value!;
+                            checkReason = false;
+                          });
+                        }),
+                    const Text(
+                      "Cố tình AFK",
+                      style: TextStyle(fontSize: 15),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                        activeColor: const Color(0xff320444),
+                        value: _controller.text,
+                        groupValue: reason,
+                        onChanged: (value) {
+                          setState(() {
+                            reason = value!;
+                            checkReason = true;
+                          });
+                        }),
+                    const Text(
+                      "Lý do khác",
+                      style: TextStyle(fontSize: 15),
+                    )
+                  ],
+                ),
+                Visibility(
+                  visible: checkReason,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                    child: TextField(
+                      controller: _controller,
+                      onChanged: (value) {
+                        setState(() {
+                          reason = _controller.text;
+                          checkReason = true;
+                        });
+                      },
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          bottomNavigationBar: BottomAppBar(
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                child: SecondMainButton(
+                    text: 'Kết thúc',
+                    onpress: () {
+                      FinishSoonOrderModel finishSoonModel =
+                          FinishSoonOrderModel(reason: reason);
+                      Future<bool?> finishFuture = OrderService()
+                          .finishSoonOrder(widget.orderModel!.id,
+                              widget.tokenModel.message, finishSoonModel);
+                      finishFuture.then((finish) {
+                        if (finish == true) {
+                          Future<OrderModel?> checkStatusOrder = OrderService()
+                              .getOrderById(widget.orderModel!.id,
+                                  widget.tokenModel.message);
+                          checkStatusOrder.then((order) {
+                            if (order != null) {
+                              setState(() {
+                                lateOrder = order;
+                                helper.pushInto(
+                                    context,
+                                    EndOrderPage(
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser ?? widget.userModel,
+                                      orderModel:
+                                          lateOrder ?? widget.orderModel,
+                                    ),
+                                    true);
+                              });
+                            }
                           });
                         }
                       });
-                    }
-                  });
-                },
-                height: 50,
-                width: 200),
-          )),
+                    },
+                    height: 50,
+                    width: 200),
+              )),
+        );
+      },
     );
   }
 }

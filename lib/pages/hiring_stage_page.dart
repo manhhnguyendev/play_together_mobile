@@ -36,19 +36,19 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   UserModel? lateUser;
   OrderModel? lateOrder;
 
-  void check() {
-    Future<UserModel?> checkStatus =
+  Future checkStatus() {
+    Future<UserModel?> getUserStatus =
         UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
+    getUserStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
           Future<OrderModel?> checkStatusOrder = OrderService()
               .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
           checkStatusOrder.then((order) {
             if (order != null) {
+              lateOrder = order;
+              lateUser = value;
               setState(() {
-                lateOrder = order;
-                lateUser = value;
                 helper.pushInto(
                     context,
                     EndOrderPage(
@@ -61,12 +61,14 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
             }
           });
         } else {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });
         }
       }
     });
+    return getUserStatus;
   }
 
   @override
@@ -108,242 +110,254 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
-    check();
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Đang thuê...',
-          style: TextStyle(
-              fontSize: 18, color: Colors.red, fontWeight: FontWeight.normal),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              widget.orderModel!.user!.id ==
-                                      widget.userModel!.id
-                                  ? widget.orderModel!.user!.avatar
-                                  : widget.orderModel!.toUser!.avatar),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.orderModel!.user!.id == widget.userModel!.id
-                            ? widget.orderModel!.user!.name
-                            : widget.orderModel!.toUser!.name,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Container(
-                        alignment: Alignment.topCenter,
-                        width: 60,
-                        height: 60,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/play_together_logo_no_text.png"),
-                                fit: BoxFit.cover)),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              widget.orderModel!.user!.id ==
-                                      widget.userModel!.id
-                                  ? widget.orderModel!.toUser!.avatar
-                                  : widget.orderModel!.user!.avatar),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        widget.orderModel!.user!.id == widget.userModel!.id
-                            ? widget.orderModel!.toUser!.name
-                            : widget.orderModel!.user!.name,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                ],
+    return FutureBuilder(
+        future: checkStatus(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              centerTitle: true,
+              title: const Text(
+                'Đang thuê...',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.red,
+                    fontWeight: FontWeight.normal),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Container(
-                height: 1,
-                decoration: const BoxDecoration(
-                    border: Border(
-                  top: BorderSide(
-                    color: Colors.grey,
-                    width: 0.15,
-                  ),
-                )),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-              child: Row(
-                children: [
-                  const Text(
-                    'Thời lượng thuê ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const Spacer(),
-                  Text(
-                    widget.orderModel!.totalTimes.toString(),
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const Text(
-                    ' giờ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-              child: Row(
-                children: [
-                  const Text(
-                    'Tổng chi phí ',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const Spacer(),
-                  Text(
-                    widget.orderModel!.totalPrices.toStringAsFixed(0).toVND(),
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 1,
-              decoration: const BoxDecoration(
-                  border: Border(
-                top: BorderSide(
-                  color: Colors.grey,
-                  width: 0.15,
-                ),
-              )),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-              child: const Text(
-                'Tựa game đã chọn: ',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-              child: Column(
-                children: List.generate(
-                    widget.orderModel!.gameOfOrders != null
-                        ? widget.orderModel!.gameOfOrders.length
-                        : 0,
-                    (index) => buildGamesChoosenField(
-                        widget.orderModel!.gameOfOrders[index])),
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
+            body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Text(
-                    'Thời gian còn lại:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  AnimatedBuilder(
-                    animation: controller,
-                    builder: (context, child) => Text(
-                      countText,
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.normal,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    widget.orderModel!.user!.id ==
+                                            widget.userModel!.id
+                                        ? widget.orderModel!.user!.avatar
+                                        : widget.orderModel!.toUser!.avatar),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.orderModel!.user!.id ==
+                                      widget.userModel!.id
+                                  ? widget.orderModel!.user!.name
+                                  : widget.orderModel!.toUser!.name,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Container(
+                              alignment: Alignment.topCenter,
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/play_together_logo_no_text.png"),
+                                      fit: BoxFit.cover)),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    widget.orderModel!.user!.id ==
+                                            widget.userModel!.id
+                                        ? widget.orderModel!.toUser!.avatar
+                                        : widget.orderModel!.user!.avatar),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.orderModel!.user!.id ==
+                                      widget.userModel!.id
+                                  ? widget.orderModel!.toUser!.name
+                                  : widget.orderModel!.user!.name,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      height: 1,
+                      decoration: const BoxDecoration(
+                          border: Border(
+                        top: BorderSide(
+                          color: Colors.grey,
+                          width: 0.15,
+                        ),
+                      )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Thời lượng thuê ',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.orderModel!.totalTimes.toString(),
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        const Text(
+                          ' giờ',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Tổng chi phí ',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.orderModel!.totalPrices
+                              .toStringAsFixed(0)
+                              .toVND(),
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                        color: Colors.grey,
+                        width: 0.15,
+                      ),
+                    )),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
+                    child: const Text(
+                      'Tựa game đã chọn: ',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+                    child: Column(
+                      children: List.generate(
+                          widget.orderModel!.gameOfOrders != null
+                              ? widget.orderModel!.gameOfOrders.length
+                              : 0,
+                          (index) => buildGamesChoosenField(
+                              widget.orderModel!.gameOfOrders[index])),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Thời gian còn lại:',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        AnimatedBuilder(
+                          animation: controller,
+                          builder: (context, child) => Text(
+                            countText,
+                            style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 1,
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                        color: Colors.grey,
+                        width: 0.15,
+                      ),
+                    )),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 1,
-              decoration: const BoxDecoration(
-                  border: Border(
-                top: BorderSide(
-                  color: Colors.grey,
-                  width: 0.15,
+            bottomNavigationBar: BottomAppBar(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SecondMainButton(
+                        text: 'Nhắn tin',
+                        onpress: () {},
+                        height: 50,
+                        width: 183),
+                    DeclineButton(
+                        text: 'Kết thúc',
+                        onpress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EndOrderEarlyPage(
+                                      tokenModel: widget.tokenModel,
+                                      userModel: lateUser!,
+                                      orderModel: widget.orderModel,
+                                    )),
+                          );
+                        },
+                        height: 50,
+                        width: 183),
+                  ],
                 ),
-              )),
+              ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SecondMainButton(
-                  text: 'Nhắn tin', onpress: () {}, height: 50, width: 183),
-              DeclineButton(
-                  text: 'Kết thúc',
-                  onpress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EndOrderEarlyPage(
-                                tokenModel: widget.tokenModel,
-                                userModel: lateUser!,
-                                orderModel: widget.orderModel,
-                              )),
-                    );
-                  },
-                  height: 50,
-                  width: 183),
-            ],
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
   Widget buildGamesChoosenField(GameOfOrdersModel game) => Container(
