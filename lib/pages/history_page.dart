@@ -36,8 +36,8 @@ class _HistoryPageState extends State<HistoryPage> {
       _listCreateOrder = _createOrderList;
       if (_listCreateOrder!.isEmpty) {
         for (var item in _listCreateOrder!) {
-          Future<OrderModel?> orderFuture =
-              OrderService().getOrderById(item.id, widget.tokenModel.message);
+          Future<OrderModel?> orderFuture = OrderService()
+              .getDetailOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
               _listCreateOrder!.add(value);

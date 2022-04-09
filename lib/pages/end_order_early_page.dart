@@ -70,7 +70,6 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   Widget build(BuildContext context) {
     check();
     return Scaffold(
-      extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -97,9 +96,6 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 60,
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
               child: Row(
@@ -268,6 +264,12 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
                 child: TextField(
                   controller: _controller,
+                  onChanged: (value) {
+                    setState(() {
+                      reason = _controller.text;
+                      checkReason = true;
+                    });
+                  },
                   style: const TextStyle(fontSize: 15),
                 ),
               ),

@@ -26,7 +26,6 @@ class _ReportPageState extends State<ReportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -55,8 +54,8 @@ class _ReportPageState extends State<ReportPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 100,
+            SizedBox(
+              height: 20,
             ),
             SizedBox(
               height: 150,

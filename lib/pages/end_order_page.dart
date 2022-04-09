@@ -29,8 +29,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool checkExpired =
-        widget.orderModel?.processExpired != "0001-01-01T00:00:00";
+    bool checkExpired = widget.orderModel?.timeStart == "0001-01-01T00:00:00";
     String dateStart = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel!.timeStart));
     String timeStart = DateFormat('hh:mm a')
@@ -89,7 +88,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
               children: [
                 Container(
                     alignment: Alignment.center,
-                    child: createStatus("Complete")),
+                    child: createStatus(widget.orderModel!.status)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
                   child: Row(
@@ -361,6 +360,13 @@ class _EndOrderPageState extends State<EndOrderPage> {
       );
     }
 
+    if (status == 'Complete') {
+      return const Text(
+        'Hoàn thành',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
     if (status == 'Starting') {
       return const Text(
         'Đang thương lượng',
@@ -390,6 +396,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
     }
 
     if (status == 'Player Finish Soon') {
+      //Player Finish Soon
       return const Text(
         'Kết thúc sớm',
         style: TextStyle(fontSize: 15, color: Colors.green),

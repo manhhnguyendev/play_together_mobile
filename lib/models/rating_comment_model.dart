@@ -32,6 +32,43 @@ class RatingModel {
       };
 }
 
+class RatingOrderModel {
+  String id;
+  String comment;
+  int rate;
+  bool isViolate;
+  bool isActive;
+  String createdDate;
+
+  RatingOrderModel({
+    required this.id,
+    required this.comment,
+    required this.rate,
+    required this.isViolate,
+    required this.isActive,
+    required this.createdDate,
+  });
+
+  factory RatingOrderModel.fromJson(Map<String, dynamic> json) =>
+      RatingOrderModel(
+        id: json['id'] as String,
+        comment: json['comment'] as String,
+        rate: json['rate'] as int,
+        isViolate: json['isViolate'] as bool,
+        isActive: json['isActive'] as bool,
+        createdDate: json['createdDate'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "comment": comment,
+        "rate": rate,
+        "isViolate": isViolate,
+        "isActive": isActive,
+        "createDate": createdDate
+      };
+}
+
 class RatingCreateModel {
   final int rate;
   final String comment;
