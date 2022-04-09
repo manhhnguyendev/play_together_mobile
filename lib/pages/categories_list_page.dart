@@ -8,6 +8,7 @@ class CategoriesListPage extends StatefulWidget {
   final List<PlayerModel> playerList;
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const CategoriesListPage(
       {Key? key,
       required this.title,
@@ -43,7 +44,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
           centerTitle: true,
           title: Text(
             widget.title,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
@@ -52,7 +53,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
           child: Column(
               children: List.generate(widget.playerList.length,
                   (index) => buildListSearch(widget.playerList[index]))),

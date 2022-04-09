@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> {
     getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });
@@ -162,7 +163,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
@@ -184,7 +184,6 @@ class _HomePageState extends State<HomePage> {
               tokenModel: widget.tokenModel,
             ),
             body: SingleChildScrollView(
-              padding: const EdgeInsets.all(10),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,21 +194,33 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 20 / 375 * size.width),
-                      child: Row(children: [
-                        Text(
-                          "Top người chơi ưa thích",
-                          style: TextStyle(
-                            fontSize: 18 / 400 * size.width,
-                            color: Colors.black,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Top người chơi ưa thích',
+                                  playerList: _listPlayerIsOrderByRating!,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Top người chơi ưa thích",
+                            style: TextStyle(
+                              fontSize: 18 / 400 * size.width,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          child: const Icon(Icons.arrow_circle_down_outlined),
-                        ),
-                      ]),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_circle_right_outlined),
+                        ]),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -228,7 +239,8 @@ class _HomePageState extends State<HomePage> {
                                         itemCount:
                                             _listPlayerIsOrderByRating == null
                                                 ? 0
-                                                : 4,
+                                                : _listPlayerIsOrderByRating!
+                                                    .length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -249,21 +261,33 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 20 / 375 * size.width),
-                      child: Row(children: [
-                        Text(
-                          "Các người chơi mới",
-                          style: TextStyle(
-                            fontSize: 18 / 400 * size.width,
-                            color: Colors.black,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Các người chơi mới',
+                                  playerList: _listPlayerIsNewAccount!,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Các người chơi mới",
+                            style: TextStyle(
+                              fontSize: 18 / 400 * size.width,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          child: const Icon(Icons.arrow_circle_down_outlined),
-                        ),
-                      ]),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_circle_right_outlined),
+                        ]),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -279,10 +303,10 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            _listPlayerIsNewAccount == null
-                                                ? 0
-                                                : 4,
+                                        itemCount: _listPlayerIsNewAccount ==
+                                                null
+                                            ? 0
+                                            : _listPlayerIsNewAccount!.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -302,21 +326,33 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 20 / 375 * size.width),
-                      child: Row(children: [
-                        Text(
-                          "Có thể bạn thích",
-                          style: TextStyle(
-                            fontSize: 18 / 400 * size.width,
-                            color: Colors.black,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Có thể bạn thích',
+                                  playerList: _listPlayerIsSameHobbies!,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Có thể bạn thích",
+                            style: TextStyle(
+                              fontSize: 18 / 400 * size.width,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          child: const Icon(Icons.arrow_circle_down_outlined),
-                        ),
-                      ]),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_circle_right_outlined),
+                        ]),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -332,10 +368,10 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            _listPlayerIsSameHobbies == null
-                                                ? 0
-                                                : 4,
+                                        itemCount: _listPlayerIsSameHobbies ==
+                                                null
+                                            ? 0
+                                            : _listPlayerIsSameHobbies!.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -356,21 +392,33 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 20 / 375 * size.width),
-                      child: Row(children: [
-                        Text(
-                          "Thuê lại",
-                          style: TextStyle(
-                            fontSize: 18 / 400 * size.width,
-                            color: Colors.black,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Thuê lại',
+                                  playerList: _listPlayerIsRecentOrder!,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Thuê lại",
+                            style: TextStyle(
+                              fontSize: 18 / 400 * size.width,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        GestureDetector(
-                          child: const Icon(Icons.arrow_circle_down_outlined),
-                        ),
-                      ]),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_circle_right_outlined),
+                        ]),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -386,10 +434,10 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            _listPlayerIsRecentOrder == null
-                                                ? 0
-                                                : 4,
+                                        itemCount: _listPlayerIsRecentOrder ==
+                                                null
+                                            ? 0
+                                            : _listPlayerIsRecentOrder!.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -406,7 +454,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
-
                     ),
                   ]),
             ),

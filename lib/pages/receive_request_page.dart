@@ -39,8 +39,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
     checkStatus.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
+          value = widget.userModel;
           setState(() {
-            value = widget.userModel;
             helper.pushInto(
                 context,
                 HomePage(

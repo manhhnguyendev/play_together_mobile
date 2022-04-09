@@ -160,27 +160,27 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                               ],
                             ),
@@ -219,6 +219,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   check3star = false;
                                   check2star = false;
                                   check1star = false;
+                                  checkAll = false;
                                   vote = 4;
                                 } else {
                                   check5star = false;
@@ -239,7 +240,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                                 Expanded(
@@ -247,7 +248,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                                 Expanded(
@@ -255,7 +256,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                                 Expanded(
@@ -263,7 +264,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                               ],
@@ -297,6 +298,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   check5star = false;
                                   check2star = false;
                                   check1star = false;
+                                  checkAll = false;
                                   vote = 3;
                                 } else {
                                   check5star = false;
@@ -317,7 +319,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                                 Expanded(
@@ -325,7 +327,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                                 Expanded(
@@ -333,7 +335,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                               ],
@@ -367,6 +369,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   check3star = false;
                                   check5star = false;
                                   check1star = false;
+                                  checkAll = false;
                                   vote = 2;
                                 } else {
                                   vote = 0;
@@ -385,12 +388,12 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                                 Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 18,
+                                  size: 17,
                                 ),
                               ],
                             ),
@@ -423,6 +426,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   check3star = false;
                                   check2star = false;
                                   check5star = false;
+                                  checkAll = false;
                                   vote = 1;
                                 } else {
                                   vote = 0;
@@ -443,7 +447,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   child: Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 18,
+                                    size: 17,
                                   ),
                                 ),
                               ],

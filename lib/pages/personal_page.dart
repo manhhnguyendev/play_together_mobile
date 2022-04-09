@@ -48,6 +48,7 @@ class _PersonalPageState extends State<PersonalPage> {
     getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });

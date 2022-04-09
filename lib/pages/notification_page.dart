@@ -32,6 +32,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });
