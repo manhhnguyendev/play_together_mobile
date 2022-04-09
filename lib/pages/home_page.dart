@@ -228,8 +228,7 @@ class _HomePageState extends State<HomePage> {
                                         itemCount:
                                             _listPlayerIsOrderByRating == null
                                                 ? 0
-                                                : _listPlayerIsOrderByRating!
-                                                    .length,
+                                                : 4,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -280,10 +279,10 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsNewAccount ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsNewAccount!.length,
+                                        itemCount:
+                                            _listPlayerIsNewAccount == null
+                                                ? 0
+                                                : 4,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -333,10 +332,10 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsSameHobbies ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsSameHobbies!.length,
+                                        itemCount:
+                                            _listPlayerIsSameHobbies == null
+                                                ? 0
+                                                : 4,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
@@ -387,10 +386,10 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsRecentOrder ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsRecentOrder!.length,
+                                        itemCount:
+                                            _listPlayerIsRecentOrder == null
+                                                ? 0
+                                                : 4,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return PlayerCard(
