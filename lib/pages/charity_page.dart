@@ -39,6 +39,7 @@ class _CharityPageState extends State<CharityPage> {
     getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });

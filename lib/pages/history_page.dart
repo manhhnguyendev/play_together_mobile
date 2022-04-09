@@ -76,6 +76,7 @@ class _HistoryPageState extends State<HistoryPage> {
     getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
+          if (!mounted) return;
           setState(() {
             lateUser = value;
           });
