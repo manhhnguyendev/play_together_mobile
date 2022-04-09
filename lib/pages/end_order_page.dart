@@ -382,14 +382,14 @@ class _EndOrderPageState extends State<EndOrderPage> {
       );
     }
 
-    if (status == 'Hirer Finish soon') {
+    if (status == 'Hirer Finish Soon') {
       return const Text(
         'Kết thúc sớm',
         style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }
 
-    if (status == 'Player Finish soon') {
+    if (status == 'Player Finish Soon') {
       return const Text(
         'Kết thúc sớm',
         style: TextStyle(fontSize: 15, color: Colors.green),

@@ -155,7 +155,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       );
     }
 
-    if (status == 'Hirer Finish soon') {
+    if (status == 'Hirer Finish Soon') {
       checkReorder = true;
       return const Text(
         'Kết thúc sớm',
@@ -163,7 +163,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       );
     }
 
-    if (status == 'Player Finish soon') {
+    if (status == 'Player Finish Soon') {
       checkReorder = true;
       return const Text(
         'Kết thúc sớm',
