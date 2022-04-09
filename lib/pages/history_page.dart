@@ -70,23 +70,23 @@ class _HistoryPageState extends State<HistoryPage> {
     return listOrderFromReceiveUserModelFuture;
   }
 
-  void check() {
-    Future<UserModel?> checkStatus =
+  Future checkStatus() {
+    Future<UserModel?> getStatusUser =
         UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
+    getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
           setState(() {
             lateUser = value;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderPlayer =
+          Future<List<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
-          checkOrderPlayer.then(((order) {
-            setState(() {
-              _listOrder = order;
-              if (_listOrder![0].toUserId == widget.userModel.id) {
-                lateUser = value;
+          checkOrderUser.then(((order) {
+            _listOrder = order;
+            if (_listOrder![0].toUserId == widget.userModel.id) {
+              lateUser = value;
+              setState(() {
                 helper.pushInto(
                     context,
                     ReceiveRequestPage(
@@ -94,126 +94,130 @@ class _HistoryPageState extends State<HistoryPage> {
                         tokenModel: widget.tokenModel,
                         userModel: lateUser!),
                     true);
-              }
-            });
+              });
+            }
           }));
         }
       }
     });
+    return getStatusUser;
   }
 
   @override
   Widget build(BuildContext context) {
-    check();
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1,
-          leading: const CircleAvatar(
-            radius: 27,
-            backgroundColor: Colors.white,
-            backgroundImage:
-                AssetImage("assets/images/play_together_logo_no_text.png"),
-          ),
-          centerTitle: true,
-          title: const Text(
-            'Lịch sử hoạt động',
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-          bottom: const TabBar(
-              indicatorColor: Colors.grey,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              tabs: [
-                Tab(
-                  child: Text(
-                    'Đi thuê',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal),
-                  ),
+    return FutureBuilder(
+        future: checkStatus(),
+        builder: (context, snapshot) {
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 1,
+                leading: const CircleAvatar(
+                  radius: 27,
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage(
+                      "assets/images/play_together_logo_no_text.png"),
                 ),
-                Tab(
-                  child: Text('Được thuê',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal)),
-                )
+                centerTitle: true,
+                title: const Text(
+                  'Lịch sử hoạt động',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
+                bottom: const TabBar(
+                    indicatorColor: Colors.grey,
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.black,
+                    tabs: [
+                      Tab(
+                        child: Text(
+                          'Đi thuê',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                      Tab(
+                        child: Text('Được thuê',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal)),
+                      )
+                    ]),
+              ),
+              body: TabBarView(children: [
+                SingleChildScrollView(
+                    child: FutureBuilder(
+                        future: loadListFromCreateUser(),
+                        builder: (context, snapshot) {
+                          if (_listCreateOrder!.isEmpty) {
+                            checkEmptyCreateOrder = true;
+                          } else {
+                            checkEmptyCreateOrder = false;
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: List.generate(
+                                      _listCreateOrder == null
+                                          ? 0
+                                          : _listCreateOrder!.length,
+                                      (index) => buildListHistory(
+                                          _listCreateOrder![index])),
+                                ),
+                                Visibility(
+                                    visible: checkEmptyCreateOrder,
+                                    child: const Text('Không có dữ liệu'))
+                              ],
+                            ),
+                          );
+                        })),
+                SingleChildScrollView(
+                    child: FutureBuilder(
+                        future: loadListFromReceiveUser(),
+                        builder: (context, snapshot) {
+                          if (_listReceiveOrder!.isEmpty) {
+                            checkEmptyReceiveOrder = true;
+                          } else {
+                            checkEmptyReceiveOrder = false;
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: List.generate(
+                                      _listReceiveOrder == null
+                                          ? 0
+                                          : _listReceiveOrder!.length,
+                                      (index) => buildListHistory(
+                                          _listReceiveOrder![index])),
+                                ),
+                                Visibility(
+                                    visible: checkEmptyReceiveOrder,
+                                    child: const Text('Không có dữ liệu'))
+                              ],
+                            ),
+                          );
+                        })),
               ]),
-        ),
-        body: TabBarView(children: [
-          SingleChildScrollView(
-              child: FutureBuilder(
-                  future: loadListFromCreateUser(),
-                  builder: (context, snapshot) {
-                    if (_listCreateOrder!.isEmpty) {
-                      checkEmptyCreateOrder = true;
-                    } else {
-                      checkEmptyCreateOrder = false;
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: List.generate(
-                                _listCreateOrder == null
-                                    ? 0
-                                    : _listCreateOrder!.length,
-                                (index) =>
-                                    buildListHistory(_listCreateOrder![index])),
-                          ),
-                          Visibility(
-                              visible: checkEmptyCreateOrder,
-                              child: const Text('Không có dữ liệu'))
-                        ],
-                      ),
-                    );
-                  })),
-          SingleChildScrollView(
-              child: FutureBuilder(
-                  future: loadListFromReceiveUser(),
-                  builder: (context, snapshot) {
-                    if (_listReceiveOrder!.isEmpty) {
-                      checkEmptyReceiveOrder = true;
-                    } else {
-                      checkEmptyReceiveOrder = false;
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            children: List.generate(
-                                _listReceiveOrder == null
-                                    ? 0
-                                    : _listReceiveOrder!.length,
-                                (index) => buildListHistory(
-                                    _listReceiveOrder![index])),
-                          ),
-                          Visibility(
-                              visible: checkEmptyReceiveOrder,
-                              child: const Text('Không có dữ liệu'))
-                        ],
-                      ),
-                    );
-                  })),
-        ]),
-        bottomNavigationBar: BottomBar(
-          userModel: widget.userModel,
-          tokenModel: widget.tokenModel,
-          bottomBarIndex: 1,
-        ),
-      ),
-    );
+              bottomNavigationBar: BottomBar(
+                userModel: widget.userModel,
+                tokenModel: widget.tokenModel,
+                bottomBarIndex: 1,
+              ),
+            ),
+          );
+        });
   }
 
   Widget buildListHistory(OrderModel _orderModel) {

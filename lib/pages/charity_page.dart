@@ -33,23 +33,23 @@ class _CharityPageState extends State<CharityPage> {
   final _controller = TextEditingController();
   List<CharityModel>? _listCharity;
 
-  void check() {
-    Future<UserModel?> checkStatus =
+  Future checkStatus() {
+    Future<UserModel?> getStatusUser =
         UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
+    getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
           setState(() {
             lateUser = value;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderPlayer =
+          Future<List<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
-          checkOrderPlayer.then(((order) {
-            setState(() {
-              _listOrder = order;
-              if (_listOrder![0].toUserId == widget.userModel.id) {
-                lateUser = value;
+          checkOrderUser.then(((order) {
+            _listOrder = order;
+            if (_listOrder![0].toUserId == widget.userModel.id) {
+              lateUser = value;
+              setState(() {
                 helper.pushInto(
                     context,
                     ReceiveRequestPage(
@@ -57,12 +57,13 @@ class _CharityPageState extends State<CharityPage> {
                         tokenModel: widget.tokenModel,
                         userModel: lateUser!),
                     true);
-              }
-            });
+              });
+            }
           }));
         }
       }
     });
+    return getStatusUser;
   }
 
   Future loadListCharity() {
@@ -89,80 +90,85 @@ class _CharityPageState extends State<CharityPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    check();
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        backgroundColor: Colors.white,
-        bottomOpacity: 0,
-        toolbarOpacity: 1,
-        toolbarHeight: 65,
-        title: Container(
-          margin: const EdgeInsets.only(top: 10, left: 10),
-          child: Row(children: [
-            const CircleAvatar(
-              radius: 27,
+    return FutureBuilder(
+        future: checkStatus(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 1,
               backgroundColor: Colors.white,
-              backgroundImage:
-                  AssetImage("assets/images/play_together_logo_no_text.png"),
-            ),
-            SizedBox(
-              width: size.width / 25,
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: size.width * 0.7,
-                decoration: BoxDecoration(
-                  color: my_colors.secondary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: TextField(
-                  controller: _controller,
-                  onChanged: (value) {
-                    search = value;
-                    setState(() {});
-                  },
-                  onSubmitted: (value) {
-                    if (search.isNotEmpty && value.isNotEmpty) {
-                      setState(() {});
-                    }
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: 30 / 375 * size.width,
-                        vertical: 9 / 512 * size.height),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    hintText: "Tìm kiếm hội từ thiện",
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: my_colors.secondary,
-                    ),
+              bottomOpacity: 0,
+              toolbarOpacity: 1,
+              toolbarHeight: 65,
+              title: Container(
+                margin: const EdgeInsets.only(top: 10, left: 10),
+                child: Row(children: [
+                  const CircleAvatar(
+                    radius: 27,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage(
+                        "assets/images/play_together_logo_no_text.png"),
                   ),
-                ),
+                  SizedBox(
+                    width: size.width / 25,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: size.width * 0.7,
+                      decoration: BoxDecoration(
+                        color: my_colors.secondary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: TextField(
+                        controller: _controller,
+                        onChanged: (value) {
+                          search = value;
+                          setState(() {});
+                        },
+                        onSubmitted: (value) {
+                          if (search.isNotEmpty && value.isNotEmpty) {
+                            setState(() {});
+                          }
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 30 / 375 * size.width,
+                              vertical: 9 / 512 * size.height),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          hintText: "Tìm kiếm hội từ thiện",
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: my_colors.secondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ]),
               ),
-            )
-          ]),
-        ),
-      ),
-      body: SingleChildScrollView(
-          child: FutureBuilder(
-              future: loadListCharity(),
-              builder: (context, snapshot) {
-                return Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    child: Column(
-                        children: List.generate(_listCharity!.length,
-                            (index) => buildListSearch(_listCharity![index]))));
-              })),
-      bottomNavigationBar: BottomBar(
-        userModel: widget.userModel,
-        tokenModel: widget.tokenModel,
-        bottomBarIndex: 2,
-      ),
-    );
+            ),
+            body: SingleChildScrollView(
+                child: FutureBuilder(
+                    future: loadListCharity(),
+                    builder: (context, snapshot) {
+                      return Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: Column(
+                              children: List.generate(
+                                  _listCharity!.length,
+                                  (index) =>
+                                      buildListSearch(_listCharity![index]))));
+                    })),
+            bottomNavigationBar: BottomBar(
+              userModel: widget.userModel,
+              tokenModel: widget.tokenModel,
+              bottomBarIndex: 2,
+            ),
+          );
+        });
   }
 
   Widget buildListSearch(CharityModel _charityModel) {
