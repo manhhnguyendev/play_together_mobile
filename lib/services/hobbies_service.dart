@@ -44,4 +44,21 @@ class HobbiesService {
     }
     return result;
   }
+
+  Future<bool?> deleteHobbies(String hobbyId, dynamic token) async {
+    Response response;
+    bool? result = false;
+    try {
+      response = await delete(
+        Uri.parse('${apiUrl.hobbies}/$hobbyId'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
 }

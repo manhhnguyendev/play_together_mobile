@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/categories_list_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
@@ -161,6 +162,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
@@ -405,6 +407,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
+
                     ),
                   ]),
             ),
