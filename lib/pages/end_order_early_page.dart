@@ -27,7 +27,7 @@ class EndOrderEarlyPage extends StatefulWidget {
 }
 
 class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
-  var reasonController = TextEditingController();
+  final _controller = TextEditingController();
   UserModel? lateUser;
   OrderModel? lateOrder;
   bool checkReason = true;
@@ -69,7 +69,6 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
   @override
   Widget build(BuildContext context) {
     check();
-    reasonController.text = "";
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
@@ -249,7 +248,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
               children: [
                 Radio<String>(
                     activeColor: const Color(0xff320444),
-                    value: reasonController.text,
+                    value: _controller.text,
                     groupValue: reason,
                     onChanged: (value) {
                       setState(() {
@@ -268,7 +267,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
                 child: TextField(
-                  controller: reasonController,
+                  controller: _controller,
                   style: const TextStyle(fontSize: 15),
                 ),
               ),

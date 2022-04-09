@@ -26,17 +26,19 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   late bool checkEndEarly;
   @override
   Widget build(BuildContext context) {
+    bool checkExpired =
+        widget.orderModel.processExpired != "0001-01-01T00:00:00";
     String dateStart = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel.timeStart));
-    String timeStart = DateFormat('hh:mm:ss a')
+    String timeStart = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel.timeStart));
     String dateFinish = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel.timeFinish));
-    String timeFinish = DateFormat('hh:mm:ss a')
+    String timeFinish = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel.timeFinish));
     String dateExpired = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel.processExpired));
-    String timeExpired = DateFormat('hh:mm:ss a')
+    String timeExpired = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel.processExpired));
     checkEndEarly = false;
     var _controller = TextEditingController();
@@ -200,36 +202,61 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Thời gian bắt đầu:',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    const Spacer(),
-                    Text(
-                      dateStart + ", " + timeStart,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ],
+              Visibility(
+                visible: !checkExpired,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Thời gian bắt đầu',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        dateStart + ", " + timeStart,
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Thời gian kết thúc:',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    const Spacer(),
-                    Text(
-                      dateFinish + ", " + timeFinish,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ],
+              Visibility(
+                visible: !checkExpired,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Thời gian kết thúc',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        dateFinish + ", " + timeFinish,
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: checkExpired,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Thời gian: ',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        dateExpired + ", " + timeExpired,
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Visibility(
@@ -330,8 +357,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       );
     }
 
-    if (status == 'Finish soon') {
-      checkEndEarly = true;
+    if (status == 'Hirer Finish soon') {
+      return const Text(
+        'Kết thúc sớm',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
+    if (status == 'Player Finish soon') {
       return const Text(
         'Kết thúc sớm',
         style: TextStyle(fontSize: 15, color: Colors.green),

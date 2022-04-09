@@ -300,11 +300,11 @@ class _PersonalPageState extends State<PersonalPage> {
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ManageHiringPage(),
-                            ));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => ManageHiringPage(),
+                        //     ));
                       },
                       child: Row(
                         children: const [
