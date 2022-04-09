@@ -37,7 +37,6 @@ class _RatingCardState extends State<RatingCard> {
                   height: 60,
                   width: 50,
                   child: FittedBox(
-                    fit: BoxFit.fill,
                     child: CircleAvatar(
                       backgroundImage:
                           NetworkImage(widget.ratingModel!.user!.avatar),

@@ -115,7 +115,6 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: const [],
         centerTitle: true,
         title: const Text(
           'Đang thuê...',

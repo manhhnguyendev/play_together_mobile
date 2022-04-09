@@ -27,75 +27,84 @@ class _ReportPageState extends State<ReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: FlatButton(
-            child: const Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Tố cáo',
-          style: TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
-        ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 75,
-          ),
-          SizedBox(
-            height: 150,
-            width: 150,
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  widget.orderModel!.user!.id == widget.userModel!.id
-                      ? widget.orderModel!.user!.avatar
-                      : widget.orderModel!.toUser!.avatar),
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 1,
+          centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: FlatButton(
+              child: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
-          const SizedBox(
-            height: 5,
+          title: const Text(
+            'Tố cáo',
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
           ),
-          Text(
-            widget.orderModel!.user!.id == widget.userModel!.id
-                ? widget.orderModel!.user!.name
-                : widget.orderModel!.toUser!.name,
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-            child: Container(
-              height: 300,
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
-              child: TextFormField(
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                maxLength: 1000,
-                onChanged: (newValue) => reportMessage = newValue,
-                decoration: const InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  counterText: "",
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  labelText: "Nhập lý do tố cáo của bạn...",
-                  hintText: "Nhập vào lý do tố cáo",
-                  border: InputBorder.none,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 100,
+            ),
+            SizedBox(
+              height: 150,
+              width: 150,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    widget.orderModel!.user!.id == widget.userModel!.id
+                        ? widget.orderModel!.user!.avatar
+                        : widget.orderModel!.toUser!.avatar),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              widget.orderModel!.user!.id == widget.userModel!.id
+                  ? widget.orderModel!.user!.name
+                  : widget.orderModel!.toUser!.name,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
+              child: Container(
+                height: 300,
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black)),
+                child: TextFormField(
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  maxLength: 1000,
+                  onChanged: (newValue) => reportMessage = newValue,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                    counterText: "",
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    labelText: "Nhập lý do tố cáo của bạn...",
+                    hintText: "Nhập vào lý do tố cáo",
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
           elevation: 0,

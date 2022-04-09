@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/search_history_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/search_page.dart';
+import 'package:play_together_mobile/services/game_service.dart';
 import 'package:play_together_mobile/services/search_history_service.dart';
 import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
@@ -28,34 +30,41 @@ class _SearchHistoryAndRecommendPageState
   List<PlayerModel>? _listPlayerSearch = [];
   String searchValue = "";
   List<SearchHistoryModel> listSearchHistory = [];
-  List<String> listTopGameType = [
-    'MOBA',
-    'FPS',
-    'Sinh Tồn',
-    'Thể thao',
-    'Chiến thuật',
-    'Battle',
-    'Kinh dị'
-  ];
-  List<String> listTopGame = [
-    'LOL',
-    'CSGO',
-    'Liên quân',
-    'FIFA',
-    'PUBG',
-    'XXX'
-  ];
+  List<SearchHistoryModel> listHotSearch = [];
+  List<GamesModel> listMostFavoriteGame = [];
 
   Future loadListSearchHistory() {
-    listSearchHistory = [];
-    Future<List<SearchHistoryModel>?> listSearchHistoryModelFuture =
-        SearchHistoryService().getAllSearchHistories(widget.tokenModel.message);
-    listSearchHistoryModelFuture.then((_listSearchHistory) {
+    Future<List<SearchHistoryModel>?> listSearchHistoryFuture =
+        SearchHistoryService().getSearchHistories(widget.tokenModel.message);
+    listSearchHistoryFuture.then((_listSearchHistory) {
       if (_listSearchHistory != null) {
         listSearchHistory = _listSearchHistory;
       }
     });
-    return listSearchHistoryModelFuture;
+    return listSearchHistoryFuture;
+  }
+
+  Future loadListHotSearch() {
+    Future<List<SearchHistoryModel>?> listHotSearchFuture =
+        SearchHistoryService().getHotSearch(widget.tokenModel.message);
+    listHotSearchFuture.then((_listHotSearch) {
+      if (_listHotSearch != null) {
+        listHotSearch = _listHotSearch;
+      }
+    });
+    return listHotSearchFuture;
+  }
+
+  Future loadListMostFavoriteGame() {
+    Future<List<GamesModel>?> listMostFavoriteGameFuture =
+        GameService().getMostFavoriteGames(widget.tokenModel.message);
+    listMostFavoriteGameFuture.then((_listMostFavoriteGame) {
+      if (_listMostFavoriteGame != null) {
+        listMostFavoriteGame = _listMostFavoriteGame;
+        print(listMostFavoriteGame);
+      }
+    });
+    return listMostFavoriteGameFuture;
   }
 
   @override
@@ -89,7 +98,7 @@ class _SearchHistoryAndRecommendPageState
                 searchValue = _controller.text;
                 _listPlayerSearch = [];
                 Future<List<UserModel>?> listPlayerSearchModelFuture =
-                    SearchService().searchUser(
+                    SearchService().searchUserByName(
                         _controller.text, widget.tokenModel.message);
                 listPlayerSearchModelFuture.then((_playerSearchList) {
                   listPlayerSearch = _playerSearchList;
@@ -159,7 +168,7 @@ class _SearchHistoryAndRecommendPageState
               alignment: Alignment.topLeft,
               child: const Text(
                 'Tìm kiếm gần đây',
-                style: TextStyle(color: Colors.grey, fontSize: 15),
+                style: TextStyle(color: Colors.grey, fontSize: 17),
               ),
             ),
             Padding(
@@ -182,30 +191,47 @@ class _SearchHistoryAndRecommendPageState
             Container(
               alignment: Alignment.topLeft,
               child: const Text(
-                'Thể loại ưa thích',
-                style: TextStyle(color: Colors.grey, fontSize: 15),
+                'Top tìm kiếm',
+                style: TextStyle(color: Colors.grey, fontSize: 17),
               ),
             ),
-            GridView.count(
-              shrinkWrap: true,
-              childAspectRatio: (120 / 50),
-              crossAxisCount: 3,
-              children: List.generate(listTopGameType.length,
-                  (index) => buildTopGameTag(listTopGameType[index])),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: FutureBuilder(
+                future: loadListHotSearch(),
+                builder: (context, snapshot) {
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      children: List.generate(
+                          listHotSearch.length,
+                          (index) => buildSearchHistory(
+                              listHotSearch[index].searchString)),
+                    ),
+                  );
+                },
+              ),
             ),
             Container(
               alignment: Alignment.topLeft,
               child: const Text(
-                'Các tựa game nổi tiếng',
-                style: TextStyle(color: Colors.grey, fontSize: 15),
+                'Các tựa game hot',
+                style: TextStyle(color: Colors.grey, fontSize: 17),
               ),
             ),
-            GridView.count(
-              shrinkWrap: true,
-              childAspectRatio: (120 / 50),
-              crossAxisCount: 3,
-              children: List.generate(listTopGame.length,
-                  (index) => buildTopGameTag(listTopGame[index])),
+            FutureBuilder(
+              future: loadListMostFavoriteGame(),
+              builder: (context, snapshot) {
+                return GridView.count(
+                  shrinkWrap: true,
+                  childAspectRatio: (130 / 50),
+                  crossAxisCount: 2,
+                  children: List.generate(
+                      listMostFavoriteGame.length,
+                      (index) =>
+                          buildTopGameTag(listMostFavoriteGame[index].name)),
+                );
+              },
             ),
           ],
         ),
@@ -250,7 +276,7 @@ class _SearchHistoryAndRecommendPageState
                 color: const Color(0xff8980FF),
               ),
               color: const Color(0xff8980FF).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(15),
             ),
             child: Text(
               gameType,

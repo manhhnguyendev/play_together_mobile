@@ -31,9 +31,10 @@ class _RegisterPageState extends State<RegisterPage> {
   String confirmPass = "";
   String otpCode = "";
   bool submitValid = false;
+  bool confirmEmail = false;
   bool passObsecure = true;
   bool confirmObsecure = true;
-  bool confirmEmail = false;
+
   TempRegisterModel tempRegisterModel = TempRegisterModel(
       email: "", password: "", confirmPassword: "", confirmEmail: false);
 

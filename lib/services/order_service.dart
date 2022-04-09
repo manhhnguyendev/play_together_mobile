@@ -23,32 +23,12 @@ class OrderService {
     return result;
   }
 
-  Future<List<OrderModel>?> getAllOrdersForHirer(dynamic token) async {
+  Future<List<OrderModel>?> getOrderOfPlayer(dynamic token) async {
     Response response;
     List<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders'),
-        headers: configJson.headerAuth(token),
-      );
-      if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
-      }
-    } on Exception {
-      rethrow;
-    }
-    return result;
-  }
-
-  Future<List<OrderModel>?> getAllOrdersForPlayer(
-      dynamic token, bool? isNew, String? status) async {
-    Response response;
-    List<OrderModel>? result;
-    try {
-      response = await get(
-        Uri.parse(
-            '${apiUrl.users}/orders/requests?Status=$status&IsNew=$isNew'),
+        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=3'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -66,7 +46,7 @@ class OrderService {
     List<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders?IsNew=true'),
+        Uri.parse('${apiUrl.users}/orders?IsNew=true&PageSize=20'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -84,7 +64,7 @@ class OrderService {
     List<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true'),
+        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=20'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -160,7 +140,7 @@ class OrderService {
         Uri.parse('${apiUrl.orders}/finish/$orderId'),
         headers: configJson.headerAuth(token),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {
@@ -179,7 +159,7 @@ class OrderService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {
