@@ -24,6 +24,7 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
   List<HobbiesModel> listHobbies = [];
   List<GamesModel> listAllGames = [];
   List<CheckBoxState> listGamesCheckBox = [];
+  List<CreateHobbiesModel> listCreateHobbies = [];
   List listGamesChoosen = [];
   bool checkUpdate = false;
   bool checkFirstTime = true;
@@ -140,10 +141,33 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                       text: 'Cập nhật',
                       onpress: () {
                         checkUpdate = false;
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Cập nhật thành công"),
-                        ));
+                        for (var hobby in listHobbies) {
+                          Future<bool?> userUpdateModelFuture = HobbiesService()
+                              .deleteHobbies(
+                                  hobby.game.id, widget.tokenModel.message);
+                        } // delete all hobbies
+
+                        for (var gameChoose in listGamesChoosen) {
+                          for (var game in listAllGames) {
+                            if (game.name.contains(gameChoose)) {
+                              CreateHobbiesModel createHobbies =
+                                  CreateHobbiesModel(gameId: game.id);
+                              listCreateHobbies.add(createHobbies);
+                            }
+                          }
+                        }
+
+                        Future<bool?> createHobbiesFuture = HobbiesService()
+                            .createHobbies(
+                                listCreateHobbies, widget.tokenModel.message);
+                        createHobbiesFuture.then((_listCreateHobbies) {
+                          if (_listCreateHobbies == true) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Cập nhật thành công"),
+                            ));
+                          }
+                        });
                       })),
             ),
           );

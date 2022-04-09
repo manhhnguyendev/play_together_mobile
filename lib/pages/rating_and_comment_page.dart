@@ -24,6 +24,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
   bool check3star = false;
   bool check2star = false;
   bool check1star = false;
+  bool checkAll = true;
   List<RatingModel>? listAllRating;
   double vote = 0;
   bool checkExist = false;
@@ -40,6 +41,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -73,328 +76,393 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(2, 20, 2, 10),
-              child: GridView.count(
-                crossAxisSpacing: 3,
-                childAspectRatio: (120 / 70),
-                shrinkWrap: true,
-                crossAxisCount: 5,
+              child: Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff8980FF),
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          if (!check5star) {
-                            check5star = true;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                            vote = 5;
-                          } else {
-                            check5star = false;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                            vote = 0;
-                          }
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                            ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xff8980FF),
                           ),
-                        ],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: SizedBox(
+                          width: width * 0.3,
+                          height: height * 0.05,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!checkAll) {
+                                  check5star = false;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = true;
+                                  vote = 0;
+                                }
+                              });
+                            },
+                            child: Text(
+                              'Tất cả',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            color: checkAll
+                                ? const Color(0xff8980FF).withOpacity(1)
+                                : const Color(0xff8980FF).withOpacity(0.1),
+                          ),
+                        ),
                       ),
-                      color: check5star
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
-                    ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xff8980FF),
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: SizedBox(
+                          width: width * 0.3,
+                          height: height * 0.05,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!check5star) {
+                                  check5star = true;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = false;
+                                  vote = 5;
+                                } else {
+                                  check5star = false;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = true;
+                                  vote = 0;
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                            color: check5star
+                                ? const Color(0xff8980FF).withOpacity(1)
+                                : const Color(0xff8980FF).withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff8980FF),
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          if (!check4star) {
-                            check4star = true;
-                            check5star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                            vote = 4;
-                          } else {
-                            check5star = false;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                            vote = 0;
-                          }
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      color: check4star
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
-                    ),
+                  SizedBox(
+                    height: 10,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff8980FF),
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          if (!check3star) {
-                            check3star = true;
-                            check4star = false;
-                            check5star = false;
-                            check2star = false;
-                            check1star = false;
-                            vote = 3;
-                          } else {
-                            check5star = false;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                            vote = 0;
-                          }
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 8,
-                                ),
-                              ),
-                            ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        //4 sao
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xff8980FF),
                           ),
-                        ],
-                      ),
-                      color: check3star
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff8980FF),
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          if (!check2star) {
-                            check2star = true;
-                            check4star = false;
-                            check3star = false;
-                            check5star = false;
-                            check1star = false;
-                            vote = 2;
-                          } else {
-                            vote = 0;
-                            check5star = false;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                          }
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 8,
-                              ),
-                            ],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: SizedBox(
+                          width: width * 0.2,
+                          height: height * 0.05,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!check4star) {
+                                  check4star = true;
+                                  check5star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  vote = 4;
+                                } else {
+                                  check5star = false;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = true;
+                                  vote = 0;
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            color: check4star
+                                ? const Color(0xff8980FF).withOpacity(1)
+                                : const Color(0xff8980FF).withOpacity(0.1),
                           ),
-                        ],
+                        ),
                       ),
-                      color: check2star
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff8980FF),
+                      SizedBox(
+                        width: 10,
                       ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          if (!check1star) {
-                            check1star = true;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check5star = false;
-                            vote = 1;
-                          } else {
-                            vote = 0;
-                            check5star = false;
-                            check4star = false;
-                            check3star = false;
-                            check2star = false;
-                            check1star = false;
-                          }
-                        });
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
+                      Container(
+                        //3 sao
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xff8980FF),
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: SizedBox(
+                          width: width * 0.2,
+                          height: height * 0.05,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!check3star) {
+                                  check3star = true;
+                                  check4star = false;
+                                  check5star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  vote = 3;
+                                } else {
+                                  check5star = false;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = true;
+                                  vote = 0;
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            color: check3star
+                                ? const Color(0xff8980FF).withOpacity(1)
+                                : const Color(0xff8980FF).withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        // 2 sao
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xff8980FF),
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: SizedBox(
+                          width: width * 0.2,
+                          height: height * 0.05,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!check2star) {
+                                  check2star = true;
+                                  check4star = false;
+                                  check3star = false;
+                                  check5star = false;
+                                  check1star = false;
+                                  vote = 2;
+                                } else {
+                                  vote = 0;
+                                  check5star = false;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = true;
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
                                   Icons.star,
                                   color: Colors.yellow,
-                                  size: 8,
+                                  size: 18,
                                 ),
-                              ),
-                            ],
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                            color: check2star
+                                ? const Color(0xff8980FF).withOpacity(1)
+                                : const Color(0xff8980FF).withOpacity(0.1),
                           ),
-                        ],
+                        ),
                       ),
-                      color: check1star
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
-                    ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        // 1 sao
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xff8980FF),
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: SizedBox(
+                          width: width * 0.2,
+                          height: height * 0.05,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                if (!check1star) {
+                                  check1star = true;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check5star = false;
+                                  vote = 1;
+                                } else {
+                                  vote = 0;
+                                  check5star = false;
+                                  check4star = false;
+                                  check3star = false;
+                                  check2star = false;
+                                  check1star = false;
+                                  checkAll = true;
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            color: check1star
+                                ? const Color(0xff8980FF).withOpacity(1)
+                                : const Color(0xff8980FF).withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
             const Divider(
               thickness: 0.5,
-              indent: 15,
-              endIndent: 15,
+              indent: 18,
+              endIndent: 18,
             ),
             FutureBuilder(
                 future: loadListRating(),
