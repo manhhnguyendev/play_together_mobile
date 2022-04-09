@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/categories_list_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
@@ -184,7 +185,6 @@ class _HomePageState extends State<HomePage> {
         tokenModel: widget.tokenModel,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,21 +195,33 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Top người chơi ưa thích",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoriesListPage(
+                            title: 'Top người chơi ưa thích',
+                            playerList: _listPlayerIsOrderByRating!,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel,
+                          ),
+                        ));
+                  },
+                  child: Row(children: [
+                    Text(
+                      "Top người chơi ưa thích",
+                      style: TextStyle(
+                        fontSize: 18 / 400 * size.width,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Icon(Icons.arrow_circle_right_outlined),
+                  ]),
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -247,21 +259,33 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Các người chơi mới",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoriesListPage(
+                            title: 'Các người chơi mới',
+                            playerList: _listPlayerIsNewAccount!,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel,
+                          ),
+                        ));
+                  },
+                  child: Row(children: [
+                    Text(
+                      "Các người chơi mới",
+                      style: TextStyle(
+                        fontSize: 18 / 400 * size.width,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Icon(Icons.arrow_circle_right_outlined),
+                  ]),
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -299,21 +323,33 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Có thể bạn thích",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoriesListPage(
+                            title: 'Có thể bạn thích',
+                            playerList: _listPlayerIsSameHobbies!,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel,
+                          ),
+                        ));
+                  },
+                  child: Row(children: [
+                    Text(
+                      "Có thể bạn thích",
+                      style: TextStyle(
+                        fontSize: 18 / 400 * size.width,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Icon(Icons.arrow_circle_right_outlined),
+                  ]),
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -351,21 +387,33 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 20 / 375 * size.width),
-                child: Row(children: [
-                  Text(
-                    "Thuê lại",
-                    style: TextStyle(
-                      fontSize: 18 / 400 * size.width,
-                      color: Colors.black,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoriesListPage(
+                            title: 'Thuê lại',
+                            playerList: _listPlayerIsRecentOrder!,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel,
+                          ),
+                        ));
+                  },
+                  child: Row(children: [
+                    Text(
+                      "Thuê lại",
+                      style: TextStyle(
+                        fontSize: 18 / 400 * size.width,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    child: const Icon(Icons.arrow_circle_down_outlined),
-                  ),
-                ]),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Icon(Icons.arrow_circle_right_outlined),
+                  ]),
+                ),
               ),
               const SizedBox(
                 height: 10,

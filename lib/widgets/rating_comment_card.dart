@@ -24,6 +24,8 @@ class _RatingCardState extends State<RatingCard> {
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -32,8 +34,8 @@ class _RatingCardState extends State<RatingCard> {
               Expanded(
                 flex: 1,
                 child: SizedBox(
-                  height: 80,
-                  width: 80,
+                  height: 60,
+                  width: 50,
                   child: FittedBox(
                     child: CircleAvatar(
                       backgroundImage:
