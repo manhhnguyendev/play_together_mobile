@@ -25,23 +25,24 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   UserModel? lateUser;
   List<OrderModel>? _listOrder;
-  void check() {
-    Future<UserModel?> checkStatus =
+
+  Future checkStatus() {
+    Future<UserModel?> getStatusUser =
         UserService().getUserProfile(widget.tokenModel.message);
-    checkStatus.then((value) {
+    getStatusUser.then((value) {
       if (value != null) {
         if (value.status.contains('Online')) {
           setState(() {
             lateUser = value;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderPlayer =
+          Future<List<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
-          checkOrderPlayer.then(((order) {
-            setState(() {
-              _listOrder = order;
-              if (_listOrder![0].toUserId == widget.userModel.id) {
-                lateUser = value;
+          checkOrderUser.then(((order) {
+            _listOrder = order;
+            if (_listOrder![0].toUserId == widget.userModel.id) {
+              lateUser = value;
+              setState(() {
                 helper.pushInto(
                     context,
                     ReceiveRequestPage(
@@ -49,58 +50,64 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         tokenModel: widget.tokenModel,
                         userModel: lateUser!),
                     true);
-              }
-            });
+              });
+            }
           }));
         }
       }
     });
+    return getStatusUser;
   }
 
   @override
   Widget build(BuildContext context) {
-    check();
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: AppBar(
-          bottomOpacity: 0,
-          toolbarOpacity: 1,
-          toolbarHeight: 65,
-          backgroundColor: Colors.white,
-          elevation: 1,
-          leading: CircleAvatar(
-            radius: 27,
+    return FutureBuilder(
+        future: checkStatus(),
+        builder: (context, snapshot) {
+          return Scaffold(
             backgroundColor: Colors.white,
-            backgroundImage:
-                AssetImage("assets/images/play_together_logo_no_text.png"),
-          ),
-          centerTitle: true,
-          title: Text(
-            'Thông báo',
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Column(
-            children: List.generate(demoListNotifications.length,
-                (index) => buildListNotification(demoListNotifications[index])),
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomBar(
-        userModel: widget.userModel,
-        tokenModel: widget.tokenModel,
-        bottomBarIndex: 3,
-      ),
-    );
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(50),
+              child: AppBar(
+                bottomOpacity: 0,
+                toolbarOpacity: 1,
+                toolbarHeight: 65,
+                backgroundColor: Colors.white,
+                elevation: 1,
+                leading: CircleAvatar(
+                  radius: 27,
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage(
+                      "assets/images/play_together_logo_no_text.png"),
+                ),
+                centerTitle: true,
+                title: Text(
+                  'Thông báo',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  children: List.generate(
+                      demoListNotifications.length,
+                      (index) =>
+                          buildListNotification(demoListNotifications[index])),
+                ),
+              ),
+            ),
+            bottomNavigationBar: BottomBar(
+              userModel: widget.userModel,
+              tokenModel: widget.tokenModel,
+              bottomBarIndex: 3,
+            ),
+          );
+        });
   }
 
   Widget buildListNotification(NotificationModel model) =>
