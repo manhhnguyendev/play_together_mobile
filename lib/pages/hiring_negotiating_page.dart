@@ -103,7 +103,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
   Widget build(BuildContext context) {
     check();
     return Scaffold(
-      extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -118,9 +117,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
       ),
       body: Column(
         children: [
-          const SizedBox(
-            height: 60,
-          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
             child: Row(

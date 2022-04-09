@@ -237,7 +237,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
       avatar = widget.userModel.avatar;
     }
     return Scaffold(
-      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -270,8 +269,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           key: _formKey,
           child: Column(
             children: [
-              const SizedBox(
-                height: 100,
+              SizedBox(
+                height: 20,
               ),
               Container(
                 alignment: Alignment.center,

@@ -69,7 +69,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       checkFirstTime = false;
     }
     return Scaffold(
-      extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -90,9 +89,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          const SizedBox(
-            height: 60,
-          ),
           Container(
             alignment: Alignment.center,
             child: Column(

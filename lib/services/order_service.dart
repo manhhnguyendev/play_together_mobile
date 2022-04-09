@@ -23,6 +23,23 @@ class OrderService {
     return result;
   }
 
+  Future<OrderModel?> getDetailOrderById(String orderId, dynamic token) async {
+    Response response;
+    OrderModel? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.orders}/detail/$orderId'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = OrderModel.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
   Future<List<OrderModel>?> getOrderOfPlayer(dynamic token) async {
     Response response;
     List<OrderModel>? result;

@@ -23,11 +23,11 @@ class HistoryHiringDetail extends StatefulWidget {
 
 class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
-  late bool checkEndEarly;
+  bool checkEndEarly = true;
+  int rate = 5;
   @override
   Widget build(BuildContext context) {
-    bool checkExpired =
-        widget.orderModel.processExpired != "0001-01-01T00:00:00";
+    bool checkExpired = widget.orderModel.timeStart == "0001-01-01T00:00:00";
     String dateStart = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.orderModel.timeStart));
     String timeStart = DateFormat('hh:mm a')
@@ -40,9 +40,22 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
         .format(DateTime.parse(widget.orderModel.processExpired));
     String timeExpired = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel.processExpired));
-    checkEndEarly = false;
+    if (widget.orderModel.status == "Hirer Finish Soon") {
+      checkEndEarly = true;
+    } else if (widget.orderModel.status == "Player Finish Soon") {
+      checkEndEarly = true;
+    } else {
+      checkEndEarly = false;
+    }
     var _controller = TextEditingController();
-    _controller.text = widget.orderModel.message;
+    // if (widget.orderModel.ratings!.length > 0) {
+    //   _controller.text = widget.orderModel.ratings![0].comment;
+    //   rate = widget.orderModel.ratings![0].rate;
+    // } else {
+    //   _controller.text = "comment";
+    //   rate = 10;
+    // }
+
     var _reasonController = TextEditingController();
     _reasonController.text =
         widget.orderModel.reason != null ? widget.orderModel.reason! : "";
@@ -286,9 +299,9 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 25, 10),
+                padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
                 child: Row(
-                  children: const [
+                  children: [
                     Text(
                       'Đánh giá: ',
                       style: TextStyle(fontSize: 15),
@@ -298,7 +311,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                       color: Colors.yellow,
                     ),
                     Text(
-                      "5",
+                      rate.toString(),
                       style: TextStyle(fontSize: 15),
                     ),
                   ],
@@ -307,7 +320,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
                 child: Container(
-                  height: 200,
+                  height: 150,
                   decoration:
                       BoxDecoration(border: Border.all(color: Colors.black)),
                   child: TextField(
@@ -382,6 +395,13 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       return const Text(
         'Bị từ chối',
         style: TextStyle(fontSize: 15, color: Colors.grey),
+      );
+    }
+
+    if (status == 'Complete') {
+      return const Text(
+        'Hoàn thành',
+        style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }
 

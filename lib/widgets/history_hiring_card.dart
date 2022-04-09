@@ -187,6 +187,14 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       );
     }
 
+    if (status == 'Complete') {
+      checkReorder = true;
+      return const Text(
+        'Hoàn thành',
+        style: TextStyle(fontSize: 15, color: Colors.green),
+      );
+    }
+
     if (status == 'Interrupt') {
       checkReorder = true;
       return const Text(

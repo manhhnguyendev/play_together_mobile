@@ -29,7 +29,6 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -45,9 +44,6 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 80,
-            ),
             SizedBox(
               height: 150,
               width: 150,
