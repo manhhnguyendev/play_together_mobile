@@ -118,16 +118,17 @@ class UserService {
     return result;
   }
 
-  Future<UserModel?> getUserById(String userId, dynamic token) async {
+  Future<ResponseModel<UserModel>?> getUserById(
+      String userId, dynamic token) async {
     Response response;
-    UserModel? result;
+    ResponseModel<UserModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/$userId'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = UserModel.fromJson(json.decode(response.body));
+        result = ResponseModel<UserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -135,16 +136,18 @@ class UserService {
     return result;
   }
 
-  Future<PlayerModel?> getPlayerById(String id, dynamic token) async {
+  Future<ResponseModel<PlayerModel>?> getPlayerById(
+      String id, dynamic token) async {
     Response response;
-    PlayerModel? result;
+    ResponseModel<PlayerModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/$id'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = PlayerModel.fromJson(json.decode(response.body));
+        result =
+            ResponseModel<PlayerModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -152,17 +155,18 @@ class UserService {
     return result;
   }
 
-  Future<UserServiceModel?> getUserServiceById(
+  Future<ResponseModel<UserServiceModel>?> getUserServiceById(
       String userId, dynamic token) async {
     Response response;
-    UserServiceModel? result;
+    ResponseModel<UserServiceModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/service/$userId'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = UserServiceModel.fromJson(json.decode(response.body));
+        result = ResponseModel<UserServiceModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;

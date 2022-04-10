@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
@@ -252,13 +253,15 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                               totalTimes: chooseTime,
                               message: beginMessage,
                               games: games);
-                          Future<OrderModel?> orderModelFuture = OrderService()
-                              .createOrderRequest(widget.playerModel!.id,
-                                  createOrderModel, widget.tokenModel.message);
+                          Future<ResponseModel<OrderModel>?> orderModelFuture =
+                              OrderService().createOrderRequest(
+                                  widget.playerModel!.id,
+                                  createOrderModel,
+                                  widget.tokenModel.message);
                           orderModelFuture.then((order) {
                             if (order != null) {
                               setState(() {
-                                orderModel = order;
+                                orderModel = order.content;
                                 print('OrderId: ' + orderModel!.id);
                                 helper.pushInto(
                                     context,

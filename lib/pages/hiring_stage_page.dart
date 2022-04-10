@@ -43,11 +43,11 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
     getUserStatus.then((value) {
       if (value != null) {
         if (value.content.status.contains('Online')) {
-          Future<OrderModel?> checkStatusOrder = OrderService()
+          Future<ResponseModel<OrderModel>?> checkStatusOrder = OrderService()
               .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
           checkStatusOrder.then((order) {
             if (order != null) {
-              lateOrder = order;
+              lateOrder = order.content;
               lateUser = value.content;
               setState(() {
                 helper.pushInto(

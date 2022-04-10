@@ -76,11 +76,11 @@ class _CharityPageState extends State<CharityPage> {
       _listCharity = _charityList;
       if (_listCharity!.isEmpty) {
         for (var item in _listCharity!) {
-          Future<CharityModel?> charityFuture = CharityService()
+          Future<ResponseModel<CharityModel>?> charityFuture = CharityService()
               .getCharityById(item.id, widget.tokenModel.message);
           charityFuture.then((value) {
             if (value != null) {
-              _listCharity!.add(value);
+              _listCharity!.add(value.content);
             }
           });
         }
