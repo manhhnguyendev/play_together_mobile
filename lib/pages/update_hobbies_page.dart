@@ -22,11 +22,13 @@ class UpdateHobbiesPage extends StatefulWidget {
 }
 
 class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
+  late bool checkDelete;
+  late bool checkAdd;
   List<HobbiesModel> listHobbies = [];
   List<GamesModel> listAllGames = [];
   List<CheckBoxState> listGamesCheckBox = [];
   List<CreateHobbiesModel> listCreateHobbies = [];
-  List listDeleteHobbies = [];
+  List<DeleteHobbiesModel> listDeleteHobbies = [];
   List listGamesChoosen = [];
   bool checkUpdate = false;
   bool checkFirstTime = true;
@@ -163,40 +165,33 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                   child: AcceptProfileButton(
                       text: 'Cập nhật',
                       onpress: () {
-                        setState(() {
-                          checkUpdate = false;
-                          for (var gameChoose in listGamesChoosen) {
-                            for (var game in listAllGames) {
-                              if (game.name.contains(gameChoose)) {
-                                CreateHobbiesModel createHobbies =
-                                    CreateHobbiesModel(gameId: game.id);
-                                listCreateHobbies.add(createHobbies);
-                              }
+                        for (var gameChoose in listGamesChoosen) {
+                          for (var game in listAllGames) {
+                            if (game.name.contains(gameChoose)) {
+                              CreateHobbiesModel createHobbies =
+                                  CreateHobbiesModel(gameId: game.id);
+                              listCreateHobbies.add(createHobbies);
                             }
                           }
-                          for (var hobby in listHobbies) {
-                            listDeleteHobbies.add(hobby.id);
-                            Future<bool?> userUpdateModelFuture =
-                                HobbiesService().deleteHobbies(
-                                    hobby.id, widget.tokenModel.message);
-                            print('Remove HobbyId: ' + hobby.id);
-                          }
+                        }
 
-                          Future<bool?> createHobbiesFuture = HobbiesService()
-                              .createHobbies(
-                                  listCreateHobbies, widget.tokenModel.message);
-                          createHobbiesFuture.then((_listCreateHobbies) {
-                            if (_listCreateHobbies == true) {
-                              for (var item in listCreateHobbies) {
-                                print('Add GameId: ' + item.gameId);
-                              }
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Cập nhật thành công"),
-                              ));
-                            }
-                          });
-                        });
+                        for (var hobby in listHobbies) {
+                          DeleteHobbiesModel deleteHobbies =
+                              DeleteHobbiesModel(hobbyId: hobby.id);
+                          listDeleteHobbies.add(deleteHobbies);
+                        }
+                        Future<bool?> deleteHobbiesFuture = HobbiesService()
+                            .deleteHobbies(
+                                listDeleteHobbies, widget.tokenModel.message);
+
+                        //print(checkDelete.toString() + " check delete");
+                        // Future<bool?> createHobbiesFuture = HobbiesService()
+                        //     .createHobbies(
+                        //         listCreateHobbies, widget.tokenModel.message);
+                        // createHobbiesFuture.then((value) => {
+                        //       checkAdd = value!,
+                        //     });
+                        //print(checkAdd.toString() + " check add");
                       })),
             ),
           );

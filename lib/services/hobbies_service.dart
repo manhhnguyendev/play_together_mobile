@@ -45,17 +45,24 @@ class HobbiesService {
     return result;
   }
 
-  Future<bool?> deleteHobbies(String hobbyId, dynamic token) async {
+  Future<bool?> deleteHobbies(
+      List<DeleteHobbiesModel> listDeleteHobbies, dynamic token) async {
     Response response;
     bool? result = false;
     try {
       response = await delete(
-        Uri.parse('${apiUrl.hobbies}/$hobbyId'),
+        Uri.parse(apiUrl.hobbies),
         headers: configJson.headerAuth(token),
+        body: json.encoder.convert(listDeleteHobbies),
       );
       if (response.statusCode == 204) {
         result = true;
       }
+      print(response.statusCode.toString() + "delete status");
+      print(result.toString() + " result delete");
+      // else if (response.statusCode == 200) {
+      //   result = true;
+      // }
     } on Exception {
       rethrow;
     }

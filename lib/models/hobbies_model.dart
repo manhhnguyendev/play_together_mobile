@@ -45,3 +45,20 @@ class CreateHobbiesModel {
         "gameId": gameId,
       };
 }
+
+class DeleteHobbiesModel {
+  String hobbyId;
+
+  DeleteHobbiesModel({
+    required this.hobbyId,
+  });
+
+  factory DeleteHobbiesModel.fromJson(Map<String, dynamic> json) =>
+      DeleteHobbiesModel(
+        hobbyId: json['hobbyId'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "hobbyId": hobbyId,
+      };
+}
