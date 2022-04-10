@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
@@ -35,26 +36,27 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
   late AnimationController controller;
   int time = 5;
   List listGamesChoosen = [];
+  UserModel? lateUser;
 
   Future checkStatus() {
-    Future<UserModel?> getUserStatus =
+    Future<ResponseModel<UserModel>?> getUserStatus =
         UserService().getUserProfile(widget.tokenModel.message);
     getUserStatus.then((value) {
       if (value != null) {
-        if (value.status.contains('Hiring')) {
-          value = widget.userModel;
+        if (value.content.status.contains('Hiring')) {
+          lateUser = value.content;
           setState(() {
             helper.pushInto(
                 context,
                 HiringPage(
                   tokenModel: widget.tokenModel,
-                  userModel: value,
+                  userModel: lateUser,
                   orderModel: widget.orderModel,
                 ),
                 true);
           });
-        } else if (value.status.contains('Online')) {
-          value = widget.userModel;
+        } else if (value.content.status.contains('Online')) {
+          lateUser = value.content;
           setState(() {
             helper.pushInto(
                 context,
@@ -65,7 +67,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         } else {
           if (!mounted) return;
           setState(() {
-            value = widget.userModel;
+            lateUser = value.content;
           });
         }
       }

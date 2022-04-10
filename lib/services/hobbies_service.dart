@@ -4,21 +4,21 @@ import 'package:http/http.dart';
 import 'package:play_together_mobile/constants/api_url.dart' as apiUrl;
 import 'package:play_together_mobile/constants/config_json.dart' as configJson;
 import 'package:play_together_mobile/models/hobbies_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 
 class HobbiesService {
-  Future<List<HobbiesModel>?> getHobbiesOfUser(
+  Future<ResponseListModel<HobbiesModel>?> getHobbiesOfUser(
       String userId, dynamic token) async {
     Response response;
-    List<HobbiesModel>? result;
+    ResponseListModel<HobbiesModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/$userId/hobbies'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result =
-            body.map((dynamic item) => HobbiesModel.fromJson(item)).toList();
+        result = ResponseListModel<HobbiesModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;

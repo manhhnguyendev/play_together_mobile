@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -32,25 +33,25 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   List listGamesChoosen = [];
   late AnimationController controller;
   int time = 5;
+  UserModel? lateUser;
 
   Future checkStatus() {
-    Future<UserModel?> getUserStatus =
+    Future<ResponseModel<UserModel>?> getUserStatus =
         UserService().getUserProfile(widget.tokenModel.message);
     getUserStatus.then((value) {
       if (value != null) {
-        if (value.status.contains('Online')) {
-          value = widget.userModel;
+        if (value.content.status.contains('Online')) {
+          lateUser = value.content;
           setState(() {
             helper.pushInto(
                 context,
-                HomePage(
-                    tokenModel: widget.tokenModel, userModel: widget.userModel),
+                HomePage(tokenModel: widget.tokenModel, userModel: lateUser!),
                 false);
           });
         } else {
           if (!mounted) return;
           setState(() {
-            value = widget.userModel;
+            lateUser = value.content;
           });
         }
       }

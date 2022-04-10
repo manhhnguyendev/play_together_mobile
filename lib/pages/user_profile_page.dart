@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/const.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/personal_page.dart';
@@ -333,15 +334,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   addImageModel, widget.tokenModel.message);
                           listImageModelFuture.then((_addImageModel) {});
                         }
-                        Future<UserModel?> userModelFuture = UserService()
-                            .getUserProfile(widget.tokenModel.message);
+                        Future<ResponseModel<UserModel>?> userModelFuture =
+                            UserService()
+                                .getUserProfile(widget.tokenModel.message);
                         userModelFuture.then((_userModel) {
                           if (_userModel != null) {
                             setState(() {
                               helper.pushInto(
                                   context,
                                   PersonalPage(
-                                      userModel: _userModel,
+                                      userModel: _userModel.content,
                                       tokenModel: widget.tokenModel),
                                   true);
                             });
@@ -473,15 +475,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             userUpdateModel, widget.tokenModel.message);
                     userUpdateModelFuture.then((_userUpdateModel) {
                       if (_userUpdateModel == true) {
-                        Future<UserModel?> userModelFuture = UserService()
-                            .getUserProfile(widget.tokenModel.message);
+                        Future<ResponseModel<UserModel>?> userModelFuture =
+                            UserService()
+                                .getUserProfile(widget.tokenModel.message);
                         userModelFuture.then((_userModel) {
                           if (_userModel != null) {
                             setState(() {
                               helper.pushInto(
                                   context,
                                   PersonalPage(
-                                      userModel: _userModel,
+                                      userModel: _userModel.content,
                                       tokenModel: widget.tokenModel),
                                   true);
                             });

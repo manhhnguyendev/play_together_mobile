@@ -3,6 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/login_google_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
@@ -67,18 +69,18 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                               loginGoogleModelFuture.then((value) {
                                 if (value != null) {
                                   tokenModel = value;
-                                  Future<UserModel?> hirerModelFuture =
-                                      UserService()
+                                  Future<ResponseModel<UserModel>?>
+                                      hirerModelFuture = UserService()
                                           .getUserProfile(value.message);
                                   hirerModelFuture.then((hirer) {
                                     if (hirer != null) {
-                                      userModel = hirer;
-                                      Future<List<HobbiesModel>?>
+                                      userModel = hirer.content;
+                                      Future<ResponseListModel<HobbiesModel>?>
                                           hobbiesFuture =
                                           HobbiesService().getHobbiesOfUser(
                                               userModel.id, tokenModel.message);
                                       hobbiesFuture.then((listHobbies) {
-                                        if (listHobbies!.isNotEmpty) {
+                                        if (listHobbies!.content.isNotEmpty) {
                                           setState(() {
                                             helper.pushInto(
                                                 context,
@@ -88,7 +90,8 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                                                 ),
                                                 true);
                                           });
-                                        } else if (listHobbies.isEmpty) {
+                                        } else if (listHobbies
+                                            .content.isEmpty) {
                                           setState(() {
                                             helper.pushInto(
                                                 context,
