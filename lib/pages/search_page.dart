@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -33,11 +34,11 @@ class _SearchPageState extends State<SearchPage> {
 
   Future loadPlayerList() {
     _listPlayerSearch ??= [];
-    Future<List<UserModel>?> listOrderFromCreateUserModelFuture =
+    Future<ResponseListModel<UserModel>?> listOrderFromCreateUserModelFuture =
         SearchService().searchUserByName(
             widget.searchValue.toString(), widget.tokenModel.message);
     listOrderFromCreateUserModelFuture.then((_userList) {
-      listPlayerSearch = _userList;
+      listPlayerSearch = _userList!.content;
       if (_listPlayerSearch!.isEmpty) {
         for (var item in listPlayerSearch!) {
           Future<ResponseModel<PlayerModel>?> playerFuture =

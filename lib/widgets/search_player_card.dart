@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
@@ -26,11 +27,11 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
 
   Future getGameOfUser() {
     listGameAndRank ??= [];
-    Future<List<GameOfUserModel>?> gameOfUserFuture = UserService()
+    Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
         .getGameOfUser(widget.playerModel.id, widget.tokenModel.message);
     gameOfUserFuture.then((value) {
       if (value != null) {
-        listGameAndRank = value;
+        listGameAndRank = value.content;
       }
     });
     return gameOfUserFuture;

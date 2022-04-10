@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/transaction_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -41,11 +42,11 @@ class _TransactionPageState extends State<TransactionPage> {
 
   Future loadListAllTransaction() {
     listAllTransaction ??= [];
-    Future<List<TransactionModel>?> listAllTransactionModelFuture =
+    Future<ResponseListModel<TransactionModel>?> listAllTransactionModelFuture =
         TransactionService()
             .getAllTransaction(type, operation, widget.tokenModel.message);
     listAllTransactionModelFuture.then((_transactionList) {
-      listAllTransaction = _transactionList;
+      listAllTransaction = _transactionList!.content;
     });
     return listAllTransactionModelFuture;
   }

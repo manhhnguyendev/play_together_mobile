@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -53,10 +54,10 @@ class _PersonalPageState extends State<PersonalPage> {
             lateUser = value.content;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderUser =
+          Future<ResponseListModel<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
-            _listOrder = order;
+            _listOrder = order!.content;
             if (_listOrder![0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {

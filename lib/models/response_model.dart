@@ -2,18 +2,18 @@ import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
-import 'package:play_together_mobile/models/register_model.dart';
-import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class ResponseModel<T> {
   late T content;
-  String error;
+  ErrorModel error;
   bool isSuccess;
   String responseTime;
 
   ResponseModel._fromJson(Map<String, dynamic> parsedJson)
-      : error = parsedJson['error'],
+      : error = (parsedJson['error']) != null
+            ? ErrorModel.fromJson(parsedJson['error'])
+            : ErrorModel.fromJson(parsedJson),
         isSuccess = parsedJson['isSuccess'],
         responseTime = parsedJson['responseTime'];
 
@@ -84,4 +84,28 @@ class CharityModelResponse extends ResponseModel<CharityModel> {
       : super._fromJson(json) {
     content = CharityModel.fromJson(json["content"]);
   }
+}
+
+class ErrorModel {
+  int code;
+  String type;
+  String message;
+
+  ErrorModel({
+    required this.code,
+    required this.type,
+    required this.message,
+  });
+
+  factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
+        code: json['code'] as int,
+        type: json['type'] as String,
+        message: json['message'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "type": type,
+        "message": message,
+      };
 }

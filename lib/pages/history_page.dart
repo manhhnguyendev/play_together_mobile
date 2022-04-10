@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -31,10 +32,10 @@ class _HistoryPageState extends State<HistoryPage> {
   bool checkEmptyReceiveOrder = false;
   Future loadListFromCreateUser() {
     _listCreateOrder ??= [];
-    Future<List<OrderModel>?> listOrderFromCreateUserModelFuture =
+    Future<ResponseListModel<OrderModel>?> listOrderFromCreateUserModelFuture =
         OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
     listOrderFromCreateUserModelFuture.then((_createOrderList) {
-      _listCreateOrder = _createOrderList;
+      _listCreateOrder = _createOrderList!.content;
       if (_listCreateOrder!.isEmpty) {
         for (var item in _listCreateOrder!) {
           Future<ResponseModel<OrderModel>?> orderFuture = OrderService()
@@ -52,10 +53,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future loadListFromReceiveUser() {
     _listReceiveOrder ??= [];
-    Future<List<OrderModel>?> listOrderFromReceiveUserModelFuture =
+    Future<ResponseListModel<OrderModel>?> listOrderFromReceiveUserModelFuture =
         OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
     listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
-      _listReceiveOrder = _receiveOrderList;
+      _listReceiveOrder = _receiveOrderList!.content;
       if (_listReceiveOrder!.isEmpty) {
         for (var item in _listReceiveOrder!) {
           Future<ResponseModel<OrderModel>?> orderFuture =
@@ -82,10 +83,10 @@ class _HistoryPageState extends State<HistoryPage> {
             lateUser = value.content;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderUser =
+          Future<ResponseListModel<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
-            _listOrder = order;
+            _listOrder = order!.content;
             if (_listOrder![0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {

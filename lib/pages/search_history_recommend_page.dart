@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/game_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/search_history_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -35,33 +36,33 @@ class _SearchHistoryAndRecommendPageState
   List<GamesModel> listMostFavoriteGame = [];
 
   Future loadListSearchHistory() {
-    Future<List<SearchHistoryModel>?> listSearchHistoryFuture =
+    Future<ResponseListModel<SearchHistoryModel>?> listSearchHistoryFuture =
         SearchHistoryService().getSearchHistories(widget.tokenModel.message);
     listSearchHistoryFuture.then((_listSearchHistory) {
       if (_listSearchHistory != null) {
-        listSearchHistory = _listSearchHistory;
+        listSearchHistory = _listSearchHistory.content;
       }
     });
     return listSearchHistoryFuture;
   }
 
   Future loadListHotSearch() {
-    Future<List<SearchHistoryModel>?> listHotSearchFuture =
+    Future<ResponseListModel<SearchHistoryModel>?> listHotSearchFuture =
         SearchHistoryService().getHotSearch(widget.tokenModel.message);
     listHotSearchFuture.then((_listHotSearch) {
       if (_listHotSearch != null) {
-        listHotSearch = _listHotSearch;
+        listHotSearch = _listHotSearch.content;
       }
     });
     return listHotSearchFuture;
   }
 
   Future loadListMostFavoriteGame() {
-    Future<List<GamesModel>?> listMostFavoriteGameFuture =
+    Future<ResponseListModel<GamesModel>?> listMostFavoriteGameFuture =
         GameService().getMostFavoriteGames(widget.tokenModel.message);
     listMostFavoriteGameFuture.then((_listMostFavoriteGame) {
       if (_listMostFavoriteGame != null) {
-        listMostFavoriteGame = _listMostFavoriteGame;
+        listMostFavoriteGame = _listMostFavoriteGame.content;
         print(listMostFavoriteGame);
       }
     });
@@ -98,11 +99,12 @@ class _SearchHistoryAndRecommendPageState
               if (_controller.text.isNotEmpty) {
                 searchValue = _controller.text;
                 _listPlayerSearch = [];
-                Future<List<UserModel>?> listPlayerSearchModelFuture =
-                    SearchService().searchUserByName(
-                        _controller.text, widget.tokenModel.message);
+                Future<ResponseListModel<UserModel>?>
+                    listPlayerSearchModelFuture = SearchService()
+                        .searchUserByName(
+                            _controller.text, widget.tokenModel.message);
                 listPlayerSearchModelFuture.then((_playerSearchList) {
-                  listPlayerSearch = _playerSearchList;
+                  listPlayerSearch = _playerSearchList!.content;
                   if (_listPlayerSearch!.isEmpty) {
                     for (var item in listPlayerSearch!) {
                       Future<ResponseModel<PlayerModel>?> playerFuture =

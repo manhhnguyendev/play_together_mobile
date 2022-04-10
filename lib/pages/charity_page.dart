@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -45,10 +46,10 @@ class _CharityPageState extends State<CharityPage> {
             lateUser = value.content;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderUser =
+          Future<ResponseListModel<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
-            _listOrder = order;
+            _listOrder = order!.content;
             if (_listOrder![0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {
@@ -70,10 +71,10 @@ class _CharityPageState extends State<CharityPage> {
 
   Future loadListCharity() {
     _listCharity ??= [];
-    Future<List<CharityModel>?> listCharityModelFuture =
+    Future<ResponseListModel<CharityModel>?> listCharityModelFuture =
         CharityService().getAllCharities(widget.tokenModel.message);
     listCharityModelFuture.then((_charityList) {
-      _listCharity = _charityList;
+      _listCharity = _charityList!.content;
       if (_listCharity!.isEmpty) {
         for (var item in _listCharity!) {
           Future<ResponseModel<CharityModel>?> charityFuture = CharityService()

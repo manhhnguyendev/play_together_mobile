@@ -58,11 +58,6 @@ class HobbiesService {
       if (response.statusCode == 204) {
         result = true;
       }
-      print(response.statusCode.toString() + "delete status");
-      print(result.toString() + " result delete");
-      // else if (response.statusCode == 200) {
-      //   result = true;
-      // }
     } on Exception {
       rethrow;
     }

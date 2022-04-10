@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -42,10 +43,10 @@ class _HomePageState extends State<HomePage> {
   Future loadListUserByIsOrderByRating() {
     playerListIsOrderByRating ??= [];
     _listPlayerIsOrderByRating ??= [];
-    Future<List<UserModel>?> listUserIsOrderByRatingModelFuture =
+    Future<ResponseListModel<UserModel>?> listUserIsOrderByRatingModelFuture =
         UserService().getAllUsersIsOrderByRating(widget.tokenModel.message);
     listUserIsOrderByRatingModelFuture.then((_playerList) {
-      playerListIsOrderByRating = _playerList;
+      playerListIsOrderByRating = _playerList!.content;
       if (_listPlayerIsOrderByRating!.isEmpty) {
         for (var item in playerListIsOrderByRating!) {
           Future<ResponseModel<PlayerModel>?> playerFuture =
@@ -64,10 +65,10 @@ class _HomePageState extends State<HomePage> {
   Future loadListUserByIsNewAccount() {
     playerListIsNewAccount ??= [];
     _listPlayerIsNewAccount ??= [];
-    Future<List<UserModel>?> listUserIsNewAccountModelFuture =
+    Future<ResponseListModel<UserModel>?> listUserIsNewAccountModelFuture =
         UserService().getAllUsersIsNewAccount(widget.tokenModel.message);
     listUserIsNewAccountModelFuture.then((_playerList) {
-      playerListIsNewAccount = _playerList;
+      playerListIsNewAccount = _playerList!.content;
       if (_listPlayerIsNewAccount!.isEmpty) {
         for (var item in playerListIsNewAccount!) {
           Future<ResponseModel<PlayerModel>?> playerFuture =
@@ -86,10 +87,10 @@ class _HomePageState extends State<HomePage> {
   Future loadListUserByIsSameHobbies() {
     playerListIsSameHobbies ??= [];
     _listPlayerIsSameHobbies ??= [];
-    Future<List<UserModel>?> listUserIsSameHobbiesModelFuture =
+    Future<ResponseListModel<UserModel>?> listUserIsSameHobbiesModelFuture =
         UserService().getAllUsersIsSameHobbies(widget.tokenModel.message);
     listUserIsSameHobbiesModelFuture.then((_playerList) {
-      playerListIsSameHobbies = _playerList;
+      playerListIsSameHobbies = _playerList!.content;
       if (_listPlayerIsSameHobbies!.isEmpty) {
         for (var item in playerListIsSameHobbies!) {
           Future<ResponseModel<PlayerModel>?> playerFuture =
@@ -108,10 +109,10 @@ class _HomePageState extends State<HomePage> {
   Future loadListUserByIsRecentOrder() {
     playerListIsRecentOrder ??= [];
     _listPlayerIsRecentOrder ??= [];
-    Future<List<UserModel>?> listUserIsRecentOrderModelFuture =
+    Future<ResponseListModel<UserModel>?> listUserIsRecentOrderModelFuture =
         UserService().getAllUsersIsRecentOrder(widget.tokenModel.message);
     listUserIsRecentOrderModelFuture.then((_playerList) {
-      playerListIsRecentOrder = _playerList;
+      playerListIsRecentOrder = _playerList!.content;
       if (_listPlayerIsRecentOrder!.isEmpty) {
         for (var item in playerListIsRecentOrder!) {
           Future<ResponseModel<PlayerModel>?> playerFuture =
@@ -138,10 +139,10 @@ class _HomePageState extends State<HomePage> {
             lateUser = value.content;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderUser =
+          Future<ResponseListModel<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
-            _listOrder = order;
+            _listOrder = order!.content;
             if (_listOrder![0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {

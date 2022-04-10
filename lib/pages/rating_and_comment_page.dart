@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
@@ -31,10 +32,11 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
 
   Future loadListRating() {
     listAllRating ??= [];
-    Future<List<RatingModel>?> listAllRatingModelFuture = RatingService()
-        .getAllRating(widget.playerModel!.id, vote, widget.tokenModel.message);
+    Future<ResponseListModel<RatingModel>?> listAllRatingModelFuture =
+        RatingService().getAllRating(
+            widget.playerModel!.id, vote, widget.tokenModel.message);
     listAllRatingModelFuture.then((_ratingList) {
-      listAllRating = _ratingList;
+      listAllRating = _ratingList!.content;
     });
     return listAllRatingModelFuture;
   }
