@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
@@ -32,13 +33,13 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
 
   Future getAllGames() {
     listGames ??= [];
-    Future<List<GamesModel>?> gameFuture =
+    Future<ResponseListModel<GamesModel>?> gameFuture =
         GameService().getAllGames(widget.tokenModel.message);
     gameFuture.then((value) {
       if (value != null) {
         if (checkFirstTime) {
           setState(() {
-            listGames = value;
+            listGames = value.content;
             checkFirstTime = false;
           });
         }

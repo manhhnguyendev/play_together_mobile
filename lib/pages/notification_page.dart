@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
@@ -38,10 +39,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
             lateUser = value.content;
           });
         } else {
-          Future<List<OrderModel>?> checkOrderUser =
+          Future<ResponseListModel<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
-            _listOrder = order;
+            _listOrder = order!.content;
             if (_listOrder![0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {

@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:play_together_mobile/constants/api_url.dart' as apiUrl;
 import 'package:play_together_mobile/constants/config_json.dart' as configJson;
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 
 class OrderService {
@@ -43,17 +44,17 @@ class OrderService {
     return result;
   }
 
-  Future<List<OrderModel>?> getOrderOfPlayer(dynamic token) async {
+  Future<ResponseListModel<OrderModel>?> getOrderOfPlayer(dynamic token) async {
     Response response;
-    List<OrderModel>? result;
+    ResponseListModel<OrderModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=3'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<OrderModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -61,17 +62,18 @@ class OrderService {
     return result;
   }
 
-  Future<List<OrderModel>?> getAllOrdersFromCreateUser(dynamic token) async {
+  Future<ResponseListModel<OrderModel>?> getAllOrdersFromCreateUser(
+      dynamic token) async {
     Response response;
-    List<OrderModel>? result;
+    ResponseListModel<OrderModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/orders?IsNew=true&PageSize=20'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<OrderModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -79,17 +81,18 @@ class OrderService {
     return result;
   }
 
-  Future<List<OrderModel>?> getAllOrdersFromReceivedUser(dynamic token) async {
+  Future<ResponseListModel<OrderModel>?> getAllOrdersFromReceivedUser(
+      dynamic token) async {
     Response response;
-    List<OrderModel>? result;
+    ResponseListModel<OrderModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=20'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => OrderModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<OrderModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;

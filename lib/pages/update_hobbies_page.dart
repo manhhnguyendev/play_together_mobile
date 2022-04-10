@@ -35,13 +35,13 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
   bool checkAddChoosen = true;
 
   Future getAllGames() {
-    Future<List<GamesModel>?> gameFuture =
+    Future<ResponseListModel<GamesModel>?> gameFuture =
         GameService().getAllGames(widget.tokenModel.message);
     gameFuture.then((listGameValue) {
       if (listGameValue != null) {
         if (checkFirstTime) {
           setState(() {
-            listAllGames = listGameValue;
+            listAllGames = listGameValue.content;
             Future<ResponseListModel<HobbiesModel>?> hobbiesFuture =
                 HobbiesService().getHobbiesOfUser(
                     widget.userModel.id, widget.tokenModel.message);

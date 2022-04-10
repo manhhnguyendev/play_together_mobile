@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:play_together_mobile/constants/api_url.dart' as apiUrl;
 import 'package:play_together_mobile/constants/config_json.dart' as configJson;
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
@@ -43,17 +44,18 @@ class UserService {
     return result;
   }
 
-  Future<List<UserModel>?> getAllUsersIsNewAccount(dynamic token) async {
+  Future<ResponseListModel<UserModel>?> getAllUsersIsNewAccount(
+      dynamic token) async {
     Response response;
-    List<UserModel>? result;
+    ResponseListModel<UserModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}?IsNewAccount=true&IsPlayer=true&PageSize=4'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -61,9 +63,10 @@ class UserService {
     return result;
   }
 
-  Future<List<UserModel>?> getAllUsersIsSameHobbies(dynamic token) async {
+  Future<ResponseListModel<UserModel>?> getAllUsersIsSameHobbies(
+      dynamic token) async {
     Response response;
-    List<UserModel>? result;
+    ResponseListModel<UserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -71,8 +74,8 @@ class UserService {
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -80,9 +83,10 @@ class UserService {
     return result;
   }
 
-  Future<List<UserModel>?> getAllUsersIsOrderByRating(dynamic token) async {
+  Future<ResponseListModel<UserModel>?> getAllUsersIsOrderByRating(
+      dynamic token) async {
     Response response;
-    List<UserModel>? result;
+    ResponseListModel<UserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -90,8 +94,8 @@ class UserService {
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -99,9 +103,10 @@ class UserService {
     return result;
   }
 
-  Future<List<UserModel>?> getAllUsersIsRecentOrder(dynamic token) async {
+  Future<ResponseListModel<UserModel>?> getAllUsersIsRecentOrder(
+      dynamic token) async {
     Response response;
-    List<UserModel>? result;
+    ResponseListModel<UserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -109,8 +114,8 @@ class UserService {
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result = body.map((dynamic item) => UserModel.fromJson(item)).toList();
+        result =
+            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -174,19 +179,18 @@ class UserService {
     return result;
   }
 
-  Future<List<GameOfUserModel>?> getGameOfUser(
+  Future<ResponseListModel<GameOfUserModel>?> getGameOfUser(
       String userId, dynamic token) async {
     Response response;
-    List<GameOfUserModel>? result;
+    ResponseListModel<GameOfUserModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}/$userId/games'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        List<dynamic> body = jsonDecode(response.body);
-        result =
-            body.map((dynamic item) => GameOfUserModel.fromJson(item)).toList();
+        result = ResponseListModel<GameOfUserModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;
