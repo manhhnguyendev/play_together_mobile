@@ -37,11 +37,11 @@ class _HistoryPageState extends State<HistoryPage> {
       _listCreateOrder = _createOrderList;
       if (_listCreateOrder!.isEmpty) {
         for (var item in _listCreateOrder!) {
-          Future<OrderModel?> orderFuture = OrderService()
+          Future<ResponseModel<OrderModel>?> orderFuture = OrderService()
               .getDetailOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
-              _listCreateOrder!.add(value);
+              _listCreateOrder!.add(value.content);
             }
           });
         }
@@ -58,11 +58,11 @@ class _HistoryPageState extends State<HistoryPage> {
       _listReceiveOrder = _receiveOrderList;
       if (_listReceiveOrder!.isEmpty) {
         for (var item in _listReceiveOrder!) {
-          Future<OrderModel?> orderFuture =
+          Future<ResponseModel<OrderModel>?> orderFuture =
               OrderService().getOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
-              _listReceiveOrder!.add(value);
+              _listReceiveOrder!.add(value.content);
             }
           });
         }

@@ -48,11 +48,11 @@ class _HomePageState extends State<HomePage> {
       playerListIsOrderByRating = _playerList;
       if (_listPlayerIsOrderByRating!.isEmpty) {
         for (var item in playerListIsOrderByRating!) {
-          Future<PlayerModel?> playerFuture =
+          Future<ResponseModel<PlayerModel>?> playerFuture =
               UserService().getPlayerById(item.id, widget.tokenModel.message);
           playerFuture.then((value) {
             if (value != null) {
-              _listPlayerIsOrderByRating!.add(value);
+              _listPlayerIsOrderByRating!.add(value.content);
             }
           });
         }
@@ -70,11 +70,11 @@ class _HomePageState extends State<HomePage> {
       playerListIsNewAccount = _playerList;
       if (_listPlayerIsNewAccount!.isEmpty) {
         for (var item in playerListIsNewAccount!) {
-          Future<PlayerModel?> playerFuture =
+          Future<ResponseModel<PlayerModel>?> playerFuture =
               UserService().getPlayerById(item.id, widget.tokenModel.message);
           playerFuture.then((value) {
             if (value != null) {
-              _listPlayerIsNewAccount!.add(value);
+              _listPlayerIsNewAccount!.add(value.content);
             }
           });
         }
@@ -92,11 +92,11 @@ class _HomePageState extends State<HomePage> {
       playerListIsSameHobbies = _playerList;
       if (_listPlayerIsSameHobbies!.isEmpty) {
         for (var item in playerListIsSameHobbies!) {
-          Future<PlayerModel?> playerFuture =
+          Future<ResponseModel<PlayerModel>?> playerFuture =
               UserService().getPlayerById(item.id, widget.tokenModel.message);
           playerFuture.then((value) {
             if (value != null) {
-              _listPlayerIsSameHobbies!.add(value);
+              _listPlayerIsSameHobbies!.add(value.content);
             }
           });
         }
@@ -114,11 +114,11 @@ class _HomePageState extends State<HomePage> {
       playerListIsRecentOrder = _playerList;
       if (_listPlayerIsRecentOrder!.isEmpty) {
         for (var item in playerListIsRecentOrder!) {
-          Future<PlayerModel?> playerFuture =
+          Future<ResponseModel<PlayerModel>?> playerFuture =
               UserService().getPlayerById(item.id, widget.tokenModel.message);
           playerFuture.then((value) {
             if (value != null) {
-              _listPlayerIsRecentOrder!.add(value);
+              _listPlayerIsRecentOrder!.add(value.content);
             }
           });
         }

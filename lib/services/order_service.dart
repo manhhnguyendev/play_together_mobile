@@ -4,18 +4,20 @@ import 'package:http/http.dart';
 import 'package:play_together_mobile/constants/api_url.dart' as apiUrl;
 import 'package:play_together_mobile/constants/config_json.dart' as configJson;
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 
 class OrderService {
-  Future<OrderModel?> getOrderById(String id, dynamic token) async {
+  Future<ResponseModel<OrderModel>?> getOrderById(
+      String id, dynamic token) async {
     Response response;
-    OrderModel? result;
+    ResponseModel<OrderModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.orders}/$id'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = OrderModel.fromJson(json.decode(response.body));
+        result = ResponseModel<OrderModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -23,16 +25,17 @@ class OrderService {
     return result;
   }
 
-  Future<OrderModel?> getDetailOrderById(String orderId, dynamic token) async {
+  Future<ResponseModel<OrderModel>?> getDetailOrderById(
+      String orderId, dynamic token) async {
     Response response;
-    OrderModel? result;
+    ResponseModel<OrderModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.orders}/detail/$orderId'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = OrderModel.fromJson(json.decode(response.body));
+        result = ResponseModel<OrderModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -94,10 +97,10 @@ class OrderService {
     return result;
   }
 
-  Future<OrderModel?> createOrderRequest(
+  Future<ResponseModel<OrderModel>?> createOrderRequest(
       String toUserId, CreateOrderModel createOrderModel, dynamic token) async {
     Response response;
-    OrderModel? result;
+    ResponseModel<OrderModel>? result;
     try {
       response = await post(
         Uri.parse('${apiUrl.users}/orders/$toUserId'),
@@ -105,7 +108,7 @@ class OrderService {
         body: jsonEncode(createOrderModel.toJson()),
       );
       if (response.statusCode == 201) {
-        result = OrderModel.fromJson(json.decode(response.body));
+        result = ResponseModel<OrderModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;

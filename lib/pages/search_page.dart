@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/search_service.dart';
@@ -39,11 +40,11 @@ class _SearchPageState extends State<SearchPage> {
       listPlayerSearch = _userList;
       if (_listPlayerSearch!.isEmpty) {
         for (var item in listPlayerSearch!) {
-          Future<PlayerModel?> playerFuture =
+          Future<ResponseModel<PlayerModel>?> playerFuture =
               UserService().getPlayerById(item.id, widget.tokenModel.message);
           playerFuture.then((value) {
             if (value != null) {
-              _listPlayerSearch!.add(value);
+              _listPlayerSearch!.add(value.content);
             }
           });
         }

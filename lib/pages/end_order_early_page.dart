@@ -40,11 +40,11 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
     getUserStatus.then((value) {
       if (value != null) {
         if (value.content.status.contains('Online')) {
-          Future<OrderModel?> checkStatusOrder = OrderService()
+          Future<ResponseModel<OrderModel>?> checkStatusOrder = OrderService()
               .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
           checkStatusOrder.then((order) {
             if (order != null) {
-              lateOrder = order;
+              lateOrder = order.content;
               lateUser = value.content;
               setState(() {
                 helper.pushInto(
@@ -298,13 +298,13 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                               widget.tokenModel.message, finishSoonModel);
                       finishFuture.then((finish) {
                         if (finish == true) {
-                          Future<OrderModel?> checkStatusOrder = OrderService()
-                              .getOrderById(widget.orderModel!.id,
+                          Future<ResponseModel<OrderModel>?> checkStatusOrder =
+                              OrderService().getOrderById(widget.orderModel!.id,
                                   widget.tokenModel.message);
                           checkStatusOrder.then((order) {
                             if (order != null) {
                               setState(() {
-                                lateOrder = order;
+                                lateOrder = order.content;
                                 helper.pushInto(
                                     context,
                                     EndOrderPage(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/game_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/search_history_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -104,11 +105,12 @@ class _SearchHistoryAndRecommendPageState
                   listPlayerSearch = _playerSearchList;
                   if (_listPlayerSearch!.isEmpty) {
                     for (var item in listPlayerSearch!) {
-                      Future<PlayerModel?> playerFuture = UserService()
-                          .getPlayerById(item.id, widget.tokenModel.message);
+                      Future<ResponseModel<PlayerModel>?> playerFuture =
+                          UserService().getPlayerById(
+                              item.id, widget.tokenModel.message);
                       playerFuture.then((value) {
                         if (value != null) {
-                          _listPlayerSearch!.add(value);
+                          _listPlayerSearch!.add(value.content);
                         }
                       });
                     }

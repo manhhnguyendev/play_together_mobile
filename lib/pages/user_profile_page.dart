@@ -329,8 +329,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         if (imagesLink != null) {
                           addImageModel.userId = widget.userModel.id;
                           addImageModel.imageLink = img;
-                          Future<AddImageModel?> listImageModelFuture =
-                              ImageService().addImages(
+                          Future<ResponseModel<AddImageModel>?>
+                              listImageModelFuture = ImageService().addImages(
                                   addImageModel, widget.tokenModel.message);
                           listImageModelFuture.then((_addImageModel) {});
                         }
