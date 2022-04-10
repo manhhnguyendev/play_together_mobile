@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/game_service.dart';
@@ -39,12 +40,12 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
         if (checkFirstTime) {
           setState(() {
             listAllGames = listGameValue;
-            Future<List<HobbiesModel>?> hobbiesFuture = HobbiesService()
-                .getHobbiesOfUser(
+            Future<ResponseListModel<HobbiesModel>?> hobbiesFuture =
+                HobbiesService().getHobbiesOfUser(
                     widget.userModel.id, widget.tokenModel.message);
             hobbiesFuture.then((listHobbiesValue) {
               if (listHobbiesValue != null) {
-                listHobbies = listHobbiesValue;
+                listHobbies = listHobbiesValue.content;
                 for (var games in listAllGames) {
                   listGamesCheckBox
                       .add(CheckBoxState(title: games.name, value: false));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/pages/end_order_early_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -37,17 +38,17 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   OrderModel? lateOrder;
 
   Future checkStatus() {
-    Future<UserModel?> getUserStatus =
+    Future<ResponseModel<UserModel>?> getUserStatus =
         UserService().getUserProfile(widget.tokenModel.message);
     getUserStatus.then((value) {
       if (value != null) {
-        if (value.status.contains('Online')) {
+        if (value.content.status.contains('Online')) {
           Future<OrderModel?> checkStatusOrder = OrderService()
               .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
           checkStatusOrder.then((order) {
             if (order != null) {
               lateOrder = order;
-              lateUser = value;
+              lateUser = value.content;
               setState(() {
                 helper.pushInto(
                     context,
@@ -63,7 +64,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         } else {
           if (!mounted) return;
           setState(() {
-            lateUser = value;
+            lateUser = value.content;
           });
         }
       }

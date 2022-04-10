@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
@@ -34,14 +35,14 @@ class _CharityPageState extends State<CharityPage> {
   List<CharityModel>? _listCharity;
 
   Future checkStatus() {
-    Future<UserModel?> getStatusUser =
+    Future<ResponseModel<UserModel>?> getStatusUser =
         UserService().getUserProfile(widget.tokenModel.message);
     getStatusUser.then((value) {
       if (value != null) {
-        if (value.status.contains('Online')) {
+        if (value.content.status.contains('Online')) {
           if (!mounted) return;
           setState(() {
-            lateUser = value;
+            lateUser = value.content;
           });
         } else {
           Future<List<OrderModel>?> checkOrderUser =
@@ -49,7 +50,7 @@ class _CharityPageState extends State<CharityPage> {
           checkOrderUser.then(((order) {
             _listOrder = order;
             if (_listOrder![0].toUserId == widget.userModel.id) {
-              lateUser = value;
+              lateUser = value.content;
               setState(() {
                 helper.pushInto(
                     context,
