@@ -49,11 +49,6 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
           ),
           actions: <Widget>[
             TextButton(
-              //style: style,
-              // onPressed: () async => await Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => AddNewSkillsPage()),
-              // ),
               onPressed: (() async {
                 final check = await Navigator.push(
                     context,
@@ -70,7 +65,7 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10),
         child: Column(
           children: List.generate(demoListSkills.length,
