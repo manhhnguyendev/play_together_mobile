@@ -212,8 +212,8 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => UpdateGameSkillsPage(
-                                  userModel: widget.userModel,
-                                  tokenModel: widget.tokenModel,
+                                // userModel: widget.userModel,
+                                // tokenModel: widget.tokenModel,
                                 )),
                       );
                     },
