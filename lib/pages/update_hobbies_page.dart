@@ -30,16 +30,17 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
   List<CreateHobbiesModel> listCreateHobbies = [];
   List<DeleteHobbiesModel> listDeleteHobbies = [];
   List listGamesChoosen = [];
-  bool checkUpdate = false;
+
   bool checkFirstTime = true;
   bool checkAddChoosen = true;
+  bool isPress = false;
 
   Future getAllGames() {
     Future<ResponseListModel<GamesModel>?> gameFuture =
         GameService().getAllGames(widget.tokenModel.message);
     gameFuture.then((listGameValue) {
       if (listGameValue != null) {
-        if (checkFirstTime) {
+        if (isPress || checkFirstTime) {
           setState(() {
             listAllGames = listGameValue.content;
             Future<ResponseListModel<HobbiesModel>?> hobbiesFuture =
@@ -47,25 +48,28 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                     widget.userModel.id, widget.tokenModel.message);
             hobbiesFuture.then((listHobbiesValue) {
               if (listHobbiesValue != null) {
-                listHobbies = listHobbiesValue.content;
-                for (var games in listAllGames) {
-                  listGamesCheckBox
-                      .add(CheckBoxState(title: games.name, value: false));
-                }
-                if (checkAddChoosen) {
-                  for (var hobby in listHobbies) {
-                    listGamesChoosen.add(hobby.game.name);
+                setState(() {
+                  listHobbies = listHobbiesValue.content;
+                  for (var games in listAllGames) {
+                    listGamesCheckBox
+                        .add(CheckBoxState(title: games.name, value: false));
                   }
-                  print(listGamesChoosen);
-                  checkAddChoosen = false;
-                }
-                for (var item in listGamesCheckBox) {
-                  for (var hobby in listHobbies) {
-                    if (item.title == hobby.game.name) {
-                      item.value = true;
+                  if (checkAddChoosen) {
+                    for (var hobby in listHobbies) {
+                      listGamesChoosen.add(hobby.game.name);
+                    }
+                    print(listGamesChoosen);
+                    checkAddChoosen = false;
+                  }
+                  for (var item in listGamesCheckBox) {
+                    for (var hobby in listHobbies) {
+                      if (item.title == hobby.game.name) {
+                        item.value = true;
+                      }
                     }
                   }
-                }
+                });
+
                 // for (var hobby in listHobbies) {
                 //   print(hobby.id + " id id");
                 //   listDeleteHobbies.add(hobby.id);
@@ -83,9 +87,6 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                 //     }
                 //   }
                 // }
-
-                //add list hobbies rồi mình add những game ko có trong list hobbies.
-
               }
             });
           });
@@ -115,14 +116,15 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                       Icons.arrow_back_ios,
                     ),
                     onPressed: () {
-                      if (!checkUpdate) {
-                        Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Ấn cập nhật sở thích"),
-                        ));
-                      }
+                      // if (!checkUpdate) {
+                      //
+                      // } else {
+                      //   ScaffoldMessenger.of(context)
+                      //       .showSnackBar(const SnackBar(
+                      //     content: Text("Ấn cập nhật sở thích"),
+                      //   ));
+                      // }
+                      Navigator.pop(context);
                     },
                   ),
                 ),
@@ -165,6 +167,11 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                   child: AcceptProfileButton(
                       text: 'Cập nhật',
                       onpress: () {
+                        setState(() {
+                          isPress = true;
+                          listCreateHobbies.clear();
+                          listDeleteHobbies.clear();
+                        });
                         for (var gameChoose in listGamesChoosen) {
                           for (var game in listAllGames) {
                             if (game.name.contains(gameChoose)) {
@@ -174,7 +181,6 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                             }
                           }
                         }
-
                         for (var hobby in listHobbies) {
                           DeleteHobbiesModel deleteHobbies =
                               DeleteHobbiesModel(hobbyId: hobby.id);
@@ -183,15 +189,25 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                         Future<bool?> deleteHobbiesFuture = HobbiesService()
                             .deleteHobbies(
                                 listDeleteHobbies, widget.tokenModel.message);
-
-                        //print(checkDelete.toString() + " check delete");
-                        // Future<bool?> createHobbiesFuture = HobbiesService()
-                        //     .createHobbies(
-                        //         listCreateHobbies, widget.tokenModel.message);
-                        // createHobbiesFuture.then((value) => {
-                        //       checkAdd = value!,
-                        //     });
-                        //print(checkAdd.toString() + " check add");
+                        deleteHobbiesFuture.then((_listDeleteHobbies) {
+                          if (_listDeleteHobbies == true) {
+                            Future<bool?> createHobbiesFuture = HobbiesService()
+                                .createHobbies(listCreateHobbies,
+                                    widget.tokenModel.message);
+                            createHobbiesFuture.then((_listCreateHobbies) {
+                              if (_listCreateHobbies == true) {
+                                setState(() {
+                                  isPress = false;
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Cập nhật thành công"),
+                                  ));
+                                  print('Cập nhật thành công');
+                                });
+                              }
+                            });
+                          }
+                        });
                       })),
             ),
           );
@@ -205,15 +221,12 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
       value: cbState.value,
       onChanged: (value) => setState(
         () {
-          checkUpdate = true;
           if (cbState.value) {
             listGamesChoosen.remove(cbState.title);
             cbState.value = value!;
-            print(listGamesChoosen);
           } else {
             listGamesChoosen.add(cbState.title);
             cbState.value = value!;
-            print(listGamesChoosen);
           }
         },
       ),
