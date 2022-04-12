@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 
 class NotificationCard extends StatefulWidget {
+  final UserModel userModel;
+  final TokenModel tokenModel;
   final NotificationModel notificationModel;
-  const NotificationCard({Key? key, required this.notificationModel})
+
+  const NotificationCard(
+      {Key? key,
+      required this.notificationModel,
+      required this.userModel,
+      required this.tokenModel})
       : super(key: key);
 
   @override
@@ -14,10 +23,13 @@ class NotificationCard extends StatefulWidget {
 class _NotificationCardState extends State<NotificationCard> {
   @override
   Widget build(BuildContext context) {
-    String date =
-        DateFormat('dd/MM/yyyy').format(widget.notificationModel.datetime);
-    String startTime =
-        DateFormat('hh:mm a').format(widget.notificationModel.datetime);
+    String date = "";
+    String time = "";
+
+    date = DateFormat('dd/MM/yyyy')
+        .format(DateTime.parse(widget.notificationModel.createdDate));
+    time = DateFormat('hh:mm a')
+        .format(DateTime.parse(widget.notificationModel.createdDate));
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: GestureDetector(
@@ -39,16 +51,19 @@ class _NotificationCardState extends State<NotificationCard> {
                     const SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      widget.notificationModel.message,
-                      style: const TextStyle(fontSize: 15, color: Colors.grey),
-                    ),
                   ],
                 ),
-                const Spacer(),
-                Text(
-                  date + ', ' + startTime,
-                  style: const TextStyle(fontSize: 15, color: Colors.black),
+              ],
+            ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      date + ', ' + time,
+                      style: const TextStyle(fontSize: 15, color: Colors.black),
+                    ),
+                  ],
                 ),
               ],
             ),

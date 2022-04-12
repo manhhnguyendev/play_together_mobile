@@ -1,5 +1,6 @@
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -32,6 +33,8 @@ class ResponseModel<T> {
       return AddImageModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == CharityModel) {
       return CharityModelResponse.fromJson(json) as ResponseModel<T>;
+    } else if (T == NotificationModel) {
+      return NotificationModelResponse.fromJson(json) as ResponseModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -48,6 +51,13 @@ class PlayerModelResponse extends ResponseModel<PlayerModel> {
   PlayerModelResponse.fromJson(Map<String, dynamic> json)
       : super._fromJson(json) {
     content = PlayerModel.fromJson(json["content"]);
+  }
+}
+
+class NotificationModelResponse extends ResponseModel<NotificationModel> {
+  NotificationModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = NotificationModel.fromJson(json["content"]);
   }
 }
 

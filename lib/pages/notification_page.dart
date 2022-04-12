@@ -5,6 +5,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
+import 'package:play_together_mobile/services/notification_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/widgets/notification_card.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -26,7 +27,8 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> {
   UserModel? lateUser;
-  List<OrderModel>? _listOrder;
+  List<OrderModel> _listOrder = [];
+  List<NotificationModel> _listNotification = [];
 
   Future checkStatus() {
     Future<ResponseModel<UserModel>?> getStatusUser =
@@ -43,13 +45,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
             _listOrder = order!.content;
-            if (_listOrder![0].toUserId == widget.userModel.id) {
+            if (_listOrder[0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {
                 helper.pushInto(
                     context,
                     ReceiveRequestPage(
-                        orderModel: _listOrder![0],
+                        orderModel: _listOrder[0],
                         tokenModel: widget.tokenModel,
                         userModel: lateUser!),
                     true);
@@ -62,6 +64,27 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return getStatusUser;
   }
 
+  Future loadListNotifications() {
+    Future<ResponseListModel<NotificationModel>?> listNotificationFuture =
+        NotificationService().getNotifications(widget.tokenModel.message);
+    listNotificationFuture.then((_notificationList) {
+      _listNotification = _notificationList!.content;
+      if (_listNotification.isEmpty) {
+        for (var item in _listNotification) {
+          Future<ResponseModel<NotificationModel>?> orderFuture =
+              NotificationService()
+                  .getNotificationById(item.id, widget.tokenModel.message);
+          orderFuture.then((value) {
+            if (value != null) {
+              _listNotification.add(value.content);
+            }
+          });
+        }
+      }
+    });
+    return listNotificationFuture;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -70,21 +93,21 @@ class _NotificationsPageState extends State<NotificationsPage> {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(50),
+              preferredSize: const Size.fromHeight(50),
               child: AppBar(
                 bottomOpacity: 0,
                 toolbarOpacity: 1,
                 toolbarHeight: 65,
                 backgroundColor: Colors.white,
                 elevation: 1,
-                leading: CircleAvatar(
+                leading: const CircleAvatar(
                   radius: 27,
                   backgroundColor: Colors.white,
                   backgroundImage: AssetImage(
                       "assets/images/play_together_logo_no_text.png"),
                 ),
                 centerTitle: true,
-                title: Text(
+                title: const Text(
                   'Thông báo',
                   style: TextStyle(
                       fontSize: 18,
@@ -94,14 +117,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ),
             ),
             body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Column(
-                  children: List.generate(
-                      demoListNotifications.length,
-                      (index) =>
-                          buildListNotification(demoListNotifications[index])),
-                ),
+              child: FutureBuilder(
+                future: loadListNotifications(),
+                builder: (context, snapshot) {
+                  return Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: List.generate(
+                            _listNotification.length,
+                            (index) => buildListNotification(
+                                _listNotification[index])),
+                      ));
+                },
               ),
             ),
             bottomNavigationBar: BottomBar(
@@ -113,6 +140,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
         });
   }
 
-  Widget buildListNotification(NotificationModel model) =>
-      NotificationCard(notificationModel: model);
+  Widget buildListNotification(NotificationModel _notificationModel) {
+    return NotificationCard(
+      notificationModel: _notificationModel,
+      userModel: widget.userModel,
+      tokenModel: widget.tokenModel,
+    );
+  }
 }

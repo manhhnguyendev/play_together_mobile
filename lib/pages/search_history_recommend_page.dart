@@ -28,8 +28,8 @@ class SearchHistoryAndRecommendPage extends StatefulWidget {
 class _SearchHistoryAndRecommendPageState
     extends State<SearchHistoryAndRecommendPage> {
   final _controller = TextEditingController();
-  List<UserModel>? listPlayerSearch;
-  List<PlayerModel>? _listPlayerSearch = [];
+  List<UserModel> listPlayerSearch = [];
+  List<PlayerModel> _listPlayerSearch = [];
   String searchValue = "";
   List<SearchHistoryModel> listSearchHistory = [];
   List<SearchHistoryModel> listHotSearch = [];
@@ -105,14 +105,14 @@ class _SearchHistoryAndRecommendPageState
                             _controller.text, widget.tokenModel.message);
                 listPlayerSearchModelFuture.then((_playerSearchList) {
                   listPlayerSearch = _playerSearchList!.content;
-                  if (_listPlayerSearch!.isEmpty) {
-                    for (var item in listPlayerSearch!) {
+                  if (_listPlayerSearch.isEmpty) {
+                    for (var item in listPlayerSearch) {
                       Future<ResponseModel<PlayerModel>?> playerFuture =
                           UserService().getPlayerById(
                               item.id, widget.tokenModel.message);
                       playerFuture.then((value) {
                         if (value != null) {
-                          _listPlayerSearch!.add(value.content);
+                          _listPlayerSearch.add(value.content);
                         }
                       });
                     }

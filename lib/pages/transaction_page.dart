@@ -19,6 +19,7 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+  List<TransactionModel> listAllTransaction = [];
   bool checkAll = true;
   bool checkDeposit = false;
   bool checkWithdraw = false;
@@ -31,17 +32,10 @@ class _TransactionPageState extends State<TransactionPage> {
   bool checkExistDonate = false;
   bool checkExistIncome = false;
   bool checkExistOutcome = false;
-  List<TransactionModel>? listAllTransaction;
-  List<TransactionModel>? listDepositTransaction;
-  List<TransactionModel>? listWithdrawTransaction;
-  List<TransactionModel>? listIncomeTransaction;
-  List<TransactionModel>? listOutcomeTransaction;
-  List<TransactionModel>? listDonateTransaction;
   String type = '';
   String operation = '';
 
   Future loadListAllTransaction() {
-    listAllTransaction ??= [];
     Future<ResponseListModel<TransactionModel>?> listAllTransactionModelFuture =
         TransactionService()
             .getAllTransaction(type, operation, widget.tokenModel.message);
@@ -365,7 +359,7 @@ class _TransactionPageState extends State<TransactionPage> {
               child: FutureBuilder(
                   future: loadListAllTransaction(),
                   builder: (context, snapshot) {
-                    if (listAllTransaction!.isEmpty) {
+                    if (listAllTransaction.isEmpty) {
                       checkExistTransaction = true;
                     } else {
                       checkExistTransaction = false;
@@ -378,9 +372,9 @@ class _TransactionPageState extends State<TransactionPage> {
                             children: List.generate(
                                 listAllTransaction == null
                                     ? 0
-                                    : listAllTransaction!.length,
+                                    : listAllTransaction.length,
                                 (index) => buildListTransaction(
-                                    listAllTransaction![index])),
+                                    listAllTransaction[index])),
                           ),
                           Visibility(
                               visible: checkExistTransaction,
