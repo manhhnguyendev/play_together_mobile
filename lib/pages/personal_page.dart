@@ -8,6 +8,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
 import 'package:play_together_mobile/pages/login_page.dart';
+import 'package:play_together_mobile/pages/manage_hiring_page.dart';
 import 'package:play_together_mobile/pages/personal_change_password_page.dart';
 import 'package:play_together_mobile/pages/policies_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
@@ -302,11 +303,14 @@ class _PersonalPageState extends State<PersonalPage> {
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
                     child: GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => ManageHiringPage(),
-                        //     ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ManageHiringPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel,
+                              ),
+                            ));
                       },
                       child: Row(
                         children: const [
