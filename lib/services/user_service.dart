@@ -186,7 +186,7 @@ class UserService {
     ResponseListModel<GameOfUserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$userId/games'),
+        Uri.parse('${apiUrl.users}/$userId/games?PageSize=50'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

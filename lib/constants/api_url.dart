@@ -22,3 +22,5 @@ const String hobbies =
     "https://play-together.azurewebsites.net/api/play-together/v1/hobbies";
 const String gameOfUser =
     "https://play-together.azurewebsites.net/api/play-together/v1/games-of-user";
+const String notification =
+    "https://play-together.azurewebsites.net/api/play-together/v1/notification";

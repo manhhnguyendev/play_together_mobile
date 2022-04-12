@@ -25,24 +25,24 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   UserModel? lateUser;
-  List<OrderModel>? _listOrder;
-  List<OrderModel>? _listCreateOrder;
-  List<OrderModel>? _listReceiveOrder;
+  List<OrderModel> _listOrder = [];
+  List<OrderModel> _listCreateOrder = [];
+  List<OrderModel> _listReceiveOrder = [];
   bool checkEmptyCreateOrder = false;
   bool checkEmptyReceiveOrder = false;
+
   Future loadListFromCreateUser() {
-    _listCreateOrder ??= [];
     Future<ResponseListModel<OrderModel>?> listOrderFromCreateUserModelFuture =
         OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
     listOrderFromCreateUserModelFuture.then((_createOrderList) {
       _listCreateOrder = _createOrderList!.content;
-      if (_listCreateOrder!.isEmpty) {
-        for (var item in _listCreateOrder!) {
+      if (_listCreateOrder.isEmpty) {
+        for (var item in _listCreateOrder) {
           Future<ResponseModel<OrderModel>?> orderFuture = OrderService()
               .getDetailOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
-              _listCreateOrder!.add(value.content);
+              _listCreateOrder.add(value.content);
             }
           });
         }
@@ -52,18 +52,17 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future loadListFromReceiveUser() {
-    _listReceiveOrder ??= [];
     Future<ResponseListModel<OrderModel>?> listOrderFromReceiveUserModelFuture =
         OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
     listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
       _listReceiveOrder = _receiveOrderList!.content;
-      if (_listReceiveOrder!.isEmpty) {
-        for (var item in _listReceiveOrder!) {
+      if (_listReceiveOrder.isEmpty) {
+        for (var item in _listReceiveOrder) {
           Future<ResponseModel<OrderModel>?> orderFuture =
               OrderService().getOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
-              _listReceiveOrder!.add(value.content);
+              _listReceiveOrder.add(value.content);
             }
           });
         }
@@ -87,13 +86,13 @@ class _HistoryPageState extends State<HistoryPage> {
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
             _listOrder = order!.content;
-            if (_listOrder![0].toUserId == widget.userModel.id) {
+            if (_listOrder[0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {
                 helper.pushInto(
                     context,
                     ReceiveRequestPage(
-                        orderModel: _listOrder![0],
+                        orderModel: _listOrder[0],
                         tokenModel: widget.tokenModel,
                         userModel: lateUser!),
                     true);
@@ -114,7 +113,6 @@ class _HistoryPageState extends State<HistoryPage> {
           return DefaultTabController(
             length: 2,
             child: Scaffold(
-              backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.white,
                 elevation: 1,
@@ -160,7 +158,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: FutureBuilder(
                         future: loadListFromCreateUser(),
                         builder: (context, snapshot) {
-                          if (_listCreateOrder!.isEmpty) {
+                          if (_listCreateOrder.isEmpty) {
                             checkEmptyCreateOrder = true;
                           } else {
                             checkEmptyCreateOrder = false;
@@ -173,9 +171,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                   children: List.generate(
                                       _listCreateOrder == null
                                           ? 0
-                                          : _listCreateOrder!.length,
+                                          : _listCreateOrder.length,
                                       (index) => buildListHistory(
-                                          _listCreateOrder![index])),
+                                          _listCreateOrder[index])),
                                 ),
                                 Visibility(
                                     visible: checkEmptyCreateOrder,
@@ -188,7 +186,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: FutureBuilder(
                         future: loadListFromReceiveUser(),
                         builder: (context, snapshot) {
-                          if (_listReceiveOrder!.isEmpty) {
+                          if (_listReceiveOrder.isEmpty) {
                             checkEmptyReceiveOrder = true;
                           } else {
                             checkEmptyReceiveOrder = false;
@@ -201,9 +199,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                   children: List.generate(
                                       _listReceiveOrder == null
                                           ? 0
-                                          : _listReceiveOrder!.length,
+                                          : _listReceiveOrder.length,
                                       (index) => buildListHistory(
-                                          _listReceiveOrder![index])),
+                                          _listReceiveOrder[index])),
                                 ),
                                 Visibility(
                                     visible: checkEmptyReceiveOrder,

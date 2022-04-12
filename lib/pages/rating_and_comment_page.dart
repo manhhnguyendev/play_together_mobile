@@ -26,12 +26,11 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
   bool check2star = false;
   bool check1star = false;
   bool checkAll = true;
-  List<RatingModel>? listAllRating;
+  List<RatingModel> listAllRating = [];
   double vote = 0;
   bool checkExist = false;
 
   Future loadListRating() {
-    listAllRating ??= [];
     Future<ResponseListModel<RatingModel>?> listAllRatingModelFuture =
         RatingService().getAllRating(
             widget.playerModel!.id, vote, widget.tokenModel.message);
@@ -473,7 +472,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
             FutureBuilder(
                 future: loadListRating(),
                 builder: (context, snapshot) {
-                  if (listAllRating!.isEmpty) {
+                  if (listAllRating.isEmpty) {
                     checkExist = true;
                   } else {
                     checkExist = false;
@@ -484,9 +483,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                       children: [
                         Column(
                           children: List.generate(
-                              listAllRating == null ? 0 : listAllRating!.length,
-                              (index) =>
-                                  buildRatingList(listAllRating![index])),
+                              listAllRating == null ? 0 : listAllRating.length,
+                              (index) => buildRatingList(listAllRating[index])),
                         ),
                         Visibility(
                             visible: checkExist,

@@ -36,9 +36,10 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
         GameService().getAllGames(widget.tokenModel.message);
     gameFuture.then((listGameValue) {
       if (listGameValue != null) {
-        if (checkFirstTime) {
+        if (checkFirstTime == true) {
           setState(() {
             listAllGames = listGameValue.content;
+            print(listAllGames.length);
             Future<ResponseListModel<GameOfUserModel>?> hobbiesFuture =
                 UserService().getGameOfUser(
                     widget.userModel.id, widget.tokenModel.message);
