@@ -479,6 +479,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           isExpanded: true,
+          menuMaxHeight: 6 * 48,
           value: city,
           items: listDrop,
           hint: const Text('Thành phố của bạn'),

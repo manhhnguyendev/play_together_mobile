@@ -631,6 +631,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           isExpanded: true,
+          menuMaxHeight: 6 * 48,
           value: city,
           items: listDrop,
           hint: const Text('Thành phố của bạn'),

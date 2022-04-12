@@ -1,166 +1,240 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/models/skill_model.dart';
+import 'package:play_together_mobile/models/game_of_user_model.dart';
+import 'package:play_together_mobile/models/rank_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/add_new_skills.dart';
-import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:play_together_mobile/services/game_of_user_service.dart';
+import 'package:play_together_mobile/services/rank_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 
 class UpdateGameSkillsPage extends StatefulWidget {
-  // final UserModel userModel;
-  // final TokenModel tokenModel;
-  // const UpdateGameSkillsPage(
-  //     {Key? key, required this.userModel, required this.tokenModel})
-  //     : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
 
-  const UpdateGameSkillsPage({Key? key}) : super(key: key);
+  const UpdateGameSkillsPage(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
+
   @override
   State<UpdateGameSkillsPage> createState() => _UpdateGameSkillsPageState();
 }
 
 class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1,
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
-              child: const Icon(
-                Icons.arrow_back_ios,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          centerTitle: true,
-          title: Text(
-            'Chỉnh sửa kỹ năng',
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: (() async {
-                final check = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddNewSkillsPage()));
-                setState(() {});
-              }),
-              child: Icon(
-                Icons.add,
-                color: Colors.black,
-                size: 30,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: List.generate(demoListSkills.length,
-              (index) => buildSkills(demoListSkills[index])),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            child: AcceptProfileButton(text: 'Cập nhật', onpress: () {})),
-      ),
-    );
+  List<GameOfUserModel> listGameOfUser = [];
+
+  Future getAllGameOfUser() {
+    Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
+        .getGameOfUser(widget.userModel.id, widget.tokenModel.message);
+    gameOfUserFuture.then((value) {
+      if (value != null) {
+        listGameOfUser = value.content;
+      }
+    });
+    return gameOfUserFuture;
   }
 
-  Widget buildSkills(SkillModel skillModel) {
-    List<DropdownMenuItem<String>> listDrop = [];
-    bool checkListRank = false;
-    if (skillModel.listRank != null) {
-      if (skillModel.listRank.length > 0) {
-        checkListRank = true;
-        listDrop = skillModel.listRank
-            .map((val) => DropdownMenuItem<String>(
-                  child: Text(val),
-                  value: val,
-                ))
-            .toList();
-      }
-    }
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getAllGameOfUser(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 1,
+                leading: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: FlatButton(
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                centerTitle: true,
+                title: const Text(
+                  'Chỉnh sửa kỹ năng',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: (() async {
+                      final check = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddNewSkillsPage(
+                                    userModel: widget.userModel,
+                                    tokenModel: widget.tokenModel,
+                                  )));
+                      setState(() {});
+                    }),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: List.generate(listGameOfUser.length,
+                    (index) => buildSkills(listGameOfUser[index])),
+              ),
+            ),
+          );
+        });
+  }
 
+  Widget buildSkills(GameOfUserModel _gameOfUserModel) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                width: width * 0.4,
-                child: Text(
-                  skillModel.name,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-              Spacer(),
-              Visibility(
-                visible: checkListRank,
-                child: SizedBox(
-                  width: width * 0.4,
-                  height: height * 0.05,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: DropdownButtonHideUnderline(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        child: DropdownButton(
-                          isExpanded: true,
-                          value: skillModel.rankChoosen,
-                          items: listDrop,
-                          onChanged: (value) {
-                            skillModel.rankChoosen = value as String;
-                            setState(() {
-                              skillModel.rankChoosen = value;
-                            });
-                          },
+    bool checkListRank = false;
+    bool checkOnPress = true;
+    List<RankModel> listRanksOfGame = [];
+    RankModel? rankChoosenModel;
+
+    Future getListRanksOfGame() {
+      Future<ResponseListModel<RankModel>?> ranksOfGameFuture = RankService()
+          .getAllRanksInGame(
+              _gameOfUserModel.gameId, widget.tokenModel.message);
+      ranksOfGameFuture.then((value) {
+        if (value != null) {
+          if (checkOnPress) {
+            listRanksOfGame = value.content;
+          }
+        }
+      });
+      return ranksOfGameFuture;
+    }
+
+    return FutureBuilder(
+        future: getListRanksOfGame(),
+        builder: (context, snapshot) {
+          if (_gameOfUserModel.rankId != "None") {
+            checkListRank = true;
+          }
+          return Container(
+            padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: width * 0.4,
+                      child: Text(
+                        _gameOfUserModel.game.name,
+                        maxLines: 2,
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ),
+                    const Spacer(),
+                    Visibility(
+                      visible: checkListRank,
+                      child: SizedBox(
+                        width: width * 0.4,
+                        height: height * 0.05,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: DropdownButtonHideUnderline(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: DropdownButton<RankModel>(
+                                isExpanded: true,
+                                menuMaxHeight: 5 * 48,
+                                hint: Text(
+                                  _gameOfUserModel.rank.name != null
+                                      ? _gameOfUserModel.rank.name
+                                      : '',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                                value: rankChoosenModel,
+                                onChanged: (RankModel? newValue) {
+                                  checkOnPress = true;
+                                  rankChoosenModel = newValue;
+                                  UpdateGameOfUserModel updateGameOfUserModel =
+                                      UpdateGameOfUserModel(
+                                          rankId: rankChoosenModel!.id);
+                                  Future<bool?> updateFuture =
+                                      GameOfUserService().updateGameOfUser(
+                                          _gameOfUserModel.id,
+                                          updateGameOfUserModel,
+                                          widget.tokenModel.message);
+                                  updateFuture.then((value) {
+                                    setState(() {
+                                      if (value == true) {
+                                        checkOnPress = false;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text("Cập nhật thành công"),
+                                        ));
+                                        print('Cập nhật thành công');
+                                      }
+                                    });
+                                  });
+                                },
+                                items: listRanksOfGame
+                                    .map<DropdownMenuItem<RankModel>>(
+                                        (RankModel value) {
+                                  return DropdownMenuItem<RankModel>(
+                                    value: value,
+                                    child: Text(value.name),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    IconButton(
+                        onPressed: () {
+                          checkOnPress = true;
+                          Future<bool?> deleteFuture = GameOfUserService()
+                              .deleteGameOfUser(_gameOfUserModel.id,
+                                  widget.tokenModel.message);
+                          deleteFuture.then((value) {
+                            setState(() {
+                              if (value == true) {
+                                checkOnPress = false;
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Xóa thành công"),
+                                ));
+                                print('Xóa thành công');
+                              }
+                            });
+                          });
+                        },
+                        icon: Icon(
+                          Icons.delete_outline,
+                          size: width * 0.08,
+                        )),
+                  ],
                 ),
-              ),
-              IconButton(
-                  onPressed: () {
-                    demoListSkills.remove(skillModel);
-                    setState(() {});
-                  },
-                  icon: Icon(
-                    Icons.delete_outline,
-                    size: width * 0.08,
-                  )),
-            ],
-          ),
-          Divider(
-            height: 10,
-            thickness: 1,
-          ),
-        ],
-      ),
-    );
+                const Divider(
+                  height: 10,
+                  thickness: 1,
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

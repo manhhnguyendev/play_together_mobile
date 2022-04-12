@@ -22,15 +22,12 @@ class UpdateHobbiesPage extends StatefulWidget {
 }
 
 class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
-  late bool checkDelete;
-  late bool checkAdd;
   List<HobbiesModel> listHobbies = [];
   List<GamesModel> listAllGames = [];
   List<CheckBoxState> listGamesCheckBox = [];
   List<CreateHobbiesModel> listCreateHobbies = [];
   List<DeleteHobbiesModel> listDeleteHobbies = [];
   List listGamesChoosen = [];
-
   bool checkFirstTime = true;
   bool checkAddChoosen = true;
   bool isPress = false;

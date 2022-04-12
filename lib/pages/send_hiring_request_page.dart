@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';

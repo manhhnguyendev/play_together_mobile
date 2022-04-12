@@ -1,6 +1,4 @@
-import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
-import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
 
 class UserModel {
@@ -132,43 +130,6 @@ class UserServiceModel {
         "isPlayer": isPlayer,
         "pricePerHour": pricePerHour,
         "maxHourHire": maxHourHire,
-      };
-}
-
-class GameOfUserModel {
-  String id;
-  String gameId;
-  GameModel game;
-  String rankId;
-  RankModel rank;
-
-  GameOfUserModel({
-    required this.id,
-    required this.gameId,
-    required this.game,
-    required this.rankId,
-    required this.rank,
-  });
-
-  factory GameOfUserModel.fromJson(Map<String, dynamic> json) =>
-      GameOfUserModel(
-        id: json['id'] as String,
-        gameId: json['gameId'] as String,
-        game: (json['game']) != null
-            ? GameModel.fromJson(json['game'])
-            : GameModel.fromJson(json),
-        rankId: json['rankId'] as String,
-        rank: (json['rank']) != null
-            ? RankModel.fromJson(json['rank'])
-            : RankModel.fromJson(json),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "gameId": gameId,
-        "game": game,
-        "rankId": rankId,
-        "rank": rank,
       };
 }
 
