@@ -27,10 +27,9 @@ class PlayerProfilePage extends StatefulWidget {
 
 class _PlayerProfilePageState extends State<PlayerProfilePage> {
   List listPlayerImage = [];
-  List<GameOfUserModel>? listGameAndRank;
+  List<GameOfUserModel> listGameAndRank = [];
 
   Future getGameOfUser() {
-    listGameAndRank ??= [];
     Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
         .getGameOfUser(widget.playerModel.id, widget.tokenModel.message);
     gameOfUserFuture.then((value) {
@@ -270,25 +269,12 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       child: Column(
                         children: List.generate(
                             listGameAndRank != null
-                                ? listGameAndRank!.length
+                                ? listGameAndRank.length
                                 : 0,
-                            (index) => buildGameAndRankPlayer(
-                                listGameAndRank![index])),
+                            (index) =>
+                                buildGameAndRankPlayer(listGameAndRank[index])),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                        color: Colors.grey,
-                        width: 0.1,
-                      ),
-                    )),
-                  ),
-                  const SizedBox(
-                    height: 15,
                   ),
                 ],
               ),
@@ -357,7 +343,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                    gameOfUser.rankId != ""
+                    gameOfUser.rankId != "None"
                         ? (gameOfUser.rank != null
                             ? " : " + gameOfUser.rank.name
                             : '')
