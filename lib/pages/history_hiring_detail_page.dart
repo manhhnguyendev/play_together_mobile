@@ -40,9 +40,11 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
         .format(DateTime.parse(widget.orderModel.processExpired));
     String timeExpired = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel.processExpired));
-    if (widget.orderModel.status == "Hirer Finish Soon") {
+    if (widget.orderModel.status == "Hirer Finish Soon" &&
+        widget.orderModel.reason != null) {
       checkEndEarly = true;
-    } else if (widget.orderModel.status == "Player Finish Soon") {
+    } else if (widget.orderModel.status == "Player Finish Soon" &&
+        widget.orderModel.reason != null) {
       checkEndEarly = true;
     } else {
       checkEndEarly = false;

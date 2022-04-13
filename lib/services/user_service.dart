@@ -217,4 +217,38 @@ class UserService {
     }
     return result;
   }
+
+  Future<bool?> updateIsPlayer(dynamic token) async {
+    Response response;
+    bool? result;
+    try {
+      response = await post(
+        Uri.parse('${apiUrl.users}/player'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> updatePersonalServiceInfo(dynamic token) async {
+    Response response;
+    bool? result;
+    try {
+      response = await post(
+        Uri.parse('${apiUrl.users}/service'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
 }

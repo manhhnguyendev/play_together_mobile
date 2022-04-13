@@ -32,13 +32,12 @@ class SendHiringRequestPage extends StatefulWidget {
 class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
   OrderModel? orderModel;
   bool checkFirstTime = true;
-  int chooseTime = 1;
-  int maxHour = 5;
+  int chooseTime = 0;
+  int maxHour = 0;
   String beginMessage = '';
   List<int> listHour = [];
   List listGames = [];
   List listGamesCheckBox = [];
-  //List listGameId = [];
   List listGamesChoosen = [];
   List<GameOrderModel> games = [];
   late double totalTimes;

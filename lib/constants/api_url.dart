@@ -20,6 +20,8 @@ const String games =
     "https://play-together.azurewebsites.net/api/play-together/v1/games";
 const String hobbies =
     "https://play-together.azurewebsites.net/api/play-together/v1/hobbies";
+const String dating =
+    "https://play-together.azurewebsites.net/api/play-together/v1/dating";
 const String gameOfUser =
     "https://play-together.azurewebsites.net/api/play-together/v1/games-of-user";
 const String notification =

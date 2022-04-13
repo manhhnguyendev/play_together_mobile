@@ -3,6 +3,7 @@ import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
+import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
@@ -61,6 +62,8 @@ class ResponseListModel<T> {
     } else if (T == NotificationModel) {
       return ListNotificationModelResponse.fromJson(json)
           as ResponseListModel<T>;
+    } else if (T == OnlineHourModel) {
+      return ListOnlineHourModelResponse.fromJson(json) as ResponseListModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -163,6 +166,15 @@ class ListHobbiesModelResponse extends ResponseListModel<HobbiesModel> {
       : super._fromJson(json) {
     content = (json['content'] as List<dynamic>)
         .map((dynamic item) => HobbiesModel.fromJson(item))
+        .toList();
+  }
+}
+
+class ListOnlineHourModelResponse extends ResponseListModel<OnlineHourModel> {
+  ListOnlineHourModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = (json['content'] as List<dynamic>)
+        .map((dynamic item) => OnlineHourModel.fromJson(item))
         .toList();
   }
 }

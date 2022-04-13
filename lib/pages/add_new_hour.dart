@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:play_together_mobile/models/online_hour_model.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/services/datings_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 
 class AddNewHour extends StatefulWidget {
-  const AddNewHour({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+
+  const AddNewHour(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<AddNewHour> createState() => _AddNewHourState();
@@ -17,10 +26,17 @@ class _AddNewHourState extends State<AddNewHour> {
   bool isFriday = false;
   bool isSaturday = false;
   bool isSunday = false;
-  var fromHourController = new TextEditingController();
-  var toHourController = new TextEditingController();
+  var fromHourController = TextEditingController();
+  var toHourController = TextEditingController();
   String fromHour = "";
   String toHour = "";
+  var fromMinuteController = TextEditingController();
+  var toMinuteController = TextEditingController();
+  String fromMinute = "";
+  String toMinute = "";
+  late int newFromHour;
+  late int newToHour;
+  int dayOfWeek = 1;
   bool checkFirstTime = true;
   late OnlineHourModel newOnlineHourModel;
   @override
@@ -88,8 +104,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isMonday) {
                             isMonday = true;
-                          } else {
-                            isMonday = false;
+                            isTuesday = false;
+                            isWednesday = false;
+                            isThursday = false;
+                            isFriday = false;
+                            isSaturday = false;
+                            isSunday = false;
                           }
                         });
                       },
@@ -128,8 +148,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isTuesday) {
                             isTuesday = true;
-                          } else {
-                            isTuesday = false;
+                            isMonday = false;
+                            isWednesday = false;
+                            isThursday = false;
+                            isFriday = false;
+                            isSaturday = false;
+                            isSunday = false;
                           }
                         });
                       },
@@ -168,8 +192,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isWednesday) {
                             isWednesday = true;
-                          } else {
-                            isWednesday = false;
+                            isMonday = false;
+                            isTuesday = false;
+                            isThursday = false;
+                            isFriday = false;
+                            isSaturday = false;
+                            isSunday = false;
                           }
                         });
                       },
@@ -208,8 +236,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isThursday) {
                             isThursday = true;
-                          } else {
-                            isThursday = false;
+                            isMonday = false;
+                            isTuesday = false;
+                            isWednesday = false;
+                            isFriday = false;
+                            isSaturday = false;
+                            isSunday = false;
                           }
                         });
                       },
@@ -257,8 +289,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isFriday) {
                             isFriday = true;
-                          } else {
-                            isFriday = false;
+                            isMonday = false;
+                            isTuesday = false;
+                            isWednesday = false;
+                            isThursday = false;
+                            isSaturday = false;
+                            isSunday = false;
                           }
                         });
                       },
@@ -297,8 +333,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isSaturday) {
                             isSaturday = true;
-                          } else {
-                            isSaturday = false;
+                            isMonday = false;
+                            isTuesday = false;
+                            isWednesday = false;
+                            isThursday = false;
+                            isFriday = false;
+                            isSunday = false;
                           }
                         });
                       },
@@ -337,8 +377,12 @@ class _AddNewHourState extends State<AddNewHour> {
                         setState(() {
                           if (!isSunday) {
                             isSunday = true;
-                          } else {
-                            isSunday = false;
+                            isMonday = false;
+                            isTuesday = false;
+                            isWednesday = false;
+                            isThursday = false;
+                            isFriday = false;
+                            isSaturday = false;
                           }
                         });
                       },
@@ -366,16 +410,31 @@ class _AddNewHourState extends State<AddNewHour> {
                 children: [
                   Text(
                     "Từ: ",
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 18),
                   ),
                   Spacer(),
                   SizedBox(
-                    width: width * 0.7,
-                    child: TextFormField(
-                      initialValue: fromHourController.text,
+                    width: width * 0.2,
+                    //height: height * 0.05,
+                    child: TextField(
+                      controller: fromHourController,
                       maxLength: 2,
+                      decoration: InputDecoration(counterText: ""),
                       onChanged: (value) {
                         setState(() {
+                          if (value.isNotEmpty) {
+                            if (int.parse(value) < 0 || int.parse(value) > 23) {
+                              value = "";
+                              fromHour = "";
+                              fromHourController.text = "";
+                            } else {
+                              fromHour = value;
+                            }
+                          }
+                        });
+                      },
+                      onSubmitted: (value) {
+                        if (value != null) {
                           fromHour = value;
                           if (fromHour.length > 1) {
                             if (int.parse(fromHour) < 0 ||
@@ -383,10 +442,56 @@ class _AddNewHourState extends State<AddNewHour> {
                               fromHour = "";
                             }
                           }
-                          print(fromHour);
+                        }
+                      },
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  Text(
+                    " : ",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: width * 0.2,
+                    child: TextField(
+                      //inputFormatters: [CustomRangeTextInputFormatter()],
+                      controller: fromMinuteController,
+                      decoration: InputDecoration(counterText: ""),
+                      maxLength: 2,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isNotEmpty) {
+                            if (int.parse(value) < 0 || int.parse(value) > 59) {
+                              value = "";
+                              fromMinute = "";
+                              fromMinuteController.text = "";
+                            } else {
+                              fromMinute = value;
+                            }
+                          }
                         });
                       },
-                      onSaved: (value) {},
+                      onSubmitted: (value) {
+                        setState(() {
+                          if (value != null) {
+                            if (value.length > 1) {
+                              if (int.parse(value) < 0 ||
+                                  int.parse(value) > 59) {
+                                value = "";
+                                fromMinute = "";
+                                fromMinuteController.text = "";
+                              } else {
+                                fromMinute = value;
+                              }
+                            } else if (value.length == 1) {
+                              value = "0" + value;
+                              fromMinute = "0" + fromMinute;
+                              fromMinuteController.text =
+                                  "0" + fromMinuteController.text;
+                            }
+                          }
+                        });
+                      },
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -401,15 +506,32 @@ class _AddNewHourState extends State<AddNewHour> {
               padding: const EdgeInsets.only(right: 15.0),
               child: Row(
                 children: [
-                  Text("Đến: "),
+                  Text(
+                    "Đến: ",
+                    style: TextStyle(fontSize: 18),
+                  ),
                   Spacer(),
                   SizedBox(
-                    width: width * 0.7,
-                    child: TextFormField(
-                      initialValue: toHourController.text,
+                    width: width * 0.2,
+                    child: TextField(
+                      controller: toHourController,
+                      decoration: InputDecoration(counterText: ""),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
+                          if (value.isNotEmpty) {
+                            if (int.parse(value) < 0 || int.parse(value) > 23) {
+                              value = "";
+                              toHour = "";
+                              toHourController.text = "";
+                            } else {
+                              toHour = value;
+                            }
+                          }
+                        });
+                      },
+                      onSubmitted: (value) {
+                        if (value != null) {
                           toHour = value;
                           if (toHour.length > 1) {
                             if (int.parse(toHour) < 0 ||
@@ -417,7 +539,53 @@ class _AddNewHourState extends State<AddNewHour> {
                               toHour = "";
                             }
                           }
-                          print(toHour);
+                        }
+                      },
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  Text(
+                    " : ",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: width * 0.2,
+                    child: TextField(
+                      controller: toMinuteController,
+                      decoration: InputDecoration(counterText: ""),
+                      maxLength: 2,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isNotEmpty) {
+                            if (int.parse(value) < 0 || int.parse(value) > 59) {
+                              value = "";
+                              toMinute = "";
+                              toMinuteController.text = "";
+                            } else {
+                              toMinute = value;
+                            }
+                          }
+                        });
+                      },
+                      onSubmitted: (value) {
+                        setState(() {
+                          if (value != null) {
+                            if (value.length > 1) {
+                              if (int.parse(value) < 0 ||
+                                  int.parse(value) > 59) {
+                                value = "";
+                                toMinute = "";
+                                toMinuteController.text = "";
+                              } else {
+                                toMinute = value;
+                              }
+                            } else if (value.length == 1) {
+                              value = "0" + value;
+                              toMinute = "0" + toMinute;
+                              toMinuteController.text =
+                                  "0" + toMinuteController.text;
+                            }
+                          }
                         });
                       },
                       keyboardType: TextInputType.number,
@@ -437,7 +605,32 @@ class _AddNewHourState extends State<AddNewHour> {
             child: AcceptProfileButton(
                 text: 'Thêm mới',
                 onpress: () {
+                  if (isMonday) {
+                    dayOfWeek = 2;
+                  }
+                  if (isTuesday) {
+                    dayOfWeek = 3;
+                  }
+                  if (isWednesday) {
+                    dayOfWeek = 4;
+                  }
+                  if (isThursday) {
+                    dayOfWeek = 5;
+                  }
+                  if (isFriday) {
+                    dayOfWeek = 6;
+                  }
+                  if (isSaturday) {
+                    dayOfWeek = 7;
+                  }
+                  if (isSunday) {
+                    dayOfWeek = 8;
+                  }
                   bool valid = true;
+                  if (dayOfWeek == 1) {
+                    valid = false;
+                  }
+
                   if (fromHour.length == 0) {
                     valid = false;
                   }
@@ -448,21 +641,42 @@ class _AddNewHourState extends State<AddNewHour> {
 
                   if (int.parse(fromHour) > int.parse(toHour)) {
                     valid = false;
+                  } else if (int.parse(fromHour) == int.parse(toHour)) {
+                    if (int.parse(fromMinute) > int.parse(toMinute)) {
+                      valid = false;
+                    }
                   }
 
                   if (valid) {
-                    for (var item in demoListHour) {
-                      print(item.fromHour.toString() +
-                          "-" +
-                          item.toHour.toString() +
-                          "/ " +
-                          item.dayInWeek.toString());
-                    }
-
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Cập nhật thành công"),
-                    ));
-                    //Navigator.pop(context);
+                    newFromHour =
+                        int.parse(fromHour) * 60 + int.parse(fromMinute);
+                    newToHour = int.parse(toHour) * 60 + int.parse(toMinute);
+                    print(newFromHour.toString() + " luu cai nay");
+                    print(newToHour.toString() + " luu cai nay");
+                    CreateOnlineHourModel newModel = CreateOnlineHourModel(
+                        fromHour: newFromHour,
+                        toHour: newToHour,
+                        dayInWeek: dayOfWeek);
+                    Future<bool?> addFuture = DatingService()
+                        .createDating(newModel, widget.tokenModel.message);
+                    addFuture.then((value) {
+                      if (value == true) {
+                        setState(() {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Thêm thành công"),
+                          ));
+                          print('Thêm thành công');
+                          Navigator.pop(context);
+                        });
+                      } else {
+                        print("THÊM BỊ LỖI");
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Giờ nhập bị trùng"),
+                        ));
+                      }
+                    });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text("Giờ nhập không chính xác"),
@@ -473,3 +687,20 @@ class _AddNewHourState extends State<AddNewHour> {
     );
   }
 }
+
+// class CustomRangeTextInputFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//     TextEditingValue oldValue,
+//     TextEditingValue newValue,
+//   ) {
+//     if (newValue.text == '')
+//       return TextEditingValue();
+//     else if (newValue.text.length == 1)
+//       return TextEditingValue().copyWith(text: '0' + newValue.toString());
+
+//     return int.parse(newValue.text) > 59
+//         ? TextEditingValue().copyWith(text: '00')
+//         : newValue;
+//   }
+// }
