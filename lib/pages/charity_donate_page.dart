@@ -3,7 +3,7 @@ import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/transaction_page.dart';
+import 'package:play_together_mobile/pages/charity_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:intl/intl.dart';
@@ -160,7 +160,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                       setState(() {
                         helper.pushInto(
                             context,
-                            TransactionPage(
+                            CharityPage(
                               tokenModel: widget.tokenModel,
                               userModel: widget.userModel,
                             ),

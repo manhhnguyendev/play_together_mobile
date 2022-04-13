@@ -209,7 +209,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
-                          width: width * 0.2,
+                          width: width * 0.25,
                           height: height * 0.05,
                           child: FlatButton(
                             onPressed: () {
@@ -416,7 +416,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
-                          width: width * 0.2,
+                          width: width * 0.15,
                           height: height * 0.05,
                           child: FlatButton(
                             onPressed: () {

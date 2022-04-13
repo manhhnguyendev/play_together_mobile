@@ -69,7 +69,23 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
     controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
       if (controller.value == 0) {
-        Navigator.pop(context);
+        setState(() {
+          Future<bool?> cancelFuture = OrderService().cancelOrderRequest(
+              widget.orderModel!.id, widget.tokenModel.message);
+          cancelFuture.then((check) {
+            if (check == true) {
+              setState(() {
+                helper.pushInto(
+                    context,
+                    HomePage(
+                      tokenModel: widget.tokenModel,
+                      userModel: widget.userModel,
+                    ),
+                    true);
+              });
+            }
+          });
+        });
       }
     });
   }
@@ -339,19 +355,20 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                         elevation: 5.0,
                         child: const Text('Có'),
                         onPressed: () {
-                          Future<bool?> cancelFuture = OrderService()
-                              .cancelOrderRequest(widget.orderModel!.id,
-                                  widget.tokenModel.message);
-                          cancelFuture.then((check) {
-                            if (check == true) {
+                          RejectOrderModel isReject = RejectOrderModel(
+                              isAccept: false, reason: customController.text);
+                          Future<bool?> rejectFuture = OrderService()
+                              .rejectOrderRequest(widget.orderModel!.id,
+                                  widget.tokenModel.message, isReject);
+                          rejectFuture.then((accept) {
+                            if (accept == true) {
                               setState(() {
-                                helper.pushInto(
+                                Navigator.pop(
                                     context,
                                     HomePage(
                                       tokenModel: widget.tokenModel,
                                       userModel: widget.userModel,
-                                    ),
-                                    true);
+                                    ));
                               });
                             }
                           });

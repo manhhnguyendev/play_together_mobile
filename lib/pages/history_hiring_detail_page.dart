@@ -6,13 +6,13 @@ import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
-  final OrderModel orderModel;
+  final OrderDetailModel orderDetailModel;
   final UserModel userModel;
   final TokenModel tokenModel;
 
   const HistoryHiringDetail(
       {Key? key,
-      required this.orderModel,
+      required this.orderDetailModel,
       required this.tokenModel,
       required this.userModel})
       : super(key: key);
@@ -24,43 +24,77 @@ class HistoryHiringDetail extends StatefulWidget {
 class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
   bool checkEndEarly = true;
+  bool checkRating = true;
+  bool checkFinalPrice = true;
+  bool checkReason = true;
   int rate = 5;
   @override
   Widget build(BuildContext context) {
-    bool checkExpired = widget.orderModel.timeStart == "0001-01-01T00:00:00";
+    bool checkExpired =
+        widget.orderDetailModel.timeStart == "0001-01-01T00:00:00";
     String dateStart = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.orderModel.timeStart));
+        .format(DateTime.parse(widget.orderDetailModel.timeStart));
     String timeStart = DateFormat('hh:mm a')
-        .format(DateTime.parse(widget.orderModel.timeStart));
+        .format(DateTime.parse(widget.orderDetailModel.timeStart));
     String dateFinish = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.orderModel.timeFinish));
+        .format(DateTime.parse(widget.orderDetailModel.timeFinish));
     String timeFinish = DateFormat('hh:mm a')
-        .format(DateTime.parse(widget.orderModel.timeFinish));
+        .format(DateTime.parse(widget.orderDetailModel.timeFinish));
     String dateExpired = DateFormat('dd/MM/yyyy')
-        .format(DateTime.parse(widget.orderModel.processExpired));
+        .format(DateTime.parse(widget.orderDetailModel.processExpired));
     String timeExpired = DateFormat('hh:mm a')
-        .format(DateTime.parse(widget.orderModel.processExpired));
-    if (widget.orderModel.status == "Hirer Finish Soon" &&
-        widget.orderModel.reason != null) {
+        .format(DateTime.parse(widget.orderDetailModel.processExpired));
+
+    if (widget.orderDetailModel.status == "Hirer Finish Soon") {
       checkEndEarly = true;
-    } else if (widget.orderModel.status == "Player Finish Soon" &&
-        widget.orderModel.reason != null) {
+    } else if (widget.orderDetailModel.status == "Player Finish Soon") {
+      checkEndEarly = true;
+    } else if (widget.orderDetailModel.status == "Reject") {
+      checkEndEarly = true;
+    } else if (widget.orderDetailModel.status == "OverTime") {
+      checkEndEarly = true;
+    } else if (widget.orderDetailModel.status == "Cancel") {
       checkEndEarly = true;
     } else {
       checkEndEarly = false;
     }
+
+    if (widget.orderDetailModel.status == "Reject") {
+      checkFinalPrice = true;
+    } else if (widget.orderDetailModel.status == "OverTime") {
+      checkFinalPrice = true;
+    } else if (widget.orderDetailModel.status == "Cancel") {
+      checkFinalPrice = true;
+    } else {
+      checkFinalPrice = false;
+    }
+
+    if (widget.orderDetailModel.reason!.isNotEmpty) {
+      checkReason = true;
+    } else if (widget.orderDetailModel.reason! != null) {
+      checkReason = true;
+    } else if (widget.orderDetailModel.reason! != "") {
+      checkReason = true;
+    } else {
+      checkReason = false;
+    }
+
+    if (widget.orderDetailModel.ratings!.isNotEmpty) {
+      checkRating = true;
+    } else {
+      checkRating = false;
+    }
+
     var _controller = TextEditingController();
-    // if (widget.orderModel.ratings!.length > 0) {
-    //   _controller.text = widget.orderModel.ratings![0].comment;
-    //   rate = widget.orderModel.ratings![0].rate;
-    // } else {
-    //   _controller.text = "comment";
-    //   rate = 10;
-    // }
+    _controller.text = widget.orderDetailModel.ratings!.isNotEmpty
+        ? widget.orderDetailModel.ratings![0].comment
+        : "";
 
     var _reasonController = TextEditingController();
-    _reasonController.text =
-        widget.orderModel.reason != null ? widget.orderModel.reason! : "";
+    _reasonController.text = widget.orderDetailModel.reason != null
+        ? widget.orderDetailModel.reason!
+        : "";
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -96,7 +130,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
             children: [
               Container(
                   alignment: Alignment.center,
-                  child: createStatus(widget.orderModel.status)),
+                  child: createStatus(widget.orderDetailModel.status)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
                 child: Row(
@@ -107,19 +141,20 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           height: 120,
                           width: 120,
                           child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  widget.orderModel.user!.id ==
-                                          widget.userModel.id
-                                      ? widget.orderModel.user!.avatar
-                                      : widget.orderModel.toUser!.avatar)),
+                              backgroundImage: NetworkImage(widget
+                                          .orderDetailModel.user!.id ==
+                                      widget.userModel.id
+                                  ? widget.orderDetailModel.user!.avatar
+                                  : widget.orderDetailModel.toUser!.avatar)),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.orderModel.user!.id == widget.userModel.id
-                              ? widget.orderModel.user!.name
-                              : widget.orderModel.toUser!.name,
+                          widget.orderDetailModel.user!.id ==
+                                  widget.userModel.id
+                              ? widget.orderDetailModel.user!.name
+                              : widget.orderDetailModel.toUser!.name,
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
@@ -148,19 +183,20 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                           width: 120,
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(
-                                widget.orderModel.user!.id ==
+                                widget.orderDetailModel.user!.id ==
                                         widget.userModel.id
-                                    ? widget.orderModel.toUser!.avatar
-                                    : widget.orderModel.user!.avatar),
+                                    ? widget.orderDetailModel.toUser!.avatar
+                                    : widget.orderDetailModel.user!.avatar),
                           ),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          widget.orderModel.user!.id == widget.userModel.id
-                              ? widget.orderModel.toUser!.name
-                              : widget.orderModel.user!.name,
+                          widget.orderDetailModel.user!.id ==
+                                  widget.userModel.id
+                              ? widget.orderDetailModel.toUser!.name
+                              : widget.orderDetailModel.user!.name,
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
@@ -191,7 +227,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     const Spacer(),
                     Text(
-                      widget.orderModel.totalTimes.toString(),
+                      widget.orderDetailModel.totalTimes.toString(),
                       style: const TextStyle(fontSize: 15),
                     ),
                     const Text(
@@ -211,10 +247,33 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     ),
                     const Spacer(),
                     Text(
-                      widget.orderModel.totalPrices.toStringAsFixed(0).toVND(),
+                      widget.orderDetailModel.totalPrices
+                          .toStringAsFixed(0)
+                          .toVND(),
                       style: const TextStyle(fontSize: 15),
                     ),
                   ],
+                ),
+              ),
+              Visibility(
+                visible: !checkFinalPrice,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Tổng chi phí cuối cùng: ',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.orderDetailModel.finalPrices
+                            .toStringAsFixed(0)
+                            .toVND(),
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Visibility(
@@ -275,18 +334,18 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 ),
               ),
               Visibility(
-                visible: checkEndEarly,
+                visible: checkReason,
                 child: Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
                   child: const Text(
-                    'Lý do kết thúc sớm:',
+                    'Lý do :',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),
               ),
               Visibility(
-                visible: checkEndEarly,
+                visible: checkReason,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: TextField(
@@ -300,38 +359,47 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-                child: Row(
-                  children: [
-                    Text(
-                      'Đánh giá: ',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    Icon(
-                      Icons.star,
-                      color: Colors.yellow,
-                    ),
-                    Text(
-                      rate.toString(),
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
+              Visibility(
+                visible: checkRating,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Đánh giá: ',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      Text(
+                        widget.orderDetailModel.ratings!.isNotEmpty
+                            ? widget.orderDetailModel.ratings![0].rate
+                                .toString()
+                            : "",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                child: Container(
-                  height: 150,
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: TextField(
-                    controller: _controller,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                      border: InputBorder.none,
+              Visibility(
+                visible: checkRating,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  child: Container(
+                    height: 100,
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
+                    child: TextField(
+                      controller: _controller,
+                      enabled: false,
+                      decoration: const InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 ),
@@ -355,13 +423,6 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       return const Text(
         'Đang thương lượng',
         style: TextStyle(fontSize: 15, color: Colors.yellow),
-      );
-    }
-
-    if (status == 'Finish') {
-      return const Text(
-        'Hoàn thành',
-        style: TextStyle(fontSize: 15, color: Colors.green),
       );
     }
 

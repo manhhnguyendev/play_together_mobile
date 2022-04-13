@@ -210,6 +210,24 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Tổng chi phí cuối cùng: ',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.orderModel!.finalPrices
+                            .toStringAsFixed(0)
+                            .toVND(),
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
