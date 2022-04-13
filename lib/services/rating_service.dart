@@ -32,7 +32,7 @@ class RatingService {
     ResponseListModel<RatingModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.ratings}/$userId?Vote=$vote&IsNew=true'),
+        Uri.parse('${apiUrl.users}/$userId/ratings?Vote=$vote&IsNew=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

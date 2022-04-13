@@ -9,11 +9,11 @@ import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 class HistoryHiringCard extends StatefulWidget {
   final TokenModel tokenModel;
   final UserModel userModel;
-  final OrderModel orderModel;
+  final OrderDetailModel orderDetailModel;
 
   const HistoryHiringCard(
       {Key? key,
-      required this.orderModel,
+      required this.orderDetailModel,
       required this.tokenModel,
       required this.userModel})
       : super(key: key);
@@ -25,20 +25,31 @@ class HistoryHiringCard extends StatefulWidget {
 class _HistoryHiringCardState extends State<HistoryHiringCard> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
   bool checkReorder = false;
+  bool checkStatus = true;
   @override
   Widget build(BuildContext context) {
     String date = "";
     String time = "";
-    if (widget.orderModel.timeStart != "0001-01-01T00:00:00") {
+    if (widget.orderDetailModel.timeStart != "0001-01-01T00:00:00") {
       date = DateFormat('dd/MM/yyyy')
-          .format(DateTime.parse(widget.orderModel.timeStart));
+          .format(DateTime.parse(widget.orderDetailModel.timeStart));
       time = DateFormat('hh:mm a')
-          .format(DateTime.parse(widget.orderModel.timeStart));
+          .format(DateTime.parse(widget.orderDetailModel.timeStart));
     } else {
       date = DateFormat('dd/MM/yyyy')
-          .format(DateTime.parse(widget.orderModel.processExpired));
+          .format(DateTime.parse(widget.orderDetailModel.processExpired));
       time = DateFormat('hh:mm a')
-          .format(DateTime.parse(widget.orderModel.processExpired));
+          .format(DateTime.parse(widget.orderDetailModel.processExpired));
+    }
+
+    if (widget.orderDetailModel.status == "Reject") {
+      checkStatus = false;
+    } else if (widget.orderDetailModel.status == "OverTime") {
+      checkStatus = false;
+    } else if (widget.orderDetailModel.status == "Cancel") {
+      checkStatus = false;
+    } else {
+      checkStatus = true;
     }
 
     return Container(
@@ -49,7 +60,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
             context,
             MaterialPageRoute(
                 builder: (context) => HistoryHiringDetail(
-                      orderModel: widget.orderModel,
+                      orderDetailModel: widget.orderDetailModel,
                       userModel: widget.userModel,
                       tokenModel: widget.tokenModel,
                     )),
@@ -64,7 +75,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.orderModel.toUser!.name,
+                      widget.orderDetailModel.toUser!.name,
                       style: const TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     const SizedBox(height: 5),
@@ -75,9 +86,14 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   ],
                 ),
                 const Spacer(),
-                Text(
-                  widget.orderModel.totalPrices.toStringAsFixed(0).toVND(),
-                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                Visibility(
+                  visible: checkStatus,
+                  child: Text(
+                    widget.orderDetailModel.totalPrices
+                        .toStringAsFixed(0)
+                        .toVND(),
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                  ),
                 ),
               ],
             ),
@@ -107,7 +123,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   ),
                 ),
                 const Spacer(),
-                createStatus(widget.orderModel.status),
+                createStatus(widget.orderDetailModel.status),
               ],
             ),
             const SizedBox(

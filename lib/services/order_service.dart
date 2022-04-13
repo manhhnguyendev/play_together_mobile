@@ -26,17 +26,18 @@ class OrderService {
     return result;
   }
 
-  Future<ResponseModel<OrderModel>?> getDetailOrderById(
+  Future<ResponseModel<OrderDetailModel>?> getDetailOrderById(
       String orderId, dynamic token) async {
     Response response;
-    ResponseModel<OrderModel>? result;
+    ResponseModel<OrderDetailModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.orders}/detail/$orderId'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result = ResponseModel<OrderModel>.fromJson(json.decode(response.body));
+        result = ResponseModel<OrderDetailModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -138,6 +139,25 @@ class OrderService {
 
   Future<bool?> acceptOrderRequest(
       String orderId, dynamic token, AcceptOrderModel isAccept) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.users}/orders/$orderId/process'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(isAccept.toJson()),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> rejectOrderRequest(
+      String orderId, dynamic token, RejectOrderModel isAccept) async {
     Response response;
     bool? result;
     try {

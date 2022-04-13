@@ -26,8 +26,8 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   UserModel? lateUser;
   List<OrderModel> _listOrder = [];
-  List<OrderModel> _listCreateOrder = [];
-  List<OrderModel> _listReceiveOrder = [];
+  List<OrderDetailModel> _listCreateOrder = [];
+  List<OrderDetailModel> _listReceiveOrder = [];
   bool checkEmptyCreateOrder = false;
   bool checkEmptyReceiveOrder = false;
 
@@ -35,10 +35,10 @@ class _HistoryPageState extends State<HistoryPage> {
     Future<ResponseListModel<OrderModel>?> listOrderFromCreateUserModelFuture =
         OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
     listOrderFromCreateUserModelFuture.then((_createOrderList) {
-      _listCreateOrder = _createOrderList!.content;
-      if (_listCreateOrder.isEmpty) {
-        for (var item in _listCreateOrder) {
-          Future<ResponseModel<OrderModel>?> orderFuture = OrderService()
+      // _listCreateOrder = _createOrderList!.content;
+      if (_createOrderList!.content.isNotEmpty) {
+        for (var item in _createOrderList.content) {
+          Future<ResponseModel<OrderDetailModel>?> orderFuture = OrderService()
               .getDetailOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
@@ -55,11 +55,11 @@ class _HistoryPageState extends State<HistoryPage> {
     Future<ResponseListModel<OrderModel>?> listOrderFromReceiveUserModelFuture =
         OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
     listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
-      _listReceiveOrder = _receiveOrderList!.content;
-      if (_listReceiveOrder.isEmpty) {
-        for (var item in _listReceiveOrder) {
-          Future<ResponseModel<OrderModel>?> orderFuture =
-              OrderService().getOrderById(item.id, widget.tokenModel.message);
+      // _listReceiveOrder = _receiveOrderList!.content;
+      if (_receiveOrderList!.content.isNotEmpty) {
+        for (var item in _receiveOrderList.content) {
+          Future<ResponseModel<OrderDetailModel>?> orderFuture = OrderService()
+              .getDetailOrderById(item.id, widget.tokenModel.message);
           orderFuture.then((value) {
             if (value != null) {
               _listReceiveOrder.add(value.content);
@@ -221,9 +221,9 @@ class _HistoryPageState extends State<HistoryPage> {
         });
   }
 
-  Widget buildListHistory(OrderModel _orderModel) {
+  Widget buildListHistory(OrderDetailModel _orderDetailModel) {
     return HistoryHiringCard(
-      orderModel: _orderModel,
+      orderDetailModel: _orderDetailModel,
       userModel: widget.userModel,
       tokenModel: widget.tokenModel,
     );

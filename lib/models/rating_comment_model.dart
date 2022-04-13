@@ -35,7 +35,7 @@ class RatingModel {
 class RatingOrderModel {
   String id;
   String comment;
-  int rate;
+  double rate;
   bool isViolate;
   bool isActive;
   String createdDate;
@@ -53,7 +53,7 @@ class RatingOrderModel {
       RatingOrderModel(
         id: json['id'] as String,
         comment: json['comment'] as String,
-        rate: json['rate'] as int,
+        rate: json['rate'] as double,
         isViolate: json['isViolate'] as bool,
         isActive: json['isActive'] as bool,
         createdDate: json['createdDate'] as String,
