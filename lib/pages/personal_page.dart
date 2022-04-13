@@ -41,6 +41,7 @@ class PersonalPage extends StatefulWidget {
 class _PersonalPageState extends State<PersonalPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   UserModel? lateUser;
+  UserServiceModel? lateUserService;
   List<OrderModel>? _listOrder;
   late GoogleSignIn _googleSignIn;
 
@@ -186,13 +187,36 @@ class _PersonalPageState extends State<PersonalPage> {
                                   style: const TextStyle(
                                       fontSize: 22, color: Color(0xff320444)),
                                 ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Số khả dụng: ',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    Text(
+                                      lateUser != null
+                                          ? lateUser!.userBalance.activeBalance
+                                              .toStringAsFixed(0)
+                                              .toVND()
+                                          : widget.userModel.userBalance
+                                              .activeBalance
+                                              .toStringAsFixed(0)
+                                              .toVND(),
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.black),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(border: Border.all()),
-                            height: 70,
+                            height: 100,
                             width: 1,
                           ),
                           Row(
@@ -264,7 +288,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 25, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -300,17 +324,27 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ManageHiringPage(
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel,
-                              ),
-                            ));
+                        Future<ResponseModel<UserServiceModel>?>
+                            getUserServiceFuture =
+                            UserService().getUserServiceById(
+                                widget.userModel.id, widget.tokenModel.message);
+                        getUserServiceFuture.then((value) {
+                          if (value != null) {
+                            lateUserService = value.content;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ManageHiringPage(
+                                    tokenModel: widget.tokenModel,
+                                    userModel: widget.userModel,
+                                    userServiceModel: lateUserService,
+                                  ),
+                                ));
+                          }
+                        });
                       },
                       child: Row(
                         children: const [
@@ -336,7 +370,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -372,7 +406,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -408,7 +442,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -468,7 +502,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: FutureBuilder(
                         future: _initialization,
                         builder: (context, snapshot) {
@@ -512,13 +546,6 @@ class _PersonalPageState extends State<PersonalPage> {
                           }
                           return const CircularProgressIndicator();
                         }),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Divider(
-                      thickness: 1,
-                      color: Colors.grey,
-                    ),
                   ),
                 ],
               ),

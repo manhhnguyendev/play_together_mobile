@@ -1,4 +1,5 @@
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
 
 class UserModel {

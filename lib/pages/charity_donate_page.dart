@@ -3,9 +3,10 @@ import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/charity_page.dart';
+import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:intl/intl.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class DonateCharityPage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
   String money = "";
   String message = "";
   double convertMoney = 0;
-
+  var formatter = NumberFormat('###,###,###');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +66,29 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
       body: SingleChildScrollView(
           child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.attach_money_sharp,
+                  color: Color(0xff8089FF),
+                  size: 22,
+                ),
+                Text(
+                  'Số dư khả dụng: ',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  formatter.format(widget.userModel.userBalance.activeBalance) +
+                      "đ",
+                  style: TextStyle(fontSize: 18),
+                )
+              ],
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,7 +160,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                       setState(() {
                         helper.pushInto(
                             context,
-                            CharityPage(
+                            TransactionPage(
                               tokenModel: widget.tokenModel,
                               userModel: widget.userModel,
                             ),
