@@ -85,7 +85,23 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
     controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
       if (controller.value == 0) {
-        Navigator.pop(context);
+        setState(() {
+          Future<bool?> cancelFuture = OrderService().cancelOrderRequest(
+              widget.orderModel!.id, widget.tokenModel.message);
+          cancelFuture.then((check) {
+            if (check == true) {
+              setState(() {
+                helper.pushInto(
+                    context,
+                    HomePage(
+                      tokenModel: widget.tokenModel,
+                      userModel: widget.userModel,
+                    ),
+                    true);
+              });
+            }
+          });
+        });
       }
     });
   }

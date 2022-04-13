@@ -35,6 +35,8 @@ class ResponseModel<T> {
       return CharityModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == NotificationModel) {
       return NotificationModelResponse.fromJson(json) as ResponseModel<T>;
+    } else if (T == OrderDetailModel) {
+      return OrderDetailModelResponse.fromJson(json) as ResponseModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -44,6 +46,13 @@ class UserModelResponse extends ResponseModel<UserModel> {
   UserModelResponse.fromJson(Map<String, dynamic> json)
       : super._fromJson(json) {
     content = UserModel.fromJson(json["content"]);
+  }
+}
+
+class OrderDetailModelResponse extends ResponseModel<OrderDetailModel> {
+  OrderDetailModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = OrderDetailModel.fromJson(json["content"]);
   }
 }
 

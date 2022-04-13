@@ -1,4 +1,5 @@
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
+import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class OrderModel {
@@ -12,6 +13,7 @@ class OrderModel {
   String? reason;
   int totalTimes;
   double totalPrices;
+  double finalPrices;
   String status;
   String timeStart;
   String timeFinish;
@@ -28,6 +30,7 @@ class OrderModel {
     required this.reason,
     required this.totalTimes,
     required this.totalPrices,
+    required this.finalPrices,
     required this.status,
     required this.timeStart,
     required this.timeFinish,
@@ -51,6 +54,7 @@ class OrderModel {
         reason: json['reason'] as String?,
         totalTimes: json['totalTimes'] as int,
         totalPrices: json['totalPrices'] as double,
+        finalPrices: json['finalPrices'] as double,
         status: json['status'] as String,
         timeStart: json['timeStart'] as String,
         timeFinish: json['timeFinish'] as String,
@@ -68,6 +72,94 @@ class OrderModel {
         "reason": reason,
         "totalTimes": totalTimes,
         "totalPrices": totalPrices,
+        "finalPrices": finalPrices,
+        "status": status,
+        "timeStart": timeStart,
+        "timeFinish": timeFinish,
+        "processExpired": processExpired,
+      };
+}
+
+class OrderDetailModel {
+  String id;
+  String userId;
+  UserModel? user;
+  String toUserId;
+  UserModel? toUser;
+  List<GameOfOrdersModel> gameOfOrders;
+  String message;
+  String? reason;
+  int totalTimes;
+  double totalPrices;
+  double finalPrices;
+  List<RatingOrderModel>? ratings;
+  String status;
+  String timeStart;
+  String timeFinish;
+  String processExpired;
+
+  OrderDetailModel({
+    required this.id,
+    required this.userId,
+    required this.user,
+    required this.toUserId,
+    required this.toUser,
+    required this.gameOfOrders,
+    required this.message,
+    required this.reason,
+    required this.totalTimes,
+    required this.totalPrices,
+    required this.finalPrices,
+    required this.ratings,
+    required this.status,
+    required this.timeStart,
+    required this.timeFinish,
+    required this.processExpired,
+  });
+
+  factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>
+      OrderDetailModel(
+        id: json['id'] as String,
+        userId: json['userId'] as String,
+        user: (json['user']) != null ? UserModel.fromJson(json['user']) : null,
+        toUserId: json['toUserId'] as String,
+        toUser: (json['toUser']) != null
+            ? UserModel.fromJson(json['toUser'])
+            : null,
+        gameOfOrders: (json['gameOfOrders'] as List<dynamic>?) != null
+            ? (json['gameOfOrders'] as List<dynamic>)
+                .map((games) => GameOfOrdersModel.fromJson(games))
+                .toList()
+            : <GameOfOrdersModel>[],
+        message: json['message'] as String,
+        reason: json['reason'] as String?,
+        totalTimes: json['totalTimes'] as int,
+        totalPrices: json['totalPrices'] as double,
+        finalPrices: json['finalPrices'] as double,
+        ratings: (json['ratings'] as List<dynamic>?) != null
+            ? (json['ratings'] as List<dynamic>)
+                .map((ratings) => RatingOrderModel.fromJson(ratings))
+                .toList()
+            : <RatingOrderModel>[],
+        status: json['status'] as String,
+        timeStart: json['timeStart'] as String,
+        timeFinish: json['timeFinish'] as String,
+        processExpired: json['processExpired'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "userId": userId,
+        "user": user,
+        "toUserId": toUserId,
+        "toUser": toUser,
+        "gameOfOrders": gameOfOrders,
+        "message": message,
+        "reason": reason,
+        "totalTimes": totalTimes,
+        "totalPrices": totalPrices,
+        "finalPrices": finalPrices,
+        "ratings": ratings,
         "status": status,
         "timeStart": timeStart,
         "timeFinish": timeFinish,
@@ -131,6 +223,26 @@ class AcceptOrderModel {
 
   Map<String, dynamic> toJson() => {
         "isAccept": isAccept,
+      };
+}
+
+class RejectOrderModel {
+  bool isAccept;
+  String reason;
+
+  RejectOrderModel({
+    required this.isAccept,
+    required this.reason,
+  });
+  factory RejectOrderModel.fromJson(Map<String, dynamic> json) =>
+      RejectOrderModel(
+        isAccept: json['isAccept'] as bool,
+        reason: json['reason'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "isAccept": isAccept,
+        "reason": reason,
       };
 }
 
