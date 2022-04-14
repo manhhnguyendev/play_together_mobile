@@ -69,7 +69,7 @@ class OrderService {
     ResponseListModel<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders?IsNew=true&PageSize=20'),
+        Uri.parse('${apiUrl.users}/orders?IsNew=true&PageSize=10'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -88,7 +88,7 @@ class OrderService {
     ResponseListModel<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=20'),
+        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=10'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
