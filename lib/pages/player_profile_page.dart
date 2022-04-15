@@ -298,16 +298,24 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     SecondMainButton(
                         text: 'Thuê',
                         onpress: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SendHiringRequestPage(
-                                      userModel: widget.userModel,
-                                      listGameAndRank: listGameAndRank,
-                                      playerModel: widget.playerModel,
-                                      tokenModel: widget.tokenModel,
-                                    )),
-                          );
+                          if (widget.userModel.isPlayer == true) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Bạn không thể thuê, vui lòng tắt nhận thuê để thực hiện"),
+                            ));
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SendHiringRequestPage(
+                                        userModel: widget.userModel,
+                                        listGameAndRank: listGameAndRank,
+                                        playerModel: widget.playerModel,
+                                        tokenModel: widget.tokenModel,
+                                      )),
+                            );
+                          }
                         },
                         height: 50,
                         width: 140),

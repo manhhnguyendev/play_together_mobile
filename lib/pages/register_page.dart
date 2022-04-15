@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/register_model.dart';
 import 'package:play_together_mobile/pages/complete_register_page.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
@@ -128,6 +128,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content:
+                                                Text("Lấy mã OTP thành công"),
+                                          ));
                                           sendOtp();
                                         },
                                         child: const Text("Lấy mã OTP",
@@ -165,6 +170,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                             165, 165, 165, 1),
                                         onPressed: () {
                                           confirmEmail = verify();
+                                          if (confirmEmail == true) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content:
+                                                  Text("Xác thực thành công"),
+                                            ));
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "Mã OTP nhập không đúng, vui lòng kiểm tra lại!"),
+                                            ));
+                                          }
                                         },
                                         child: const Text("Xác thực",
                                             style: TextStyle(
@@ -221,7 +239,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 );
                               });
                             } else {
-                              print('Check lại OTP đi kìa');
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Vui lòng xác thực OTP"),
+                              ));
                             }
                           }
                         }

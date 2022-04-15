@@ -6,7 +6,7 @@ import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/login_google_page.dart';
 import 'package:play_together_mobile/pages/register_page.dart';
-import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/forgot_password_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
@@ -116,6 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                                               userModel.id, tokenModel.message);
                                   hobbiesFuture.then((listHobbies) {
                                     if (listHobbies!.content.isNotEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text("Đăng nhập thành công"),
+                                      ));
                                       setState(() {
                                         helper.pushInto(
                                             context,
@@ -126,6 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                                             true);
                                       });
                                     } else if (listHobbies.content.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text("Đăng nhập thành công"),
+                                      ));
                                       setState(() {
                                         helper.pushInto(
                                             context,
@@ -135,6 +143,12 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                             true);
                                       });
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "Tên đăng nhập hoặc mật khẩu không đúng, vui lòng kiểm tra lại!"),
+                                      ));
                                     }
                                   });
                                   print('Đăng nhập thành công');
