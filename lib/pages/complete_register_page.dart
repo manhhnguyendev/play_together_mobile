@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/register_model.dart';
 import 'package:play_together_mobile/pages/login_page.dart';
 import 'package:play_together_mobile/services/register_service.dart';
@@ -302,11 +302,20 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                                 RegisterService().register(register);
                             registerModelFuture.then((registerModel) {
                               if (registerModel != null) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Đăng kí thành công"),
+                                ));
                                 setState(() {
                                   helper.pushInto(
                                       context, const LoginPage(), true);
                                 });
-                                print("Đăng kí thành công");
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content:
+                                      Text("Vui lòng kiểm tra lại thông tin!"),
+                                ));
                               }
                             });
                           }

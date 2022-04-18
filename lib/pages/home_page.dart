@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   List<UserModel> playerListIsRecentOrder = [];
   List<OrderModel> _listOrder = [];
   UserModel? lateUser;
+  bool checkRecentOrder = false;
 
   Future loadListUserByIsOrderByRating() {
     Future<ResponseListModel<UserModel>?> listUserIsOrderByRatingModelFuture =
@@ -160,6 +161,9 @@ class _HomePageState extends State<HomePage> {
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
+          if (playerListIsRecentOrder.isNotEmpty) {
+            checkRecentOrder = true;
+          }
           return Scaffold(
             appBar: Appbar(
               height: 70,
@@ -381,35 +385,38 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20 / 375 * size.width),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoriesListPage(
-                                  title: 'Thuê lại',
-                                  playerList: _listPlayerIsRecentOrder,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                ),
-                              ));
-                        },
-                        child: Row(children: [
-                          Text(
-                            "Thuê lại",
-                            style: TextStyle(
-                              fontSize: 18 / 400 * size.width,
-                              color: Colors.black,
+                    Visibility(
+                      visible: checkRecentOrder,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20 / 375 * size.width),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CategoriesListPage(
+                                    title: 'Thuê lại',
+                                    playerList: _listPlayerIsRecentOrder,
+                                    tokenModel: widget.tokenModel,
+                                    userModel: widget.userModel,
+                                  ),
+                                ));
+                          },
+                          child: Row(children: [
+                            Text(
+                              "Thuê lại",
+                              style: TextStyle(
+                                fontSize: 18 / 400 * size.width,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_circle_right_outlined),
-                        ]),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Icon(Icons.arrow_circle_right_outlined),
+                          ]),
+                        ),
                       ),
                     ),
                     const SizedBox(

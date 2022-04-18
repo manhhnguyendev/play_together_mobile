@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -480,6 +480,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 .getUserProfile(widget.tokenModel.message);
                         userModelFuture.then((_userModel) {
                           if (_userModel != null) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Cập nhật thành công"),
+                            ));
                             setState(() {
                               helper.pushInto(
                                   context,

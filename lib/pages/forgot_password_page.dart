@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:play_together_mobile/constants/const.dart';
+import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/password_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/change_password_page.dart';

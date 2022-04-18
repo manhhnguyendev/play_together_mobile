@@ -80,14 +80,14 @@ class _RatingCardState extends State<RatingCard> {
                       ],
                     ),
                   )),
-              Expanded(
-                  flex: 1,
-                  child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.report_gmailerrorred_rounded,
-                        color: Colors.black,
-                      )))
+              // Expanded(
+              //     flex: 1,
+              //     child: IconButton(
+              //         onPressed: () {},
+              //         icon: const Icon(
+              //           Icons.report_gmailerrorred_rounded,
+              //           color: Colors.black,
+              //         )))
             ],
           ),
           const Divider(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';

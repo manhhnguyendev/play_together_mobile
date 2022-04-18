@@ -10,7 +10,7 @@ import 'package:play_together_mobile/services/charity_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
-import 'package:play_together_mobile/constants/my_color.dart' as my_colors;
+import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/widgets/charity_card.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 

@@ -246,7 +246,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 width: 100,
                                 child: DropdownButton(
                                   isExpanded: true,
-                                  value: choosenTime,
+                                  value: maxHourHire,
                                   icon: const Icon(Icons.keyboard_arrow_down),
                                   items: listHour.map((item) {
                                     return DropdownMenuItem(
