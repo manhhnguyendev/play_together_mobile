@@ -42,7 +42,7 @@ class _PersonalPageState extends State<PersonalPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   UserModel? lateUser;
   UserServiceModel? lateUserService;
-  List<OrderModel>? _listOrder;
+  List<OrderModel> _listOrder = [];
   late GoogleSignIn _googleSignIn;
 
   Future checkStatus() {
@@ -60,13 +60,13 @@ class _PersonalPageState extends State<PersonalPage> {
               OrderService().getOrderOfPlayer(widget.tokenModel.message);
           checkOrderUser.then(((order) {
             _listOrder = order!.content;
-            if (_listOrder![0].toUserId == widget.userModel.id) {
+            if (_listOrder[0].toUserId == widget.userModel.id) {
               lateUser = value.content;
               setState(() {
                 helper.pushInto(
                     context,
                     ReceiveRequestPage(
-                        orderModel: _listOrder![0],
+                        orderModel: _listOrder[0],
                         tokenModel: widget.tokenModel,
                         userModel: lateUser!),
                     true);

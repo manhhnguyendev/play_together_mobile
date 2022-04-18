@@ -42,7 +42,6 @@ dependencies:
   firebase_auth: ^3.3.10
   firebase_storage: ^10.2.9
   firebase_analytics: ^9.1.2
-  firebase_messaging: ^11.2.12  
 
   #Google Sign In
   google_sign_in: ^5.2.4
@@ -57,14 +56,14 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   flutter_secure_storage: ^5.0.2
   flutter_format_money_vietnam: ^0.0.2
-  pattern_formatter: ^2.0.0
-
+  fluttertoast: ^8.0.7
+  
   #Another
   provider: ^6.0.2
   image_picker: ^0.8.4+11
   momo_vn: ^2.0.1
-  fluttertoast: ^8.0.7
-
+  pattern_formatter: ^2.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
