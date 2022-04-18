@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AcceptProfileButton extends StatelessWidget {
   final String text;
@@ -19,7 +20,7 @@ class AcceptProfileButton extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.black, width: 1),
+          side: const BorderSide(color: Colors.black, width: 1),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
@@ -27,13 +28,12 @@ class AcceptProfileButton extends StatelessWidget {
               color: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
               onPressed: onpress,
-              child:
-                  // Text(text,
-                  //      style: TextStyle(color: Color.fromRGBO(50, 4, 68, 0.9), fontSize: 16.0),)
-                  Text(
+              child: Text(
                 text,
-                style:
-                    const TextStyle(color: Color(0xff320444), fontSize: 17.0),
+                style: GoogleFonts.montserrat(
+                    color: const Color(0xff320444),
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal),
               )),
         ),
       ),

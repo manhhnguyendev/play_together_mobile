@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
@@ -12,6 +13,7 @@ import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/app_bar_home.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/widgets/player_card.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class HomePage extends StatefulWidget {
@@ -40,6 +42,322 @@ class _HomePageState extends State<HomePage> {
   List<OrderModel> _listOrder = [];
   UserModel? lateUser;
   bool checkRecentOrder = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: checkStatus(),
+        builder: (context, snapshot) {
+          if (playerListIsRecentOrder.isNotEmpty) {
+            checkRecentOrder = true;
+          }
+          return Scaffold(
+            appBar: Appbar(
+              height: 70,
+              titles: "Home",
+              onPressedSearch: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchHistoryAndRecommendPage(
+                        tokenModel: widget.tokenModel,
+                        userModel: widget.userModel,
+                      ),
+                    ));
+              },
+              userModel: widget.userModel,
+              tokenModel: widget.tokenModel,
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Top người chơi ưa thích',
+                                  playerList: _listPlayerIsOrderByRating,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Top người chơi ưa thích",
+                            style: GoogleFonts.montserrat(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(
+                            FontAwesomeIcons.arrowAltCircleRight,
+                            size: 18,
+                          ),
+                        ]),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: SizedBox(
+                                height: 220.0,
+                                child: FutureBuilder(
+                                    future: loadListUserByIsOrderByRating(),
+                                    builder: (context, snapshot) {
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _listPlayerIsOrderByRating
+                                                .isNotEmpty
+                                            ? _listPlayerIsOrderByRating.length
+                                            : 0,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return PlayerCard(
+                                            playerModel:
+                                                _listPlayerIsOrderByRating[
+                                                    index],
+                                            tokenModel: widget.tokenModel,
+                                            userModel: lateUser!,
+                                          );
+                                        },
+                                      );
+                                    })),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Các người chơi mới',
+                                  playerList: _listPlayerIsNewAccount,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Các người chơi mới",
+                            style: GoogleFonts.montserrat(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(
+                            FontAwesomeIcons.arrowAltCircleRight,
+                            size: 18,
+                          ),
+                        ]),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: SizedBox(
+                                height: 220.0,
+                                child: FutureBuilder(
+                                    future: loadListUserByIsNewAccount(),
+                                    builder: (context, snapshot) {
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            _listPlayerIsNewAccount.isNotEmpty
+                                                ? _listPlayerIsNewAccount.length
+                                                : 0,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return PlayerCard(
+                                            playerModel:
+                                                _listPlayerIsNewAccount[index],
+                                            tokenModel: widget.tokenModel,
+                                            userModel: lateUser!,
+                                          );
+                                        },
+                                      );
+                                    })),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesListPage(
+                                  title: 'Có thể bạn thích',
+                                  playerList: _listPlayerIsSameHobbies,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                              ));
+                        },
+                        child: Row(children: [
+                          Text(
+                            "Có thể bạn thích",
+                            style: GoogleFonts.montserrat(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(
+                            FontAwesomeIcons.arrowAltCircleRight,
+                            size: 18,
+                          ),
+                        ]),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: SizedBox(
+                                height: 220.0,
+                                child: FutureBuilder(
+                                    future: loadListUserByIsSameHobbies(),
+                                    builder: (context, snapshot) {
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _listPlayerIsSameHobbies
+                                                .isNotEmpty
+                                            ? _listPlayerIsSameHobbies.length
+                                            : 0,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return PlayerCard(
+                                            playerModel:
+                                                _listPlayerIsSameHobbies[index],
+                                            tokenModel: widget.tokenModel,
+                                            userModel: lateUser!,
+                                          );
+                                        },
+                                      );
+                                    })),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    Visibility(
+                      visible: checkRecentOrder,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CategoriesListPage(
+                                    title: 'Thuê lại',
+                                    playerList: _listPlayerIsRecentOrder,
+                                    tokenModel: widget.tokenModel,
+                                    userModel: widget.userModel,
+                                  ),
+                                ));
+                          },
+                          child: Row(children: [
+                            Text(
+                              "Thuê lại",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Icon(
+                              FontAwesomeIcons.arrowAltCircleRight,
+                              size: 18,
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: SizedBox(
+                                height: 220.0,
+                                child: FutureBuilder(
+                                    future: loadListUserByIsRecentOrder(),
+                                    builder: (context, snapshot) {
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _listPlayerIsRecentOrder
+                                                .isNotEmpty
+                                            ? _listPlayerIsRecentOrder.length
+                                            : 0,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return PlayerCard(
+                                            playerModel:
+                                                _listPlayerIsRecentOrder[index],
+                                            tokenModel: widget.tokenModel,
+                                            userModel: lateUser!,
+                                          );
+                                        },
+                                      );
+                                    })),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                  ]),
+            ),
+            bottomNavigationBar: BottomBar(
+              userModel: widget.userModel,
+              tokenModel: widget.tokenModel,
+              bottomBarIndex: 0,
+            ),
+          );
+        });
+  }
 
   Future loadListUserByIsOrderByRating() {
     Future<ResponseListModel<UserModel>?> listUserIsOrderByRatingModelFuture =
@@ -153,314 +471,5 @@ class _HomePageState extends State<HomePage> {
       }
     });
     return getStatusUser;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: checkStatus(),
-        builder: (context, snapshot) {
-          if (playerListIsRecentOrder.isNotEmpty) {
-            checkRecentOrder = true;
-          }
-          return Scaffold(
-            appBar: Appbar(
-              height: 70,
-              titles: "Home",
-              onPressedSearch: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchHistoryAndRecommendPage(
-                        tokenModel: widget.tokenModel,
-                        userModel: widget.userModel,
-                      ),
-                    ));
-              },
-              userModel: widget.userModel,
-              tokenModel: widget.tokenModel,
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20 / 375 * size.width),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoriesListPage(
-                                  title: 'Top người chơi ưa thích',
-                                  playerList: _listPlayerIsOrderByRating,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                ),
-                              ));
-                        },
-                        child: Row(children: [
-                          Text(
-                            "Top người chơi ưa thích",
-                            style: TextStyle(
-                              fontSize: 18 / 400 * size.width,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_circle_right_outlined),
-                        ]),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SingleChildScrollView(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: SizedBox(
-                                height: 220.0,
-                                child: FutureBuilder(
-                                    future: loadListUserByIsOrderByRating(),
-                                    builder: (context, snapshot) {
-                                      return ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsOrderByRating ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsOrderByRating.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return PlayerCard(
-                                            playerModel:
-                                                _listPlayerIsOrderByRating[
-                                                    index],
-                                            tokenModel: widget.tokenModel,
-                                            userModel: lateUser!,
-                                          );
-                                        },
-                                      );
-                                    })),
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20 / 375 * size.width),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoriesListPage(
-                                  title: 'Các người chơi mới',
-                                  playerList: _listPlayerIsNewAccount,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                ),
-                              ));
-                        },
-                        child: Row(children: [
-                          Text(
-                            "Các người chơi mới",
-                            style: TextStyle(
-                              fontSize: 18 / 400 * size.width,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_circle_right_outlined),
-                        ]),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SingleChildScrollView(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: SizedBox(
-                                height: 220.0,
-                                child: FutureBuilder(
-                                    future: loadListUserByIsNewAccount(),
-                                    builder: (context, snapshot) {
-                                      return ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsNewAccount ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsNewAccount.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return PlayerCard(
-                                            playerModel:
-                                                _listPlayerIsNewAccount[index],
-                                            tokenModel: widget.tokenModel,
-                                            userModel: lateUser!,
-                                          );
-                                        },
-                                      );
-                                    })),
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20 / 375 * size.width),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoriesListPage(
-                                  title: 'Có thể bạn thích',
-                                  playerList: _listPlayerIsSameHobbies,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                ),
-                              ));
-                        },
-                        child: Row(children: [
-                          Text(
-                            "Có thể bạn thích",
-                            style: TextStyle(
-                              fontSize: 18 / 400 * size.width,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_circle_right_outlined),
-                        ]),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SingleChildScrollView(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: SizedBox(
-                                height: 220.0,
-                                child: FutureBuilder(
-                                    future: loadListUserByIsSameHobbies(),
-                                    builder: (context, snapshot) {
-                                      return ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsSameHobbies ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsSameHobbies.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return PlayerCard(
-                                            playerModel:
-                                                _listPlayerIsSameHobbies[index],
-                                            tokenModel: widget.tokenModel,
-                                            userModel: lateUser!,
-                                          );
-                                        },
-                                      );
-                                    })),
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ),
-                    Visibility(
-                      visible: checkRecentOrder,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20 / 375 * size.width),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CategoriesListPage(
-                                    title: 'Thuê lại',
-                                    playerList: _listPlayerIsRecentOrder,
-                                    tokenModel: widget.tokenModel,
-                                    userModel: widget.userModel,
-                                  ),
-                                ));
-                          },
-                          child: Row(children: [
-                            Text(
-                              "Thuê lại",
-                              style: TextStyle(
-                                fontSize: 18 / 400 * size.width,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(Icons.arrow_circle_right_outlined),
-                          ]),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SingleChildScrollView(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: SizedBox(
-                                height: 220.0,
-                                child: FutureBuilder(
-                                    future: loadListUserByIsRecentOrder(),
-                                    builder: (context, snapshot) {
-                                      return ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsRecentOrder ==
-                                                null
-                                            ? 0
-                                            : _listPlayerIsRecentOrder.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return PlayerCard(
-                                            playerModel:
-                                                _listPlayerIsRecentOrder[index],
-                                            tokenModel: widget.tokenModel,
-                                            userModel: lateUser!,
-                                          );
-                                        },
-                                      );
-                                    })),
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ),
-                  ]),
-            ),
-            bottomNavigationBar: BottomBar(
-              userModel: widget.userModel,
-              tokenModel: widget.tokenModel,
-              bottomBarIndex: 0,
-            ),
-          );
-        });
   }
 }

@@ -116,10 +116,6 @@ class _LoginPageState extends State<LoginPage> {
                                               userModel.id, tokenModel.message);
                                   hobbiesFuture.then((listHobbies) {
                                     if (listHobbies!.content.isNotEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text("Đăng nhập thành công"),
-                                      ));
                                       setState(() {
                                         helper.pushInto(
                                             context,
@@ -130,10 +126,6 @@ class _LoginPageState extends State<LoginPage> {
                                             true);
                                       });
                                     } else if (listHobbies.content.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text("Đăng nhập thành công"),
-                                      ));
                                       setState(() {
                                         helper.pushInto(
                                             context,
@@ -143,12 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                             true);
                                       });
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            "Tên đăng nhập hoặc mật khẩu không đúng, vui lòng kiểm tra lại!"),
-                                      ));
                                     }
                                   });
                                   print('Đăng nhập thành công');

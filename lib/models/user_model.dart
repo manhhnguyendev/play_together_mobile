@@ -1,5 +1,4 @@
 import 'package:play_together_mobile/models/image_model.dart';
-import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
 
 class UserModel {
@@ -231,5 +230,42 @@ class MakeDonateModel {
   Map<String, dynamic> toJson() => {
         "money": money,
         "message": message,
+      };
+}
+
+class IsPlayerModel {
+  bool isPlayer;
+
+  IsPlayerModel({
+    required this.isPlayer,
+  });
+
+  factory IsPlayerModel.fromJson(Map<String, dynamic> json) => IsPlayerModel(
+        isPlayer: json['isPlayer'] as bool,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "isPlayer": isPlayer,
+      };
+}
+
+class ServiceUserModel {
+  double pricePerHour;
+  int maxHourHire;
+
+  ServiceUserModel({
+    required this.pricePerHour,
+    required this.maxHourHire,
+  });
+
+  factory ServiceUserModel.fromJson(Map<String, dynamic> json) =>
+      ServiceUserModel(
+        pricePerHour: json['pricePerHour'] as double,
+        maxHourHire: json['maxHourHire'] as int,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "pricePerHour": pricePerHour,
+        "maxHourHire": maxHourHire,
       };
 }

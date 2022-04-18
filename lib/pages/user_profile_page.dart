@@ -232,10 +232,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
           .format(DateTime.parse(widget.userModel.dateOfBirth));
       city = widget.userModel.city;
       gender = widget.userModel.gender;
-      checkFirstTime = false;
+
       dateOfBirth = DateTime.parse(widget.userModel.dateOfBirth);
       descriptionController.text = widget.userModel.description;
       avatar = widget.userModel.avatar;
+      checkFirstTime = false;
     }
     return Scaffold(
       backgroundColor: Colors.white,

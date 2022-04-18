@@ -218,13 +218,15 @@ class UserService {
     return result;
   }
 
-  Future<bool?> updateIsPlayer(dynamic token) async {
+  Future<bool?> updateIsPlayer(
+      IsPlayerModel isPlayerModel, dynamic token) async {
     Response response;
     bool? result;
     try {
-      response = await post(
+      response = await put(
         Uri.parse('${apiUrl.users}/player'),
         headers: configJson.headerAuth(token),
+        body: jsonEncode(isPlayerModel.toJson()),
       );
       if (response.statusCode == 204) {
         result = true;
@@ -235,15 +237,17 @@ class UserService {
     return result;
   }
 
-  Future<bool?> updatePersonalServiceInfo(dynamic token) async {
+  Future<bool?> updatePersonalServiceInfo(
+      ServiceUserModel serviceUserModel, dynamic token) async {
     Response response;
     bool? result;
     try {
-      response = await post(
+      response = await put(
         Uri.parse('${apiUrl.users}/service'),
         headers: configJson.headerAuth(token),
+        body: jsonEncode(serviceUserModel.toJson()),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/datings_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddNewHour extends StatefulWidget {
   final UserModel userModel;
@@ -63,8 +63,8 @@ class _AddNewHourState extends State<AddNewHour> {
           centerTitle: true,
           title: Text(
             'Thêm giờ',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -79,9 +79,9 @@ class _AddNewHourState extends State<AddNewHour> {
           children: [
             Text(
               'Chọn ngày trong tuần: ',
-              style: TextStyle(fontSize: 15),
+              style: GoogleFonts.montserrat(fontSize: 18),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -89,7 +89,6 @@ class _AddNewHourState extends State<AddNewHour> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -115,11 +114,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Thứ 2',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -129,11 +128,10 @@ class _AddNewHourState extends State<AddNewHour> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -159,11 +157,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Thứ 3',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -173,11 +171,10 @@ class _AddNewHourState extends State<AddNewHour> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -203,11 +200,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Thứ 4',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -217,11 +214,10 @@ class _AddNewHourState extends State<AddNewHour> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -247,11 +243,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Thứ 5',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -261,12 +257,12 @@ class _AddNewHourState extends State<AddNewHour> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -274,7 +270,6 @@ class _AddNewHourState extends State<AddNewHour> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -300,11 +295,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Thứ 6',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -314,11 +309,10 @@ class _AddNewHourState extends State<AddNewHour> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -344,11 +338,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Thứ 7',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -358,11 +352,10 @@ class _AddNewHourState extends State<AddNewHour> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  //4 sao
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color(0xff8980FF),
@@ -370,7 +363,7 @@ class _AddNewHourState extends State<AddNewHour> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
-                    width: width * 0.25,
+                    width: width * 0.3,
                     height: height * 0.05,
                     child: FlatButton(
                       onPressed: () {
@@ -388,11 +381,11 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text(
                             'Chủ Nhật',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, fontWeight: FontWeight.normal),
                           )
                         ],
                       ),
@@ -405,21 +398,21 @@ class _AddNewHourState extends State<AddNewHour> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 15.0),
+              padding: const EdgeInsets.fromLTRB(10, 5, 15, 0),
               child: Row(
                 children: [
                   Text(
                     "Từ: ",
-                    style: TextStyle(fontSize: 18),
+                    style: GoogleFonts.montserrat(fontSize: 18),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   SizedBox(
                     width: width * 0.2,
-                    //height: height * 0.05,
                     child: TextField(
+                      style: GoogleFonts.montserrat(),
                       controller: fromHourController,
                       maxLength: 2,
-                      decoration: InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(counterText: ""),
                       onChanged: (value) {
                         setState(() {
                           if (value.isNotEmpty) {
@@ -434,13 +427,11 @@ class _AddNewHourState extends State<AddNewHour> {
                         });
                       },
                       onSubmitted: (value) {
-                        if (value != null) {
-                          fromHour = value;
-                          if (fromHour.length > 1) {
-                            if (int.parse(fromHour) < 0 ||
-                                int.parse(fromHour) > 23) {
-                              fromHour = "";
-                            }
+                        fromHour = value;
+                        if (fromHour.length > 1) {
+                          if (int.parse(fromHour) < 0 ||
+                              int.parse(fromHour) > 23) {
+                            fromHour = "";
                           }
                         }
                       },
@@ -449,14 +440,14 @@ class _AddNewHourState extends State<AddNewHour> {
                   ),
                   Text(
                     " : ",
-                    style: TextStyle(fontSize: 15),
+                    style: GoogleFonts.montserrat(fontSize: 15),
                   ),
                   SizedBox(
                     width: width * 0.2,
                     child: TextField(
-                      //inputFormatters: [CustomRangeTextInputFormatter()],
+                      style: GoogleFonts.montserrat(),
                       controller: fromMinuteController,
-                      decoration: InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(counterText: ""),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
@@ -473,49 +464,50 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       onSubmitted: (value) {
                         setState(() {
-                          if (value != null) {
-                            if (value.length > 1) {
-                              if (int.parse(value) < 0 ||
-                                  int.parse(value) > 59) {
-                                value = "";
-                                fromMinute = "";
-                                fromMinuteController.text = "";
-                              } else {
-                                fromMinute = value;
-                              }
-                            } else if (value.length == 1) {
-                              value = "0" + value;
-                              fromMinute = "0" + fromMinute;
-                              fromMinuteController.text =
-                                  "0" + fromMinuteController.text;
+                          if (value.length > 1) {
+                            if (int.parse(value) < 0 || int.parse(value) > 59) {
+                              value = "";
+                              fromMinute = "";
+                              fromMinuteController.text = "";
+                            } else {
+                              fromMinute = value;
                             }
+                          } else if (value.length == 1) {
+                            value = "0" + value;
+                            fromMinute = "0" + fromMinute;
+                            fromMinuteController.text =
+                                "0" + fromMinuteController.text;
                           }
                         });
                       },
                       keyboardType: TextInputType.number,
                     ),
                   ),
-                  Text(' giờ'),
+                  Text(
+                    ' giờ',
+                    style: GoogleFonts.montserrat(fontSize: 15),
+                  ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 15.0),
+              padding: const EdgeInsets.fromLTRB(10, 5, 15, 0),
               child: Row(
                 children: [
                   Text(
                     "Đến: ",
-                    style: TextStyle(fontSize: 18),
+                    style: GoogleFonts.montserrat(fontSize: 18),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   SizedBox(
                     width: width * 0.2,
                     child: TextField(
+                      style: GoogleFonts.montserrat(),
                       controller: toHourController,
-                      decoration: InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(counterText: ""),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
@@ -531,13 +523,10 @@ class _AddNewHourState extends State<AddNewHour> {
                         });
                       },
                       onSubmitted: (value) {
-                        if (value != null) {
-                          toHour = value;
-                          if (toHour.length > 1) {
-                            if (int.parse(toHour) < 0 ||
-                                int.parse(toHour) > 23) {
-                              toHour = "";
-                            }
+                        toHour = value;
+                        if (toHour.length > 1) {
+                          if (int.parse(toHour) < 0 || int.parse(toHour) > 23) {
+                            toHour = "";
                           }
                         }
                       },
@@ -546,13 +535,14 @@ class _AddNewHourState extends State<AddNewHour> {
                   ),
                   Text(
                     " : ",
-                    style: TextStyle(fontSize: 15),
+                    style: GoogleFonts.montserrat(fontSize: 15),
                   ),
                   SizedBox(
                     width: width * 0.2,
                     child: TextField(
+                      style: GoogleFonts.montserrat(),
                       controller: toMinuteController,
-                      decoration: InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(counterText: ""),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
@@ -569,29 +559,29 @@ class _AddNewHourState extends State<AddNewHour> {
                       },
                       onSubmitted: (value) {
                         setState(() {
-                          if (value != null) {
-                            if (value.length > 1) {
-                              if (int.parse(value) < 0 ||
-                                  int.parse(value) > 59) {
-                                value = "";
-                                toMinute = "";
-                                toMinuteController.text = "";
-                              } else {
-                                toMinute = value;
-                              }
-                            } else if (value.length == 1) {
-                              value = "0" + value;
-                              toMinute = "0" + toMinute;
-                              toMinuteController.text =
-                                  "0" + toMinuteController.text;
+                          if (value.length > 1) {
+                            if (int.parse(value) < 0 || int.parse(value) > 59) {
+                              value = "";
+                              toMinute = "";
+                              toMinuteController.text = "";
+                            } else {
+                              toMinute = value;
                             }
+                          } else if (value.length == 1) {
+                            value = "0" + value;
+                            toMinute = "0" + toMinute;
+                            toMinuteController.text =
+                                "0" + toMinuteController.text;
                           }
                         });
                       },
                       keyboardType: TextInputType.number,
                     ),
                   ),
-                  Text(' giờ'),
+                  Text(
+                    ' giờ',
+                    style: GoogleFonts.montserrat(fontSize: 15),
+                  ),
                 ],
               ),
             ),
@@ -631,11 +621,11 @@ class _AddNewHourState extends State<AddNewHour> {
                     valid = false;
                   }
 
-                  if (fromHour.length == 0) {
+                  if (fromHour.isEmpty) {
                     valid = false;
                   }
 
-                  if (toHour.length == 0) {
+                  if (toHour.isEmpty) {
                     valid = false;
                   }
 
@@ -651,8 +641,7 @@ class _AddNewHourState extends State<AddNewHour> {
                     newFromHour =
                         int.parse(fromHour) * 60 + int.parse(fromMinute);
                     newToHour = int.parse(toHour) * 60 + int.parse(toMinute);
-                    print(newFromHour.toString() + " luu cai nay");
-                    print(newToHour.toString() + " luu cai nay");
+
                     CreateOnlineHourModel newModel = CreateOnlineHourModel(
                         fromHour: newFromHour,
                         toHour: newToHour,
@@ -666,19 +655,22 @@ class _AddNewHourState extends State<AddNewHour> {
                               .showSnackBar(const SnackBar(
                             content: Text("Thêm thành công"),
                           ));
-                          print('Thêm thành công');
+
                           Navigator.pop(context);
                         });
                       } else {
-                        print("THÊM BỊ LỖI");
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text("Giờ nhập bị trùng"),
                         ));
                       }
                     });
+                  } else if (dayOfWeek != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Vui lòng chọn ngày"),
+                    ));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Giờ nhập không chính xác"),
                     ));
                   }
@@ -687,20 +679,3 @@ class _AddNewHourState extends State<AddNewHour> {
     );
   }
 }
-
-// class CustomRangeTextInputFormatter extends TextInputFormatter {
-//   @override
-//   TextEditingValue formatEditUpdate(
-//     TextEditingValue oldValue,
-//     TextEditingValue newValue,
-//   ) {
-//     if (newValue.text == '')
-//       return TextEditingValue();
-//     else if (newValue.text.length == 1)
-//       return TextEditingValue().copyWith(text: '0' + newValue.toString());
-
-//     return int.parse(newValue.text) > 59
-//         ? TextEditingValue().copyWith(text: '00')
-//         : newValue;
-//   }
-// }

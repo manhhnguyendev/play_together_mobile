@@ -13,6 +13,7 @@ import 'package:play_together_mobile/pages/personal_change_password_page.dart';
 import 'package:play_together_mobile/pages/policies_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
+import 'package:play_together_mobile/pages/statistics_page.dart';
 import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/pages/update_hobbies_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
@@ -23,6 +24,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PersonalPage extends StatefulWidget {
   final UserModel userModel;
@@ -41,7 +43,6 @@ class PersonalPage extends StatefulWidget {
 class _PersonalPageState extends State<PersonalPage> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   UserModel? lateUser;
-  UserServiceModel? lateUserService;
   List<OrderModel> _listOrder = [];
   late GoogleSignIn _googleSignIn;
 
@@ -89,7 +90,7 @@ class _PersonalPageState extends State<PersonalPage> {
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 50,
+                    height: 40,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
@@ -113,7 +114,7 @@ class _PersonalPageState extends State<PersonalPage> {
                               children: [
                                 Text(
                                   widget.userModel.name,
-                                  style: const TextStyle(fontSize: 20),
+                                  style: GoogleFonts.montserrat(fontSize: 20),
                                   maxLines: 2,
                                 ),
                                 const SizedBox(
@@ -130,18 +131,18 @@ class _PersonalPageState extends State<PersonalPage> {
                                     );
                                   },
                                   child: Row(
-                                    children: const [
+                                    children: [
                                       Text(
                                         'Chỉnh sửa tài khoản',
-                                        style: TextStyle(
+                                        style: GoogleFonts.montserrat(
                                           fontSize: 15,
                                           color: Colors.grey,
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 5,
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.arrow_forward_ios,
                                         size: 15,
                                         color: Colors.grey,
@@ -164,14 +165,14 @@ class _PersonalPageState extends State<PersonalPage> {
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(10.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Số dư trong ví:',
-                                  style: TextStyle(fontSize: 18),
+                                  style: GoogleFonts.montserrat(fontSize: 18),
                                 ),
                                 const SizedBox(
                                   height: 5,
@@ -184,8 +185,9 @@ class _PersonalPageState extends State<PersonalPage> {
                                       : widget.userModel.userBalance.balance
                                           .toStringAsFixed(0)
                                           .toVND(),
-                                  style: const TextStyle(
-                                      fontSize: 22, color: Color(0xff320444)),
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 22,
+                                      color: const Color(0xff320444)),
                                 ),
                                 const SizedBox(
                                   height: 5,
@@ -194,7 +196,8 @@ class _PersonalPageState extends State<PersonalPage> {
                                   children: [
                                     Text(
                                       'Số khả dụng: ',
-                                      style: TextStyle(fontSize: 15),
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 15),
                                     ),
                                     Text(
                                       lateUser != null
@@ -205,7 +208,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                               .activeBalance
                                               .toStringAsFixed(0)
                                               .toVND(),
-                                      style: const TextStyle(
+                                      style: GoogleFonts.montserrat(
                                           fontSize: 15, color: Colors.black),
                                     ),
                                   ],
@@ -229,23 +232,23 @@ class _PersonalPageState extends State<PersonalPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              SelectDepositMethodPage()),
+                                              const SelectDepositMethodPage()),
                                     );
                                   },
                                   child: Column(
-                                    children: const [
-                                      Icon(
+                                    children: [
+                                      const Icon(
                                         FontAwesomeIcons.wallet,
                                         size: 30,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 0,
                                       ),
                                       Text(
                                         'Nạp tiền',
-                                        style: TextStyle(
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 15,
-                                            color: Color(0xff320444)),
+                                            color: const Color(0xff320444)),
                                       ),
                                     ],
                                   ),
@@ -259,23 +262,23 @@ class _PersonalPageState extends State<PersonalPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              EnterWithdrawAmount()),
+                                              const EnterWithdrawAmount()),
                                     );
                                   },
                                   child: Column(
-                                    children: const [
-                                      Icon(
+                                    children: [
+                                      const Icon(
                                         FontAwesomeIcons.moneyBill,
                                         size: 30,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 0,
                                       ),
                                       Text(
                                         'Rút tiền',
-                                        style: TextStyle(
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 15,
-                                            color: Color(0xff320444)),
+                                            color: const Color(0xff320444)),
                                       ),
                                     ],
                                   ),
@@ -301,13 +304,13 @@ class _PersonalPageState extends State<PersonalPage> {
                         );
                       },
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             'Lịch sử Giao dịch',
-                            style: TextStyle(fontSize: 20),
+                            style: GoogleFonts.montserrat(fontSize: 20),
                           ),
-                          Spacer(),
-                          Icon(
+                          const Spacer(),
+                          const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey,
                             size: 15,
@@ -327,33 +330,23 @@ class _PersonalPageState extends State<PersonalPage> {
                     padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
-                        Future<ResponseModel<UserServiceModel>?>
-                            getUserServiceFuture =
-                            UserService().getUserServiceById(
-                                widget.userModel.id, widget.tokenModel.message);
-                        getUserServiceFuture.then((value) {
-                          if (value != null) {
-                            lateUserService = value.content;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ManageHiringPage(
-                                    tokenModel: widget.tokenModel,
-                                    userModel: widget.userModel,
-                                    userServiceModel: lateUserService,
-                                  ),
-                                ));
-                          }
-                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ManageHiringPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel,
+                              ),
+                            ));
                       },
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             'Quản lý nhận thuê',
-                            style: TextStyle(fontSize: 20),
+                            style: GoogleFonts.montserrat(fontSize: 20),
                           ),
-                          Spacer(),
-                          Icon(
+                          const Spacer(),
+                          const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey,
                             size: 15,
@@ -383,13 +376,13 @@ class _PersonalPageState extends State<PersonalPage> {
                             ));
                       },
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             'Cài đặt sở thích',
-                            style: TextStyle(fontSize: 20),
+                            style: GoogleFonts.montserrat(fontSize: 20),
                           ),
-                          Spacer(),
-                          Icon(
+                          const Spacer(),
+                          const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey,
                             size: 15,
@@ -419,13 +412,13 @@ class _PersonalPageState extends State<PersonalPage> {
                             ));
                       },
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             'Thay đổi mật khẩu',
-                            style: TextStyle(fontSize: 20),
+                            style: GoogleFonts.montserrat(fontSize: 20),
                           ),
-                          Spacer(),
-                          Icon(
+                          const Spacer(),
+                          const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey,
                             size: 15,
@@ -448,17 +441,17 @@ class _PersonalPageState extends State<PersonalPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PoliciesPage(),
+                              builder: (context) => const StatisticsPage(),
                             ));
                       },
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
-                            'Chính sách',
-                            style: TextStyle(fontSize: 20),
+                            'Thống kê',
+                            style: GoogleFonts.montserrat(fontSize: 20),
                           ),
-                          Spacer(),
-                          Icon(
+                          const Spacer(),
+                          const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey,
                             size: 15,
@@ -475,14 +468,47 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PoliciesPage(),
+                            ));
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Chính sách',
+                            style: GoogleFonts.montserrat(fontSize: 20),
+                          ),
+                          const Spacer(),
+                          const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.grey,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {},
                       child: Row(
-                        children: const [
+                        children: [
                           Text(
                             'Trung tâm hỗ trợ',
-                            style: TextStyle(fontSize: 20),
+                            style: GoogleFonts.montserrat(fontSize: 20),
                           ),
                           Spacer(),
                           Icon(
@@ -529,10 +555,10 @@ class _PersonalPageState extends State<PersonalPage> {
                                 });
                               },
                               child: Row(
-                                children: const [
+                                children: [
                                   Text(
                                     'Đăng xuất',
-                                    style: TextStyle(fontSize: 20),
+                                    style: GoogleFonts.montserrat(fontSize: 20),
                                   ),
                                   Spacer(),
                                   Icon(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
@@ -8,6 +9,7 @@ import 'package:play_together_mobile/pages/add_new_skills.dart';
 import 'package:play_together_mobile/services/game_of_user_service.dart';
 import 'package:play_together_mobile/services/rank_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UpdateGameSkillsPage extends StatefulWidget {
   final UserModel userModel;
@@ -23,17 +25,6 @@ class UpdateGameSkillsPage extends StatefulWidget {
 
 class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
   List<GameOfUserModel> listGameOfUser = [];
-
-  Future getAllGameOfUser() {
-    Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
-        .getGameOfUser(widget.userModel.id, widget.tokenModel.message);
-    gameOfUserFuture.then((value) {
-      if (value != null) {
-        listGameOfUser = value.content;
-      }
-    });
-    return gameOfUserFuture;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +49,10 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                   ),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Chỉnh sửa kỹ năng',
-                  style: TextStyle(
-                      fontSize: 18,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
@@ -78,9 +69,8 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                       setState(() {});
                     }),
                     child: const Icon(
-                      Icons.add,
+                      FontAwesomeIcons.plus,
                       color: Colors.black,
-                      size: 30,
                     ),
                   ),
                 ],
@@ -126,7 +116,7 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
             checkListRank = true;
           }
           return Container(
-            padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
+            padding: const EdgeInsets.fromLTRB(10, 0, 0, 5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +128,7 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                       child: Text(
                         _gameOfUserModel.game.name,
                         maxLines: 2,
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ),
                     const Spacer(),
@@ -161,7 +151,7 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                                   _gameOfUserModel.rank.name != null
                                       ? _gameOfUserModel.rank.name
                                       : '',
-                                  style: const TextStyle(
+                                  style: GoogleFonts.montserrat(
                                       color: Colors.black, fontSize: 15),
                                 ),
                                 value: rankChoosenModel,
@@ -184,7 +174,6 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text("Cập nhật thành công"),
                                         ));
-                                        print('Cập nhật thành công');
                                       }
                                     });
                                   });
@@ -217,14 +206,12 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                                     .showSnackBar(const SnackBar(
                                   content: Text("Xóa thành công"),
                                 ));
-                                print('Xóa thành công');
                               }
                             });
                           });
                         },
-                        icon: Icon(
-                          Icons.delete_outline,
-                          size: width * 0.08,
+                        icon: const Icon(
+                          FontAwesomeIcons.solidTrashAlt,
                         )),
                   ],
                 ),
@@ -236,5 +223,16 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
             ),
           );
         });
+  }
+
+  Future getAllGameOfUser() {
+    Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
+        .getGameOfUser(widget.userModel.id, widget.tokenModel.message);
+    gameOfUserFuture.then((value) {
+      if (value != null) {
+        listGameOfUser = value.content;
+      }
+    });
+    return gameOfUserFuture;
   }
 }

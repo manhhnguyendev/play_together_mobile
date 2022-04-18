@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
@@ -69,6 +70,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   hintText: "Tìm kiếm",
+                  hintStyle: GoogleFonts.montserrat(),
                   prefixIcon: const Icon(
                     Icons.search,
                     color: my_colors.secondary,

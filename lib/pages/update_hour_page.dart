@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -6,10 +7,12 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/add_new_hour.dart';
 import 'package:play_together_mobile/pages/update_single_hour_page.dart';
 import 'package:play_together_mobile/services/datings_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UpdateHourPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const UpdateHourPage(
       {Key? key, required this.tokenModel, required this.userModel})
       : super(key: key);
@@ -27,63 +30,6 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
   late List<OnlineHourModel> saturdayList;
   late List<OnlineHourModel> sundayList;
   List<OnlineHourModel> allDatings = [];
-
-  Future getAllDatings() {
-    Future<ResponseListModel<OnlineHourModel>?> getAllDatingsFuture =
-        DatingService()
-            .getAllDatings(widget.userModel.id, widget.tokenModel.message);
-    getAllDatingsFuture.then((value) {
-      if (value != null) {
-        allDatings = value.content;
-      }
-    });
-    return getAllDatingsFuture;
-  }
-
-  void loadData() {
-    mondayList = [];
-    tuesdayList = [];
-    wednesdayList = [];
-    thursdayList = [];
-    fridayList = [];
-    saturdayList = [];
-    sundayList = [];
-    if (allDatings != null) {
-      if (allDatings.length > 0) {
-        for (var hour in allDatings) {
-          switch (hour.dayInWeek) {
-            case 2:
-              mondayList.add(hour);
-              break;
-            case 3:
-              tuesdayList.add(hour);
-              break;
-            case 4:
-              wednesdayList.add(hour);
-              break;
-            case 5:
-              thursdayList.add(hour);
-              break;
-            case 6:
-              fridayList.add(hour);
-              break;
-            case 7:
-              saturdayList.add(hour);
-              break;
-            case 8:
-              sundayList.add(hour);
-              break;
-          }
-        }
-      }
-    }
-  }
-
-  String getTimeString(int value) {
-    final int hour = value ~/ 60;
-    final int minutes = value % 60;
-    return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,10 +55,10 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                   ),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Chỉnh sửa giờ',
-                  style: TextStyle(
-                      fontSize: 18,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
@@ -129,9 +75,8 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       setState(() {});
                     }),
                     child: const Icon(
-                      Icons.add,
+                      FontAwesomeIcons.plus,
                       color: Colors.black,
-                      size: 30,
                     ),
                   ),
                 ],
@@ -143,9 +88,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Thứ 2:',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(mondayList),
                     const Divider(
@@ -153,9 +98,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    const Text(
+                    Text(
                       'Thứ 3:',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(tuesdayList),
                     const Divider(
@@ -163,9 +108,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    const Text(
+                    Text(
                       'Thứ 4:',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(wednesdayList),
                     const Divider(
@@ -173,9 +118,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    const Text(
+                    Text(
                       'Thứ 5:',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(thursdayList),
                     const Divider(
@@ -183,9 +128,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    const Text(
+                    Text(
                       'Thứ 6:',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(fridayList),
                     const Divider(
@@ -193,9 +138,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    const Text(
+                    Text(
                       'Thứ 7:',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(saturdayList),
                     const Divider(
@@ -203,9 +148,9 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                       indent: 5,
                       endIndent: 5,
                     ),
-                    const Text(
+                    Text(
                       'Chủ nhật',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                     buildListHour(sundayList),
                   ],
@@ -272,14 +217,13 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                                 getTimeString(hourModel.fromHour) +
                                 " - " +
                                 getTimeString(hourModel.toHour),
-                            style: const TextStyle(fontSize: 15),
+                            style: GoogleFonts.montserrat(fontSize: 15),
                           ),
                         ),
                         const Spacer(),
                         IconButton(
                             onPressed: () {
                               checkDelete = true;
-                              print(hourModel.id);
                               Future<bool?> deleteFuture = DatingService()
                                   .deleteDating(
                                       hourModel.id, widget.tokenModel.message);
@@ -291,14 +235,12 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                                         .showSnackBar(const SnackBar(
                                       content: Text("Xóa thành công"),
                                     ));
-                                    print('Xóa thành công');
                                   });
                                 }
                               });
                             },
-                            icon: Icon(
-                              Icons.delete_outline,
-                              size: width * 0.08,
+                            icon: const Icon(
+                              FontAwesomeIcons.solidTrashAlt,
                             )),
                       ],
                     ),
@@ -317,10 +259,68 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
             list.length, (index) => buildHourPerDay(list[index], index)),
       );
     } else {
-      return const Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Text('Không có dữ liệu'),
+      return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text(
+          'Không có dữ liệu',
+          style: GoogleFonts.montserrat(),
+        ),
       );
     }
+  }
+
+  Future getAllDatings() {
+    Future<ResponseListModel<OnlineHourModel>?> getAllDatingsFuture =
+        DatingService()
+            .getAllDatings(widget.userModel.id, widget.tokenModel.message);
+    getAllDatingsFuture.then((value) {
+      if (value != null) {
+        allDatings = value.content;
+      }
+    });
+    return getAllDatingsFuture;
+  }
+
+  void loadData() {
+    mondayList = [];
+    tuesdayList = [];
+    wednesdayList = [];
+    thursdayList = [];
+    fridayList = [];
+    saturdayList = [];
+    sundayList = [];
+    if (allDatings.isNotEmpty) {
+      for (var hour in allDatings) {
+        switch (hour.dayInWeek) {
+          case 2:
+            mondayList.add(hour);
+            break;
+          case 3:
+            tuesdayList.add(hour);
+            break;
+          case 4:
+            wednesdayList.add(hour);
+            break;
+          case 5:
+            thursdayList.add(hour);
+            break;
+          case 6:
+            fridayList.add(hour);
+            break;
+          case 7:
+            saturdayList.add(hour);
+            break;
+          case 8:
+            sundayList.add(hour);
+            break;
+        }
+      }
+    }
+  }
+
+  String getTimeString(int value) {
+    final int hour = value ~/ 60;
+    final int minutes = value % 60;
+    return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
   }
 }

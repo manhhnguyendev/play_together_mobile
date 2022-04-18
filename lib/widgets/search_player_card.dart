@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -6,6 +7,7 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchPlayerCard extends StatefulWidget {
   final PlayerModel playerModel;
@@ -24,10 +26,9 @@ class SearchPlayerCard extends StatefulWidget {
 }
 
 class _SearchPlayerCardState extends State<SearchPlayerCard> {
-  List<GameOfUserModel>? listGameAndRank;
+  List<GameOfUserModel> listGameAndRank = [];
 
   Future getGameOfUser() {
-    listGameAndRank ??= [];
     Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
         .getGameOfUser(widget.playerModel.id, widget.tokenModel.message);
     gameOfUserFuture.then((value) {
@@ -80,17 +81,14 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                           children: [
                             Text(
                               widget.playerModel.name,
-                              style: const TextStyle(
+                              style: GoogleFonts.montserrat(
                                   fontSize: 20, color: Colors.black),
-                            ),
-                            const SizedBox(
-                              height: 5,
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                               child: Container(
                                 alignment: Alignment.topLeft,
-                                child: buildGamesString(listGameAndRank!),
+                                child: buildGamesString(listGameAndRank),
                               ),
                             ),
                             const SizedBox(
@@ -99,37 +97,42 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
                             Row(
                               children: [
                                 Expanded(
-                                  flex: 1,
+                                  flex: 0,
                                   child: Text(
-                                    widget.playerModel != null
-                                        ? widget.playerModel.pricePerHour
-                                                .toStringAsFixed(0)
-                                                .toVND() +
-                                            '/h'
-                                        : '0 đ/h',
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Color(0xff320444)),
+                                    widget.playerModel.pricePerHour
+                                            .toStringAsFixed(0)
+                                            .toVND() +
+                                        '/h',
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 18,
+                                        color: const Color(0xff320444)),
                                   ),
                                 ),
                                 Expanded(
                                   flex: 1,
                                   child: Row(
                                     children: [
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
                                       const Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
+                                        FontAwesomeIcons.solidStar,
+                                        color: Colors.amber,
+                                        size: 15,
                                       ),
                                       Text(
-                                        (widget.playerModel.rate)
-                                            .toStringAsFixed(1),
-                                        style: const TextStyle(fontSize: 15),
+                                        ' ' +
+                                            (widget.playerModel.rate)
+                                                .toStringAsFixed(1),
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
                                       ),
                                       Text(
                                         "(" +
                                             widget.playerModel.numOfRate
                                                 .toString() +
                                             ")",
-                                        style: const TextStyle(
+                                        style: GoogleFonts.montserrat(
                                             fontSize: 15, color: Colors.grey),
                                       ),
                                     ],
@@ -157,30 +160,10 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
         });
   }
 
-  Widget buildGameAndRankPlayer(GameOfUserModel gameOfUser) => Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Container(
-          alignment: Alignment.topLeft,
-          child: Column(
-            children: [
-              Row(children: [
-                Text(
-                  gameOfUser.game.name,
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ]),
-              const SizedBox(
-                height: 5,
-              )
-            ],
-          ),
-        ),
-      );
-
   Widget buildGamesString(List<GameOfUserModel> gamesOfUserModel) {
     String games = "";
     if (gamesOfUserModel == null) {
-      return const Text('');
+      return Text('', style: GoogleFonts.montserrat(fontSize: 15));
     } else {
       for (var i = 0; i < gamesOfUserModel.length; i++) {
         if (i < gamesOfUserModel.length - 1) {
@@ -189,42 +172,42 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
           games = games + gamesOfUserModel[i].game.name;
         }
       }
-      return Text("Games: " + games);
+      return Text(games, style: GoogleFonts.montserrat(fontSize: 15));
     }
   }
 
   Widget createStatus(String status) {
     if (status == 'Hiring') {
-      return const Text(
+      return Text(
         'Đang được thuê',
-        style: TextStyle(fontSize: 15, color: Colors.red),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.red),
       );
     }
 
     if (status == 'Processing') {
-      return const Text(
-        'Đang thương lượng',
-        style: TextStyle(fontSize: 15, color: Colors.yellow),
+      return Text(
+        'Đang xử lý',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.amber),
       );
     }
 
     if (status == 'Offline') {
-      return const Text(
+      return Text(
         'Đang offline',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.grey),
       );
     }
 
     if (status == 'Online') {
-      return const Text(
+      return Text(
         'Có thể thuê',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
 
     return Text(
       status,
-      style: const TextStyle(fontSize: 15, color: Colors.black),
+      style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
     );
   }
 }
