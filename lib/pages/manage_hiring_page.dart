@@ -65,7 +65,6 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
     gameOfUserFuture.then((value) {
       if (value != null) {
         listGameAndRank = value.content;
-        print(listGameAndRank.length);
       }
     });
     return gameOfUserFuture;
