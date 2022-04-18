@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/token_model.dart';
@@ -9,6 +8,7 @@ import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/pages/notification_page.dart';
 import 'package:play_together_mobile/pages/personal_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BottomBar extends StatefulWidget {
   final int bottomBarIndex;
@@ -29,6 +29,8 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      selectedLabelStyle: GoogleFonts.montserrat(),
+      unselectedLabelStyle: GoogleFonts.montserrat(),
       selectedItemColor: my_colors.primary,
       unselectedItemColor: my_colors.secondary,
       currentIndex: widget.bottomBarIndex,
@@ -59,7 +61,6 @@ class _BottomBarState extends State<BottomBar> {
           label: "Cá nhân",
         ),
       ],
-      // press for switch tab
       onTap: (index) {
         if (index != widget.bottomBarIndex) {
           bool isRightToLeft = false;

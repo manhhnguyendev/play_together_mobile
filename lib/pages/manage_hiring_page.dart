@@ -12,36 +12,25 @@ import 'package:play_together_mobile/services/datings_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ManageHiringPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
-  final UserServiceModel? userServiceModel;
 
-  const ManageHiringPage(
-      {Key? key,
-      required this.userModel,
-      required this.tokenModel,
-      this.userServiceModel})
-      : super(key: key);
+  const ManageHiringPage({
+    Key? key,
+    required this.userModel,
+    required this.tokenModel,
+  }) : super(key: key);
 
   @override
   State<ManageHiringPage> createState() => _ManageHiringPageState();
 }
 
 class _ManageHiringPageState extends State<ManageHiringPage> {
-  late UserServiceModel lateUserService;
-  late bool isPlayer;
-  late double pricePerHour;
-  late int maxHourHire;
-  bool checkOnPress = true;
-  bool checkFirstTime = true;
-  int choosenTime = 0;
-  int maxHour = 5;
-  List<int> listHour = [];
-  String money = "";
-  double convertMoney = 0;
-  List<OnlineHourModel> allDatings = [];
+  final displayController = TextEditingController();
+  final formatter = NumberFormat('###,###,###');
   late List<OnlineHourModel> mondayList;
   late List<OnlineHourModel> tuesdayList;
   late List<OnlineHourModel> wednesdayList;
@@ -49,106 +38,21 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
   late List<OnlineHourModel> fridayList;
   late List<OnlineHourModel> saturdayList;
   late List<OnlineHourModel> sundayList;
-  List<GameOfUserModel> listGameAndRank = [];
-  final displayController = TextEditingController();
-  var formatter = NumberFormat('###,###,###');
-
-  String getTimeString(int value) {
-    final int hour = value ~/ 60;
-    final int minutes = value % 60;
-    return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
-  }
-
-  Future getGameOfUser() {
-    Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
-        .getGameOfUser(widget.userModel.id, widget.tokenModel.message);
-    gameOfUserFuture.then((value) {
-      if (value != null) {
-        listGameAndRank = value.content;
-      }
-    });
-    return gameOfUserFuture;
-  }
-
-  Future getAllDatings() {
-    Future<ResponseListModel<OnlineHourModel>?> getDatingsFuture =
-        DatingService()
-            .getAllDatings(widget.userModel.id, widget.tokenModel.message);
-    getDatingsFuture.then((value) {
-      if (value != null) {
-        allDatings = value.content;
-      }
-    });
-    return getDatingsFuture;
-  }
-
-  Future getUserService() {
-    Future<ResponseModel<UserServiceModel>?> getUserServiceFuture =
-        UserService()
-            .getUserServiceById(widget.userModel.id, widget.tokenModel.message);
-    getUserServiceFuture.then((value) {
-      if (value != null) {
-        if (checkOnPress) {
-          lateUserService = value.content;
-        }
-      }
-    });
-    return getUserServiceFuture;
-  }
-
-  void createHourList() {
-    for (var i = 1; i <= maxHour; i++) {
-      listHour.add(i);
-    }
-    choosenTime = listHour[0];
-  }
-
-  void loadUserService() {
-    isPlayer = widget.userServiceModel!.isPlayer;
-    pricePerHour = widget.userServiceModel!.pricePerHour;
-    maxHourHire = widget.userServiceModel!.maxHourHire;
-    // displayController.text = pricePerHour.toStringAsFixed(0);
-    displayController.text = formatter.format(pricePerHour);
-  }
-
-  void loadDating() {
-    mondayList = [];
-    tuesdayList = [];
-    wednesdayList = [];
-    thursdayList = [];
-    fridayList = [];
-    saturdayList = [];
-    sundayList = [];
-    if (allDatings != null) {
-      if (allDatings.length > 0) {
-        for (var hour in allDatings) {
-          switch (hour.dayInWeek) {
-            case 2:
-              mondayList.add(hour);
-              break;
-            case 3:
-              tuesdayList.add(hour);
-              break;
-            case 4:
-              wednesdayList.add(hour);
-              break;
-            case 5:
-              thursdayList.add(hour);
-              break;
-            case 6:
-              fridayList.add(hour);
-              break;
-            case 7:
-              saturdayList.add(hour);
-              break;
-            case 8:
-              sundayList.add(hour);
-              break;
-          }
-        }
-      }
-    }
-  }
+  bool isPlayer = false;
+  bool checkFirstTime = true;
+  bool checkDataFirstTime = true;
+  bool checkOnPress = true;
+  bool checkOnChange = true;
+  double pricePerHour = 10000;
+  double convertMoney = 0;
+  int maxHourHire = 1;
+  int choosenTime = 0;
+  int maxHour = 5;
+  String money = "";
+  List<int> listHour = [];
+  List<OnlineHourModel> listOnlineHours = [];
+  List<GameOfUserModel> listGamesOfUser = [];
+  UserServiceModel? lateUserService;
 
   @override
   Widget build(BuildContext context) {
@@ -156,20 +60,20 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
         future: getUserService(),
         builder: (context, snapshot) {
           if (checkFirstTime) {
-            loadUserService();
             createHourList();
+            displayController.text = formatter.format(pricePerHour);
             checkFirstTime = false;
           }
           return Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(50),
+              preferredSize: const Size.fromHeight(50),
               child: AppBar(
                 backgroundColor: Colors.white,
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: FlatButton(
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios,
                     ),
                     onPressed: () {
@@ -180,10 +84,10 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                 centerTitle: true,
                 title: Text(
                   'Quản lý nhận thuê',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal),
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black),
                 ),
               ),
             ),
@@ -204,26 +108,42 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
                           child: Row(
                             children: [
                               Text(
-                                'Nhận thuê',
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                                'Nhận yêu cầu thuê',
+                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               SizedBox(
                                 height: 60,
                                 width: 80,
                                 child: FittedBox(
                                   fit: BoxFit.fill,
                                   child: Switch(
-                                      activeColor: Color(0xff8980FF),
+                                      activeColor: const Color(0xff8980FF),
                                       value: isPlayer,
                                       onChanged: (value) {
                                         setState(() {
+                                          checkOnChange = true;
                                           isPlayer = value;
+                                          IsPlayerModel isPlayerModel =
+                                              IsPlayerModel(isPlayer: isPlayer);
+                                          Future<bool?> updateIsPlayer =
+                                              UserService().updateIsPlayer(
+                                                  isPlayerModel,
+                                                  widget.tokenModel.message);
+                                          updateIsPlayer.then((value) {
+                                            if (value == true) {
+                                              checkOnChange = false;
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "Cập nhật trạng thái thành công"),
+                                              ));
+                                            }
+                                          });
                                         });
                                       }),
                                 ),
@@ -237,11 +157,10 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                             children: [
                               Text(
                                 'Số giờ tối đa',
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
-                              Spacer(),
-                              Container(
+                              const Spacer(),
+                              SizedBox(
                                 width: 100,
                                 child: DropdownButton(
                                   isExpanded: true,
@@ -249,65 +168,57 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                   icon: const Icon(Icons.keyboard_arrow_down),
                                   items: listHour.map((item) {
                                     return DropdownMenuItem(
-                                      child: new Text(
+                                      child: Text(
                                         item.toString(),
-                                        style: TextStyle(fontSize: 18),
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18),
                                       ),
                                       value: item,
                                     );
                                   }).toList(),
                                   onChanged: (value) {
                                     setState(() {
-                                      choosenTime = int.parse(value.toString());
-                                      print(
-                                          choosenTime.toString() + "toi chon");
+                                      maxHourHire = int.parse(value.toString());
                                     });
                                   },
                                 ),
                               ),
                               Text(
                                 ' giờ',
-                                style: TextStyle(fontSize: 15),
+                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Row(
                             children: [
                               Text(
                                 'Chi phí mỗi giờ',
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
-                              Spacer(),
-                              Container(
-                                //decoration: BoxDecoration(border: Border.all()),
+                              const Spacer(),
+                              SizedBox(
                                 width: 120,
                                 child: TextField(
                                   inputFormatters: [ThousandsFormatter()],
                                   controller: displayController,
                                   onChanged: (value) {
-                                    // setState(() {
-                                    //   money = value; //1 VNĐ
-                                    //   print(money + " gia tri luu");
-                                    // });
-                                    // money = money.replaceAll(",", "");
-                                    // convertMoney = double.parse(money);
+                                    setState(() {
+                                      money = value;
+                                    });
                                   },
-                                  //textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 18),
                                   decoration: InputDecoration(
-                                      counter: Container(),
-                                      hintText: " Nhập số tiền"),
+                                    counter: Container(),
+                                  ),
                                   maxLength: 11,
                                   keyboardType: TextInputType.number,
                                 ),
                               ),
                               Text('đ',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black)),
+                                  style: GoogleFonts.montserrat(fontSize: 18)),
                             ],
                           ),
                         ),
@@ -315,26 +226,49 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                           alignment: Alignment.center,
                           child: SecondMainButton(
                               text: 'Cập nhật',
-                              onpress: () {},
+                              onpress: () {
+                                checkOnPress = true;
+                                money = money.replaceAll(",", "");
+                                convertMoney = double.parse(money);
+                                ServiceUserModel serviceUserModel =
+                                    ServiceUserModel(
+                                        pricePerHour: convertMoney,
+                                        maxHourHire: maxHourHire);
+                                Future<bool?> updatePersonalServiceInfo =
+                                    UserService().updatePersonalServiceInfo(
+                                        serviceUserModel,
+                                        widget.tokenModel.message);
+                                updatePersonalServiceInfo.then((value) {
+                                  if (value == true) {
+                                    setState(() {
+                                      checkOnPress = false;
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text("Cập nhật thành công"),
+                                      ));
+                                    });
+                                  }
+                                });
+                              },
                               height: 50,
                               width: 200),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Divider(
                             thickness: 1,
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.fromLTRB(15, 5, 5, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Row(
                             children: [
                               Text(
                                 'Kỹ năng',
-                                style: TextStyle(fontSize: 18),
+                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               GestureDetector(
                                 onTap: () async {
                                   final check = await Navigator.push(
@@ -350,16 +284,16 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 },
                                 child: Text(
                                   'Chỉnh sửa kỹ năng',
-                                  style: TextStyle(
+                                  style: GoogleFonts.montserrat(
                                     fontSize: 15,
                                     color: Colors.grey,
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.arrow_forward_ios,
                                 size: 15,
                                 color: Colors.grey,
@@ -368,7 +302,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 20, 10),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: FutureBuilder(
@@ -376,32 +310,32 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                               builder: (context, snapshot) {
                                 return Column(
                                   children: List.generate(
-                                      listGameAndRank != null
-                                          ? listGameAndRank.length
+                                      listGamesOfUser.isNotEmpty
+                                          ? listGamesOfUser.length
                                           : 0,
                                       (index) => buildGameOfUser(
-                                          listGameAndRank[index])),
+                                          listGamesOfUser[index])),
                                 );
                               },
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Divider(
                             thickness: 1,
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.fromLTRB(15, 5, 5, 0),
+                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Row(
                             children: [
                               Text(
                                 'Giờ online',
-                                style: TextStyle(fontSize: 18),
+                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               GestureDetector(
                                 onTap: () async {
                                   final check = await Navigator.push(
@@ -416,16 +350,16 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 },
                                 child: Text(
                                   'Chỉnh sửa giờ',
-                                  style: TextStyle(
+                                  style: GoogleFonts.montserrat(
                                     fontSize: 15,
                                     color: Colors.grey,
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.arrow_forward_ios,
                                 size: 15,
                                 color: Colors.grey,
@@ -441,7 +375,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Thứ 2:',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(mondayList),
@@ -456,7 +390,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Thứ 3:',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(tuesdayList),
@@ -471,7 +405,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Thứ 4:',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(wednesdayList),
@@ -486,7 +420,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Thứ 5:',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(thursdayList),
@@ -501,7 +435,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Thứ 6:',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(fridayList),
@@ -516,7 +450,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Thứ 7:',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(saturdayList),
@@ -531,220 +465,11 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
                                   'Chủ Nhật: ',
-                                  style: TextStyle(fontSize: 15),
+                                  style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
                               buildListDating(sundayList),
                             ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Divider(
-                            thickness: 1,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          child: Container(
-                            decoration:
-                                BoxDecoration(border: Border.all(width: 1)),
-                            child: IntrinsicHeight(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      flex: 2,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 0, 10, 0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Tỷ lệ hoàn thành',
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.pie_chart,
-                                                      size: 30,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      '100' + '%',
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.green),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      'Theo ngày',
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.grey),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Spacer(),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.pie_chart,
-                                                      size: 30,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      '100' + '%',
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.green),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      'Theo tháng',
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Colors.grey),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                  VerticalDivider(
-                                    color: Colors.black,
-                                    thickness: 1,
-                                    width: 1,
-                                  ),
-                                  Expanded(
-                                      flex: 1,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          print("tap tap");
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //       builder: (context) => RatingCommentPage()),
-                                          // );
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              'Đánh giá',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  decoration:
-                                                      TextDecoration.underline),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              size: 50,
-                                              color: Colors.yellow,
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              '4.5',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          child: Container(
-                            decoration: BoxDecoration(border: Border.all()),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Doanh thu',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 0, 15, 10),
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '1.000.000' + 'đ',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.green),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text('Theo ngày',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey)),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '15.000.000' + 'đ',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.green),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text('Theo tháng',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
                           ),
                         ),
                       ],
@@ -758,27 +483,31 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
   Widget createStatus() {
     if (isPlayer) {
       return Text(
-        'Sẵn sàng nhận thuê',
-        style: TextStyle(fontSize: 18, color: Colors.green),
+        'Sẵn sàng nhận yêu cầu thuê',
+        style: GoogleFonts.montserrat(
+            fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold),
       );
     } else {
       return Text(
-        'Không nhận thuê',
-        style: TextStyle(fontSize: 18, color: Colors.grey),
+        'Ngừng nhận yêu cầu thuê',
+        style: GoogleFonts.montserrat(
+            fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
       );
     }
   }
 
-  Widget buildGameOfUser(GameOfUserModel gameOfUser) => Padding(
-        padding: const EdgeInsets.only(left: 10),
+  Widget buildGameOfUser(GameOfUserModel gameOfUser) {
+    if (listGamesOfUser.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 15),
         child: Container(
           alignment: Alignment.topLeft,
           child: Column(
             children: [
               Row(children: [
                 Text(
-                  ('• ' + gameOfUser.game.name),
-                  style: const TextStyle(fontSize: 15),
+                  (gameOfUser.game.name),
+                  style: GoogleFonts.montserrat(fontSize: 15),
                 ),
                 Text(
                     gameOfUser.rankId != "None"
@@ -786,7 +515,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                             ? " : " + gameOfUser.rank.name
                             : '')
                         : '',
-                    style: const TextStyle(fontSize: 15)),
+                    style: GoogleFonts.montserrat(fontSize: 15)),
               ]),
               const SizedBox(
                 height: 5,
@@ -795,9 +524,14 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
           ),
         ),
       );
+    } else {
+      return Text(' Không có dữ liệu',
+          style: GoogleFonts.montserrat(fontSize: 15));
+    }
+  }
 
   Widget buildListDating(List<OnlineHourModel> listDating) {
-    if (listDating.length > 0) {
+    if (listDating.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Row(
@@ -811,23 +545,117 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
         ),
       );
     } else {
-      return Text(' Không có dữ liệu');
+      return Text(' Không có dữ liệu',
+          style: GoogleFonts.montserrat(fontSize: 15));
     }
   }
 
   Widget buildSingleDatingPerDay(OnlineHourModel model) {
     String rawFromHour = getTimeString(model.fromHour);
     String rawToHour = getTimeString(model.toHour);
-    return Container(
-      child: Text(rawFromHour + ' : ' + rawToHour + ', '),
-    );
+    return Text(rawFromHour + ' : ' + rawToHour + ', ',
+        style: GoogleFonts.montserrat(fontSize: 15));
   }
 
   Widget buildSingleDatingLastDay(OnlineHourModel model) {
     String rawFromHour = getTimeString(model.fromHour);
     String rawToHour = getTimeString(model.toHour);
-    return Container(
-      child: Text(rawFromHour + ' : ' + rawToHour),
-    );
+    return Text(rawFromHour + ' : ' + rawToHour,
+        style: GoogleFonts.montserrat(fontSize: 15));
+  }
+
+  String getTimeString(int value) {
+    final int hour = value ~/ 60;
+    final int minutes = value % 60;
+    return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
+  }
+
+  Future getAllDatings() {
+    Future<ResponseListModel<OnlineHourModel>?> getDatingsFuture =
+        DatingService()
+            .getAllDatings(widget.userModel.id, widget.tokenModel.message);
+    getDatingsFuture.then((value) {
+      if (value != null) {
+        listOnlineHours = value.content;
+      }
+    });
+    return getDatingsFuture;
+  }
+
+  Future getGameOfUser() {
+    Future<ResponseListModel<GameOfUserModel>?> gameOfUserFuture = UserService()
+        .getGameOfUser(widget.userModel.id, widget.tokenModel.message);
+    gameOfUserFuture.then((value) {
+      if (value != null) {
+        listGamesOfUser = value.content;
+      }
+    });
+    return gameOfUserFuture;
+  }
+
+  Future getUserService() {
+    Future<ResponseModel<UserServiceModel>?> getUserServiceFuture =
+        UserService()
+            .getUserServiceById(widget.userModel.id, widget.tokenModel.message);
+    getUserServiceFuture.then((value) {
+      if (value != null) {
+        if (checkOnPress || checkOnChange) {
+          setState(() {
+            lateUserService = value.content;
+            isPlayer = lateUserService?.isPlayer ?? false;
+            pricePerHour = lateUserService?.pricePerHour ?? 10000;
+            maxHourHire = lateUserService?.maxHourHire ?? 1;
+            displayController.text = formatter.format(pricePerHour);
+            checkOnPress = false;
+            checkOnChange = false;
+          });
+        }
+      }
+    });
+    return getUserServiceFuture;
+  }
+
+  void createHourList() {
+    for (var i = 1; i <= maxHour; i++) {
+      listHour.add(i);
+    }
+    choosenTime = listHour[0];
+  }
+
+  void loadDating() {
+    mondayList = [];
+    tuesdayList = [];
+    wednesdayList = [];
+    thursdayList = [];
+    fridayList = [];
+    saturdayList = [];
+    sundayList = [];
+    if (listOnlineHours.isNotEmpty) {
+      for (var hour in listOnlineHours) {
+        switch (hour.dayInWeek) {
+          case 2:
+            mondayList.add(hour);
+            break;
+          case 3:
+            tuesdayList.add(hour);
+            break;
+          case 4:
+            wednesdayList.add(hour);
+            break;
+          case 5:
+            thursdayList.add(hour);
+            break;
+          case 6:
+            fridayList.add(hour);
+            break;
+          case 7:
+            saturdayList.add(hour);
+            break;
+          case 8:
+            sundayList.add(hour);
+            break;
+        }
+      }
+    }
   }
 }

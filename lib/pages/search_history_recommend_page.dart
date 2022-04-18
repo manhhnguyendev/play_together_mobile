@@ -11,6 +11,7 @@ import 'package:play_together_mobile/services/game_service.dart';
 import 'package:play_together_mobile/services/search_history_service.dart';
 import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchHistoryAndRecommendPage extends StatefulWidget {
   final TokenModel tokenModel;
@@ -30,44 +31,10 @@ class _SearchHistoryAndRecommendPageState
   final _controller = TextEditingController();
   List<UserModel> listPlayerSearch = [];
   List<PlayerModel> _listPlayerSearch = [];
-  String searchValue = "";
   List<SearchHistoryModel> listSearchHistory = [];
   List<SearchHistoryModel> listHotSearch = [];
   List<GamesModel> listMostFavoriteGame = [];
-
-  Future loadListSearchHistory() {
-    Future<ResponseListModel<SearchHistoryModel>?> listSearchHistoryFuture =
-        SearchHistoryService().getSearchHistories(widget.tokenModel.message);
-    listSearchHistoryFuture.then((_listSearchHistory) {
-      if (_listSearchHistory != null) {
-        listSearchHistory = _listSearchHistory.content;
-      }
-    });
-    return listSearchHistoryFuture;
-  }
-
-  Future loadListHotSearch() {
-    Future<ResponseListModel<SearchHistoryModel>?> listHotSearchFuture =
-        SearchHistoryService().getHotSearch(widget.tokenModel.message);
-    listHotSearchFuture.then((_listHotSearch) {
-      if (_listHotSearch != null) {
-        listHotSearch = _listHotSearch.content;
-      }
-    });
-    return listHotSearchFuture;
-  }
-
-  Future loadListMostFavoriteGame() {
-    Future<ResponseListModel<GamesModel>?> listMostFavoriteGameFuture =
-        GameService().getMostFavoriteGames(widget.tokenModel.message);
-    listMostFavoriteGameFuture.then((_listMostFavoriteGame) {
-      if (_listMostFavoriteGame != null) {
-        listMostFavoriteGame = _listMostFavoriteGame.content;
-        print(listMostFavoriteGame);
-      }
-    });
-    return listMostFavoriteGameFuture;
-  }
+  String searchValue = "";
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +104,7 @@ class _SearchHistoryAndRecommendPageState
               border: InputBorder.none,
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
+              hintStyle: GoogleFonts.montserrat(),
               hintText: "Tìm kiếm",
               prefixIcon: const Icon(
                 Icons.search,
@@ -170,9 +138,9 @@ class _SearchHistoryAndRecommendPageState
           children: [
             Container(
               alignment: Alignment.topLeft,
-              child: const Text(
+              child: Text(
                 'Tìm kiếm gần đây',
-                style: TextStyle(color: Colors.grey, fontSize: 17),
+                style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 18),
               ),
             ),
             Padding(
@@ -194,9 +162,9 @@ class _SearchHistoryAndRecommendPageState
             ),
             Container(
               alignment: Alignment.topLeft,
-              child: const Text(
+              child: Text(
                 'Top tìm kiếm',
-                style: TextStyle(color: Colors.grey, fontSize: 17),
+                style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 18),
               ),
             ),
             Padding(
@@ -218,9 +186,9 @@ class _SearchHistoryAndRecommendPageState
             ),
             Container(
               alignment: Alignment.topLeft,
-              child: const Text(
+              child: Text(
                 'Các tựa game hot',
-                style: TextStyle(color: Colors.grey, fontSize: 17),
+                style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 18),
               ),
             ),
             FutureBuilder(
@@ -243,50 +211,92 @@ class _SearchHistoryAndRecommendPageState
     );
   }
 
-  Widget buildSearchHistory(String searchHistory) => GestureDetector(
-        onTap: () {
-          print(searchHistory);
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Container(
-            alignment: Alignment.topLeft,
-            child: Column(
-              children: [
-                Text(
-                  searchHistory,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.normal),
-                ),
-                const SizedBox(
-                  height: 10,
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-
-  Widget buildTopGameTag(String gameType) => Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GestureDetector(
-          onTap: () {
-            print(gameType);
-          },
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color(0xff8980FF),
+  Widget buildSearchHistory(String searchHistory) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _controller.text = searchHistory;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Container(
+          alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              Text(
+                searchHistory,
+                style: GoogleFonts.montserrat(
+                    fontSize: 15, fontWeight: FontWeight.normal),
               ),
-              color: const Color(0xff8980FF).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Text(
-              gameType,
-              style: const TextStyle(fontSize: 15),
-            ),
+              const SizedBox(
+                height: 10,
+              )
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
+
+  Widget buildTopGameTag(String gameType) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _controller.text = gameType;
+          });
+        },
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color(0xff8980FF),
+            ),
+            color: const Color(0xff8980FF).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Text(
+            gameType,
+            style: GoogleFonts.montserrat(
+                fontSize: 15, fontWeight: FontWeight.normal),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future loadListSearchHistory() {
+    Future<ResponseListModel<SearchHistoryModel>?> listSearchHistoryFuture =
+        SearchHistoryService().getSearchHistories(widget.tokenModel.message);
+    listSearchHistoryFuture.then((_listSearchHistory) {
+      if (_listSearchHistory != null) {
+        listSearchHistory = _listSearchHistory.content;
+      }
+    });
+    return listSearchHistoryFuture;
+  }
+
+  Future loadListHotSearch() {
+    Future<ResponseListModel<SearchHistoryModel>?> listHotSearchFuture =
+        SearchHistoryService().getHotSearch(widget.tokenModel.message);
+    listHotSearchFuture.then((_listHotSearch) {
+      if (_listHotSearch != null) {
+        listHotSearch = _listHotSearch.content;
+      }
+    });
+    return listHotSearchFuture;
+  }
+
+  Future loadListMostFavoriteGame() {
+    Future<ResponseListModel<GamesModel>?> listMostFavoriteGameFuture =
+        GameService().getMostFavoriteGames(widget.tokenModel.message);
+    listMostFavoriteGameFuture.then((_listMostFavoriteGame) {
+      if (_listMostFavoriteGame != null) {
+        listMostFavoriteGame = _listMostFavoriteGame.content;
+      }
+    });
+    return listMostFavoriteGameFuture;
+  }
 }

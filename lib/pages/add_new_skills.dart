@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
-import 'package:play_together_mobile/pages/update_game_skills_page.dart';
 import 'package:play_together_mobile/services/game_of_user_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
@@ -10,6 +9,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/game_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddNewSkillsPage extends StatefulWidget {
   final UserModel userModel;
@@ -30,39 +30,6 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
   List<CheckBoxState> listGamesCheckBox = [];
   List<GamesModel> listAllGames = [];
   List listGamesChoosen = [];
-
-  Future getAllGames() {
-    Future<ResponseListModel<GamesModel>?> gameFuture =
-        GameService().getAllGames(widget.tokenModel.message);
-    gameFuture.then((listGameValue) {
-      if (listGameValue != null) {
-        if (checkFirstTime == true) {
-          setState(() {
-            listAllGames = listGameValue.content;
-            print(listAllGames.length);
-            Future<ResponseListModel<GameOfUserModel>?> hobbiesFuture =
-                UserService().getGameOfUser(
-                    widget.userModel.id, widget.tokenModel.message);
-            hobbiesFuture.then((listGameOfUserValue) {
-              if (listGameOfUserValue != null) {
-                listGameOfUser = listGameOfUserValue.content;
-                for (var remove in listGameOfUser) {
-                  listAllGames
-                      .removeWhere((item) => item.name == remove.game.name);
-                }
-                for (var games in listAllGames) {
-                  listGamesCheckBox
-                      .add(CheckBoxState(title: games.name, value: false));
-                }
-              }
-            });
-          });
-          checkFirstTime = false;
-        }
-      }
-    });
-    return gameFuture;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +54,10 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
                   ),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Thêm kỹ năng',
-                  style: TextStyle(
-                      fontSize: 18,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
@@ -137,7 +104,6 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
                                 content: Text("Thêm thành công"),
                               ));
                               Navigator.pop(context);
-                              print('Thêm thành công');
                             });
                           }
                         });
@@ -165,8 +131,40 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
       ),
       title: Text(
         cbState.title,
-        style: const TextStyle(fontSize: 15),
+        style: GoogleFonts.montserrat(fontSize: 15),
       ),
     );
+  }
+
+  Future getAllGames() {
+    Future<ResponseListModel<GamesModel>?> gameFuture =
+        GameService().getAllGames(widget.tokenModel.message);
+    gameFuture.then((listGameValue) {
+      if (listGameValue != null) {
+        if (checkFirstTime == true) {
+          setState(() {
+            listAllGames = listGameValue.content;
+            Future<ResponseListModel<GameOfUserModel>?> hobbiesFuture =
+                UserService().getGameOfUser(
+                    widget.userModel.id, widget.tokenModel.message);
+            hobbiesFuture.then((listGameOfUserValue) {
+              if (listGameOfUserValue != null) {
+                listGameOfUser = listGameOfUserValue.content;
+                for (var remove in listGameOfUser) {
+                  listAllGames
+                      .removeWhere((item) => item.name == remove.game.name);
+                }
+                for (var games in listAllGames) {
+                  listGamesCheckBox
+                      .add(CheckBoxState(title: games.name, value: false));
+                }
+              }
+            });
+          });
+          checkFirstTime = false;
+        }
+      }
+    });
+    return gameFuture;
   }
 }

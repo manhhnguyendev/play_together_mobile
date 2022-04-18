@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/datings_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UpdateSingleHourPage extends StatefulWidget {
   final OnlineHourModel onlineHourModel;
@@ -68,7 +69,6 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
     }
 
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -90,38 +90,39 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
           centerTitle: true,
           title: Text(
             'Chỉnh sửa giờ online',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
         ),
       ),
       body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(10, 10, 5, 0),
+          padding: const EdgeInsets.fromLTRB(10, 10, 5, 0),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Thứ 2: ",
-                  style: TextStyle(fontSize: 18),
+                  'Thứ ' + widget.onlineHourModel.dayInWeek.toString() + ':',
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 Padding(
-                    padding: EdgeInsets.fromLTRB(10, 15, 15, 0),
+                    padding: const EdgeInsets.fromLTRB(10, 15, 15, 0),
                     child: Row(
                       children: [
                         Text(
                           "Từ: ",
-                          style: TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         SizedBox(
                           width: width * 0.2,
                           child: TextField(
+                            style: GoogleFonts.montserrat(),
                             controller: fromHourController,
                             maxLength: 2,
-                            decoration: InputDecoration(counterText: ""),
+                            decoration: const InputDecoration(counterText: ""),
                             onChanged: (value) {
                               setState(() {
                                 if (value.isNotEmpty) {
@@ -137,13 +138,11 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                               });
                             },
                             onSubmitted: (value) {
-                              if (value != null) {
-                                fromHour = value;
-                                if (fromHour.length > 1) {
-                                  if (int.parse(fromHour) < 0 ||
-                                      int.parse(fromHour) > 23) {
-                                    fromHour = "";
-                                  }
+                              fromHour = value;
+                              if (fromHour.length > 1) {
+                                if (int.parse(fromHour) < 0 ||
+                                    int.parse(fromHour) > 23) {
+                                  fromHour = "";
                                 }
                               }
                             },
@@ -152,13 +151,14 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                         ),
                         Text(
                           " : ",
-                          style: TextStyle(fontSize: 15),
+                          style: GoogleFonts.montserrat(fontSize: 15),
                         ),
                         SizedBox(
                           width: width * 0.2,
                           child: TextField(
+                            style: GoogleFonts.montserrat(),
                             controller: fromMinuteController,
-                            decoration: InputDecoration(counterText: ""),
+                            decoration: const InputDecoration(counterText: ""),
                             maxLength: 2,
                             onChanged: (value) {
                               setState(() {
@@ -176,48 +176,50 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                             },
                             onSubmitted: (value) {
                               setState(() {
-                                if (value != null) {
-                                  if (value.length > 1) {
-                                    if (int.parse(value) < 0 ||
-                                        int.parse(value) > 59) {
-                                      value = "";
-                                      fromMinute = "";
-                                      fromMinuteController.text = "";
-                                    } else {
-                                      fromMinute = value;
-                                    }
-                                  } else if (value.length == 1) {
-                                    value = "0" + value;
-                                    fromMinute = "0" + fromMinute;
-                                    fromMinuteController.text =
-                                        "0" + fromMinuteController.text;
+                                if (value.length > 1) {
+                                  if (int.parse(value) < 0 ||
+                                      int.parse(value) > 59) {
+                                    value = "";
+                                    fromMinute = "";
+                                    fromMinuteController.text = "";
+                                  } else {
+                                    fromMinute = value;
                                   }
+                                } else if (value.length == 1) {
+                                  value = "0" + value;
+                                  fromMinute = "0" + fromMinute;
+                                  fromMinuteController.text =
+                                      "0" + fromMinuteController.text;
                                 }
                               });
                             },
                             keyboardType: TextInputType.number,
                           ),
                         ),
-                        Text(' giờ'),
+                        Text(
+                          ' giờ',
+                          style: GoogleFonts.montserrat(fontSize: 15),
+                        ),
                       ],
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(10.0, 0, 15.0, 0),
+                  padding: const EdgeInsets.fromLTRB(10.0, 0, 15.0, 0),
                   child: Row(
                     children: [
                       Text(
                         "Đến: ",
-                        style: TextStyle(fontSize: 18),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SizedBox(
                         width: width * 0.2,
                         child: TextField(
+                          style: GoogleFonts.montserrat(),
                           controller: toHourController,
-                          decoration: InputDecoration(counterText: ""),
+                          decoration: const InputDecoration(counterText: ""),
                           maxLength: 2,
                           onChanged: (value) {
                             setState(() {
@@ -234,13 +236,11 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                             });
                           },
                           onSubmitted: (value) {
-                            if (value != null) {
-                              toHour = value;
-                              if (toHour.length > 1) {
-                                if (int.parse(toHour) < 0 ||
-                                    int.parse(toHour) > 23) {
-                                  toHour = "";
-                                }
+                            toHour = value;
+                            if (toHour.length > 1) {
+                              if (int.parse(toHour) < 0 ||
+                                  int.parse(toHour) > 23) {
+                                toHour = "";
                               }
                             }
                           },
@@ -249,13 +249,14 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                       ),
                       Text(
                         " : ",
-                        style: TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       SizedBox(
                         width: width * 0.2,
                         child: TextField(
+                          style: GoogleFonts.montserrat(),
                           controller: toMinuteController,
-                          decoration: InputDecoration(counterText: ""),
+                          decoration: const InputDecoration(counterText: ""),
                           maxLength: 2,
                           onChanged: (value) {
                             setState(() {
@@ -273,29 +274,30 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                           },
                           onSubmitted: (value) {
                             setState(() {
-                              if (value != null) {
-                                if (value.length > 1) {
-                                  if (int.parse(value) < 0 ||
-                                      int.parse(value) > 59) {
-                                    value = "";
-                                    toMinute = "";
-                                    toMinuteController.text = "";
-                                  } else {
-                                    toMinute = value;
-                                  }
-                                } else if (value.length == 1) {
-                                  value = "0" + value;
-                                  toMinute = "0" + toMinute;
-                                  toMinuteController.text =
-                                      "0" + toMinuteController.text;
+                              if (value.length > 1) {
+                                if (int.parse(value) < 0 ||
+                                    int.parse(value) > 59) {
+                                  value = "";
+                                  toMinute = "";
+                                  toMinuteController.text = "";
+                                } else {
+                                  toMinute = value;
                                 }
+                              } else if (value.length == 1) {
+                                value = "0" + value;
+                                toMinute = "0" + toMinute;
+                                toMinuteController.text =
+                                    "0" + toMinuteController.text;
                               }
                             });
                           },
                           keyboardType: TextInputType.number,
                         ),
                       ),
-                      Text(' giờ'),
+                      Text(
+                        ' giờ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
                     ],
                   ),
                 ),
@@ -308,11 +310,11 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                 text: 'Cập nhật',
                 onpress: () {
                   bool valid = true;
-                  if (fromHour.length == 0) {
+                  if (fromHour.isEmpty) {
                     valid = false;
                   }
 
-                  if (toHour.length == 0) {
+                  if (toHour.isEmpty) {
                     valid = false;
                   }
 
@@ -328,8 +330,7 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                     newFromHour =
                         int.parse(fromHour) * 60 + int.parse(fromMinute);
                     newToHour = int.parse(toHour) * 60 + int.parse(toMinute);
-                    print(newFromHour.toString() + " luu cai nay");
-                    print(newToHour.toString() + " luu cai nay");
+
                     UpdateOnlineHourModel newModel = UpdateOnlineHourModel(
                       fromHour: newFromHour,
                       toHour: newToHour,
@@ -345,11 +346,10 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                               .showSnackBar(const SnackBar(
                             content: Text("Cập nhật thành công"),
                           ));
-                          print('Cập nhật thành công');
+
                           Navigator.pop(context);
                         });
                       } else {
-                        print("THÊM BỊ LỖI");
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text("Giờ nhập bị trùng"),
@@ -357,7 +357,7 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                       }
                     });
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Giờ nhập không chính xác"),
                     ));
                   }
