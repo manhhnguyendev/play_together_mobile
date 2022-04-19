@@ -25,7 +25,9 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   var msgController = new TextEditingController();
   List<ChatModel> allChats = [];
-  Iterable<ChatModel> displayChat = [];
+  late Iterable<ChatModel> displayChat;
+  bool checkSendMsg = true;
+  bool checkFirstTime = true;
 
   Future getAllChats() {
     Future<ResponseListModel<ChatModel>?> getAllChatsFuture = ChatService()
@@ -33,8 +35,6 @@ class _ChatPageState extends State<ChatPage> {
     getAllChatsFuture.then((value) {
       if (value != null) {
         allChats = value.content;
-        print(allChats.length);
-        displayChat = allChats.reversed;
       }
     });
     return getAllChatsFuture;
@@ -45,6 +45,7 @@ class _ChatPageState extends State<ChatPage> {
     return FutureBuilder(
         future: getAllChats(),
         builder: (context, snapshot) {
+          displayChat = allChats.reversed;
           return Scaffold(
             backgroundColor: Colors.white,
             resizeToAvoidBottomInset: true,
@@ -84,6 +85,7 @@ class _ChatPageState extends State<ChatPage> {
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
+                      reverse: true,
                       child: Column(
                         children: List.generate(
                             displayChat.length,
@@ -134,12 +136,30 @@ class _ChatPageState extends State<ChatPage> {
                                       hintText: "Type message",
                                       border: InputBorder.none,
                                     ),
-                                    onChanged: (value) {},
-                                    onSubmitted: (Value) {},
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    SendMessageModel sendMessageModel =
+                                        SendMessageModel(
+                                            message: msgController.text);
+                                    Future<bool?> sendMessageFuture =
+                                        ChatService().createChat(
+                                            widget.orderModel.user!.id ==
+                                                    widget.userModel.id
+                                                ? widget.orderModel.toUser!.id
+                                                : widget.orderModel.user!.id,
+                                            sendMessageModel,
+                                            widget.tokenModel.message);
+                                    sendMessageFuture.then((value) {
+                                      setState(() {
+                                        if (value == true) {
+                                          checkSendMsg = false;
+                                          msgController.text = "";
+                                        }
+                                      });
+                                    });
+                                  },
                                   icon: Icon(Icons.send_rounded,
                                       color: Color.fromRGBO(137, 128, 255, 1)
                                           .withOpacity(0.64)),
@@ -178,13 +198,12 @@ class _ChatPageState extends State<ChatPage> {
                   color: Color.fromRGBO(137, 128, 255, 1),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Flexible(
-                  child: Text(
-                    chatModel.message,
-                    //maxLines: null,
-                    overflow: TextOverflow.visible,
-                    style: TextStyle(color: Colors.white),
-                  ),
+
+                child: Text(
+                  chatModel.message,
+                  //maxLines: null,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             )
@@ -217,12 +236,11 @@ class _ChatPageState extends State<ChatPage> {
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Flexible(
-                  child: Text(
-                    chatModel.message,
-                    overflow: TextOverflow.visible,
-                    style: TextStyle(color: Colors.black),
-                  ),
+
+                child: Text(
+                  chatModel.message,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             )
