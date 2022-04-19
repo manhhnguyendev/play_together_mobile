@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class GoBackButton extends StatelessWidget {
   final String text;
-  final Function() onpress;
+  final Function() onPress;
   const GoBackButton({
     Key? key,
     required this.text,
-    required this.onpress,
+    required this.onPress,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class GoBackButton extends StatelessWidget {
           child: FlatButton(
               color: const Color.fromRGBO(112, 113, 123, 1),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              onPressed: onpress,
+              onPressed: onPress,
               child: Text(
                 text,
                 style: const TextStyle(color: Colors.white, fontSize: 17.0),

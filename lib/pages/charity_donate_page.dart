@@ -146,7 +146,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: AcceptProfileButton(
                 text: 'Gửi tiền từ thiện',
-                onpress: () {
+                onPress: () {
                   money = money.replaceAll(",", "");
                   convertMoney = double.parse(money);
                   MakeDonateModel makeDonateModel = MakeDonateModel(

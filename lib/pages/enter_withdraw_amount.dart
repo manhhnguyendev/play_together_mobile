@@ -91,7 +91,7 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
               child: AcceptProfileButton(
                   text: 'Rút tiền',
-                  onpress: () {
+                  onPress: () {
                     if (money.length < 6) {
                       print("Không đủ điều kiện");
                     } else {

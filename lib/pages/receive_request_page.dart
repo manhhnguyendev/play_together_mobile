@@ -333,7 +333,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                         width: 186),
                     SecondMainButton(
                         text: 'Chấp nhận',
-                        onpress: () {
+                        onPress: () {
                           AcceptOrderModel isAccept =
                               AcceptOrderModel(isAccept: true);
                           Future<bool?> acceptFuture = OrderService()

@@ -226,7 +226,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                           alignment: Alignment.center,
                           child: SecondMainButton(
                               text: 'Cập nhật',
-                              onpress: () {
+                              onPress: () {
                                 checkOnPress = true;
                                 money = money.replaceAll(",", "");
                                 convertMoney = double.parse(money);

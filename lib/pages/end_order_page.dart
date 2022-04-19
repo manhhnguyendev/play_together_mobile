@@ -334,6 +334,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     ),
                   ),
                 ),
+
               ]))),
       bottomNavigationBar: BottomAppBar(
           elevation: 0,
@@ -370,6 +371,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                 width: 150),
           )),
     );
+
   }
 
   Widget createStatus(String status) {

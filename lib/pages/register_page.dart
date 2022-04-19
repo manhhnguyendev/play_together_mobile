@@ -211,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     MainButton(
                       text: "TIẾP TỤC",
-                      onpress: () {
+                      onPress: () {
                         if (_formKey.currentState == null) {
                           print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {

@@ -351,7 +351,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   children: [
                     DeclineButton(
                         text: 'Kết thúc',
-                        onpress: () {
+                        onPress: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(

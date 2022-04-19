@@ -14,6 +14,7 @@ import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:play_together_mobile/widgets/second_main_button.dart';
 
 class HiringNegotiatingPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -237,7 +238,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     children: [
                       Text(
@@ -257,7 +258,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     children: [
                       Text(
@@ -275,7 +276,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     children: [
                       Text(
@@ -292,14 +293,14 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                   child: Text(
                     'Tựa game đã chọn',
                     style: GoogleFonts.montserrat(fontSize: 18),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Column(
                     children: List.generate(
                         widget.orderModel!.gameOfOrders != null
@@ -378,12 +379,12 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                                 });
                               }
                             });
-                          });
-                        },
-                        height: 50,
-                        width: 180),
-                  ],
-                ),
+                          }
+                        });
+                      });
+                    },
+                    height: 50,
+                    width: 150),
               ),
             ),
           );

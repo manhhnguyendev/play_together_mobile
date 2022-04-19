@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class DeclineButton extends StatelessWidget {
   final String text;
-  final Function() onpress;
+  final Function() onPress;
   final double height, width;
 
   const DeclineButton({
     Key? key,
     required this.text,
-    required this.onpress,
+    required this.onPress,
     required this.height,
     required this.width,
   }) : super(key: key);
@@ -29,7 +29,7 @@ class DeclineButton extends StatelessWidget {
           child: FlatButton(
               color: const Color(0xff70717B),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              onPressed: onpress,
+              onPressed: onPress,
               child: Text(
                 text,
                 style:
