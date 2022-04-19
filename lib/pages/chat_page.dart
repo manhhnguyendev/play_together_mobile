@@ -29,7 +29,11 @@ class _ChatPageState extends State<ChatPage> {
 
   Future getAllChats() {
     Future<ResponseListModel<ChatModel>?> getAllChatsFuture = ChatService()
-        .getAllChats(widget.orderModel.toUserId, widget.tokenModel.message);
+        .getAllChats(
+            widget.orderModel.user!.id == widget.userModel.id
+                ? widget.orderModel.toUser!.id
+                : widget.orderModel.user!.id,
+            widget.tokenModel.message);
     getAllChatsFuture.then((value) {
       if (value != null) {
         allChats = value.content;
