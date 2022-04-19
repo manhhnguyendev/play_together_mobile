@@ -355,23 +355,29 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
             bottomNavigationBar: BottomAppBar(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: DeclineButton(
-                    text: 'Hủy yêu cầu',
-                    onPress: () {
-                      setState(() {
-                        Future<bool?> cancelFuture = OrderService()
-                            .cancelOrderRequest(widget.orderModel!.id,
-                                widget.tokenModel.message);
-                        cancelFuture.then((check) {
-                          if (check == true) {
-                            setState(() {
-                              helper.pushInto(
-                                  context,
-                                  HomePage(
-                                    tokenModel: widget.tokenModel,
-                                    userModel: widget.userModel,
-                                  ),
-                                  true);
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    DeclineButton(
+                        text: 'Hủy thuê',
+                        onpress: () {
+                          setState(() {
+                            Future<bool?> cancelFuture = OrderService()
+                                .cancelOrderRequest(widget.orderModel!.id,
+                                    widget.tokenModel.message);
+                            cancelFuture.then((check) {
+                              if (check == true) {
+                                setState(() {
+                                  helper.pushInto(
+                                      context,
+                                      HomePage(
+                                        tokenModel: widget.tokenModel,
+                                        userModel: widget.userModel,
+                                      ),
+                                      true);
+                                });
+                              }
                             });
                           }
                         });

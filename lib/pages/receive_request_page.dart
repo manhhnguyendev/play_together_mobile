@@ -12,6 +12,8 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ReceiveRequestPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -34,6 +36,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   late AnimationController controller;
   int time = 5;
   UserModel? lateUser;
+  final today = DateTime.now();
 
   Future checkStatus() {
     Future<ResponseModel<UserModel>?> getUserStatus =
@@ -99,8 +102,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   String get countText {
     Duration count = controller.duration! * controller.value;
     return controller.isDismissed
-        ? '${controller.duration!.inHours}:${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
-        : '${count.inHours}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
+        ? '${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
+        : '${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
@@ -108,15 +111,21 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
+          final intend =
+              today.add(Duration(hours: widget.orderModel!.totalTimes));
+          String intendDate = DateFormat('dd/MM/yyyy')
+              .format(DateTime.parse(intend.toString()));
+          String intendTime =
+              DateFormat('hh:mm a').format(DateTime.parse(intend.toString()));
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true,
-              title: const Text(
-                'Yêu cầu nhận được',
-                style: TextStyle(
-                    fontSize: 18,
+              title: Text(
+                'Bạn nhận được yêu cầu thuê',
+                style: GoogleFonts.montserrat(
+                    fontSize: 20,
                     color: Colors.black,
                     fontWeight: FontWeight.normal),
               ),
@@ -149,7 +158,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       widget.orderModel!.user!.name,
-                                      style: const TextStyle(fontSize: 20),
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 20),
                                     ),
                                   ),
                                   const SizedBox(
@@ -157,16 +167,18 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                                   ),
                                   Row(
                                     children: [
-                                      const Text(
-                                        'Thời lượng: ',
-                                        style: TextStyle(fontSize: 16),
+                                      Text(
+                                        'Thời lượng:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18),
                                       ),
                                       const Spacer(),
                                       Text(
                                         widget.orderModel!.totalTimes
                                                 .toString() +
                                             ' giờ',
-                                        style: const TextStyle(fontSize: 16),
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18),
                                       ),
                                     ],
                                   ),
@@ -175,17 +187,47 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                                   ),
                                   Row(
                                     children: [
-                                      const Text(
-                                        'Chi phí: ',
-                                        style: TextStyle(fontSize: 16),
+                                      Text(
+                                        'Chi phí:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18),
                                       ),
                                       const Spacer(),
                                       Text(
                                         widget.orderModel!.totalPrices
                                             .toStringAsFixed(0)
                                             .toVND(),
-                                        style: const TextStyle(fontSize: 16),
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18),
                                       )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Dự kiến kết thúc:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 0, 0, 0),
+                                        child: Text(
+                                          intendDate + ", " + intendTime,
+                                          style: GoogleFonts.montserrat(
+                                              fontSize: 18),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -195,14 +237,14 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                     )),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                  child: const Text(
-                    'Tựa game đã chọn: ',
-                    style: TextStyle(fontSize: 18),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: Text(
+                    'Tựa game đã chọn:',
+                    style: GoogleFonts.montserrat(fontSize: 18),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 25, 15),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: Column(
                     children: List.generate(
                         widget.orderModel!.gameOfOrders != null
@@ -212,36 +254,12 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                             widget.orderModel!.gameOfOrders[index])),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Thời gian còn lại:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      AnimatedBuilder(
-                        animation: controller,
-                        builder: (context, child) => Text(
-                          countText,
-                          style: const TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: const Text('Lời nhắn:',
-                          style: TextStyle(fontSize: 18))),
+                      child: Text('Lời nhắn:',
+                          style: GoogleFonts.montserrat(fontSize: 18))),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
@@ -253,33 +271,49 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                         padding: const EdgeInsets.all(5),
                         child: Text(
                           widget.orderModel!.message,
-                          style: const TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                       )),
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text('Nhắn tin ',
-                            style: TextStyle(
-                                fontSize: 18,
-                                decoration: TextDecoration.underline)),
-                        Icon(
-                          Icons.message_outlined,
-                          size: 30,
-                        ),
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Container(
+                    height: 1,
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                        color: Colors.grey,
+                        width: 0.15,
+                      ),
+                    )),
                   ),
                 ),
-                const Divider(
-                  thickness: 1,
-                  indent: 15,
-                  endIndent: 15,
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Yêu cầu sẽ bị hủy sau',
+                        style: GoogleFonts.montserrat(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      AnimatedBuilder(
+                        animation: controller,
+                        builder: (context, child) => Text(
+                          countText,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 40,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             )),
@@ -290,6 +324,13 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    DeclineButton(
+                        text: 'Từ chối',
+                        onpress: () {
+                          createAlertDialog(context);
+                        },
+                        height: 50,
+                        width: 186),
                     SecondMainButton(
                         text: 'Chấp nhận',
                         onPress: () {
@@ -314,14 +355,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                           });
                         },
                         height: 50,
-                        width: 183),
-                    DeclineButton(
-                        text: 'Từ chối',
-                        onPress: () {
-                          createAlertDialog(context);
-                        },
-                        height: 50,
-                        width: 183)
+                        width: 187),
                   ],
                 ),
               ),
@@ -339,21 +373,21 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
               future: checkStatus(),
               builder: (context, snapshot) {
                 return AlertDialog(
-                    title: const Text("Từ chối nhận đơn thuê này?"),
+                    title: Text("Từ chối nhận đơn thuê này?"),
                     content: TextField(
                       controller: customController,
                     ),
                     actions: <Widget>[
                       MaterialButton(
                         elevation: 5.0,
-                        child: const Text('Không'),
+                        child: Text('Không'),
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
                       MaterialButton(
                         elevation: 5.0,
-                        child: const Text('Có'),
+                        child: Text('Có'),
                         onPressed: () {
                           RejectOrderModel isReject = RejectOrderModel(
                               isAccept: false, reason: customController.text);
@@ -384,7 +418,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "• " + game.game.name,
-          style: const TextStyle(color: Colors.black, fontSize: 15),
+          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
         ),
       );
 }

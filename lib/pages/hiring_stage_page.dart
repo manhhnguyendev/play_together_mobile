@@ -234,7 +234,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     child: Row(
                       children: [
                         Text(
-                          'Thời lượng thuê ',
+                          'Thời lượng thuê:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
@@ -254,7 +254,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     child: Row(
                       children: [
                         Text(
-                          'Tổng chi phí ',
+                          'Tổng chi phí:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
@@ -272,7 +272,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     child: Row(
                       children: [
                         Text(
-                          'Dự kiến kết thúc',
+                          'Dự kiến kết thúc:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
@@ -287,7 +287,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: Text(
-                      'Tựa game đã chọn',
+                      'Tựa game đã chọn:',
                       style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
@@ -320,7 +320,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     child: Column(
                       children: [
                         Text(
-                          'Thời gian còn lại',
+                          'Thời gian còn lại:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const SizedBox(
@@ -349,21 +349,6 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SecondMainButton(
-                        text: 'Nhắn tin',
-                        onPress: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatPage(
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel!,
-                                  orderModel: widget.orderModel!,
-                                ),
-                              ));
-                        },
-                        height: 50,
-                        width: 183),
                     DeclineButton(
                         text: 'Kết thúc',
                         onPress: () {
@@ -376,6 +361,21 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                                       orderModel: widget.orderModel,
                                     )),
                           );
+                        },
+                        height: 50,
+                        width: 183),
+                    SecondMainButton(
+                        text: 'Nhắn tin',
+                        onpress: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel!,
+                                  orderModel: widget.orderModel!,
+                                ),
+                              ));
                         },
                         height: 50,
                         width: 183),
