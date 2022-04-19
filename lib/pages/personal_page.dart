@@ -441,7 +441,10 @@ class _PersonalPageState extends State<PersonalPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const StatisticsPage(),
+                              builder: (context) => StatisticsPage(
+                                userModel: widget.userModel,
+                                tokenModel: widget.tokenModel,
+                              ),
                             ));
                       },
                       child: Row(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/rating_comment_card.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RatingCommentPage extends StatefulWidget {
   final UserModel? userModel;
@@ -63,10 +65,10 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Chi tiết đánh giá',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -109,8 +111,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             },
                             child: Text(
                               'Tất cả',
-                              style: TextStyle(
-                                  fontSize: 15,
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 18,
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal),
                             ),
@@ -120,7 +122,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Container(
@@ -131,7 +133,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
-                          width: width * 0.3,
+                          width: width * 0.31,
                           height: height * 0.05,
                           child: FlatButton(
                             onPressed: () {
@@ -159,29 +161,41 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
                                 ),
                               ],
                             ),
@@ -193,7 +207,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -209,7 +223,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
-                          width: width * 0.25,
+                          width: width * 0.26,
                           height: height * 0.05,
                           child: FlatButton(
                             onPressed: () {
@@ -236,37 +250,34 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                SizedBox(
+                                  width: 2,
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                SizedBox(
+                                  width: 2,
+                                ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
+                                ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
                                 ),
                               ],
                             ),
@@ -276,7 +287,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Container(
@@ -288,7 +299,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
-                          width: width * 0.2,
+                          width: width * 0.22,
                           height: height * 0.05,
                           child: FlatButton(
                             onPressed: () {
@@ -315,29 +326,26 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                SizedBox(
+                                  width: 2,
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
+                                ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
                                 ),
                               ],
                             ),
@@ -347,7 +355,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Container(
@@ -359,7 +367,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
-                          width: width * 0.2,
+                          width: width * 0.19,
                           height: height * 0.05,
                           child: FlatButton(
                             onPressed: () {
@@ -387,14 +395,17 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
+                                ),
+                                SizedBox(
+                                  width: 2,
                                 ),
                                 Icon(
-                                  Icons.star,
+                                  FontAwesomeIcons.solidStar,
                                   color: Colors.amber,
-                                  size: 17,
+                                  size: 16,
                                 ),
                               ],
                             ),
@@ -404,7 +415,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Container(
@@ -443,13 +454,10 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 17,
-                                  ),
+                                Icon(
+                                  FontAwesomeIcons.solidStar,
+                                  color: Colors.amber,
+                                  size: 16,
                                 ),
                               ],
                             ),
@@ -502,5 +510,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
   Widget buildRatingList(RatingModel _ratingModel) => RatingCard(
         ratingModel: _ratingModel,
         tokenModel: widget.tokenModel,
+        playerModel: widget.playerModel,
       );
 }

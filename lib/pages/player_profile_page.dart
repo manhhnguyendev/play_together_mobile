@@ -407,7 +407,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
                                 child: Text(
-                                  'Chủ Nhật: ',
+                                  'Chủ Nhật:',
                                   style: GoogleFonts.montserrat(fontSize: 15),
                                 ),
                               ),
@@ -556,7 +556,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
         ),
       );
     } else {
-      return Text(' Không có dữ liệu',
+      return Text('  Không có dữ liệu',
           style: GoogleFonts.montserrat(fontSize: 15));
     }
   }
@@ -564,14 +564,14 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   Widget buildSingleDatingPerDay(OnlineHourModel model) {
     String rawFromHour = getTimeString(model.fromHour);
     String rawToHour = getTimeString(model.toHour);
-    return Text(rawFromHour + ' : ' + rawToHour + ', ',
+    return Text(rawFromHour + ' - ' + rawToHour + ', ',
         style: GoogleFonts.montserrat(fontSize: 15));
   }
 
   Widget buildSingleDatingLastDay(OnlineHourModel model) {
     String rawFromHour = getTimeString(model.fromHour);
     String rawToHour = getTimeString(model.toHour);
-    return Text(rawFromHour + ' : ' + rawToHour,
+    return Text(rawFromHour + ' - ' + rawToHour,
         style: GoogleFonts.montserrat(fontSize: 15));
   }
 
@@ -584,7 +584,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   Future getAllDatings() {
     Future<ResponseListModel<OnlineHourModel>?> getDatingsFuture =
         DatingService()
-            .getAllDatings(widget.userModel.id, widget.tokenModel.message);
+            .getAllDatings(widget.playerModel.id, widget.tokenModel.message);
     getDatingsFuture.then((value) {
       if (value != null) {
         listOnlineHours = value.content;
