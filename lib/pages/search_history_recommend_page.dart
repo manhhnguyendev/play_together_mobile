@@ -61,6 +61,7 @@ class _SearchHistoryAndRecommendPageState
             borderRadius: BorderRadius.circular(15),
           ),
           child: TextField(
+            style: GoogleFonts.montserrat(),
             controller: _controller,
             onSubmitted: (value) {
               if (_controller.text.isNotEmpty) {

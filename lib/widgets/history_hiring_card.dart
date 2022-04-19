@@ -150,7 +150,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
     if (status == 'Starting') {
       checkReorder = false;
       return const Text(
-        'Đang thương lượng',
+        'Đang xử lý',
         style: TextStyle(fontSize: 15, color: Colors.yellow),
       );
     }

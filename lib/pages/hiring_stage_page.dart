@@ -13,6 +13,8 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class HiringPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -37,6 +39,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   double progress = 1.0;
   UserModel? lateUser;
   OrderModel? lateOrder;
+  final today = DateTime.now();
 
   Future checkStatus() {
     Future<ResponseModel<UserModel>?> getUserStatus =
@@ -115,6 +118,12 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
+          final intend =
+              today.add(Duration(hours: widget.orderModel!.totalTimes));
+          String intendDate = DateFormat('dd/MM/yyyy')
+              .format(DateTime.parse(intend.toString()));
+          String intendTime =
+              DateFormat('hh:mm a').format(DateTime.parse(intend.toString()));
           return Scaffold(
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
@@ -122,10 +131,10 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true,
-              title: const Text(
+              title: Text(
                 'Đang thuê...',
-                style: TextStyle(
-                    fontSize: 18,
+                style: GoogleFonts.montserrat(
+                    fontSize: 20,
                     color: Colors.red,
                     fontWeight: FontWeight.normal),
               ),
@@ -158,7 +167,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                                       widget.userModel!.id
                                   ? widget.orderModel!.user!.name
                                   : widget.orderModel!.toUser!.name,
-                              style: const TextStyle(fontSize: 18),
+                              style: GoogleFonts.montserrat(fontSize: 18),
                             ),
                           ],
                         ),
@@ -200,7 +209,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                                       widget.userModel!.id
                                   ? widget.orderModel!.toUser!.name
                                   : widget.orderModel!.user!.name,
-                              style: const TextStyle(fontSize: 18),
+                              style: GoogleFonts.montserrat(fontSize: 18),
                             ),
                           ],
                         ),
@@ -221,59 +230,65 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'Thời lượng thuê ',
-                          style: TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
                         Text(
                           widget.orderModel!.totalTimes.toString(),
-                          style: const TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
-                        const Text(
+                        Text(
                           ' giờ',
-                          style: TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'Tổng chi phí ',
-                          style: TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
                         Text(
                           widget.orderModel!.totalPrices
                               .toStringAsFixed(0)
                               .toVND(),
-                          style: const TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Dự kiến kết thúc',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          intendDate + ", " + intendTime,
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                        color: Colors.grey,
-                        width: 0.15,
-                      ),
-                    )),
-                  ),
-                  Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                    child: const Text(
-                      'Tựa game đã chọn: ',
-                      style: TextStyle(fontSize: 18),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 0),
+                    child: Text(
+                      'Tựa game đã chọn',
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
                   Padding(
@@ -288,33 +303,6 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Thời gian còn lại:',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        AnimatedBuilder(
-                          animation: controller,
-                          builder: (context, child) => Text(
-                            countText,
-                            style: const TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
                     height: 1,
                     decoration: const BoxDecoration(
                         border: Border(
@@ -323,6 +311,33 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                         width: 0.15,
                       ),
                     )),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Thời gian còn lại',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        AnimatedBuilder(
+                          animation: controller,
+                          builder: (context, child) => Text(
+                            countText,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 40,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -376,8 +391,8 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          "• " + game.game.name,
-          style: const TextStyle(color: Colors.black, fontSize: 15),
+          game.game.name,
+          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
         ),
       );
 }

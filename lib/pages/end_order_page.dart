@@ -10,6 +10,7 @@ import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EndOrderPage extends StatefulWidget {
   final UserModel? userModel;
@@ -73,9 +74,9 @@ class _EndOrderPageState extends State<EndOrderPage> {
             ),
           ],
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Chi tiết thuê',
-            style: TextStyle(
+            style: GoogleFonts.montserrat(
                 fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
@@ -90,7 +91,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     alignment: Alignment.center,
                     child: createStatus(widget.orderModel!.status)),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
+                  padding: const EdgeInsets.fromLTRB(15, 10, 25, 15),
                   child: Row(
                     children: [
                       Column(
@@ -112,7 +113,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                             widget.orderModel!.user!.id == widget.userModel!.id
                                 ? widget.orderModel!.user!.name
                                 : widget.orderModel!.toUser!.name,
-                            style: const TextStyle(fontSize: 18),
+                            style: GoogleFonts.montserrat(fontSize: 18),
                           ),
                         ],
                       ),
@@ -152,7 +153,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                             widget.orderModel!.user!.id == widget.userModel!.id
                                 ? widget.orderModel!.toUser!.name
                                 : widget.orderModel!.user!.name,
-                            style: const TextStyle(fontSize: 18),
+                            style: GoogleFonts.montserrat(fontSize: 18),
                           ),
                         ],
                       ),
@@ -173,71 +174,128 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                   child: Row(
                     children: [
-                      const Text(
+                      Text(
                         'Thời lượng thuê ',
-                        style: TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                       const Spacer(),
                       Text(
                         widget.orderModel!.totalTimes.toString(),
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
-                      const Text(
+                      Text(
                         ' giờ',
-                        style: TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                   child: Row(
                     children: [
-                      const Text(
+                      Text(
                         'Tổng chi phí ',
-                        style: TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                       const Spacer(),
                       Text(
                         (widget.orderModel!.totalPrices
                             .toStringAsFixed(0)
                             .toVND()),
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        'Tổng chi phí cuối cùng: ',
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        'Tổng chi phí cuối cùng ',
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                       const Spacer(),
                       Text(
                         widget.orderModel!.finalPrices
                             .toStringAsFixed(0)
                             .toVND(),
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                     ],
                   ),
                 ),
+                Visibility(
+                  visible: !checkExpired,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Thời gian bắt đầu',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          dateStart + ", " + timeStart,
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: !checkExpired,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Thời gian kết thúc',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          dateFinish + ", " + timeFinish,
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: checkExpired,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Thời gian: ',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          dateExpired + ", " + timeExpired,
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                  child: const Text(
-                    'Tựa game đã chọn: ',
-                    style: TextStyle(fontSize: 15),
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                  child: Text(
+                    'Tựa game đã chọn ',
+                    style: GoogleFonts.montserrat(fontSize: 18),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 25, 0),
                   child: Column(
                     children: List.generate(
                         widget.orderModel!.gameOfOrders != null
@@ -248,70 +306,13 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   ),
                 ),
                 Visibility(
-                  visible: !checkExpired,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Thời gian bắt đầu',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        const Spacer(),
-                        Text(
-                          dateStart + ", " + timeStart,
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: !checkExpired,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Thời gian kết thúc',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        const Spacer(),
-                        Text(
-                          dateFinish + ", " + timeFinish,
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: checkExpired,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Thời gian: ',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        const Spacer(),
-                        Text(
-                          dateExpired + ", " + timeExpired,
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
                   visible: checkEndEarly,
                   child: Container(
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
-                    child: const Text(
-                      'Lý do kết thúc sớm:',
-                      style: TextStyle(fontSize: 18),
+                    child: Text(
+                      'Lý do kết thúc sớm',
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
                 ),
@@ -324,6 +325,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black)),
                       child: TextField(
+                        style: GoogleFonts.montserrat(fontSize: 15),
                         controller: _reasonController,
                         enabled: false,
                         decoration: const InputDecoration(
@@ -372,79 +374,79 @@ class _EndOrderPageState extends State<EndOrderPage> {
 
   Widget createStatus(String status) {
     if (status == 'Processing') {
-      return const Text(
+      return Text(
         'Đang thuê',
-        style: TextStyle(fontSize: 15, color: Colors.red),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.red),
       );
     }
 
     if (status == 'Complete') {
-      return const Text(
+      return Text(
         'Hoàn thành',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
 
     if (status == 'Starting') {
-      return const Text(
-        'Đang thương lượng',
-        style: TextStyle(fontSize: 15, color: Colors.yellow),
+      return Text(
+        'Đang xử lý',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.yellow),
       );
     }
 
     if (status == 'Finish') {
-      return const Text(
+      return Text(
         'Hoàn thành',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
 
     if (status == 'Cancel') {
-      return const Text(
+      return Text(
         'Hủy yêu cầu',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.grey),
       );
     }
 
     if (status == 'Hirer Finish Soon') {
-      return const Text(
-        'Kết thúc sớm',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+      return Text(
+        'Người thuê kết thúc sớm',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
 
     if (status == 'Player Finish Soon') {
       //Player Finish Soon
-      return const Text(
-        'Kết thúc sớm',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+      return Text(
+        'Người chơi kết thúc sớm',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
 
     if (status == 'OverTime') {
-      return const Text(
+      return Text(
         'Quá giờ chấp nhận',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.grey),
       );
     }
 
     if (status == 'Reject') {
-      return const Text(
+      return Text(
         'Bị từ chối',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.grey),
       );
     }
 
     if (status == 'Interrupt') {
-      return const Text(
+      return Text(
         'Người dùng bị khóa',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.grey),
       );
     }
 
     return Text(
       status,
-      style: const TextStyle(fontSize: 15, color: Colors.black),
+      style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
     );
   }
 
@@ -453,7 +455,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "• " + game.game.name,
-          style: const TextStyle(color: Colors.black, fontSize: 15),
+          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
         ),
       );
 }

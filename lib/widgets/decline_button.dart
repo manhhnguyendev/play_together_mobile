@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DeclineButton extends StatelessWidget {
   final String text;
@@ -22,7 +23,6 @@ class DeclineButton extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          //side: BorderSide(color: Colors.black, width: 0.1),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
@@ -32,7 +32,8 @@ class DeclineButton extends StatelessWidget {
               onPressed: onpress,
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.white, fontSize: 16.0),
+                style:
+                    GoogleFonts.montserrat(color: Colors.white, fontSize: 18.0),
               )),
         ),
       ),

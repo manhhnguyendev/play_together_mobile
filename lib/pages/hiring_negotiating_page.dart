@@ -8,11 +8,12 @@ import 'package:play_together_mobile/pages/chat_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
-import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class HiringNegotiatingPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -38,6 +39,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
   int time = 5;
   List listGamesChoosen = [];
   UserModel? lateUser;
+  final today = DateTime.now();
 
   Future checkStatus() {
     Future<ResponseModel<UserModel>?> getUserStatus =
@@ -58,12 +60,13 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
           });
         } else if (value.content.status.contains('Online')) {
           lateUser = value.content;
+          if (!mounted) return;
           setState(() {
             helper.pushInto(
                 context,
                 HomePage(
                     tokenModel: widget.tokenModel, userModel: widget.userModel),
-                false);
+                true);
           });
         } else {
           if (!mounted) return;
@@ -116,8 +119,8 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
   String get countText {
     Duration count = controller.duration! * controller.value;
     return controller.isDismissed
-        ? '${controller.duration!.inHours}:${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
-        : '${count.inHours}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
+        ? '${(controller.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(controller.duration!.inSeconds % 60).toString().padLeft(2, '0')}'
+        : '${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
@@ -125,6 +128,12 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
+          final intend =
+              today.add(Duration(hours: widget.orderModel!.totalTimes));
+          String intendDate = DateFormat('dd/MM/yyyy')
+              .format(DateTime.parse(intend.toString()));
+          String intendTime =
+              DateFormat('hh:mm a').format(DateTime.parse(intend.toString()));
           return Scaffold(
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
@@ -132,10 +141,10 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true,
-              title: const Text(
+              title: Text(
                 'Đang chờ chấp thuận...',
-                style: TextStyle(
-                    fontSize: 18,
+                style: GoogleFonts.montserrat(
+                    fontSize: 20,
                     color: Colors.black,
                     fontWeight: FontWeight.normal),
               ),
@@ -161,16 +170,17 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                           ),
                           Text(
                             widget.userModel.name,
-                            style: const TextStyle(fontSize: 18),
+                            style: GoogleFonts.montserrat(fontSize: 18),
                           ),
                         ],
                       ),
                       const Spacer(),
                       Row(
                         children: [
-                          const Text(
+                          Text(
                             ' •  •  ',
-                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, color: Colors.grey),
                           ),
                           Container(
                             alignment: Alignment.topCenter,
@@ -183,9 +193,10 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                                         "assets/images/play_together_logo_no_text.png"),
                                     fit: BoxFit.cover)),
                           ),
-                          const Text(
+                          Text(
                             ' •  • ',
-                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                            style: GoogleFonts.montserrat(
+                                fontSize: 15, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -205,7 +216,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                           ),
                           Text(
                             widget.playerModel!.name,
-                            style: const TextStyle(fontSize: 18),
+                            style: GoogleFonts.montserrat(fontSize: 18),
                           ),
                         ],
                       ),
@@ -226,59 +237,65 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        'Thời lượng thuê ',
-                        style: TextStyle(fontSize: 18),
+                      Text(
+                        'Thời lượng thuê',
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                       const Spacer(),
                       Text(
                         widget.orderModel!.totalTimes.toString(),
-                        style: const TextStyle(fontSize: 18),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
-                      const Text(
+                      Text(
                         ' giờ',
-                        style: TextStyle(fontSize: 18),
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        'Tổng chi phí ',
-                        style: TextStyle(fontSize: 18),
+                      Text(
+                        'Tổng chi phí',
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                       const Spacer(),
                       Text(
                         widget.orderModel!.totalPrices
                             .toStringAsFixed(0)
                             .toVND(),
-                        style: const TextStyle(fontSize: 18),
+                        style: GoogleFonts.montserrat(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Dự kiến kết thúc',
+                        style: GoogleFonts.montserrat(fontSize: 18),
+                      ),
+                      const Spacer(),
+                      Text(
+                        intendDate + ", " + intendTime,
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  height: 1,
-                  decoration: const BoxDecoration(
-                      border: Border(
-                    top: BorderSide(
-                      color: Colors.grey,
-                      width: 0.15,
-                    ),
-                  )),
-                ),
-                Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                  child: const Text(
-                    'Tựa game đã chọn: ',
-                    style: TextStyle(fontSize: 18),
+                  child: Text(
+                    'Tựa game đã chọn',
+                    style: GoogleFonts.montserrat(fontSize: 18),
                   ),
                 ),
                 Padding(
@@ -292,13 +309,29 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                             widget.orderModel!.gameOfOrders[index])),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Container(
+                    height: 1,
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                        color: Colors.grey,
+                        width: 0.15,
+                      ),
+                    )),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Container(
                   alignment: Alignment.center,
                   child: Column(
                     children: [
-                      const Text(
-                        'Thời gian còn lại:',
-                        style: TextStyle(fontSize: 18),
+                      Text(
+                        'Yêu cầu sẽ bị hủy sau',
+                        style: GoogleFonts.montserrat(fontSize: 18),
                       ),
                       const SizedBox(
                         height: 5,
@@ -307,7 +340,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                         animation: controller,
                         builder: (context, child) => Text(
                           countText,
-                          style: const TextStyle(
+                          style: GoogleFonts.montserrat(
                             fontSize: 40,
                             fontWeight: FontWeight.normal,
                           ),
@@ -325,21 +358,9 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // SecondMainButton(
-                    //     text: 'Nhắn tin',
-                    //     onpress: () {
-                    //       Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => ChatPage(
-                    //             tokenModel: widget.tokenModel,
-                    //             userModel: widget.userModel,
-                    //             orderModel: widget.orderModel,
-                    //           ),
-                    //         ));
-                    //     },
-                    //     height: 50,
-                    //     width: 180),
+
+                    
+
                     DeclineButton(
                         text: 'Hủy thuê',
                         onpress: () {
@@ -377,7 +398,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "• " + game.game.name,
-          style: const TextStyle(color: Colors.black, fontSize: 15),
+          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
         ),
       );
 }

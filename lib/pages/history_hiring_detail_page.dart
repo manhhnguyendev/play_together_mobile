@@ -421,7 +421,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
 
     if (status == 'Starting') {
       return const Text(
-        'Đang thương lượng',
+        'Đang xử lý',
         style: TextStyle(fontSize: 15, color: Colors.yellow),
       );
     }

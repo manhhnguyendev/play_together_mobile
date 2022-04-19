@@ -8,6 +8,7 @@ import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EndOrderEarlyPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -92,10 +93,10 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 },
               ),
             ),
-            title: const Text(
+            title: Text(
               'Kết thúc thuê sớm',
-              style: TextStyle(
-                  fontSize: 18,
+              style: GoogleFonts.montserrat(
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.normal),
             ),
@@ -127,7 +128,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             widget.orderModel!.user!.id == widget.userModel!.id
                                 ? widget.orderModel!.user!.name
                                 : widget.orderModel!.toUser!.name,
-                            style: const TextStyle(fontSize: 18),
+                            style: GoogleFonts.montserrat(fontSize: 18),
                           ),
                         ],
                       ),
@@ -168,7 +169,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             widget.orderModel!.user!.id == widget.userModel!.id
                                 ? widget.orderModel!.toUser!.name
                                 : widget.orderModel!.user!.name,
-                            style: const TextStyle(fontSize: 18),
+                            style: GoogleFonts.montserrat(fontSize: 18),
                           ),
                         ],
                       ),
@@ -187,9 +188,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             checkReason = false;
                           });
                         }),
-                    const Text(
+                    Text(
                       "Có việc bận đột xuất",
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     )
                   ],
                 ),
@@ -205,9 +206,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             checkReason = false;
                           });
                         }),
-                    const Text(
+                    Text(
                       "Thông tin không chính xác",
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     )
                   ],
                 ),
@@ -223,9 +224,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             checkReason = false;
                           });
                         }),
-                    const Text(
+                    Text(
                       "Ngôn ngữ lăng mạ",
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     )
                   ],
                 ),
@@ -241,9 +242,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             checkReason = false;
                           });
                         }),
-                    const Text(
+                    Text(
                       "Cố tình AFK",
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     )
                   ],
                 ),
@@ -259,9 +260,9 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                             checkReason = true;
                           });
                         }),
-                    const Text(
+                    Text(
                       "Lý do khác",
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     )
                   ],
                 ),
@@ -277,7 +278,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                           checkReason = true;
                         });
                       },
-                      style: const TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     ),
                   ),
                 )
