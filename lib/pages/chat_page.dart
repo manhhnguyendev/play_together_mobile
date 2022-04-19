@@ -25,13 +25,16 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   var msgController = new TextEditingController();
   List<ChatModel> allChats = [];
+  Iterable<ChatModel> displayChat = [];
+
   Future getAllChats() {
     Future<ResponseListModel<ChatModel>?> getAllChatsFuture = ChatService()
-        .getAllChats(widget.userModel.id, widget.tokenModel.message);
+        .getAllChats(widget.orderModel.toUserId, widget.tokenModel.message);
     getAllChatsFuture.then((value) {
       if (value != null) {
         allChats = value.content;
-        allChats = allChats.reversed as List<ChatModel>;
+        print(allChats.length);
+        displayChat = allChats.reversed;
       }
     });
     return getAllChatsFuture;
@@ -58,8 +61,8 @@ class _ChatPageState extends State<ChatPage> {
                   CircleAvatar(
                     backgroundImage: NetworkImage(
                         widget.orderModel.user!.id == widget.userModel.id
-                            ? widget.orderModel.user!.avatar
-                            : widget.orderModel.toUser!.avatar),
+                            ? widget.orderModel.toUser!.avatar
+                            : widget.orderModel.user!.avatar),
                   ),
                   SizedBox(width: 10 * 0.75),
                   Column(
@@ -67,8 +70,8 @@ class _ChatPageState extends State<ChatPage> {
                     children: [
                       Text(
                         widget.orderModel.user!.id == widget.userModel.id
-                            ? widget.orderModel.user!.name
-                            : widget.orderModel.toUser!.name,
+                            ? widget.orderModel.toUser!.name
+                            : widget.orderModel.user!.name,
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -76,74 +79,80 @@ class _ChatPageState extends State<ChatPage> {
                 ],
               ),
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: List.generate(allChats.length,
-                        (index) => buildChatMessage(allChats[index])),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20 / 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(0, 4),
-                        blurRadius: 32,
-                        color: Color(0xFF087949).withOpacity(0.08),
+            body: Container(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(
+                            displayChat.length,
+                            (index) =>
+                                buildChatMessage(displayChat.elementAt(index))),
                       ),
-                    ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(137, 128, 255, 1)
-                                .withOpacity(0.05),
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                    Icons.sentiment_satisfied_alt_outlined,
-                                    color: Color.fromRGBO(137, 128, 255, 1)
-                                        .withOpacity(0.64)),
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  controller: msgController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  decoration: InputDecoration(
-                                    hintText: "Type message",
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (value) {},
-                                  onSubmitted: (Value) {},
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 20 / 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 4),
+                          blurRadius: 32,
+                          color: Color(0xFF087949).withOpacity(0.08),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(137, 128, 255, 1)
+                                  .withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                      Icons.sentiment_satisfied_alt_outlined,
+                                      color: Color.fromRGBO(137, 128, 255, 1)
+                                          .withOpacity(0.64)),
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.send_rounded,
-                                    color: Color.fromRGBO(137, 128, 255, 1)
-                                        .withOpacity(0.64)),
-                              )
-                            ],
+                                Expanded(
+                                  child: TextField(
+                                    controller: msgController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    decoration: InputDecoration(
+                                      hintText: "Type message",
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (value) {},
+                                    onSubmitted: (Value) {},
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.send_rounded,
+                                      color: Color.fromRGBO(137, 128, 255, 1)
+                                          .withOpacity(0.64)),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });
@@ -151,55 +160,74 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget buildChatMessage(ChatModel chatModel) {
     if (chatModel.user!.id == widget.userModel.id) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            color: Color.fromRGBO(137, 128, 255, 1),
-            padding: EdgeInsets.symmetric(
-              horizontal: 20 * 0.75,
-              vertical: 20 / 2,
-            ),
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(137, 128, 255, 1),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Text(
-              chatModel.message,
-              maxLines: null,
-              style: TextStyle(color: Colors.white),
-            ),
-          )
-        ],
+      return Padding(
+        padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.8),
+              child: Container(
+                //color: Color.fromRGBO(137, 128, 255, 1),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20 * 0.75,
+                  vertical: 20 / 2,
+                ),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(137, 128, 255, 1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Flexible(
+                  child: Text(
+                    chatModel.message,
+                    //maxLines: null,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ); //return row gửi
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          CircleAvatar(
-              radius: 12,
-              backgroundImage: NetworkImage(
-                  widget.orderModel.user!.id == widget.userModel.id
-                      ? widget.orderModel.user!.avatar
-                      : widget.orderModel.toUser!.avatar)),
-          SizedBox(width: 20 / 2),
-          Container(
-            color: Colors.grey,
-            padding: EdgeInsets.symmetric(
-              horizontal: 20 * 0.75,
-              vertical: 20 / 2,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Text(
-              chatModel.message,
-              maxLines: null,
-              style: TextStyle(color: Colors.black),
-            ),
-          )
-        ],
+      return Padding(
+        padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CircleAvatar(
+                radius: 15,
+                backgroundImage: NetworkImage(
+                    widget.orderModel.user!.id == widget.userModel.id
+                        ? widget.orderModel.toUser!.avatar
+                        : widget.orderModel.user!.avatar)),
+            SizedBox(width: 20 / 2),
+            Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.8),
+              child: Container(
+                //color: Colors.grey,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20 * 0.75,
+                  vertical: 20 / 2,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Flexible(
+                  child: Text(
+                    chatModel.message,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ); // return row nhận
     }
   }
