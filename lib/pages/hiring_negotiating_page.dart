@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/chat_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -324,11 +325,21 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SecondMainButton(
-                        text: 'Nhắn tin',
-                        onpress: () {},
-                        height: 50,
-                        width: 180),
+                    // SecondMainButton(
+                    //     text: 'Nhắn tin',
+                    //     onpress: () {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => ChatPage(
+                    //             tokenModel: widget.tokenModel,
+                    //             userModel: widget.userModel,
+                    //             orderModel: widget.orderModel,
+                    //           ),
+                    //         ));
+                    //     },
+                    //     height: 50,
+                    //     width: 180),
                     DeclineButton(
                         text: 'Hủy thuê',
                         onpress: () {
