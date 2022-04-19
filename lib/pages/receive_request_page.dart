@@ -108,6 +108,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
@@ -319,7 +320,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
             )),
             bottomNavigationBar: BottomAppBar(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -330,7 +331,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                           createAlertDialog(context);
                         },
                         height: 50,
-                        width: 186),
+                        width: width * 0.47),
                     SecondMainButton(
                         text: 'Chấp nhận',
                         onPress: () {
@@ -355,7 +356,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                           });
                         },
                         height: 50,
-                        width: 187),
+                        width: width * 0.47),
                   ],
                 ),
               ),
