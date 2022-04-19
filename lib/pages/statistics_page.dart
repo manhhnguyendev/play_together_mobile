@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
 
 class StatisticsPage extends StatefulWidget {
-  const StatisticsPage({Key? key}) : super(key: key);
+  final UserModel? userModel;
+  final TokenModel tokenModel;
+  const StatisticsPage(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<StatisticsPage> createState() => _StatisticsPageState();
@@ -142,17 +148,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           RatingCommentPage(
-                            //             tokenModel:
-                            //                 widget.tokenModel,
-                            //             userModel:
-                            //                 widget.userModel,
-                            //           )),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RatingCommentPage(
+                                        userModel: widget.userModel,
+                                        tokenModel: widget.tokenModel,
+                                      )),
+                            );
                           },
                           child: Column(
                             children: [

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RatingCard extends StatefulWidget {
   final RatingModel? ratingModel;
+  final PlayerModel? playerModel;
   final TokenModel tokenModel;
 
-  const RatingCard({Key? key, this.ratingModel, required this.tokenModel})
+  const RatingCard(
+      {Key? key, this.ratingModel, required this.tokenModel, this.playerModel})
       : super(key: key);
 
   @override
@@ -15,8 +20,14 @@ class RatingCard extends StatefulWidget {
 }
 
 class _RatingCardState extends State<RatingCard> {
+  bool checkReport = true;
   @override
   Widget build(BuildContext context) {
+    if (widget.playerModel!.id == widget.ratingModel!.user!.id) {
+      checkReport = true;
+    } else {
+      checkReport = false;
+    }
     String date = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.ratingModel!.createdDate));
     String startTime = DateFormat('hh:mm a')
@@ -24,8 +35,6 @@ class _RatingCardState extends State<RatingCard> {
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +63,7 @@ class _RatingCardState extends State<RatingCard> {
                       children: [
                         Text(
                           widget.ratingModel!.user!.name,
-                          style: const TextStyle(
+                          style: GoogleFonts.montserrat(
                               fontSize: 15, color: Colors.black),
                         ),
                         const SizedBox(
@@ -66,28 +75,31 @@ class _RatingCardState extends State<RatingCard> {
                         ),
                         Text(
                           date + ', ' + startTime,
-                          style:
-                              const TextStyle(fontSize: 15, color: Colors.grey),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
                           widget.ratingModel!.comment,
-                          style: const TextStyle(
+                          style: GoogleFonts.montserrat(
                               fontSize: 15, color: Colors.black),
                         )
                       ],
                     ),
                   )),
-              // Expanded(
-              //     flex: 1,
-              //     child: IconButton(
-              //         onPressed: () {},
-              //         icon: const Icon(
-              //           Icons.report_gmailerrorred_rounded,
-              //           color: Colors.black,
-              //         )))
+              Visibility(
+                visible: checkReport,
+                child: Expanded(
+                    flex: 1,
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.report_gmailerrorred_rounded,
+                          color: Colors.black,
+                        ))),
+              )
             ],
           ),
           const Divider(
@@ -103,95 +115,125 @@ class _RatingCardState extends State<RatingCard> {
       case 1:
         return Row(children: const [
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
           ),
         ]);
 
       case 2:
         return Row(children: const [
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
           ),
         ]);
 
       case 3:
         return Row(children: const [
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
           ),
         ]);
 
       case 4:
         return Row(children: const [
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
           ),
         ]);
 
       case 5:
         return Row(children: const [
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
+          ),
+          SizedBox(
+            width: 2,
           ),
           Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 20,
+            FontAwesomeIcons.solidStar,
+            color: Colors.amber,
+            size: 16,
           ),
         ]);
 

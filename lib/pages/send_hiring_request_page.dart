@@ -10,6 +10,7 @@ import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SendHiringRequestPage extends StatefulWidget {
   final UserModel userModel;
@@ -95,8 +96,8 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 150,
-                  width: 150,
+                  height: 160,
+                  width: 160,
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(widget.playerModel!.avatar),
                   ),
@@ -106,7 +107,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                 ),
                 Text(
                   widget.playerModel!.name,
-                  style: const TextStyle(fontSize: 20),
+                  style: GoogleFonts.montserrat(fontSize: 22),
                 ),
                 const SizedBox(
                   height: 2,
@@ -119,14 +120,16 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
             child: Row(
               children: [
-                const Text(
-                  'Thời lượng thuê: ',
-                  style: TextStyle(fontSize: 18),
+                Text(
+                  'Thời lượng thuê ',
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 const Spacer(),
                 SizedBox(
                   width: 80,
                   child: DropdownButton(
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15, color: Colors.black),
                     isExpanded: true,
                     value: chooseTime,
                     icon: const Icon(Icons.keyboard_arrow_down),
@@ -142,9 +145,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                     },
                   ),
                 ),
-                const Text(
+                Text(
                   ' giờ',
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
               ],
             ),
@@ -153,16 +156,16 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
             child: Row(
               children: [
-                const Text(
+                Text(
                   'Chi phí tổng ',
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 const Spacer(),
                 Text(
                   (widget.playerModel!.pricePerHour * chooseTime)
                       .toStringAsFixed(0)
                       .toVND(),
-                  style: const TextStyle(fontSize: 18),
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
               ],
             ),
@@ -171,9 +174,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
             child: Row(
               children: [
-                const Text(
+                Text(
                   'Số dư hiện tại ',
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 const Spacer(),
                 IconButton(
@@ -183,7 +186,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                   widget.userModel.userBalance.balance
                       .toStringAsFixed(0)
                       .toVND(),
-                  style: const TextStyle(
+                  style: GoogleFonts.montserrat(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -192,9 +195,9 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
           Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
-            child: const Text(
+            child: Text(
               'Tựa game bạn chọn ',
-              style: TextStyle(fontSize: 18),
+              style: GoogleFonts.montserrat(fontSize: 18),
             ),
           ),
           Padding(
@@ -208,20 +211,23 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
             child: Container(
-              height: 250,
+              height: 200,
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
               child: TextFormField(
+                style: GoogleFonts.montserrat(),
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 maxLength: 1000,
                 onChanged: (newValue) => beginMessage = newValue,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                   counterText: "",
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: "Nhập lời nhắn...",
+                  hintStyle: GoogleFonts.montserrat(),
+                  labelStyle: GoogleFonts.montserrat(),
                   hintText: "Nhập vào lời nhắn của bạn",
                   border: InputBorder.none,
                 ),
@@ -298,21 +304,42 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
         }),
         title: Text(
           cbState.title,
-          style: const TextStyle(fontSize: 15),
+          style: GoogleFonts.montserrat(fontSize: 15),
         ),
       );
 
   Widget createStatus(String status) {
+    if (status == 'Hiring') {
+      return Text(
+        'Đang được thuê',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.red),
+      );
+    }
+
+    if (status == 'Processing') {
+      return Text(
+        'Đang xử lý',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.amber),
+      );
+    }
+
+    if (status == 'Offline') {
+      return Text(
+        'Đang offline',
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.grey),
+      );
+    }
+
     if (status == 'Online') {
-      return const Text(
+      return Text(
         'Có thể thuê',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
 
     return Text(
       status,
-      style: const TextStyle(fontSize: 15, color: Colors.black),
+      style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
     );
   }
 }
