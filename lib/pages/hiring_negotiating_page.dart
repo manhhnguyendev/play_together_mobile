@@ -242,7 +242,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     child: Row(
                       children: [
                         Text(
-                          'Thời lượng thuê',
+                          'Thời lượng thuê:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
@@ -262,7 +262,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     child: Row(
                       children: [
                         Text(
-                          'Tổng chi phí',
+                          'Tổng chi phí:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
@@ -280,7 +280,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     child: Row(
                       children: [
                         Text(
-                          'Dự kiến kết thúc',
+                          'Dự kiến kết thúc:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const Spacer(),
@@ -295,7 +295,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: Text(
-                      'Tựa game đã chọn',
+                      'Tựa game đã chọn:',
                       style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
@@ -331,7 +331,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     child: Column(
                       children: [
                         Text(
-                          'Yêu cầu sẽ bị hủy sau',
+                          'Yêu cầu sẽ bị hủy sau:',
                           style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                         const SizedBox(
@@ -353,14 +353,11 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                 ],
               ),
               bottomNavigationBar: BottomAppBar(
+                  elevation: 0,
                   child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    DeclineButton(
-                        text: 'Hủy thuê',
+                    padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    child: DeclineButton(
+                        text: 'Hủy yêu cầu',
                         onPress: () {
                           setState(() {
                             Future<bool?> cancelFuture = OrderService()
@@ -383,9 +380,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                         },
                         height: 50,
                         width: 150),
-                  ],
-                ),
-              )));
+                  )));
         });
   }
 

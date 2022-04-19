@@ -34,7 +34,7 @@ class SecondMainButton extends StatelessWidget {
               child: Text(
                 text,
                 style:
-                    GoogleFonts.montserrat(color: Colors.white, fontSize: 18),
+                    GoogleFonts.montserrat(color: Colors.white, fontSize: 17),
               )),
         ),
       ),
