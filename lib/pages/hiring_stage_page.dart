@@ -230,7 +230,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Row(
                       children: [
                         Text(
@@ -250,7 +250,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Row(
                       children: [
                         Text(
@@ -268,7 +268,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Row(
                       children: [
                         Text(
@@ -285,14 +285,14 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: Text(
                       'Tựa game đã chọn',
                       style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Column(
                       children: List.generate(
                           widget.orderModel!.gameOfOrders != null
@@ -391,7 +391,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
-          game.game.name,
+          "• " + game.game.name,
           style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
         ),
       );

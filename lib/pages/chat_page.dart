@@ -38,7 +38,11 @@ class _ChatPageState extends State<ChatPage> {
             widget.tokenModel.message);
     getAllChatsFuture.then((value) {
       if (value != null) {
-        allChats = value.content;
+        if (!mounted) return;
+        setState(() {
+          allChats = value.content;
+          print(allChats.length);
+        });
       }
     });
     return getAllChatsFuture;

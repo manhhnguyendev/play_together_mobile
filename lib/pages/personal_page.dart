@@ -135,7 +135,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                       Text(
                                         'Chỉnh sửa tài khoản',
                                         style: GoogleFonts.montserrat(
-                                          fontSize: 15,
+                                          fontSize: 14,
                                           color: Colors.grey,
                                         ),
                                       ),
