@@ -486,7 +486,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           children: [
             Row(children: [
               Text(
-                (gameOfUser.game.name),
+                ("• " + gameOfUser.game.name),
                 style: GoogleFonts.montserrat(fontSize: 15),
               ),
               Text(
