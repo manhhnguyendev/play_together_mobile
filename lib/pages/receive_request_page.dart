@@ -292,7 +292,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                   children: [
                     SecondMainButton(
                         text: 'Chấp nhận',
-                        onpress: () {
+                        onPress: () {
                           AcceptOrderModel isAccept =
                               AcceptOrderModel(isAccept: true);
                           Future<bool?> acceptFuture = OrderService()
@@ -317,7 +317,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                         width: 183),
                     DeclineButton(
                         text: 'Từ chối',
-                        onpress: () {
+                        onPress: () {
                           createAlertDialog(context);
                         },
                         height: 50,

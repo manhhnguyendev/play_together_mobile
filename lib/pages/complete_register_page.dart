@@ -279,7 +279,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                   ),
                   MainButton(
                       text: "HOÀN TẤT",
-                      onpress: () {
+                      onPress: () {
                         if (_formKey.currentState == null) {
                           print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {
@@ -323,7 +323,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                       }),
                   GoBackButton(
                       text: "QUAY LẠI ",
-                      onpress: () {
+                      onPress: () {
                         Navigator.pop(context);
                       }),
                 ],

@@ -121,7 +121,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: AcceptProfileButton(
                 text: 'Cập nhật',
-                onpress: () {
+                onPress: () {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Cập nhật thành công"),
                   ));

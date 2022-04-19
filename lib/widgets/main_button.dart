@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
   final String text;
-  final Function() onpress;
+  final Function() onPress;
   const MainButton({
     Key? key,
     required this.text,
-    required this.onpress,
+    required this.onPress,
   }) : super(key: key);
 
   @override
@@ -19,18 +19,14 @@ class MainButton extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
-          //side: BorderSide(color: Colors.black, width: 0.1),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: FlatButton(
               color: const Color.fromRGBO(137, 128, 255, 1),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              onPressed: onpress,
-              child:
-                  // Text(text,
-                  //      style: TextStyle(color: Color.fromRGBO(50, 4, 68, 0.9), fontSize: 16.0),)
-                  Text(
+              onPressed: onPress,
+              child: Text(
                 text,
                 style: const TextStyle(color: Colors.white, fontSize: 17.0),
               )),

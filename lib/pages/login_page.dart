@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   MainButton(
                     text: "ĐĂNG NHẬP",
-                    onpress: () {
+                    onPress: () {
                       if (_formKey.currentState == null) {
                         print("_formKey.currentState is null!");
                       } else if (_formKey.currentState!.validate()) {

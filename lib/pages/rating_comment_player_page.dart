@@ -110,7 +110,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: SecondMainButton(
                 text: 'Gửi',
-                onpress: () {
+                onPress: () {
                   RatingCreateModel rateComment = RatingCreateModel(
                       rate: ratingStar.round(),
                       comment: comment != "" ? comment : comment);

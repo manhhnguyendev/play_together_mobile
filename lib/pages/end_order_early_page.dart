@@ -291,7 +291,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                 child: SecondMainButton(
                     text: 'Kết thúc',
-                    onpress: () {
+                    onPress: () {
                       FinishSoonOrderModel finishSoonModel =
                           FinishSoonOrderModel(reason: reason);
                       Future<bool?> finishFuture = OrderService()

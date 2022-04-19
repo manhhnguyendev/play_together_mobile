@@ -435,7 +435,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     const Spacer(),
                     SecondMainButton(
                         text: 'Thuê',
-                        onpress: () {
+                        onPress: () {
                           if (widget.userModel.isPlayer == true) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(

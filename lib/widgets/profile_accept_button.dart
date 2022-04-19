@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AcceptProfileButton extends StatelessWidget {
   final String text;
-  final Function() onpress;
+  final Function() onPress;
   const AcceptProfileButton({
     Key? key,
     required this.text,
-    required this.onpress,
+    required this.onPress,
   }) : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class AcceptProfileButton extends StatelessWidget {
           child: FlatButton(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              onPressed: onpress,
+              onPressed: onPress,
               child: Text(
                 text,
                 style: GoogleFonts.montserrat(

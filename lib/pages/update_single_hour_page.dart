@@ -308,7 +308,7 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: AcceptProfileButton(
                 text: 'Cập nhật',
-                onpress: () {
+                onPress: () {
                   bool valid = true;
                   if (fromHour.isEmpty) {
                     valid = false;

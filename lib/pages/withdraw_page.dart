@@ -77,7 +77,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
           elevation: 0,
           child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-              child: AcceptProfileButton(text: 'Rút tiền', onpress: () {})),
+              child: AcceptProfileButton(text: 'Rút tiền', onPress: () {})),
         ));
   }
 }

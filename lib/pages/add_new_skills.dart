@@ -81,7 +81,7 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                   child: AcceptProfileButton(
                       text: 'Cập nhật',
-                      onpress: () {
+                      onPress: () {
                         for (var gameChoose in listGamesChoosen) {
                           for (var game in listAllGames) {
                             if (game.name.contains(gameChoose)) {
