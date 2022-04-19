@@ -358,9 +358,6 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
-                    
-
                     DeclineButton(
                         text: 'Hủy thuê',
                         onpress: () {

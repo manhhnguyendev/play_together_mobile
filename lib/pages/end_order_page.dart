@@ -48,45 +48,42 @@ class _EndOrderPageState extends State<EndOrderPage> {
     _reasonController.text =
         widget.orderModel!.reason != null ? widget.orderModel!.reason! : "";
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ReportPage(
-                              orderModel: widget.orderModel,
-                              tokenModel: widget.tokenModel,
-                              userModel: widget.userModel!)),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.warning_amber_rounded,
-                    color: Colors.black,
-                  )),
-            ),
-          ],
-          centerTitle: true,
-          title: Text(
-            'Chi tiết thuê',
-            style: GoogleFonts.montserrat(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReportPage(
+                            orderModel: widget.orderModel,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!)),
+                  );
+                },
+                icon: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.black,
+                )),
           ),
+        ],
+        centerTitle: true,
+        title: Text(
+          'Chi tiết thuê',
+          style: GoogleFonts.montserrat(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(),
-            child: Column(
-              children: [
+              padding: const EdgeInsets.only(),
+              child: Column(children: [
                 Container(
                     alignment: Alignment.center,
                     child: createStatus(widget.orderModel!.status)),
@@ -178,7 +175,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   child: Row(
                     children: [
                       Text(
-                        'Thời lượng thuê ',
+                        'Thời lượng thuê:',
                         style: GoogleFonts.montserrat(fontSize: 17),
                       ),
                       const Spacer(),
@@ -198,7 +195,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   child: Row(
                     children: [
                       Text(
-                        'Tổng chi phí ',
+                        'Chi phí dự kiến: ',
                         style: GoogleFonts.montserrat(fontSize: 17),
                       ),
                       const Spacer(),
@@ -216,7 +213,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   child: Row(
                     children: [
                       Text(
-                        'Tổng chi phí cuối cùng ',
+                        'Chi phí cuối cùng:',
                         style: GoogleFonts.montserrat(fontSize: 17),
                       ),
                       const Spacer(),
@@ -236,7 +233,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     child: Row(
                       children: [
                         Text(
-                          'Thời gian bắt đầu',
+                          'Thời gian bắt đầu:',
                           style: GoogleFonts.montserrat(fontSize: 17),
                         ),
                         const Spacer(),
@@ -255,7 +252,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     child: Row(
                       children: [
                         Text(
-                          'Thời gian kết thúc',
+                          'Thời gian kết thúc:',
                           style: GoogleFonts.montserrat(fontSize: 17),
                         ),
                         const Spacer(),
@@ -274,7 +271,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     child: Row(
                       children: [
                         Text(
-                          'Thời gian: ',
+                          'Thời gian:',
                           style: GoogleFonts.montserrat(fontSize: 17),
                         ),
                         const Spacer(),
@@ -290,7 +287,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
                   child: Text(
-                    'Tựa game đã chọn ',
+                    'Tựa game đã chọn:',
                     style: GoogleFonts.montserrat(fontSize: 17),
                   ),
                 ),
@@ -311,7 +308,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.fromLTRB(15, 10, 25, 10),
                     child: Text(
-                      'Lý do kết thúc sớm',
+                      'Lý do kết thúc sớm:',
                       style: GoogleFonts.montserrat(fontSize: 17),
                     ),
                   ),
@@ -337,39 +334,42 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     ),
                   ),
                 ),
-                SecondMainButton(
-                    text: 'Kết thúc',
-                    onpress: () {
-                      if (widget.userModel!.id == widget.orderModel!.userId) {
-                        setState(() {
-                          helper.pushInto(
-                              context,
-                              RatingAndCommentPage(
-                                orderModel: widget.orderModel,
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel!,
-                              ),
-                              true);
-                        });
-                      } else if (widget.userModel!.id ==
-                          widget.orderModel!.toUserId) {
-                        setState(() {
-                          helper.pushInto(
-                              context,
-                              HistoryPage(
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel!,
-                              ),
-                              true);
-                        });
-                      }
-                    },
-                    height: 50,
-                    width: 200),
-              ],
-            ),
-          ),
-        ));
+              ]))),
+      bottomNavigationBar: BottomAppBar(
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: SecondMainButton(
+                text: 'Kết thúc',
+                onpress: () {
+                  if (widget.userModel!.id == widget.orderModel!.userId) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          RatingAndCommentPage(
+                            orderModel: widget.orderModel,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!,
+                          ),
+                          true);
+                    });
+                  } else if (widget.userModel!.id ==
+                      widget.orderModel!.toUserId) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          HistoryPage(
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!,
+                          ),
+                          true);
+                    });
+                  }
+                },
+                height: 50,
+                width: 150),
+          )),
+    );
   }
 
   Widget createStatus(String status) {
