@@ -366,7 +366,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                         width: 183),
                     SecondMainButton(
                         text: 'Nhắn tin',
-                        onpress: () {
+                        onPress: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

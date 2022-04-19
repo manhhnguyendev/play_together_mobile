@@ -136,224 +136,224 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
           String intendTime =
               DateFormat('hh:mm a').format(DateTime.parse(intend.toString()));
           return Scaffold(
-            resizeToAvoidBottomInset: true,
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              centerTitle: true,
-              title: Text(
-                'Đang chờ chấp thuận...',
-                style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal),
+              resizeToAvoidBottomInset: true,
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                centerTitle: true,
+                title: Text(
+                  'Đang chờ chấp thuận...',
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
               ),
-            ),
-            body: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 120,
-                            width: 120,
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(widget.orderModel!.user!.avatar),
+              body: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    widget.orderModel!.user!.avatar),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            widget.userModel.name,
-                            style: GoogleFonts.montserrat(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Text(
-                            ' •  •  ',
-                            style: GoogleFonts.montserrat(
-                                fontSize: 15, color: Colors.grey),
-                          ),
-                          Container(
-                            alignment: Alignment.topCenter,
-                            width: 60,
-                            height: 60,
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/play_together_logo_no_text.png"),
-                                    fit: BoxFit.cover)),
-                          ),
-                          Text(
-                            ' •  • ',
-                            style: GoogleFonts.montserrat(
-                                fontSize: 15, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 120,
-                            width: 120,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  widget.orderModel!.toUser!.avatar),
+                            const SizedBox(
+                              height: 5,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            widget.playerModel!.name,
-                            style: GoogleFonts.montserrat(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Text(
+                              widget.userModel.name,
+                              style: GoogleFonts.montserrat(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(
+                              ' •  •  ',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 15, color: Colors.grey),
+                            ),
+                            Container(
+                              alignment: Alignment.topCenter,
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/play_together_logo_no_text.png"),
+                                      fit: BoxFit.cover)),
+                            ),
+                            Text(
+                              ' •  • ',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 15, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    widget.orderModel!.toUser!.avatar),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.playerModel!.name,
+                              style: GoogleFonts.montserrat(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Container(
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                        color: Colors.grey,
-                        width: 0.15,
-                      ),
-                    )),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      height: 1,
+                      decoration: const BoxDecoration(
+                          border: Border(
+                        top: BorderSide(
+                          color: Colors.grey,
+                          width: 0.15,
+                        ),
+                      )),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Thời lượng thuê',
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                      const Spacer(),
-                      Text(
-                        widget.orderModel!.totalTimes.toString(),
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                      Text(
-                        ' giờ',
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Thời lượng thuê',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.orderModel!.totalTimes.toString(),
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        Text(
+                          ' giờ',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Tổng chi phí',
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                      const Spacer(),
-                      Text(
-                        widget.orderModel!.totalPrices
-                            .toStringAsFixed(0)
-                            .toVND(),
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Tổng chi phí',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.orderModel!.totalPrices
+                              .toStringAsFixed(0)
+                              .toVND(),
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Dự kiến kết thúc',
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                      const Spacer(),
-                      Text(
-                        intendDate + ", " + intendTime,
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Dự kiến kết thúc',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const Spacer(),
+                        Text(
+                          intendDate + ", " + intendTime,
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-                  child: Text(
-                    'Tựa game đã chọn',
-                    style: GoogleFonts.montserrat(fontSize: 18),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+                    child: Text(
+                      'Tựa game đã chọn',
+                      style: GoogleFonts.montserrat(fontSize: 18),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Column(
-                    children: List.generate(
-                        widget.orderModel!.gameOfOrders != null
-                            ? widget.orderModel!.gameOfOrders.length
-                            : 0,
-                        (index) => buildGamesChoosenField(
-                            widget.orderModel!.gameOfOrders[index])),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Column(
+                      children: List.generate(
+                          widget.orderModel!.gameOfOrders != null
+                              ? widget.orderModel!.gameOfOrders.length
+                              : 0,
+                          (index) => buildGamesChoosenField(
+                              widget.orderModel!.gameOfOrders[index])),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Container(
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                      top: BorderSide(
-                        color: Colors.grey,
-                        width: 0.15,
-                      ),
-                    )),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Container(
+                      height: 1,
+                      decoration: const BoxDecoration(
+                          border: Border(
+                        top: BorderSide(
+                          color: Colors.grey,
+                          width: 0.15,
+                        ),
+                      )),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Yêu cầu sẽ bị hủy sau',
-                        style: GoogleFonts.montserrat(fontSize: 18),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      AnimatedBuilder(
-                        animation: controller,
-                        builder: (context, child) => Text(
-                          countText,
-                          style: GoogleFonts.montserrat(
-                            fontSize: 40,
-                            fontWeight: FontWeight.normal,
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Yêu cầu sẽ bị hủy sau',
+                          style: GoogleFonts.montserrat(fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        AnimatedBuilder(
+                          animation: controller,
+                          builder: (context, child) => Text(
+                            countText,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 40,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            bottomNavigationBar: BottomAppBar(
-              child: Padding(
+                ],
+              ),
+              bottomNavigationBar: BottomAppBar(
+                  child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -361,7 +361,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   children: [
                     DeclineButton(
                         text: 'Hủy thuê',
-                        onpress: () {
+                        onPress: () {
                           setState(() {
                             Future<bool?> cancelFuture = OrderService()
                                 .cancelOrderRequest(widget.orderModel!.id,
@@ -379,15 +379,13 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                                 });
                               }
                             });
-                          }
-                        });
-                      });
-                    },
-                    height: 50,
-                    width: 150),
-              ),
-            ),
-          );
+                          });
+                        },
+                        height: 50,
+                        width: 150),
+                  ],
+                ),
+              )));
         });
   }
 

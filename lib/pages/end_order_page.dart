@@ -334,7 +334,6 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     ),
                   ),
                 ),
-
               ]))),
       bottomNavigationBar: BottomAppBar(
           elevation: 0,
@@ -342,7 +341,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: SecondMainButton(
                 text: 'Kết thúc',
-                onpress: () {
+                onPress: () {
                   if (widget.userModel!.id == widget.orderModel!.userId) {
                     setState(() {
                       helper.pushInto(
@@ -371,7 +370,6 @@ class _EndOrderPageState extends State<EndOrderPage> {
                 width: 150),
           )),
     );
-
   }
 
   Widget createStatus(String status) {
