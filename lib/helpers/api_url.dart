@@ -26,3 +26,5 @@ const String gameOfUser =
     "https://play-together.azurewebsites.net/api/play-together/v1/games-of-user";
 const String notification =
     "https://play-together.azurewebsites.net/api/play-together/v1/notification";
+const String chat =
+    "https://play-together.azurewebsites.net/api/play-together/v1/chats";

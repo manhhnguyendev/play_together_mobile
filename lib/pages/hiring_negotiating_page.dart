@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/chat_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -357,6 +358,9 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
+                    
+
                     DeclineButton(
                         text: 'Hủy thuê',
                         onpress: () {

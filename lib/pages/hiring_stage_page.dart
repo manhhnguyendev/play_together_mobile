@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/response_model.dart';
+import 'package:play_together_mobile/pages/chat_page.dart';
 import 'package:play_together_mobile/pages/end_order_early_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/widgets/decline_button.dart';
@@ -350,7 +351,17 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                   children: [
                     SecondMainButton(
                         text: 'Nhắn tin',
-                        onpress: () {},
+                        onpress: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel!,
+                                  orderModel: widget.orderModel!,
+                                ),
+                              ));
+                        },
                         height: 50,
                         width: 183),
                     DeclineButton(
