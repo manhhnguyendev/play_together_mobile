@@ -242,7 +242,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: SecondMainButton(
                 text: 'Gửi yêu cầu',
-                onpress: (widget.playerModel!.pricePerHour * chooseTime) <=
+                onPress: (widget.playerModel!.pricePerHour * chooseTime) <=
                         widget.userModel.userBalance.balance
                     ? () {
                         setState(() {

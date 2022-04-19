@@ -339,7 +339,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                 ),
                 SecondMainButton(
                     text: 'Kết thúc',
-                    onpress: () {
+                    onPress: () {
                       if (widget.userModel!.id == widget.orderModel!.userId) {
                         setState(() {
                           helper.pushInto(

@@ -87,7 +87,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     ),
                     MainButton(
                       text: "THAY ĐỔI MẬT KHẨU",
-                      onpress: () {
+                      onPress: () {
                         if (_formKey.currentState == null) {
                           print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {

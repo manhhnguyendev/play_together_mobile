@@ -163,7 +163,7 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                   child: AcceptProfileButton(
                       text: 'Cập nhật',
-                      onpress: () {
+                      onPress: () {
                         setState(() {
                           isPress = true;
                           listCreateHobbies.clear();

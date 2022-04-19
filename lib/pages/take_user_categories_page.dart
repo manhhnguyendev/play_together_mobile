@@ -102,7 +102,7 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                                         listGamesCheckBox[index])),
                               ),
                             ),
-                            //GoBackButton(text: "QUAY LẠI", onpress: () {})
+                            //GoBackButton(text: "QUAY LẠI", onPress: () {})
                           ],
                         )),
                   ),
@@ -117,7 +117,7 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: MainButton(
                     text: "HOÀN TẤT",
-                    onpress: () {
+                    onPress: () {
                       if (listGamesChoosen.isNotEmpty) {
                         for (var gameChoose in listGamesChoosen) {
                           for (var game in listGames!) {

@@ -175,7 +175,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                     MainButton(
                       text: "TIẾP TỤC",
-                      onpress: () {
+                      onPress: () {
                         if (_formKey.currentState == null) {
                           print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {

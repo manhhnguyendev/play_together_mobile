@@ -456,7 +456,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
           child: AcceptProfileButton(
               text: "CẬP NHẬT",
-              onpress: () {
+              onPress: () {
                 if (_formKey.currentState == null) {
                   print("_formKey.currentState is null!");
                 } else if (_formKey.currentState!.validate()) {

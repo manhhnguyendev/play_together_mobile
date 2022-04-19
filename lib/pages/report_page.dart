@@ -111,7 +111,7 @@ class _ReportPageState extends State<ReportPage> {
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: SecondMainButton(
                 text: 'Gửi',
-                onpress: () {
+                onPress: () {
                   ReportCreateModel reportCreateModel = ReportCreateModel(
                       reportMessage:
                           reportMessage != "" ? reportMessage : reportMessage);

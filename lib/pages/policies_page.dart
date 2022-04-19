@@ -60,7 +60,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
       //       padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
       //       child: AcceptProfileButton(
       //           text: 'Cập nhật',
-      //           onpress: () {
+      //           onPress: () {
 
       //           })),
       // ),

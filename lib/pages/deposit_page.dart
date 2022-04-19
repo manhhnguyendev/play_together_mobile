@@ -114,7 +114,7 @@ class _DepositPageState extends State<DepositPage> {
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
               child: AcceptProfileButton(
                   text: 'Nạp tiền',
-                  onpress: () async {
+                  onPress: () async {
                     if (money.length < 2) {
                       print("Không đủ điều kiện");
                     } else {

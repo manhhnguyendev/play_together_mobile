@@ -594,7 +594,7 @@ class _AddNewHourState extends State<AddNewHour> {
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: AcceptProfileButton(
                 text: 'Thêm mới',
-                onpress: () {
+                onPress: () {
                   if (isMonday) {
                     dayOfWeek = 2;
                   }
