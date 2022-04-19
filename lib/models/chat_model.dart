@@ -31,3 +31,20 @@ class ChatModel {
         "isActive": isActive,
       };
 }
+
+class SendMessageModel {
+  String message;
+
+  SendMessageModel({
+    required this.message,
+  });
+
+  factory SendMessageModel.fromJson(Map<String, dynamic> json) =>
+      SendMessageModel(
+        message: json['message'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "message": message,
+      };
+}
