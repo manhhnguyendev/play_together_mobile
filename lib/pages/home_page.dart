@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Expanded(
                             child: SizedBox(
-                                height: 220.0,
+                                height: 230.0,
                                 child: FutureBuilder(
                                     future: loadListUserByIsOrderByRating(),
                                     builder: (context, snapshot) {
@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Expanded(
                             child: SizedBox(
-                                height: 220.0,
+                                height: 230.0,
                                 child: FutureBuilder(
                                     future: loadListUserByIsNewAccount(),
                                     builder: (context, snapshot) {
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Expanded(
                             child: SizedBox(
-                                height: 220.0,
+                                height: 230.0,
                                 child: FutureBuilder(
                                     future: loadListUserByIsSameHobbies(),
                                     builder: (context, snapshot) {
@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Expanded(
                             child: SizedBox(
-                                height: 220.0,
+                                height: 230.0,
                                 child: FutureBuilder(
                                     future: loadListUserByIsRecentOrder(),
                                     builder: (context, snapshot) {
