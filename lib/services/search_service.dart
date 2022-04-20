@@ -8,25 +8,6 @@ import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class SearchService {
-  Future<ResponseListModel<UserModel>?> searchUserByName(
-      String search, dynamic token) async {
-    Response response;
-    ResponseListModel<UserModel>? result;
-    try {
-      response = await get(
-        Uri.parse('${apiUrl.users}?Name=$search&IsPlayer=true'),
-        headers: configJson.headerAuth(token),
-      );
-      if (response.statusCode == 200) {
-        result =
-            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
-      }
-    } on Exception {
-      rethrow;
-    }
-    return result;
-  }
-
   Future<ResponseListModel<UserModel>?> searchUser(
       String search, dynamic token) async {
     Response response;
@@ -39,6 +20,45 @@ class SearchService {
       if (response.statusCode == 200) {
         result =
             ResponseListModel<UserModel>.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseListModel<PlayerModel>?> searchUserByFilter(
+      String search,
+      bool isMale,
+      bool isFemale,
+      String gameId,
+      String status,
+      bool sortByAlphabet,
+      bool sortByRating,
+      bool sortByRecommend,
+      bool sortByPrice,
+      double startPrice,
+      double endPrice,
+      dynamic token) async {
+    String gender = "";
+    if (isMale && !isFemale) {
+      gender = "true";
+    } else if (!isMale && isFemale) {
+      gender = "false";
+    } else {
+      gender = "";
+    }
+    Response response;
+    ResponseListModel<PlayerModel>? result;
+    try {
+      response = await get(
+        Uri.parse(
+            '${apiUrl.users}?Search=$search&Gender=$gender&GameId=$gameId&Status=$status&IsOrderByName=$sortByAlphabet&IsOrderByRating=$sortByRating&IsOrderByPricing=$sortByPrice&IsSkillSameHobbies=$sortByRecommend&IsPlayer=true&FromPrice=$startPrice&ToPrice=$endPrice'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result =
+            ResponseListModel<PlayerModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;

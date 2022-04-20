@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
-import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/search_history_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/search_page.dart';
 import 'package:play_together_mobile/services/game_service.dart';
 import 'package:play_together_mobile/services/search_history_service.dart';
-import 'package:play_together_mobile/services/search_service.dart';
-import 'package:play_together_mobile/services/user_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchHistoryAndRecommendPage extends StatefulWidget {
@@ -29,8 +26,6 @@ class SearchHistoryAndRecommendPage extends StatefulWidget {
 class _SearchHistoryAndRecommendPageState
     extends State<SearchHistoryAndRecommendPage> {
   final _controller = TextEditingController();
-  List<UserModel> listPlayerSearch = [];
-  List<PlayerModel> _listPlayerSearch = [];
   List<SearchHistoryModel> listSearchHistory = [];
   List<SearchHistoryModel> listHotSearch = [];
   List<GamesModel> listMostFavoriteGame = [];
@@ -64,39 +59,16 @@ class _SearchHistoryAndRecommendPageState
             style: GoogleFonts.montserrat(),
             controller: _controller,
             onSubmitted: (value) {
-              if (_controller.text.isNotEmpty) {
-                searchValue = _controller.text;
-                _listPlayerSearch = [];
-                Future<ResponseListModel<UserModel>?>
-                    listPlayerSearchModelFuture = SearchService()
-                        .searchUserByName(
-                            _controller.text, widget.tokenModel.message);
-                listPlayerSearchModelFuture.then((_playerSearchList) {
-                  listPlayerSearch = _playerSearchList!.content;
-                  if (_listPlayerSearch.isEmpty) {
-                    for (var item in listPlayerSearch) {
-                      Future<ResponseModel<PlayerModel>?> playerFuture =
-                          UserService().getPlayerById(
-                              item.id, widget.tokenModel.message);
-                      playerFuture.then((value) {
-                        if (value != null) {
-                          _listPlayerSearch.add(value.content);
-                        }
-                      });
-                    }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchPage(
-                            tokenModel: widget.tokenModel,
-                            userModel: widget.userModel,
-                            listSearch: _listPlayerSearch,
-                            searchValue: searchValue,
-                          ),
-                        ));
-                  }
-                });
-              }
+              searchValue = _controller.text;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchPage(
+                      tokenModel: widget.tokenModel,
+                      userModel: widget.userModel,
+                      searchValue: searchValue,
+                    ),
+                  ));
             },
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
@@ -123,14 +95,6 @@ class _SearchHistoryAndRecommendPageState
             ),
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            iconSize: 30,
-            icon: const Icon(Icons.filter_alt_rounded),
-            color: Colors.black,
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
           child: Padding(
