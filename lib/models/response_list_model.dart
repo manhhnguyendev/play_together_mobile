@@ -67,6 +67,9 @@ class ResponseListModel<T> {
       return ListOnlineHourModelResponse.fromJson(json) as ResponseListModel<T>;
     } else if (T == ChatModel) {
       return ListChatModelResponse.fromJson(json) as ResponseListModel<T>;
+    } else if (T == PlayerModel) {
+      return ListPlayerModelModelResponse.fromJson(json)
+          as ResponseListModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -77,6 +80,15 @@ class ListUserModelResponse extends ResponseListModel<UserModel> {
       : super._fromJson(json) {
     content = (json['content'] as List<dynamic>)
         .map((dynamic item) => UserModel.fromJson(item))
+        .toList();
+  }
+}
+
+class ListPlayerModelModelResponse extends ResponseListModel<PlayerModel> {
+  ListPlayerModelModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = (json['content'] as List<dynamic>)
+        .map((dynamic item) => PlayerModel.fromJson(item))
         .toList();
   }
 }
