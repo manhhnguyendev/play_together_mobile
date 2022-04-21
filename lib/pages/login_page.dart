@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/login_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
@@ -17,6 +18,7 @@ import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -137,9 +139,21 @@ class _LoginPageState extends State<LoginPage> {
                                       });
                                     }
                                   });
-                                  print('Đăng nhập thành công');
+                                  Fluttertoast.showToast(
+                                      msg: "ĐĂNG NHẬP THÀNH CÔNG",
+                                      textColor: Colors.white,
+                                      backgroundColor: const Color.fromRGBO(
+                                          137, 128, 255, 1),
+                                      toastLength: Toast.LENGTH_SHORT);
                                 }
                               });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Tên đăng nhập hoặc mật khẩu không đúng",
+                                  textColor: Colors.red,
+                                  backgroundColor:
+                                      const Color.fromRGBO(137, 128, 255, 1),
+                                  toastLength: Toast.LENGTH_SHORT);
                             }
                           });
                         }
@@ -161,9 +175,9 @@ class _LoginPageState extends State<LoginPage> {
                   context,
                   MaterialPageRoute(builder: (context) => const RegisterPage()),
                 ),
-                child: const Text(
+                child: Text(
                   'Tạo tài khoản?',
-                  style: TextStyle(
+                  style: GoogleFonts.montserrat(
                     fontSize: 15,
                     decoration: TextDecoration.underline,
                   ),
@@ -178,9 +192,9 @@ class _LoginPageState extends State<LoginPage> {
                   MaterialPageRoute(
                       builder: (context) => const ForgotPasswordPage()),
                 ),
-                child: const Text(
+                child: Text(
                   'Quên mật khẩu?',
-                  style: TextStyle(
+                  style: GoogleFonts.montserrat(
                     fontSize: 15,
                     decoration: TextDecoration.underline,
                   ),
@@ -206,10 +220,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 1,
                 child: Text("Hoặc",
-                    style: TextStyle(fontSize: 17, color: Colors.grey),
+                    style: GoogleFonts.montserrat(
+                        fontSize: 17, color: Colors.grey),
                     textAlign: TextAlign.center),
               ),
               Expanded(
@@ -241,6 +256,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildPasswordField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
         password = value;
@@ -261,6 +277,8 @@ class _LoginPageState extends State<LoginPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Mật khẩu",
           hintText: "Nhập vào mật khẩu",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -271,13 +289,13 @@ class _LoginPageState extends State<LoginPage> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           focusedErrorBorder: const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     obsecure = !obsecure;
                   }),
-              icon: const Icon(
-                Icons.remove_red_eye,
+              icon: Icon(
+                obsecure ? Icons.visibility_off : Icons.visibility,
                 size: 25,
                 color: Colors.black,
               ))),
@@ -287,6 +305,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField buildEmailField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue!,
       onChanged: (value) {
@@ -309,22 +328,24 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         labelText: "Email",
         hintText: "Nhập vào email",
-        enabledBorder: OutlineInputBorder(
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }

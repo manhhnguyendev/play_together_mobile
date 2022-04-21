@@ -89,3 +89,20 @@ class RatingCreateModel {
         "comment": comment,
       };
 }
+
+class ReportCommentModel {
+  final String reason;
+
+  ReportCommentModel({
+    required this.reason,
+  });
+
+  factory ReportCommentModel.fromJson(Map<String, dynamic> json) =>
+      ReportCommentModel(
+        reason: json['reason'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "reason": reason,
+      };
+}

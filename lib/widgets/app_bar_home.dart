@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
@@ -57,7 +56,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
             child: Container(
               width: size.width * 0.7,
               decoration: BoxDecoration(
-                color: my_colors.secondary.withOpacity(0.1),
+                color: Colors.grey.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: TextField(
@@ -73,7 +72,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                   hintStyle: GoogleFonts.montserrat(),
                   prefixIcon: const Icon(
                     Icons.search,
-                    color: my_colors.secondary,
+                    color: Colors.grey,
                   ),
                 ),
               ),
