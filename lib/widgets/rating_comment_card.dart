@@ -5,14 +5,20 @@ import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/pages/report_comment_page.dart';
 
 class RatingCard extends StatefulWidget {
   final RatingModel? ratingModel;
   final PlayerModel? playerModel;
   final TokenModel tokenModel;
+  final bool checkCanReport;
 
   const RatingCard(
-      {Key? key, this.ratingModel, required this.tokenModel, this.playerModel})
+      {Key? key,
+      this.ratingModel,
+      required this.tokenModel,
+      this.playerModel,
+      required this.checkCanReport})
       : super(key: key);
 
   @override
@@ -20,14 +26,8 @@ class RatingCard extends StatefulWidget {
 }
 
 class _RatingCardState extends State<RatingCard> {
-  bool checkReport = true;
   @override
   Widget build(BuildContext context) {
-    if (widget.playerModel!.id == widget.ratingModel!.user!.id) {
-      checkReport = true;
-    } else {
-      checkReport = false;
-    }
     String date = DateFormat('dd/MM/yyyy')
         .format(DateTime.parse(widget.ratingModel!.createdDate));
     String startTime = DateFormat('hh:mm a')
@@ -90,11 +90,20 @@ class _RatingCardState extends State<RatingCard> {
                     ),
                   )),
               Visibility(
-                visible: checkReport,
+                visible: widget.checkCanReport,
                 child: Expanded(
                     flex: 1,
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReportCommentPage(
+                                      ratingModel: widget.ratingModel!,
+                                      tokenModel: widget.tokenModel,
+                                    )),
+                          );
+                        },
                         icon: const Icon(
                           Icons.report_gmailerrorred_rounded,
                           color: Colors.black,

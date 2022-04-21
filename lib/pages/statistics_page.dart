@@ -154,6 +154,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   builder: (context) => RatingCommentPage(
                                         userModel: widget.userModel,
                                         tokenModel: widget.tokenModel,
+                                        checkCanReport: true,
                                       )),
                             );
                           },

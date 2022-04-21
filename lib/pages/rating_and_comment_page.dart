@@ -12,9 +12,14 @@ class RatingCommentPage extends StatefulWidget {
   final UserModel? userModel;
   final TokenModel tokenModel;
   final PlayerModel? playerModel;
+  final bool checkCanReport;
 
   const RatingCommentPage(
-      {Key? key, this.userModel, required this.tokenModel, this.playerModel})
+      {Key? key,
+      this.userModel,
+      required this.tokenModel,
+      this.playerModel,
+      required this.checkCanReport})
       : super(key: key);
 
   @override
@@ -508,8 +513,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
   }
 
   Widget buildRatingList(RatingModel _ratingModel) => RatingCard(
-        ratingModel: _ratingModel,
-        tokenModel: widget.tokenModel,
-        playerModel: widget.playerModel,
-      );
+      ratingModel: _ratingModel,
+      tokenModel: widget.tokenModel,
+      playerModel: widget.playerModel,
+      checkCanReport: widget.checkCanReport);
 }

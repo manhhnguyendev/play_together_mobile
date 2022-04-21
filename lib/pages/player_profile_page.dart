@@ -155,6 +155,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                                         userModel: widget.userModel,
                                         tokenModel: widget.tokenModel,
                                         playerModel: widget.playerModel,
+                                        checkCanReport: false,
                                       )),
                             );
                           },
