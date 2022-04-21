@@ -45,12 +45,34 @@ class OrderService {
     return result;
   }
 
-  Future<ResponseListModel<OrderModel>?> getOrderOfPlayer(dynamic token) async {
+  Future<ResponseListModel<OrderModel>?> getOrderOfPlayer(
+      dynamic token, String status) async {
     Response response;
     ResponseListModel<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true&PageSize=3'),
+        Uri.parse(
+            '${apiUrl.users}/orders/requests?IsNew=true&PageSize=3&Status=$status'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result =
+            ResponseListModel<OrderModel>.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseListModel<OrderModel>?> getOrderOfUser(
+      dynamic token, String status) async {
+    Response response;
+    ResponseListModel<OrderModel>? result;
+    try {
+      response = await get(
+        Uri.parse(
+            '${apiUrl.users}/orders/?IsNew=true&PageSize=3&Status=$status'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
