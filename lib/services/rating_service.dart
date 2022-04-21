@@ -26,6 +26,25 @@ class RatingService {
     return result;
   }
 
+  Future<bool?> reportComment(String rateId, dynamic token,
+      ReportCommentModel reportCommentModel) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.ratings}/violate/$rateId'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(reportCommentModel.toJson()),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
   Future<ResponseListModel<RatingModel>?> getAllRating(
       String userId, double vote, dynamic token) async {
     Response response;

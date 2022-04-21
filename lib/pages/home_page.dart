@@ -7,6 +7,7 @@ import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/categories_list_page.dart';
+import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
@@ -44,10 +45,9 @@ class _HomePageState extends State<HomePage> {
   List<UserModel> listPlayerIsNewAccount = [];
   List<ResultRecommendModel> listResultRecommend = [];
   List<ResultRecommendModel> listGetResultRecommend = [];
-  List<String> listPlayerIdIsSkillSameHobbies = [];
   List<RecommendModel> listRecommend = [];
   List<OrderModel> _listOrder = [];
-
+  List listPlayerIdIsSkillSameHobbies = [];
   UserModel? lateUser;
   bool checkRecentOrder = false;
   bool checkFirstOrderByRating = true;
@@ -58,27 +58,6 @@ class _HomePageState extends State<HomePage> {
   bool checkFirstTime = true;
   bool checkFirstTimeRecommend = true;
 
-  void getListPlayerId() {
-    if (checkFirstTime && listPlayerIsSkillSameHobbies.length == 5) {
-      for (var playerId in listPlayerIsSkillSameHobbies) {
-        listPlayerIdIsSkillSameHobbies.add(playerId.id);
-        print('List Player Id: ' + playerId.id);
-      }
-      checkFirstTime = false;
-    }
-  }
-
-  void getListRecommend() {
-    if (checkFirstTimeRecommend && listPlayerIdIsSkillSameHobbies.length == 5) {
-      for (var playerId in listPlayerIdIsSkillSameHobbies) {
-        RecommendModel recommendModel =
-            RecommendModel(userId: widget.userModel.id, playerId: playerId);
-        listRecommend.add(recommendModel);
-      }
-      checkFirstTimeRecommend = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -88,7 +67,6 @@ class _HomePageState extends State<HomePage> {
             checkRecentOrder = true;
           }
           getListPlayerId();
-
           return Scaffold(
             appBar: Appbar(
               height: 70,
@@ -473,6 +451,26 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  void getListPlayerId() {
+    if (checkFirstTime && listPlayerIsSkillSameHobbies.length == 5) {
+      for (var playerId in listPlayerIsSkillSameHobbies) {
+        listPlayerIdIsSkillSameHobbies.add(playerId.id);
+      }
+      checkFirstTime = false;
+    }
+  }
+
+  void getListRecommend() {
+    if (checkFirstTimeRecommend && listPlayerIdIsSkillSameHobbies.length == 5) {
+      for (var playerId in listPlayerIdIsSkillSameHobbies) {
+        RecommendModel recommendModel =
+            RecommendModel(userId: widget.userModel.id, playerId: playerId);
+        listRecommend.add(recommendModel);
+      }
+      checkFirstTimeRecommend = false;
+    }
+  }
+
   Future loadListPlayerRecommend() {
     double score;
     getListRecommend();
@@ -481,13 +479,11 @@ class _HomePageState extends State<HomePage> {
     listPlayerRecommendFuture.then((_playerList) {
       if (checkFirstPlayerRecommend && listRecommend.length == 5) {
         listResultRecommend = _playerList!;
-        print(listResultRecommend.length.toString() + ' ResultRecommend');
+
         for (var result in listResultRecommend) {
           score = double.parse(result.score);
           if (score > 3.5) {
             listGetResultRecommend.add(result);
-            print(listGetResultRecommend.length.toString() +
-                ' GetResultRecommend');
           }
         }
         if (listGetResultRecommend.isNotEmpty) {
@@ -498,8 +494,6 @@ class _HomePageState extends State<HomePage> {
             getPlayerByIdFuture.then((value) {
               if (value != null) {
                 _listPlayerRecommend.add(value.content);
-                print('IsPlayerRecommend: ' +
-                    _listPlayerRecommend.length.toString());
               }
             });
           }
@@ -523,8 +517,6 @@ class _HomePageState extends State<HomePage> {
             getPlayerByIdFuture.then((value) {
               if (value != null) {
                 _listPlayerIsOrderByRating.add(value.content);
-                print('IsOrderByRating: ' +
-                    _listPlayerIsOrderByRating.length.toString());
               }
             });
           }
@@ -548,8 +540,6 @@ class _HomePageState extends State<HomePage> {
             getPlayerByIdFuture.then((value) {
               if (value != null) {
                 _listPlayerIsNewAccount.add(value.content);
-                print('IsNewAccount: ' +
-                    _listPlayerIsNewAccount.length.toString());
               }
             });
           }
@@ -574,8 +564,6 @@ class _HomePageState extends State<HomePage> {
             getPlayerByIdFuture.then((value) {
               if (value != null) {
                 _listPlayerIsSkillSameHobbies.add(value.content);
-                print('IsSkillSameHobbies: ' +
-                    _listPlayerIsSkillSameHobbies.length.toString());
               }
             });
           }
@@ -599,8 +587,6 @@ class _HomePageState extends State<HomePage> {
             getPlayerByIdFuture.then((value) {
               if (value != null) {
                 _listPlayerIsRecentOrder.add(value.content);
-                print('IsRecentOrder: ' +
-                    _listPlayerIsRecentOrder.length.toString());
               }
             });
           }
@@ -621,6 +607,25 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             lateUser = value.content;
           });
+        } else if (value.content.status.contains('Hiring')) {
+          Future<ResponseListModel<OrderModel>?> checkOrderUser =
+              OrderService().getOrderOfPlayer(widget.tokenModel.message);
+          checkOrderUser.then(((order) {
+            _listOrder = order!.content;
+            if (_listOrder[0].toUserId == widget.userModel.id) {
+              lateUser = value.content;
+              setState(() {
+                helper.pushInto(
+                    context,
+                    HiringPage(
+                      tokenModel: widget.tokenModel,
+                      userModel: lateUser,
+                      orderModel: _listOrder[0],
+                    ),
+                    true);
+              });
+            }
+          }));
         } else {
           Future<ResponseListModel<OrderModel>?> checkOrderUser =
               OrderService().getOrderOfPlayer(widget.tokenModel.message);

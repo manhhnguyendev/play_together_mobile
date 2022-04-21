@@ -7,13 +7,14 @@ import 'package:play_together_mobile/pages/filter_page.dart';
 import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/search_player_card.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchPage extends StatefulWidget {
   final TokenModel tokenModel;
   final UserModel userModel;
   final String searchValue;
 
-  SearchPage({
+  const SearchPage({
     Key? key,
     required this.tokenModel,
     required this.userModel,
@@ -25,73 +26,45 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<UserModel>? listPlayerSearch;
-  List<PlayerModel> _listPlayerSearch = [];
-  List<PlayerModel> listPlayerFilter = [];
+  final List<PlayerModel> _listPlayerSearch = [];
   final _controller = TextEditingController();
+  List<UserModel>? listPlayerSearch;
+  List<PlayerModel> listPlayerFilter = [];
   bool checkFirstTime = true;
-  bool checkListFilter = false;
+  bool checkFilter = true;
   bool checkListSearch = true;
+  bool checkListFilter = false;
+  bool isMale = true;
+  bool isFemale = true;
+  bool newIsMale = false;
+  bool newIsFemale = false;
   bool sortByRating = false;
   bool sortByAlphabet = false;
   bool sortByPrice = false;
-  bool sortByRecommend = false;
-  bool checkFilter = true;
-  int sortOrder = 0;
-  String status = "";
-  int statusOrder = 0;
-  bool isMale = true;
-  bool isFemale = true;
-  double startPrice = 10000;
-  double endPrice = 5000000;
-  String defaultGameId = "";
-
+  bool sortByHobby = false;
   bool newSortByRating = false;
   bool newSortByAlphabet = false;
   bool newSortByPrice = false;
-  bool newSortByRecommend = false;
+  bool newSortByHobby = false;
+  int sortOrder = 0;
   int newSortOrder = 0;
-  String newStatus = "";
+  int statusOrder = 0;
   int newStatusOrder = 0;
-  bool newIsMale = false;
-  bool newIsFemale = false;
+  String status = "";
+  String newStatus = "";
+  double startPrice = 10000;
   double newStartPrice = 10000;
+  double endPrice = 5000000;
   double newEndPrice = 5000000;
+  String defaultGameId = "";
   String newDefaultGameId = "";
-
-  Future loadPlayerList() {
-    Future<ResponseListModel<UserModel>?> getListSearchUser = SearchService()
-        .searchUser(widget.searchValue.toString(), widget.tokenModel.message);
-    getListSearchUser.then((_userList) {
-      if (checkFirstTime) {
-        checkListSearch = true;
-        setState(() {
-          listPlayerSearch = _userList!.content;
-          if (_listPlayerSearch.isEmpty) {
-            for (var item in listPlayerSearch!) {
-              Future<ResponseModel<PlayerModel>?> playerFuture = UserService()
-                  .getPlayerById(item.id, widget.tokenModel.message);
-              playerFuture.then((value) {
-                if (value != null) {
-                  _listPlayerSearch.add(value.content);
-                }
-              });
-            }
-          }
-        });
-        checkFirstTime = false;
-      }
-    });
-    return getListSearchUser;
-  }
 
   @override
   Widget build(BuildContext context) {
     _controller.text = widget.searchValue.toString();
     Size size = MediaQuery.of(context).size;
-
     return FutureBuilder(
-        future: loadPlayerList(),
+        future: loadListSearchPlayer(),
         builder: (context, snapshot) {
           return Scaffold(
             backgroundColor: Colors.white,
@@ -112,11 +85,6 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 child: TextField(
                   controller: _controller,
-                  onChanged: (value) {
-                    // if (_controller.text.isEmpty) {
-                    //   Navigator.pop(context);
-                    // }
-                  },
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(
                         horizontal: 40 / 375 * size.width,
@@ -125,6 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     hintText: "Tìm kiếm",
+                    hintStyle: GoogleFonts.montserrat(),
                     prefixIcon: const Icon(
                       Icons.search,
                       color: Colors.grey,
@@ -146,7 +115,7 @@ class _SearchPageState extends State<SearchPage> {
                 IconButton(
                   iconSize: 30,
                   icon: const Icon(Icons.filter_alt_outlined),
-                  color: Color(0xff8980FF),
+                  color: const Color(0xff8980FF),
                   onPressed: (() async {
                     checkFilter = true;
                     final Map<String, Object> list = await Navigator.push(
@@ -156,9 +125,8 @@ class _SearchPageState extends State<SearchPage> {
                             tokenModel: widget.tokenModel,
                             userModel: widget.userModel,
                             searchValue: _controller.text,
-                            sortByRecommend: checkListSearch
-                                ? sortByRecommend
-                                : newSortByRecommend,
+                            sortByHobby:
+                                checkListSearch ? sortByHobby : newSortByHobby,
                             defaultGameId: checkListSearch
                                 ? defaultGameId
                                 : newDefaultGameId,
@@ -172,6 +140,8 @@ class _SearchPageState extends State<SearchPage> {
                                 : newSortByRating,
                             sortOrder:
                                 checkListSearch ? sortOrder : newSortOrder,
+                            statusOrder:
+                                checkListSearch ? statusOrder : newStatusOrder,
                             sortByAlphabet: checkListSearch
                                 ? sortByAlphabet
                                 : newSortByAlphabet,
@@ -180,32 +150,18 @@ class _SearchPageState extends State<SearchPage> {
                             status: checkListSearch ? status : newStatus,
                           ),
                         ));
-                    //listPlayerFilter = list;
                     newSortByAlphabet = list["sortByAlphabet"] as bool;
-                    newSortByRecommend = list["sortByRecommend"] as bool;
+                    newSortByHobby = list["sortByHobby"] as bool;
                     newSortByPrice = list["sortByPrice"] as bool;
                     newSortByRating = list["sortByRating"] as bool;
                     newIsMale = list["isMale"] as bool;
                     newIsFemale = list["isFemale"] as bool;
                     newDefaultGameId = list["defaultGameId"] as String;
                     newStatus = list["status"] as String;
-                    newStartPrice = list["sPrice"] as double;
-                    newEndPrice = list["ePrice"] as double;
-                    newSortOrder = list["sortOrd"] as int;
-                    newStatusOrder = list["sttOrder"] as int;
-                    //_controller.text = list["searchValue"] as String;
-                    // print(newSortByAlphabet.toString() + " abc");
-                    // print(newSortByRecommend.toString() + " recommend");
-                    // print(newSortByPrice.toString() + " price");
-                    // print(newSortByRating.toString() + " rating");
-                    // print(newIsMale.toString() + " male");
-                    // print(newIsFemale.toString() + " female");
-                    // print(newDefaultGameId.toString() + " game id");
-                    // print(newStatus + " status");
-                    // print(newStartPrice.toString() + " start price");
-                    // print(newEndPrice.toString() + " end price");
-                    // print(newSortOrder.toString() + " sort ord");
-                    // print(newStatusOrder.toString() + " status order");
+                    newStartPrice = list["startPrice"] as double;
+                    newEndPrice = list["endPrice"] as double;
+                    newSortOrder = list["sortOrder"] as int;
+                    newStatusOrder = list["statusOrder"] as int;
                     setState(() {
                       checkListFilter = true;
                       checkListSearch = false;
@@ -219,7 +175,7 @@ class _SearchPageState extends State<SearchPage> {
                                   newStatus,
                                   newSortByAlphabet,
                                   newSortByRating,
-                                  newSortByRecommend,
+                                  newSortByHobby,
                                   newSortByPrice,
                                   newStartPrice,
                                   newEndPrice,
@@ -276,4 +232,30 @@ class _SearchPageState extends State<SearchPage> {
         tokenModel: widget.tokenModel,
         userModel: widget.userModel,
       );
+
+  Future loadListSearchPlayer() {
+    Future<ResponseListModel<UserModel>?> getListSearchUser = SearchService()
+        .searchUser(widget.searchValue.toString(), widget.tokenModel.message);
+    getListSearchUser.then((_userList) {
+      if (checkFirstTime) {
+        checkListSearch = true;
+        setState(() {
+          listPlayerSearch = _userList!.content;
+          if (_listPlayerSearch.isEmpty) {
+            for (var item in listPlayerSearch!) {
+              Future<ResponseModel<PlayerModel>?> playerFuture = UserService()
+                  .getPlayerById(item.id, widget.tokenModel.message);
+              playerFuture.then((value) {
+                if (value != null) {
+                  _listPlayerSearch.add(value.content);
+                }
+              });
+            }
+          }
+        });
+        checkFirstTime = false;
+      }
+    });
+    return getListSearchUser;
+  }
 }

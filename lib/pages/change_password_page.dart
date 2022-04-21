@@ -172,8 +172,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               onPressed: () => setState(() {
                     passObsecure = !passObsecure;
                   }),
-              icon: const Icon(
-                Icons.remove_red_eye,
+              icon: Icon(
+                passObsecure ? Icons.visibility_off : Icons.visibility,
                 size: 25,
                 color: Colors.black,
               ))),
@@ -226,8 +226,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               onPressed: () => setState(() {
                     confirmObsecure = !confirmObsecure;
                   }),
-              icon: const Icon(
-                Icons.remove_red_eye,
+              icon: Icon(
+                confirmObsecure ? Icons.visibility_off : Icons.visibility,
                 size: 25,
                 color: Colors.black,
               ))),

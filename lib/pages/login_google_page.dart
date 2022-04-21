@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
@@ -13,6 +14,7 @@ import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/services/login_google_service.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginGooglePage extends StatefulWidget {
   const LoginGooglePage({Key? key}) : super(key: key);
@@ -103,7 +105,12 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                                           });
                                         }
                                       });
-                                      print('Đăng nhập thành công');
+                                      Fluttertoast.showToast(
+                                          msg: "ĐĂNG NHẬP THÀNH CÔNG",
+                                          textColor: Colors.white,
+                                          backgroundColor: const Color.fromRGBO(
+                                              137, 128, 255, 1),
+                                          toastLength: Toast.LENGTH_SHORT);
                                     }
                                   });
                                 }
@@ -124,10 +131,9 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                                           "assets/images/google_logo.png"),
                                       fit: BoxFit.cover)),
                             ),
-                            //Spacer(),
-                            const Text("ĐĂNG NHẬP BẰNG GOOGLE",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16.0)),
+                            Text("ĐĂNG NHẬP BẰNG GOOGLE",
+                                style: GoogleFonts.montserrat(
+                                    color: Colors.white, fontSize: 18.0)),
                           ],
                         ),
                       ),

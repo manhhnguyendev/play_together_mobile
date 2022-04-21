@@ -35,7 +35,7 @@ class SearchService {
       String status,
       bool sortByAlphabet,
       bool sortByRating,
-      bool sortByRecommend,
+      bool sortByHobby,
       bool sortByPrice,
       double startPrice,
       double endPrice,
@@ -53,7 +53,7 @@ class SearchService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?Search=$search&Gender=$gender&GameId=$gameId&Status=$status&IsOrderByName=$sortByAlphabet&IsOrderByRating=$sortByRating&IsOrderByPricing=$sortByPrice&IsSkillSameHobbies=$sortByRecommend&IsPlayer=true&FromPrice=$startPrice&ToPrice=$endPrice'),
+            '${apiUrl.users}?Search=$search&Gender=$gender&GameId=$gameId&Status=$status&IsOrderByName=$sortByAlphabet&IsOrderByRating=$sortByRating&IsOrderByPricing=$sortByPrice&IsSkillSameHobbies=$sortByHobby&IsPlayer=true&FromPrice=$startPrice&ToPrice=$endPrice'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

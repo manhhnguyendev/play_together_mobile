@@ -207,8 +207,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
               onPressed: () => setState(() {
                     oldPassObsecure = !oldPassObsecure;
                   }),
-              icon: const Icon(
-                Icons.remove_red_eye,
+              icon: Icon(
+                oldPassObsecure ? Icons.visibility_off : Icons.visibility,
                 size: 25,
                 color: Colors.black,
               ))),
@@ -261,8 +261,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
               onPressed: () => setState(() {
                     passObsecure = !passObsecure;
                   }),
-              icon: const Icon(
-                Icons.remove_red_eye,
+              icon: Icon(
+                passObsecure ? Icons.visibility_off : Icons.visibility,
                 size: 25,
                 color: Colors.black,
               ))),
@@ -314,8 +314,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
               onPressed: () => setState(() {
                     confirmObsecure = !confirmObsecure;
                   }),
-              icon: const Icon(
-                Icons.remove_red_eye,
+              icon: Icon(
+                confirmObsecure ? Icons.visibility_off : Icons.visibility,
                 size: 25,
                 color: Colors.black,
               ))),

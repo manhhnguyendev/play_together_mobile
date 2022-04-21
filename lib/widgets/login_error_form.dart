@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FormError extends StatelessWidget {
   const FormError({
@@ -10,7 +11,6 @@ class FormError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
     return Column(
       children: List.generate(
         listError.length,
@@ -25,7 +25,7 @@ class FormError extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: (Text(
         error,
-        style: const TextStyle(color: Colors.red),
+        style: GoogleFonts.montserrat(color: Colors.red),
       )),
     );
   }

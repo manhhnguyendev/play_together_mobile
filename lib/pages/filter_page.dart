@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/game_service.dart';
-import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FilterPage extends StatefulWidget {
   final TokenModel tokenModel;
@@ -17,15 +18,16 @@ class FilterPage extends StatefulWidget {
   final bool sortByRating;
   final bool sortByAlphabet;
   final bool sortByPrice;
-  final bool sortByRecommend;
+  final bool sortByHobby;
   final int sortOrder;
   final String status;
-  final int statusOrder = 0;
+  final int statusOrder;
   final bool isMale;
   final bool isFemale;
   final double startPrice;
   final double endPrice;
   final String defaultGameId;
+
   const FilterPage(
       {Key? key,
       required this.tokenModel,
@@ -34,14 +36,15 @@ class FilterPage extends StatefulWidget {
       required this.sortByRating,
       required this.sortByAlphabet,
       required this.sortByPrice,
-      required this.sortByRecommend,
+      required this.sortByHobby,
       required this.sortOrder,
       required this.status,
       required this.isMale,
       required this.isFemale,
       required this.startPrice,
       required this.endPrice,
-      required this.defaultGameId})
+      required this.defaultGameId,
+      required this.statusOrder})
       : super(key: key);
 
   @override
@@ -49,82 +52,28 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
+  RangeValues _currentRangeValues = const RangeValues(10000, 5000000);
+  List<CheckBoxState> listGamesCheckBox = [];
+  List<CreateHobbiesModel> listGameId = [];
+  List<PlayerModel> listUserModelFilter = [];
+  List<GamesModel> listGames = [];
+  List listGamesChoosen = [];
+  List listSplitGameId = [];
+  List listSplitGameName = [];
   String defaultGameId = "";
-  bool sortByRating = false;
-  bool sortByAlphabet = false;
-  bool sortByPrice = false;
-  bool sortByRecommend = false;
-  int sortOrder = 0;
   String status = "";
-  int statusOrder = 0;
+  bool checkFirstTime = true;
+  bool checkInitValue = true;
+  bool sortByAlphabet = false;
+  bool sortByRating = false;
+  bool sortByPrice = false;
+  bool sortByHobby = false;
   bool isMale = true;
   bool isFemale = true;
   double startPrice = 10000;
   double endPrice = 5000000;
-  RangeValues _currentRangeValues = RangeValues(10000, 5000000);
-  bool checkInitValue = true;
-  List<GamesModel>? listGames;
-  List<CheckBoxState> listGamesCheckBox = [];
-  List listGamesChoosen = [];
-  List<CreateHobbiesModel> listGameId = [];
-  List<PlayerModel> listUserModelFilter = [];
-  List listSplitGameId = [];
-  List listSplitGameName = [];
-  bool checkFirstTime = true;
-  Future getAllGames() {
-    listGames ??= [];
-    Future<ResponseListModel<GamesModel>?> gameFuture =
-        GameService().getAllGames(widget.tokenModel.message);
-    gameFuture.then((value) {
-      if (value != null) {
-        if (checkFirstTime) {
-          setState(() {
-            listGames = value.content;
-            checkFirstTime = false;
-          });
-          createAListCheckBox();
-        }
-      }
-    });
-    return gameFuture;
-  }
-
-  void createAListCheckBox() {
-    if (listGames == null) {
-    } else {
-      for (var gameId in listSplitGameId) {
-        for (var games in listGames!) {
-          if (gameId == games.id) {
-            listSplitGameName.add(games.name);
-          }
-        }
-      }
-      for (var item in listSplitGameName) {
-        print('List Game Name Split: ' + item);
-      }
-
-      for (var i = 0; i < listGames!.length; i++) {
-        listGamesCheckBox.add(CheckBoxState(title: listGames![i].name));
-      }
-      for (var checkTrue in listSplitGameName) {
-        for (var checkbox in listGamesCheckBox) {
-          if (checkTrue == checkbox.title) {
-            checkbox.value = true;
-          }
-        }
-      }
-
-      for (var choosen in listGamesCheckBox) {
-        if (choosen.value) {
-          listGamesChoosen.add(choosen.title);
-        }
-      }
-
-      for (var choose in listGamesChoosen) {
-        print(choose + " init choosen");
-      }
-    }
-  }
+  int sortOrder = 0;
+  int statusOrder = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +81,7 @@ class _FilterPageState extends State<FilterPage> {
       sortByRating = widget.sortByRating;
       sortByAlphabet = widget.sortByAlphabet;
       sortByPrice = widget.sortByPrice;
-      sortByRecommend = widget.sortByRecommend;
+      sortByHobby = widget.sortByHobby;
       sortOrder = widget.sortOrder;
       status = widget.status;
       statusOrder = widget.statusOrder;
@@ -142,11 +91,6 @@ class _FilterPageState extends State<FilterPage> {
       endPrice = widget.endPrice;
       defaultGameId = widget.defaultGameId;
       listSplitGameId = defaultGameId.split(' ');
-
-      for (var item in listSplitGameId) {
-        print(item);
-      }
-
       _currentRangeValues = RangeValues(startPrice, endPrice);
       checkInitValue = false;
     }
@@ -175,20 +119,20 @@ class _FilterPageState extends State<FilterPage> {
                         "status": widget.status,
                         "sortByAlphabet": widget.sortByAlphabet,
                         "sortByRating": widget.sortByRating,
-                        "sortByRecommend": widget.sortByRecommend,
+                        "sortByHobby": widget.sortByHobby,
                         "sortByPrice": widget.sortByPrice,
-                        "sPrice": widget.startPrice,
-                        "ePrice": widget.endPrice,
-                        "sortOrd": widget.sortOrder,
-                        "sttOrder": widget.statusOrder,
+                        "startPrice": widget.startPrice,
+                        "endPrice": widget.endPrice,
+                        "sortOrder": widget.sortOrder,
+                        "statusOrder": widget.statusOrder,
                       });
                     },
                   ),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Bộ lọc',
-                  style: TextStyle(
+                  style: GoogleFonts.montserrat(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
@@ -204,32 +148,32 @@ class _FilterPageState extends State<FilterPage> {
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                     child: Text(
                       'Lọc theo',
-                      style: TextStyle(
+                      style: GoogleFonts.montserrat(
                         fontSize: 18,
                         color: Colors.black,
                       ),
                     ),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.thumb_up_alt_outlined),
-                              SizedBox(
+                              const Icon(FontAwesomeIcons.thumbsUp),
+                              const SizedBox(
                                 width: 5,
                               ),
                               Text(
                                 'Sở thích',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: sortOrder == 1
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 1,
@@ -237,7 +181,7 @@ class _FilterPageState extends State<FilterPage> {
                                   onChanged: (value) {
                                     setState(() {
                                       sortOrder = 1;
-                                      sortByRecommend = true;
+                                      sortByHobby = true;
                                       sortByRating = false;
                                       sortByPrice = false;
                                       sortByAlphabet = false;
@@ -247,18 +191,18 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.star_border),
-                              SizedBox(
-                                width: 5,
+                              const Icon(FontAwesomeIcons.star),
+                              const SizedBox(
+                                width: 6,
                               ),
                               Text(
                                 'Đánh giá',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: sortOrder == 2
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 2,
@@ -266,7 +210,7 @@ class _FilterPageState extends State<FilterPage> {
                                   onChanged: (value) {
                                     setState(() {
                                       sortOrder = 2;
-                                      sortByRecommend = false;
+                                      sortByHobby = false;
                                       sortByRating = true;
                                       sortByPrice = false;
                                       sortByAlphabet = false;
@@ -276,18 +220,18 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.money),
-                              SizedBox(
-                                width: 5,
+                              const Icon(FontAwesomeIcons.moneyBill1),
+                              const SizedBox(
+                                width: 6,
                               ),
                               Text(
                                 'Giá tiền',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: sortOrder == 3
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 3,
@@ -295,7 +239,7 @@ class _FilterPageState extends State<FilterPage> {
                                   onChanged: (value) {
                                     setState(() {
                                       sortOrder = 3;
-                                      sortByRecommend = false;
+                                      sortByHobby = false;
                                       sortByRating = false;
                                       sortByPrice = true;
                                       sortByAlphabet = false;
@@ -305,18 +249,18 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.abc_rounded),
-                              SizedBox(
+                              const Icon(Icons.abc),
+                              const SizedBox(
                                 width: 5,
                               ),
                               Text(
                                 'Từ A-Z',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: sortOrder == 4
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 4,
@@ -324,7 +268,7 @@ class _FilterPageState extends State<FilterPage> {
                                   onChanged: (value) {
                                     setState(() {
                                       sortOrder = 4;
-                                      sortByRecommend = false;
+                                      sortByHobby = false;
                                       sortByRating = false;
                                       sortByPrice = false;
                                       sortByAlphabet = true;
@@ -334,16 +278,17 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                         ],
                       )),
-                  Divider(height: 1, thickness: 1),
+                  const Divider(height: 1, thickness: 1),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                     child: Text(
                       'Tùy chọn giới tính',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, color: Colors.black),
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Column(
                       children: [
                         Row(
@@ -356,7 +301,10 @@ class _FilterPageState extends State<FilterPage> {
                                     isMale = !isMale;
                                   });
                                 }),
-                            Text('Nam'),
+                            Text(
+                              'Nam',
+                              style: GoogleFonts.montserrat(),
+                            ),
                           ],
                         ),
                         Row(
@@ -369,54 +317,58 @@ class _FilterPageState extends State<FilterPage> {
                                     isFemale = !isFemale;
                                   });
                                 }),
-                            Text('Nữ'),
+                            Text('Nữ', style: GoogleFonts.montserrat()),
                           ],
                         )
                       ],
                     ),
                   ),
-                  Divider(height: 1, thickness: 1),
+                  const Divider(height: 1, thickness: 1),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 5),
                     child: Text(
                       'Tùy chọn giá thuê mỗi giờ',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, color: Colors.black),
                     ),
                   ),
-                  Container(
-                    child: RangeSlider(
-                      activeColor: const Color(0xff8980FF),
-                      values: _currentRangeValues,
-                      max: 5000000,
-                      min: 0,
-                      divisions: 100,
-                      labels: RangeLabels(
-                        _currentRangeValues.start.round().toString().toVND(),
-                        _currentRangeValues.end.round().toString().toVND(),
-                      ),
-                      onChanged: (RangeValues values) {
-                        setState(() {
-                          _currentRangeValues = values;
-                        });
-                      },
+                  RangeSlider(
+                    activeColor: const Color(0xff8980FF),
+                    values: _currentRangeValues,
+                    max: 5000000,
+                    min: 0,
+                    divisions: 100,
+                    labels: RangeLabels(
+                      _currentRangeValues.start.round().toString().toVND(),
+                      _currentRangeValues.end.round().toString().toVND(),
                     ),
+                    onChanged: (RangeValues values) {
+                      setState(() {
+                        _currentRangeValues = values;
+                      });
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                     child: Row(
-                      children: [Text('0đ'), Spacer(), Text('5.000.000đ')],
+                      children: [
+                        Text('0đ', style: GoogleFonts.montserrat()),
+                        const Spacer(),
+                        Text('5.000.000đ', style: GoogleFonts.montserrat())
+                      ],
                     ),
                   ),
-                  Divider(height: 1, thickness: 1),
+                  const Divider(height: 1, thickness: 1),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 5),
                     child: Text(
                       'Tùy chọn trạng thái của người chơi',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, color: Colors.black),
                     ),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,12 +377,12 @@ class _FilterPageState extends State<FilterPage> {
                             children: [
                               Text(
                                 'Tất cả',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: statusOrder == 0
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 0,
@@ -447,12 +399,12 @@ class _FilterPageState extends State<FilterPage> {
                             children: [
                               Text(
                                 'Có thể thuê',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: statusOrder == 1
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 1,
@@ -469,12 +421,12 @@ class _FilterPageState extends State<FilterPage> {
                             children: [
                               Text(
                                 'Đang thương lượng',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: statusOrder == 2
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 2,
@@ -491,12 +443,12 @@ class _FilterPageState extends State<FilterPage> {
                             children: [
                               Text(
                                 'Đang được thuê',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: statusOrder == 3
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 3,
@@ -513,12 +465,12 @@ class _FilterPageState extends State<FilterPage> {
                             children: [
                               Text(
                                 'Đang offline',
-                                style: TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontWeight: statusOrder == 4
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Radio(
                                   activeColor: const Color(0xff8980FF),
                                   value: 4,
@@ -533,12 +485,13 @@ class _FilterPageState extends State<FilterPage> {
                           ),
                         ],
                       )),
-                  Divider(height: 1, thickness: 1),
+                  const Divider(height: 1, thickness: 1),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 0, 5),
                     child: Text(
                       'Chọn các tựa game bạn muốn tìm',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, color: Colors.black),
                     ),
                   ),
                   Column(
@@ -565,11 +518,11 @@ class _FilterPageState extends State<FilterPage> {
                         });
                         if (listGamesChoosen.isNotEmpty) {
                           for (var gameChoose in listGamesChoosen) {
-                            for (var game in listGames!) {
+                            for (var game in listGames) {
                               if (game.name.contains(gameChoose)) {
-                                CreateHobbiesModel createHobbies =
+                                CreateHobbiesModel getListGameId =
                                     CreateHobbiesModel(gameId: game.id);
-                                listGameId.add(createHobbies);
+                                listGameId.add(getListGameId);
                               }
                             }
                           }
@@ -578,12 +531,6 @@ class _FilterPageState extends State<FilterPage> {
                           }
                         }
                         listGamesChoosen.clear();
-                        print(sortOrder.toString() + " sortOrder Filter");
-                        print(statusOrder.toString() + " status ord filter");
-                        print(_currentRangeValues.start.toString() +
-                            " start price filter");
-                        print((_currentRangeValues.end.toString() +
-                            "end price filter"));
                         Navigator.pop(context, {
                           "searchValue": widget.searchValue,
                           "isMale": isMale,
@@ -592,12 +539,12 @@ class _FilterPageState extends State<FilterPage> {
                           "status": status,
                           "sortByAlphabet": sortByAlphabet,
                           "sortByRating": sortByRating,
-                          "sortByRecommend": sortByRecommend,
+                          "sortByHobby": sortByHobby,
                           "sortByPrice": sortByPrice,
-                          "sPrice": _currentRangeValues.start,
-                          "ePrice": _currentRangeValues.end,
-                          "sortOrd": sortOrder,
-                          "sttOrder": statusOrder,
+                          "startPrice": _currentRangeValues.start,
+                          "endPrice": _currentRangeValues.end,
+                          "sortOrder": sortOrder,
+                          "statusOrder": statusOrder,
                         });
                       },
                       height: 50,
@@ -614,13 +561,12 @@ class _FilterPageState extends State<FilterPage> {
         children: [
           Text(
             gameModel.name,
-            style: TextStyle(
+            style: GoogleFonts.montserrat(
                 fontWeight: defaultGameId == gameModel.id
                     ? FontWeight.bold
                     : FontWeight.normal),
           ),
-          Spacer(),
-          //Checkbox(value: value, onChanged: onChanged)
+          const Spacer(),
           Radio(
               activeColor: const Color(0xff8980FF),
               value: gameModel.id,
@@ -636,7 +582,6 @@ class _FilterPageState extends State<FilterPage> {
   }
 
   Widget buildSingleCheckBox(CheckBoxState cbState) => CheckboxListTile(
-        //controlAffinity: ListTileControlAffinity.leading,
         activeColor: const Color(0xff8980FF),
         value: cbState.value,
         onChanged: (value) => setState(() {
@@ -647,14 +592,55 @@ class _FilterPageState extends State<FilterPage> {
             cbState.value = value!;
             listGamesChoosen.remove(cbState.title);
           }
-          for (var item in listGamesChoosen) {
-            print(item + " choosen");
-          }
-          // print(listGamesChoosen.length.toString() + " choosen");
         }),
         title: Text(
           cbState.title,
-          style: const TextStyle(fontSize: 15),
+          style: GoogleFonts.montserrat(fontSize: 15),
         ),
       );
+
+  Future getAllGames() {
+    Future<ResponseListModel<GamesModel>?> gameFuture =
+        GameService().getAllGames(widget.tokenModel.message);
+    gameFuture.then((value) {
+      if (value != null) {
+        if (checkFirstTime) {
+          setState(() {
+            listGames = value.content;
+          });
+          createAListCheckBox();
+          checkFirstTime = false;
+        }
+      }
+    });
+    return gameFuture;
+  }
+
+  void createAListCheckBox() {
+    if (listGames.isEmpty) {
+    } else {
+      for (var gameId in listSplitGameId) {
+        for (var games in listGames) {
+          if (gameId == games.id) {
+            listSplitGameName.add(games.name);
+          }
+        }
+      }
+      for (var i = 0; i < listGames.length; i++) {
+        listGamesCheckBox.add(CheckBoxState(title: listGames[i].name));
+      }
+      for (var checkTrue in listSplitGameName) {
+        for (var checkbox in listGamesCheckBox) {
+          if (checkTrue == checkbox.title) {
+            checkbox.value = true;
+          }
+        }
+      }
+      for (var choosen in listGamesCheckBox) {
+        if (choosen.value) {
+          listGamesChoosen.add(choosen.title);
+        }
+      }
+    }
+  }
 }
