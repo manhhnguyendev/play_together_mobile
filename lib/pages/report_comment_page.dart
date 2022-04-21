@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
-import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 
@@ -128,24 +127,6 @@ class _ReportCommentPageState extends State<ReportCommentPage> {
             children: [
               Radio<String>(
                   activeColor: const Color(0xff320444),
-                  value: "Chứa thông tin cá nhân",
-                  groupValue: reason,
-                  onChanged: (value) {
-                    setState(() {
-                      reason = value!;
-                      checkReason = false;
-                    });
-                  }),
-              Text(
-                "Chứa thông tin cá nhân",
-                style: GoogleFonts.montserrat(fontSize: 15),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Radio<String>(
-                  activeColor: const Color(0xff320444),
                   value: _controller.text,
                   groupValue: reason,
                   onChanged: (value) {
@@ -185,31 +166,30 @@ class _ReportCommentPageState extends State<ReportCommentPage> {
             child: SecondMainButton(
                 text: 'Kết thúc',
                 onPress: () {
-                  ReportCommentModel reportCommentModel =
-                      ReportCommentModel(reason: _controller.text);
-
                   if (checkReason == true && _controller.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Báo cáo thất bại"),
                     ));
                   } else {
-                    Future<bool?> reportComment = RatingService()
-                        .reportComment(widget.ratingModel.id,
-                            widget.tokenModel.message, reportCommentModel)
-                        .then((value) {
-                      if (value != null) {
-                        if (value == true) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Báo cáo thành công"),
-                          ));
-                          Navigator.pop(context);
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Báo cáo thất bại"),
-                          ));
-                        }
+                    _controller.text = reason;
+                    ReportCommentModel reportCommentModel =
+                        ReportCommentModel(reason: _controller.text);
+                    Future<bool?> reportComment = RatingService().reportComment(
+                        widget.ratingModel.id,
+                        widget.tokenModel.message,
+                        reportCommentModel);
+                    reportComment.then((value) {
+                      if (value == true) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Báo cáo thành công"),
+                        ));
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Báo cáo thất bại"),
+                        ));
                       }
                     });
                   }

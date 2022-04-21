@@ -13,13 +13,13 @@ class RatingCard extends StatefulWidget {
   final TokenModel tokenModel;
   final bool checkCanReport;
 
-  const RatingCard(
-      {Key? key,
-      this.ratingModel,
-      required this.tokenModel,
-      this.playerModel,
-      required this.checkCanReport})
-      : super(key: key);
+  const RatingCard({
+    Key? key,
+    this.ratingModel,
+    required this.tokenModel,
+    this.playerModel,
+    required this.checkCanReport,
+  }) : super(key: key);
 
   @override
   State<RatingCard> createState() => _RatingCardState();
@@ -108,7 +108,7 @@ class _RatingCardState extends State<RatingCard> {
                           Icons.report_gmailerrorred_rounded,
                           color: Colors.black,
                         ))),
-              )
+              ),
             ],
           ),
           const Divider(

@@ -3,10 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
+import 'package:play_together_mobile/pages/rating_and_comment_user_page.dart';
 
 class StatisticsPage extends StatefulWidget {
-  final UserModel? userModel;
+  final UserModel userModel;
   final TokenModel tokenModel;
   const StatisticsPage(
       {Key? key, required this.userModel, required this.tokenModel})
@@ -151,7 +151,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RatingCommentPage(
+                                  builder: (context) => RatingCommentUserPage(
                                         userModel: widget.userModel,
                                         tokenModel: widget.tokenModel,
                                         checkCanReport: true,

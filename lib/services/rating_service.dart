@@ -36,6 +36,7 @@ class RatingService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(reportCommentModel.toJson()),
       );
+      print(response.statusCode);
       if (response.statusCode == 204) {
         result = true;
       }
