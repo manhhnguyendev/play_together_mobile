@@ -318,6 +318,12 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                               });
                             }
                           });
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                "Bạn chỉ có thể kết thúc sau khi hoàn thành 1/10 thời gian thuê"),
+                          ));
                         }
                       });
                     },

@@ -255,4 +255,21 @@ class UserService {
     }
     return result;
   }
+
+  Future<bool?> checkBalance(dynamic token) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.users}/un-active-balance'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 204) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
 }

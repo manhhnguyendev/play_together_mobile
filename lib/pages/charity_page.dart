@@ -5,6 +5,8 @@ import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/services/charity_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
@@ -29,58 +31,23 @@ class CharityPage extends StatefulWidget {
 
 class _CharityPageState extends State<CharityPage> {
   UserModel? lateUser;
-  List<OrderModel>? _listOrder;
+  List<OrderModel> _listOrder = [];
   late String search;
   final _controller = TextEditingController();
-  List<CharityModel>? _listCharity;
-
-  Future checkStatus() {
-    Future<ResponseModel<UserModel>?> getStatusUser =
-        UserService().getUserProfile(widget.tokenModel.message);
-    getStatusUser.then((value) {
-      if (value != null) {
-        if (value.content.status.contains('Online')) {
-          if (!mounted) return;
-          setState(() {
-            lateUser = value.content;
-          });
-        } else {
-          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
-              .getOrderOfPlayer(widget.tokenModel.message, 'Processing');
-          checkOrderUser.then(((order) {
-            _listOrder = order!.content;
-            if (_listOrder![0].toUserId == widget.userModel.id) {
-              lateUser = value.content;
-              setState(() {
-                helper.pushInto(
-                    context,
-                    ReceiveRequestPage(
-                        orderModel: _listOrder![0],
-                        tokenModel: widget.tokenModel,
-                        userModel: lateUser!),
-                    true);
-              });
-            }
-          }));
-        }
-      }
-    });
-    return getStatusUser;
-  }
+  List<CharityModel> _listCharity = [];
 
   Future loadListCharity() {
-    _listCharity ??= [];
     Future<ResponseListModel<CharityModel>?> listCharityModelFuture =
         CharityService().getAllCharities(widget.tokenModel.message);
     listCharityModelFuture.then((_charityList) {
       _listCharity = _charityList!.content;
-      if (_listCharity!.isEmpty) {
-        for (var item in _listCharity!) {
+      if (_listCharity.isEmpty) {
+        for (var item in _listCharity) {
           Future<ResponseModel<CharityModel>?> charityFuture = CharityService()
               .getCharityById(item.id, widget.tokenModel.message);
           charityFuture.then((value) {
             if (value != null) {
-              _listCharity!.add(value.content);
+              _listCharity.add(value.content);
             }
           });
         }
@@ -160,9 +127,9 @@ class _CharityPageState extends State<CharityPage> {
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Column(
                               children: List.generate(
-                                  _listCharity!.length,
+                                  _listCharity.length,
                                   (index) =>
-                                      buildListSearch(_listCharity![index]))));
+                                      buildListSearch(_listCharity[index]))));
                     })),
             bottomNavigationBar: BottomBar(
               userModel: widget.userModel,
@@ -178,5 +145,107 @@ class _CharityPageState extends State<CharityPage> {
         charityModel: _charityModel,
         tokenModel: widget.tokenModel,
         userModel: widget.userModel);
+  }
+
+  Future checkStatus() {
+    Future<ResponseModel<UserModel>?> getStatusUser =
+        UserService().getUserProfile(widget.tokenModel.message);
+    getStatusUser.then((value) {
+      if (value != null) {
+        if (value.content.status.contains('Online')) {
+          if (!mounted) return;
+          setState(() {
+            lateUser = value.content;
+          });
+        } else if (value.content.status.contains('Hiring')) {
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfUser(widget.tokenModel.message, 'Starting');
+          checkOrderUser.then(((orderUser) {
+            if (orderUser!.content.isEmpty) {
+              Future<ResponseListModel<OrderModel>?> checkOrderPlayer =
+                  OrderService()
+                      .getOrderOfPlayer(widget.tokenModel.message, 'Starting');
+              checkOrderPlayer.then(((orderPlayer) {
+                _listOrder = orderPlayer!.content;
+                if (_listOrder[0].toUserId == widget.userModel.id) {
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        HiringPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
+                }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                setState(() {
+                  helper.pushInto(
+                      context,
+                      HiringPage(
+                          orderModel: _listOrder[0],
+                          tokenModel: widget.tokenModel,
+                          userModel: lateUser!),
+                      true);
+                });
+              }
+            }
+          }));
+        } else if (value.content.status.contains('Processing')) {
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfUser(widget.tokenModel.message, 'Processing');
+          checkOrderUser.then(((orderUser) {
+            if (orderUser!.content.isEmpty) {
+              Future<ResponseListModel<OrderModel>?> checkOrderPlayer =
+                  OrderService().getOrderOfPlayer(
+                      widget.tokenModel.message, 'Processing');
+              checkOrderPlayer.then(((orderPlayer) {
+                _listOrder = orderPlayer!.content;
+                if (_listOrder[0].toUserId == widget.userModel.id) {
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        ReceiveRequestPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
+                }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                Future<ResponseModel<PlayerModel>?> getPlayerModel =
+                    UserService().getPlayerById(
+                        _listOrder[0].toUserId, widget.tokenModel.message);
+                getPlayerModel.then((playerModel) {
+                  if (playerModel != null) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          HiringNegotiatingPage(
+                              orderModel: _listOrder[0],
+                              tokenModel: widget.tokenModel,
+                              userModel: lateUser!,
+                              playerModel: playerModel.content),
+                          true);
+                    });
+                  }
+                });
+              }
+            }
+          }));
+        }
+      }
+    });
+    return getStatusUser;
   }
 }

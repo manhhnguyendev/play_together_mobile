@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/password_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -7,6 +8,7 @@ import 'package:play_together_mobile/services/password_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   final EmailModel emailModel;
@@ -111,6 +113,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   helper.pushInto(
                                       context, const LoginPage(), true);
                                 });
+                                Fluttertoast.showToast(
+                                    msg: "Đổi mật khẩu thành công",
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        const Color.fromRGBO(137, 128, 255, 1),
+                                    toastLength: Toast.LENGTH_SHORT);
                               }
                             });
                           }
@@ -129,6 +137,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   TextFormField buildPasswordField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: newPasswordController,
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
@@ -157,6 +166,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Mật khẩu mới",
           hintText: "Nhập vào mật khẩu mới",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -167,7 +178,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     passObsecure = !passObsecure;
@@ -183,6 +194,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   TextFormField buildConfirmField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: confirmNewPasswordController,
       onSaved: (newValue) => confirmPass = newValue!,
       onChanged: (value) {
@@ -211,6 +223,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Nhập lại mật khẩu mới",
           hintText: "Nhập lại mật khẩu mới",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -221,7 +235,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     confirmObsecure = !confirmObsecure;

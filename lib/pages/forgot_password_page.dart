@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/password_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/change_password_page.dart';
+import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/services/password_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:email_auth/email_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -120,12 +123,38 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          sendOtp();
+                                          Future<String?> checkEmailFuture =
+                                              EmailService().checkEmail(
+                                                  emailController.text);
+                                          checkEmailFuture.then((_checkEmail) {
+                                            if (_checkEmail != 'false') {
+                                              sendOtp();
+                                              Fluttertoast.showToast(
+                                                  msg: "Lấy mã OTP thành công",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Tên đăng nhập không tồn tại",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            }
+                                          });
                                         },
-                                        child: const Text("Lấy mã OTP",
-                                            style: TextStyle(
+                                        child: Text("Lấy mã OTP",
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
                                                 color: Colors.white,
-                                                fontSize: 13.5)),
+                                                fontSize: 14)),
                                       ),
                                     ),
                                   ),
@@ -157,11 +186,30 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                             165, 165, 165, 1),
                                         onPressed: () {
                                           verifyEmail = verify();
+                                          if (verifyEmail == true) {
+                                            Fluttertoast.showToast(
+                                                msg: "Xác thực thành công",
+                                                textColor: Colors.white,
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        137, 128, 255, 1),
+                                                toastLength:
+                                                    Toast.LENGTH_SHORT);
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "Mã OTP không chính xác",
+                                                textColor: Colors.white,
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        137, 128, 255, 1),
+                                                toastLength:
+                                                    Toast.LENGTH_SHORT);
+                                          }
                                         },
-                                        child: const Text("Xác thực",
-                                            style: TextStyle(
+                                        child: Text("Xác thực",
+                                            style: GoogleFonts.montserrat(
                                                 color: Colors.white,
-                                                fontSize: 13.5)),
+                                                fontSize: 14)),
                                       ),
                                     ),
                                   ),
@@ -200,7 +248,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         true);
                                   });
                                 } else {
-                                  print('Check lại OTP đi kìa');
+                                  Fluttertoast.showToast(
+                                      msg: "Vui lòng xác thực email",
+                                      textColor: Colors.white,
+                                      backgroundColor: const Color.fromRGBO(
+                                          137, 128, 255, 1),
+                                      toastLength: Toast.LENGTH_SHORT);
                                 }
                               }
                             });
@@ -216,9 +269,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: Text(
                             'Bạn đã có tài khoản? Quay lại đăng nhập',
-                            style: TextStyle(
+                            style: GoogleFonts.montserrat(
                               fontSize: 15,
                               decoration: TextDecoration.underline,
                             ),
@@ -238,6 +291,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   TextFormField buildEmailField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: emailController,
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue!,
@@ -262,28 +316,31 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         }
         return null;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         labelText: "Email",
         hintText: "Nhập vào email",
-        enabledBorder: OutlineInputBorder(
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }
 
   TextFormField buildOTPField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: otpController,
       onSaved: (newValue) => otpCode = newValue!,
       maxLength: 6,
@@ -304,23 +361,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       },
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         counterText: "",
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         labelText: "Mã OTP",
         hintText: "Nhập vào mã OTP",
-        enabledBorder: OutlineInputBorder(
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }
