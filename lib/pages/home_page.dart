@@ -7,6 +7,7 @@ import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/categories_list_page.dart';
+import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
@@ -608,40 +609,89 @@ class _HomePageState extends State<HomePage> {
             lateUser = value.content;
           });
         } else if (value.content.status.contains('Hiring')) {
-          Future<ResponseListModel<OrderModel>?> checkOrderUser =
-              OrderService().getOrderOfPlayer(widget.tokenModel.message);
-          checkOrderUser.then(((order) {
-            _listOrder = order!.content;
-            if (_listOrder[0].toUserId == widget.userModel.id) {
-              lateUser = value.content;
-              setState(() {
-                helper.pushInto(
-                    context,
-                    HiringPage(
-                      tokenModel: widget.tokenModel,
-                      userModel: lateUser,
-                      orderModel: _listOrder[0],
-                    ),
-                    true);
-              });
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfUser(widget.tokenModel.message, 'Starting');
+          checkOrderUser.then(((orderUser) {
+            if (orderUser!.content.isEmpty) {
+              Future<ResponseListModel<OrderModel>?> checkOrderPlayer =
+                  OrderService()
+                      .getOrderOfPlayer(widget.tokenModel.message, 'Starting');
+              checkOrderPlayer.then(((orderPlayer) {
+                _listOrder = orderPlayer!.content;
+                if (_listOrder[0].toUserId == widget.userModel.id) {
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        HiringPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
+                }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                setState(() {
+                  helper.pushInto(
+                      context,
+                      HiringPage(
+                          orderModel: _listOrder[0],
+                          tokenModel: widget.tokenModel,
+                          userModel: lateUser!),
+                      true);
+                });
+              }
             }
           }));
-        } else {
-          Future<ResponseListModel<OrderModel>?> checkOrderUser =
-              OrderService().getOrderOfPlayer(widget.tokenModel.message);
-          checkOrderUser.then(((order) {
-            _listOrder = order!.content;
-            if (_listOrder[0].toUserId == widget.userModel.id) {
-              lateUser = value.content;
-              setState(() {
-                helper.pushInto(
-                    context,
-                    ReceiveRequestPage(
-                        orderModel: _listOrder[0],
-                        tokenModel: widget.tokenModel,
-                        userModel: lateUser!),
-                    true);
-              });
+        } else if (value.content.status.contains('Processing')) {
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfUser(widget.tokenModel.message, 'Processing');
+          checkOrderUser.then(((orderUser) {
+            if (orderUser!.content.isEmpty) {
+              Future<ResponseListModel<OrderModel>?> checkOrderPlayer =
+                  OrderService().getOrderOfPlayer(
+                      widget.tokenModel.message, 'Processing');
+              checkOrderPlayer.then(((orderPlayer) {
+                _listOrder = orderPlayer!.content;
+                if (_listOrder[0].toUserId == widget.userModel.id) {
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        ReceiveRequestPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
+                }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                Future<ResponseModel<PlayerModel>?> getPlayerModel =
+                    UserService().getPlayerById(
+                        _listOrder[0].toUserId, widget.tokenModel.message);
+                getPlayerModel.then((playerModel) {
+                  if (playerModel != null) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          HiringNegotiatingPage(
+                              orderModel: _listOrder[0],
+                              tokenModel: widget.tokenModel,
+                              userModel: lateUser!,
+                              playerModel: playerModel.content),
+                          true);
+                    });
+                  }
+                });
+              }
             }
           }));
         }

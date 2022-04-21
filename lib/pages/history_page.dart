@@ -82,8 +82,8 @@ class _HistoryPageState extends State<HistoryPage> {
             lateUser = value.content;
           });
         } else {
-          Future<ResponseListModel<OrderModel>?> checkOrderUser =
-              OrderService().getOrderOfPlayer(widget.tokenModel.message);
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfPlayer(widget.tokenModel.message, 'Processing');
           checkOrderUser.then(((order) {
             _listOrder = order!.content;
             if (_listOrder[0].toUserId == widget.userModel.id) {
