@@ -8,25 +8,23 @@ import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/rating_comment_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RatingCommentPage extends StatefulWidget {
-  final UserModel? userModel;
+class RatingCommentUserPage extends StatefulWidget {
+  final UserModel userModel;
   final TokenModel tokenModel;
-  final PlayerModel? playerModel;
   final bool checkCanReport;
 
-  const RatingCommentPage({
+  const RatingCommentUserPage({
     Key? key,
-    this.userModel,
+    required this.userModel,
     required this.tokenModel,
-    this.playerModel,
     required this.checkCanReport,
   }) : super(key: key);
 
   @override
-  State<RatingCommentPage> createState() => _RatingCommentPageState();
+  State<RatingCommentUserPage> createState() => _RatingCommentUserPageState();
 }
 
-class _RatingCommentPageState extends State<RatingCommentPage> {
+class _RatingCommentUserPageState extends State<RatingCommentUserPage> {
   bool check5star = false;
   bool check4star = false;
   bool check3star = false;
@@ -39,8 +37,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
 
   Future loadListRating() {
     Future<ResponseListModel<RatingModel>?> listAllRatingModelFuture =
-        RatingService().getAllRating(
-            widget.playerModel!.id, vote, widget.tokenModel.message);
+        RatingService()
+            .getAllRating(widget.userModel.id, vote, widget.tokenModel.message);
     listAllRatingModelFuture.then((_ratingList) {
       listAllRating = _ratingList!.content;
     });
@@ -515,7 +513,6 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
   Widget buildRatingList(RatingModel _ratingModel) => RatingCard(
         ratingModel: _ratingModel,
         tokenModel: widget.tokenModel,
-        playerModel: widget.playerModel,
         checkCanReport: widget.checkCanReport,
       );
 }
