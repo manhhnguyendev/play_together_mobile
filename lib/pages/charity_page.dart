@@ -10,7 +10,6 @@ import 'package:play_together_mobile/services/charity_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
-import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/widgets/charity_card.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
@@ -120,7 +119,7 @@ class _CharityPageState extends State<CharityPage> {
                     child: Container(
                       width: size.width * 0.7,
                       decoration: BoxDecoration(
-                        color: my_colors.secondary.withOpacity(0.1),
+                        color: Colors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: TextField(
@@ -144,7 +143,7 @@ class _CharityPageState extends State<CharityPage> {
                           hintText: "Tìm kiếm hội từ thiện",
                           prefixIcon: const Icon(
                             Icons.search,
-                            color: my_colors.secondary,
+                            color: Colors.grey,
                           ),
                         ),
                       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
-import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_page.dart';
@@ -31,8 +30,8 @@ class _BottomBarState extends State<BottomBar> {
     return BottomNavigationBar(
       selectedLabelStyle: GoogleFonts.montserrat(),
       unselectedLabelStyle: GoogleFonts.montserrat(),
-      selectedItemColor: my_colors.primary,
-      unselectedItemColor: my_colors.secondary,
+      selectedItemColor: const Color.fromRGBO(137, 128, 255, 1),
+      unselectedItemColor: Colors.grey,
       currentIndex: widget.bottomBarIndex,
       items: const [
         BottomNavigationBarItem(

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/helpers/my_color.dart' as my_colors;
-import 'package:play_together_mobile/models/hobbies_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -109,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
               title: Container(
                 width: size.width,
                 decoration: BoxDecoration(
-                  color: my_colors.secondary.withOpacity(0.1),
+                  color: Colors.grey.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
@@ -129,7 +127,7 @@ class _SearchPageState extends State<SearchPage> {
                     hintText: "Tìm kiếm",
                     prefixIcon: const Icon(
                       Icons.search,
-                      color: my_colors.secondary,
+                      color: Colors.grey,
                     ),
                     suffixIcon: IconButton(
                       onPressed: () {
