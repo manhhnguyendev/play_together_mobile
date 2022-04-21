@@ -14,12 +14,34 @@ class FilterPage extends StatefulWidget {
   final TokenModel tokenModel;
   final UserModel userModel;
   final String searchValue;
-
+  final bool sortByRating;
+  final bool sortByAlphabet;
+  final bool sortByPrice;
+  final bool sortByRecommend;
+  final int sortOrder;
+  final String status;
+  final int statusOrder = 0;
+  final bool isMale;
+  final bool isFemale;
+  final double startPrice;
+  final double endPrice;
+  final String defaultGameId;
   const FilterPage(
       {Key? key,
       required this.tokenModel,
       required this.userModel,
-      required this.searchValue})
+      required this.searchValue,
+      required this.sortByRating,
+      required this.sortByAlphabet,
+      required this.sortByPrice,
+      required this.sortByRecommend,
+      required this.sortOrder,
+      required this.status,
+      required this.isMale,
+      required this.isFemale,
+      required this.startPrice,
+      required this.endPrice,
+      required this.defaultGameId})
       : super(key: key);
 
   @override
@@ -27,6 +49,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
+  String defaultGameId = "";
   bool sortByRating = false;
   bool sortByAlphabet = false;
   bool sortByPrice = false;
@@ -38,17 +61,15 @@ class _FilterPageState extends State<FilterPage> {
   bool isFemale = true;
   double startPrice = 10000;
   double endPrice = 5000000;
+  RangeValues _currentRangeValues = RangeValues(10000, 5000000);
+  bool checkInitValue = true;
   List<GamesModel>? listGames;
-  List listGamesCheckBox = [];
+  List<CheckBoxState> listGamesCheckBox = [];
   List listGamesChoosen = [];
   List<CreateHobbiesModel> listGameId = [];
-  String defaultGameId = "";
   List<PlayerModel> listUserModelFilter = [];
-  //1 = recommend - default
-  //2 = rating
-  //3 = price
-  //4 = alphabet
-  RangeValues _currentRangeValues = RangeValues(10000, 5000000);
+  List listSplitGameId = [];
+  List listSplitGameName = [];
   bool checkFirstTime = true;
   Future getAllGames() {
     listGames ??= [];
@@ -71,15 +92,64 @@ class _FilterPageState extends State<FilterPage> {
   void createAListCheckBox() {
     if (listGames == null) {
     } else {
+      for (var gameId in listSplitGameId) {
+        for (var games in listGames!) {
+          if (gameId == games.id) {
+            listSplitGameName.add(games.name);
+          }
+        }
+      }
+      for (var item in listSplitGameName) {
+        print('List Game Name Split: ' + item);
+      }
+
       for (var i = 0; i < listGames!.length; i++) {
         listGamesCheckBox.add(CheckBoxState(title: listGames![i].name));
+      }
+      for (var checkTrue in listSplitGameName) {
+        for (var checkbox in listGamesCheckBox) {
+          if (checkTrue == checkbox.title) {
+            checkbox.value = true;
+          }
+        }
+      }
+
+      for (var choosen in listGamesCheckBox) {
+        if (choosen.value) {
+          listGamesChoosen.add(choosen.title);
+        }
+      }
+
+      for (var choose in listGamesChoosen) {
+        print(choose + " init choosen");
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // createAListCheckBox();
+    if (checkInitValue) {
+      sortByRating = widget.sortByRating;
+      sortByAlphabet = widget.sortByAlphabet;
+      sortByPrice = widget.sortByPrice;
+      sortByRecommend = widget.sortByRecommend;
+      sortOrder = widget.sortOrder;
+      status = widget.status;
+      statusOrder = widget.statusOrder;
+      isMale = widget.isMale;
+      isFemale = widget.isFemale;
+      startPrice = widget.startPrice;
+      endPrice = widget.endPrice;
+      defaultGameId = widget.defaultGameId;
+      listSplitGameId = defaultGameId.split(' ');
+
+      for (var item in listSplitGameId) {
+        print(item);
+      }
+
+      _currentRangeValues = RangeValues(startPrice, endPrice);
+      checkInitValue = false;
+    }
     return FutureBuilder(
         future: getAllGames(),
         builder: (context, snapshot) {
@@ -97,7 +167,21 @@ class _FilterPageState extends State<FilterPage> {
                       Icons.close,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(context, {
+                        "searchValue": widget.searchValue,
+                        "isMale": widget.isMale,
+                        "isFemale": widget.isFemale,
+                        "defaultGameId": widget.defaultGameId,
+                        "status": widget.status,
+                        "sortByAlphabet": widget.sortByAlphabet,
+                        "sortByRating": widget.sortByRating,
+                        "sortByRecommend": widget.sortByRecommend,
+                        "sortByPrice": widget.sortByPrice,
+                        "sPrice": widget.startPrice,
+                        "ePrice": widget.endPrice,
+                        "sortOrd": widget.sortOrder,
+                        "sttOrder": widget.statusOrder,
+                      });
                     },
                   ),
                 ),
@@ -304,6 +388,7 @@ class _FilterPageState extends State<FilterPage> {
                       activeColor: const Color(0xff8980FF),
                       values: _currentRangeValues,
                       max: 5000000,
+                      min: 0,
                       divisions: 100,
                       labels: RangeLabels(
                         _currentRangeValues.start.round().toString().toVND(),
@@ -472,6 +557,12 @@ class _FilterPageState extends State<FilterPage> {
                   child: SecondMainButton(
                       text: 'Áp dụng',
                       onPress: () {
+                        setState(() {
+                          listGameId.clear();
+                          listSplitGameId.clear();
+                          listSplitGameName.clear();
+                          defaultGameId = "";
+                        });
                         if (listGamesChoosen.isNotEmpty) {
                           for (var gameChoose in listGamesChoosen) {
                             for (var game in listGames!) {
@@ -486,26 +577,27 @@ class _FilterPageState extends State<FilterPage> {
                             defaultGameId = defaultGameId + id.gameId + " ";
                           }
                         }
-                        print(status + " status");
-                        Future<ResponseListModel<PlayerModel>?> listFilter =
-                            SearchService().searchUserByFilter(
-                                widget.searchValue,
-                                isMale,
-                                isFemale,
-                                defaultGameId,
-                                status,
-                                sortByAlphabet,
-                                sortByRating,
-                                sortByRecommend,
-                                sortByPrice,
-                                _currentRangeValues.start,
-                                _currentRangeValues.end,
-                                widget.tokenModel.message);
-                        listFilter.then((value) {
-                          if (value != null) {
-                            listUserModelFilter = value.content;
-                            Navigator.pop(context, listUserModelFilter);
-                          }
+                        listGamesChoosen.clear();
+                        print(sortOrder.toString() + " sortOrder Filter");
+                        print(statusOrder.toString() + " status ord filter");
+                        print(_currentRangeValues.start.toString() +
+                            " start price filter");
+                        print((_currentRangeValues.end.toString() +
+                            "end price filter"));
+                        Navigator.pop(context, {
+                          "searchValue": widget.searchValue,
+                          "isMale": isMale,
+                          "isFemale": isFemale,
+                          "defaultGameId": defaultGameId,
+                          "status": status,
+                          "sortByAlphabet": sortByAlphabet,
+                          "sortByRating": sortByRating,
+                          "sortByRecommend": sortByRecommend,
+                          "sortByPrice": sortByPrice,
+                          "sPrice": _currentRangeValues.start,
+                          "ePrice": _currentRangeValues.end,
+                          "sortOrd": sortOrder,
+                          "sttOrder": statusOrder,
                         });
                       },
                       height: 50,
@@ -555,6 +647,10 @@ class _FilterPageState extends State<FilterPage> {
             cbState.value = value!;
             listGamesChoosen.remove(cbState.title);
           }
+          for (var item in listGamesChoosen) {
+            print(item + " choosen");
+          }
+          // print(listGamesChoosen.length.toString() + " choosen");
         }),
         title: Text(
           cbState.title,
