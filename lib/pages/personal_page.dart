@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,6 +8,8 @@ import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
+import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/login_page.dart';
 import 'package:play_together_mobile/pages/manage_hiring_page.dart';
 import 'package:play_together_mobile/pages/personal_change_password_page.dart';
@@ -45,40 +48,7 @@ class _PersonalPageState extends State<PersonalPage> {
   UserModel? lateUser;
   List<OrderModel> _listOrder = [];
   late GoogleSignIn _googleSignIn;
-
-  Future checkStatus() {
-    Future<ResponseModel<UserModel>?> getStatusUser =
-        UserService().getUserProfile(widget.tokenModel.message);
-    getStatusUser.then((value) {
-      if (value != null) {
-        if (value.content.status.contains('Online')) {
-          if (!mounted) return;
-          setState(() {
-            lateUser = value.content;
-          });
-        } else {
-          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
-              .getOrderOfPlayer(widget.tokenModel.message, 'Processing');
-          checkOrderUser.then(((order) {
-            _listOrder = order!.content;
-            if (_listOrder[0].toUserId == widget.userModel.id) {
-              lateUser = value.content;
-              setState(() {
-                helper.pushInto(
-                    context,
-                    ReceiveRequestPage(
-                        orderModel: _listOrder[0],
-                        tokenModel: widget.tokenModel,
-                        userModel: lateUser!),
-                    true);
-              });
-            }
-          }));
-        }
-      }
-    });
-    return getStatusUser;
-  }
+  bool checkBalance = false;
 
   @override
   Widget build(BuildContext context) {
@@ -174,24 +144,42 @@ class _PersonalPageState extends State<PersonalPage> {
                                   'Số dư trong ví:',
                                   style: GoogleFonts.montserrat(fontSize: 18),
                                 ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  lateUser != null
-                                      ? lateUser!.userBalance.balance
-                                          .toStringAsFixed(0)
-                                          .toVND()
-                                      : widget.userModel.userBalance.balance
-                                          .toStringAsFixed(0)
-                                          .toVND(),
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 22,
-                                      color: const Color(0xff320444)),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
+                                Row(children: [
+                                  Text(
+                                    (lateUser != null
+                                        ? lateUser!.userBalance.balance
+                                            .toStringAsFixed(0)
+                                            .toVND()
+                                        : widget.userModel.userBalance.balance
+                                            .toStringAsFixed(0)
+                                            .toVND()),
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 22,
+                                        color: const Color(0xff320444)),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      FontAwesomeIcons.arrowsRotate,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        Future<bool?> checkBalanceFuture =
+                                            UserService().checkBalance(
+                                                widget.tokenModel.message);
+                                        checkBalanceFuture.then((value) {
+                                          if (value == true) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "Cập nhật số dư thành công"),
+                                            ));
+                                          }
+                                        });
+                                      });
+                                    },
+                                  )
+                                ]),
                                 Row(
                                   children: [
                                     Text(
@@ -219,7 +207,7 @@ class _PersonalPageState extends State<PersonalPage> {
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(border: Border.all()),
-                            height: 100,
+                            height: 110,
                             width: 1,
                           ),
                           Row(
@@ -553,7 +541,12 @@ class _PersonalPageState extends State<PersonalPage> {
                                       helper.pushInto(
                                           context, const LoginPage(), true);
                                     });
-                                    print('Đăng xuất thành công');
+                                    Fluttertoast.showToast(
+                                        msg: "Đăng xuất thành công",
+                                        textColor: Colors.white,
+                                        backgroundColor: const Color.fromRGBO(
+                                            137, 128, 255, 1),
+                                        toastLength: Toast.LENGTH_SHORT);
                                   }
                                 });
                               },
@@ -563,8 +556,8 @@ class _PersonalPageState extends State<PersonalPage> {
                                     'Đăng xuất',
                                     style: GoogleFonts.montserrat(fontSize: 20),
                                   ),
-                                  Spacer(),
-                                  Icon(
+                                  const Spacer(),
+                                  const Icon(
                                     Icons.logout,
                                     color: Colors.grey,
                                     size: 15,
@@ -586,5 +579,107 @@ class _PersonalPageState extends State<PersonalPage> {
             ),
           );
         });
+  }
+
+  Future checkStatus() {
+    Future<ResponseModel<UserModel>?> getStatusUser =
+        UserService().getUserProfile(widget.tokenModel.message);
+    getStatusUser.then((value) {
+      if (value != null) {
+        if (value.content.status.contains('Online')) {
+          if (!mounted) return;
+          setState(() {
+            lateUser = value.content;
+          });
+        } else if (value.content.status.contains('Hiring')) {
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfUser(widget.tokenModel.message, 'Starting');
+          checkOrderUser.then(((orderUser) {
+            if (orderUser!.content.isEmpty) {
+              Future<ResponseListModel<OrderModel>?> checkOrderPlayer =
+                  OrderService()
+                      .getOrderOfPlayer(widget.tokenModel.message, 'Starting');
+              checkOrderPlayer.then(((orderPlayer) {
+                _listOrder = orderPlayer!.content;
+                if (_listOrder[0].toUserId == widget.userModel.id) {
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        HiringPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
+                }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                setState(() {
+                  helper.pushInto(
+                      context,
+                      HiringPage(
+                          orderModel: _listOrder[0],
+                          tokenModel: widget.tokenModel,
+                          userModel: lateUser!),
+                      true);
+                });
+              }
+            }
+          }));
+        } else if (value.content.status.contains('Processing')) {
+          Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()
+              .getOrderOfUser(widget.tokenModel.message, 'Processing');
+          checkOrderUser.then(((orderUser) {
+            if (orderUser!.content.isEmpty) {
+              Future<ResponseListModel<OrderModel>?> checkOrderPlayer =
+                  OrderService().getOrderOfPlayer(
+                      widget.tokenModel.message, 'Processing');
+              checkOrderPlayer.then(((orderPlayer) {
+                _listOrder = orderPlayer!.content;
+                if (_listOrder[0].toUserId == widget.userModel.id) {
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        ReceiveRequestPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
+                }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                Future<ResponseModel<PlayerModel>?> getPlayerModel =
+                    UserService().getPlayerById(
+                        _listOrder[0].toUserId, widget.tokenModel.message);
+                getPlayerModel.then((playerModel) {
+                  if (playerModel != null) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          HiringNegotiatingPage(
+                              orderModel: _listOrder[0],
+                              tokenModel: widget.tokenModel,
+                              userModel: lateUser!,
+                              playerModel: playerModel.content),
+                          true);
+                    });
+                  }
+                });
+              }
+            }
+          }));
+        }
+      }
+    });
+    return getStatusUser;
   }
 }

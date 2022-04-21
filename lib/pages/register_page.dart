@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/register_model.dart';
 import 'package:play_together_mobile/pages/complete_register_page.dart';
+import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:email_auth/email_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({
@@ -128,17 +131,37 @@ class _RegisterPageState extends State<RegisterPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content:
-                                                Text("Lấy mã OTP thành công"),
-                                          ));
-                                          sendOtp();
+                                          Future<String?> checkEmailFuture =
+                                              EmailService().checkEmail(
+                                                  emailController.text);
+                                          checkEmailFuture.then((_checkEmail) {
+                                            if (_checkEmail == 'false') {
+                                              sendOtp();
+                                              Fluttertoast.showToast(
+                                                  msg: "Lấy mã OTP thành công",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg: "Email đã được sử dụng",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            }
+                                          });
                                         },
-                                        child: const Text("Lấy mã OTP",
-                                            style: TextStyle(
+                                        child: Text("Lấy mã OTP",
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
                                                 color: Colors.white,
-                                                fontSize: 13.5)),
+                                                fontSize: 14)),
                                       ),
                                     ),
                                   ),
@@ -171,23 +194,29 @@ class _RegisterPageState extends State<RegisterPage> {
                                         onPressed: () {
                                           confirmEmail = verify();
                                           if (confirmEmail == true) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                              content:
-                                                  Text("Xác thực thành công"),
-                                            ));
+                                            Fluttertoast.showToast(
+                                                msg: "Xác thực thành công",
+                                                textColor: Colors.white,
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        137, 128, 255, 1),
+                                                toastLength:
+                                                    Toast.LENGTH_SHORT);
                                           } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  "Mã OTP nhập không đúng, vui lòng kiểm tra lại!"),
-                                            ));
+                                            Fluttertoast.showToast(
+                                                msg: "Mã OTP không chính xác",
+                                                textColor: Colors.white,
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        137, 128, 255, 1),
+                                                toastLength:
+                                                    Toast.LENGTH_SHORT);
                                           }
                                         },
-                                        child: const Text("Xác thực",
-                                            style: TextStyle(
+                                        child: Text("Xác thực",
+                                            style: GoogleFonts.montserrat(
                                                 color: Colors.white,
-                                                fontSize: 13.5)),
+                                                fontSize: 14)),
                                       ),
                                     ),
                                   ),
@@ -239,10 +268,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 );
                               });
                             } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Vui lòng xác thực OTP"),
-                              ));
+                              Fluttertoast.showToast(
+                                  msg: "Vui lòng xác thực email",
+                                  textColor: Colors.white,
+                                  backgroundColor:
+                                      const Color.fromRGBO(137, 128, 255, 1),
+                                  toastLength: Toast.LENGTH_SHORT);
                             }
                           }
                         }
@@ -261,9 +292,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
+                child: Text(
                   'Bạn đã có tài khoản? Quay lại đăng nhập',
-                  style: TextStyle(
+                  style: GoogleFonts.montserrat(
                     fontSize: 15,
                     decoration: TextDecoration.underline,
                   ),
@@ -281,6 +312,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildEmailField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: emailController,
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue!,
@@ -305,28 +337,31 @@ class _RegisterPageState extends State<RegisterPage> {
         }
         return null;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         labelText: "Email",
         hintText: "Nhập vào email",
-        enabledBorder: OutlineInputBorder(
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }
 
   TextFormField buildPasswordField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: passwordController,
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
@@ -355,6 +390,8 @@ class _RegisterPageState extends State<RegisterPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Mật khẩu",
           hintText: "Nhập vào mật khẩu",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -365,7 +402,7 @@ class _RegisterPageState extends State<RegisterPage> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     passObsecure = !passObsecure;
@@ -381,6 +418,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildConfirmPasswordField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: confirmPasswordController,
       onSaved: (newValue) => confirmPass = newValue!,
       onChanged: (value) {
@@ -408,6 +446,8 @@ class _RegisterPageState extends State<RegisterPage> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Nhập lại mật khẩu",
           hintText: "Nhập lại mật khẩu",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -418,7 +458,7 @@ class _RegisterPageState extends State<RegisterPage> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     confirmObsecure = !confirmObsecure;
@@ -434,6 +474,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextFormField buildOTPField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: otpController,
       maxLength: 6,
       onSaved: (newValue) => otpCode = newValue!,
@@ -454,23 +495,25 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         counterText: "",
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         labelText: "Mã OTP",
         hintText: "Nhập vào mã OTP",
-        enabledBorder: OutlineInputBorder(
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }

@@ -12,6 +12,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/pages/forgot_password_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/take_user_categories_page.dart';
+import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/services/login_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
@@ -101,46 +102,60 @@ class _LoginPageState extends State<LoginPage> {
                         if (listError.length == 1) {
                           login.email = email;
                           login.password = password;
-                          Future<TokenModel?> loginModelFuture =
-                              LoginService().login(login);
-                          loginModelFuture.then((value) {
-                            if (value != null) {
-                              tokenModel = value;
-                              Future<ResponseModel<UserModel>?>
-                                  hirerModelFuture =
-                                  UserService().getUserProfile(value.message);
-                              hirerModelFuture.then((hirer) {
-                                if (hirer != null) {
-                                  userModel = hirer.content;
-                                  Future<ResponseListModel<HobbiesModel>?>
-                                      hobbiesFuture = HobbiesService()
-                                          .getHobbiesOfUser(
+                          Future<String?> checkEmailFuture =
+                              EmailService().checkEmail(login.email);
+                          checkEmailFuture.then((_checkEmail) {
+                            if (_checkEmail == 'true') {
+                              Future<TokenModel?> loginModelFuture =
+                                  LoginService().login(login);
+                              loginModelFuture.then((value) {
+                                if (value != null) {
+                                  tokenModel = value;
+                                  Future<ResponseModel<UserModel>?>
+                                      hirerModelFuture = UserService()
+                                          .getUserProfile(value.message);
+                                  hirerModelFuture.then((hirer) {
+                                    if (hirer != null) {
+                                      userModel = hirer.content;
+                                      Future<ResponseListModel<HobbiesModel>?>
+                                          hobbiesFuture =
+                                          HobbiesService().getHobbiesOfUser(
                                               userModel.id, tokenModel.message);
-                                  hobbiesFuture.then((listHobbies) {
-                                    if (listHobbies!.content.isNotEmpty) {
-                                      setState(() {
-                                        helper.pushInto(
-                                            context,
-                                            HomePage(
-                                              userModel: userModel,
-                                              tokenModel: tokenModel,
-                                            ),
-                                            true);
+                                      hobbiesFuture.then((listHobbies) {
+                                        if (listHobbies!.content.isNotEmpty) {
+                                          setState(() {
+                                            helper.pushInto(
+                                                context,
+                                                HomePage(
+                                                  userModel: userModel,
+                                                  tokenModel: tokenModel,
+                                                ),
+                                                true);
+                                          });
+                                        } else if (listHobbies
+                                            .content.isEmpty) {
+                                          setState(() {
+                                            helper.pushInto(
+                                                context,
+                                                UserCategoriesPage(
+                                                  userModel: userModel,
+                                                  tokenModel: tokenModel,
+                                                ),
+                                                true);
+                                          });
+                                        }
                                       });
-                                    } else if (listHobbies.content.isEmpty) {
-                                      setState(() {
-                                        helper.pushInto(
-                                            context,
-                                            UserCategoriesPage(
-                                              userModel: userModel,
-                                              tokenModel: tokenModel,
-                                            ),
-                                            true);
-                                      });
+                                      Fluttertoast.showToast(
+                                          msg: "Đăng nhập thành công",
+                                          textColor: Colors.white,
+                                          backgroundColor: const Color.fromRGBO(
+                                              137, 128, 255, 1),
+                                          toastLength: Toast.LENGTH_SHORT);
                                     }
                                   });
+                                } else {
                                   Fluttertoast.showToast(
-                                      msg: "ĐĂNG NHẬP THÀNH CÔNG",
+                                      msg: "Mật khẩu không chính xác",
                                       textColor: Colors.white,
                                       backgroundColor: const Color.fromRGBO(
                                           137, 128, 255, 1),
@@ -149,8 +164,8 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             } else {
                               Fluttertoast.showToast(
-                                  msg: "Tên đăng nhập hoặc mật khẩu không đúng",
-                                  textColor: Colors.red,
+                                  msg: "Tên đăng nhập không tồn tại",
+                                  textColor: Colors.white,
                                   backgroundColor:
                                       const Color.fromRGBO(137, 128, 255, 1),
                                   toastLength: Toast.LENGTH_SHORT);
@@ -224,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
                 flex: 1,
                 child: Text("Hoặc",
                     style: GoogleFonts.montserrat(
-                        fontSize: 17, color: Colors.grey),
+                        fontSize: 18, color: Colors.grey),
                     textAlign: TextAlign.center),
               ),
               Expanded(

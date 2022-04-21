@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/register_model.dart';
 import 'package:play_together_mobile/pages/login_page.dart';
@@ -7,6 +8,7 @@ import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/widgets/main_go_back_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class CompleteRegisterPage extends StatefulWidget {
   final TempRegisterModel tempRegisterModel;
@@ -248,14 +250,15 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                             padding: const EdgeInsets.all(0.0),
                             child: Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   flex: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                     child: Text(
                                       "Giới tính:",
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
+                                      style: GoogleFonts.montserrat(
+                                          color: const Color.fromARGB(
                                               220, 100, 100, 100),
                                           fontSize: 16),
                                     ),
@@ -302,20 +305,23 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                                 RegisterService().register(register);
                             registerModelFuture.then((registerModel) {
                               if (registerModel != null) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("Đăng kí thành công"),
-                                ));
+                                Fluttertoast.showToast(
+                                    msg: "Đăng kí tài khoản thành công",
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        const Color.fromRGBO(137, 128, 255, 1),
+                                    toastLength: Toast.LENGTH_SHORT);
                                 setState(() {
                                   helper.pushInto(
                                       context, const LoginPage(), true);
                                 });
                               } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content:
-                                      Text("Vui lòng kiểm tra lại thông tin!"),
-                                ));
+                                Fluttertoast.showToast(
+                                    msg: "Kiếm tra lại thông tin",
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        const Color.fromRGBO(137, 128, 255, 1),
+                                    toastLength: Toast.LENGTH_SHORT);
                               }
                             });
                           }
@@ -340,9 +346,9 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2);
               },
-              child: const Text(
+              child: Text(
                 'Bạn đã có tài khoản? Quay lại đăng nhập',
-                style: TextStyle(
+                style: GoogleFonts.montserrat(
                   fontSize: 15,
                   decoration: TextDecoration.underline,
                 ),
@@ -359,6 +365,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
 
   TextFormField buildNameField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: nameController,
       maxLength: 30,
       keyboardType: TextInputType.name,
@@ -377,23 +384,25 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
         }
         return null;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         counterText: "",
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         labelText: "Tên",
         hintText: "Tên của bạn",
-        enabledBorder: OutlineInputBorder(
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }
@@ -416,7 +425,10 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                         gender = true;
                       });
                     }),
-                const Text("Nam")
+                Text(
+                  "Nam",
+                  style: GoogleFonts.montserrat(fontSize: 15),
+                )
               ],
             ),
           ),
@@ -433,7 +445,10 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                         gender = false;
                       });
                     }),
-                const Text("Nữ"),
+                Text(
+                  "Nữ",
+                  style: GoogleFonts.montserrat(fontSize: 15),
+                ),
               ],
             ),
           )
@@ -448,23 +463,24 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
       onSaved: (newValue) {
         dateDisplay.value = newValue!;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         counterText: "",
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         labelText: "Sinh nhật của bạn",
-        enabledBorder: OutlineInputBorder(
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
-        suffixIcon: Icon(
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
+        suffixIcon: const Icon(
           Icons.calendar_today,
         ),
       ),
@@ -491,7 +507,10 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
           menuMaxHeight: 6 * 48,
           value: city,
           items: listDrop,
-          hint: const Text('Thành phố của bạn'),
+          hint: Text(
+            'Thành phố của bạn',
+            style: GoogleFonts.montserrat(),
+          ),
           iconSize: 0.0,
           elevation: 16,
           onChanged: (value) {

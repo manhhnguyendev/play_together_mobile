@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GoBackButton extends StatelessWidget {
   final String text;
@@ -29,7 +30,8 @@ class GoBackButton extends StatelessWidget {
               onPressed: onPress,
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.white, fontSize: 17.0),
+                style:
+                    GoogleFonts.montserrat(color: Colors.white, fontSize: 18.0),
               )),
         ),
       ),

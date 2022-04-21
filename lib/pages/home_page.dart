@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   bool checkFirstPlayerRecommend = true;
   bool checkFirstTime = true;
   bool checkFirstTimeRecommend = true;
+  bool checkRecommend = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +67,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           if (listPlayerIsRecentOrder.isNotEmpty) {
             checkRecentOrder = true;
+          }
+          if (listGetResultRecommend.isNotEmpty) {
+            checkRecommend = true;
           }
           getListPlayerId();
           return Scaffold(
@@ -93,71 +97,80 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CategoriesListPage(
-                                  title: 'Đề xuất cho bạn',
-                                  playerList: _listPlayerRecommend,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                ),
-                              ));
-                        },
-                        child: Row(children: [
-                          Text(
-                            "Đề xuất cho bạn",
-                            style: GoogleFonts.montserrat(
-                              fontSize: 18,
-                              color: Colors.black,
+                    Visibility(
+                      visible: checkRecommend,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CategoriesListPage(
+                                    title: 'Đề xuất cho bạn',
+                                    playerList: _listPlayerRecommend,
+                                    tokenModel: widget.tokenModel,
+                                    userModel: widget.userModel,
+                                  ),
+                                ));
+                          },
+                          child: Row(children: [
+                            Text(
+                              "Đề xuất cho bạn",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(
-                            FontAwesomeIcons.arrowAltCircleRight,
-                            size: 18,
-                          ),
-                        ]),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Icon(
+                              FontAwesomeIcons.arrowAltCircleRight,
+                              size: 18,
+                            ),
+                          ]),
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    Visibility(
+                      visible: checkRecommend,
+                      child: const SizedBox(
+                        height: 10,
+                      ),
                     ),
-                    SingleChildScrollView(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: SizedBox(
-                                height: 230.0,
-                                child: FutureBuilder(
-                                    future: loadListPlayerRecommend(),
-                                    builder: (context, snapshot) {
-                                      return ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            _listPlayerRecommend.isNotEmpty
-                                                ? _listPlayerRecommend.length
-                                                : 0,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return PlayerCard(
-                                            playerModel:
-                                                _listPlayerRecommend[index],
-                                            tokenModel: widget.tokenModel,
-                                            userModel: lateUser!,
-                                          );
-                                        },
-                                      );
-                                    })),
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Visibility(
+                      visible: checkRecommend,
+                      child: SingleChildScrollView(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: SizedBox(
+                                  height: 230.0,
+                                  child: FutureBuilder(
+                                      future: loadListPlayerRecommend(),
+                                      builder: (context, snapshot) {
+                                        return ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount:
+                                              _listPlayerRecommend.isNotEmpty
+                                                  ? _listPlayerRecommend.length
+                                                  : 0,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return PlayerCard(
+                                              playerModel:
+                                                  _listPlayerRecommend[index],
+                                              tokenModel: widget.tokenModel,
+                                              userModel: lateUser!,
+                                            );
+                                          },
+                                        );
+                                      })),
+                            ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
                       ),
                     ),
                     Padding(
