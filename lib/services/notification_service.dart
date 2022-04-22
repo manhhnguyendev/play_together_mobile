@@ -14,7 +14,7 @@ class NotificationService {
     ResponseListModel<NotificationModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.notification}/?IsNew=true&PageSize=20'),
+        Uri.parse('${apiUrl.notification}/?IsNew=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

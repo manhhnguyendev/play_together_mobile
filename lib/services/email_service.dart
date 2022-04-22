@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
 import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
 import 'dart:async';
 import 'package:http/http.dart';
+import 'package:play_together_mobile/models/email_model.dart';
 
 class EmailService {
   Future<String?> checkEmail(String email) async {
@@ -14,6 +17,24 @@ class EmailService {
       );
       if (response.statusCode == 200) {
         result = response.body;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> sendEmail(SendEmailModel sendEmailModel, dynamic token) async {
+    Response response;
+    bool? result;
+    try {
+      response = await post(
+        Uri.parse('${apiUrl.email}/send'),
+        headers: configJson.headerAuth(token),
+        body: json.encoder.convert(sendEmailModel),
+      );
+      if (response.statusCode == 200) {
+        result = true;
       }
     } on Exception {
       rethrow;

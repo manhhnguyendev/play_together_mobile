@@ -220,7 +220,10 @@ class _PersonalPageState extends State<PersonalPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const SelectDepositMethodPage()),
+                                              SelectDepositMethodPage(
+                                                tokenModel: widget.tokenModel,
+                                                userModel: widget.userModel,
+                                              )),
                                     );
                                   },
                                   child: Column(

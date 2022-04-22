@@ -14,6 +14,7 @@ import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NotificationsPage extends StatefulWidget {
   final UserModel userModel;
@@ -31,23 +32,28 @@ class _NotificationsPageState extends State<NotificationsPage> {
   UserModel? lateUser;
   List<OrderModel> _listOrder = [];
   List<NotificationModel> _listNotification = [];
+  bool checkFirstTime = true;
+  bool checkEmptyNoti = false;
 
   Future loadListNotifications() {
     Future<ResponseListModel<NotificationModel>?> listNotificationFuture =
         NotificationService().getNotifications(widget.tokenModel.message);
     listNotificationFuture.then((_notificationList) {
-      _listNotification = _notificationList!.content;
-      if (_listNotification.isEmpty) {
-        for (var item in _listNotification) {
-          Future<ResponseModel<NotificationModel>?> orderFuture =
-              NotificationService()
-                  .getNotificationById(item.id, widget.tokenModel.message);
-          orderFuture.then((value) {
-            if (value != null) {
-              _listNotification.add(value.content);
-            }
-          });
+      if (checkFirstTime) {
+        _listNotification = _notificationList!.content;
+        if (_listNotification.isEmpty) {
+          for (var item in _listNotification) {
+            Future<ResponseModel<NotificationModel>?> orderFuture =
+                NotificationService()
+                    .getNotificationById(item.id, widget.tokenModel.message);
+            orderFuture.then((value) {
+              if (value != null) {
+                _listNotification.add(value.content);
+              }
+            });
+          }
         }
+        checkFirstTime = false;
       }
     });
     return listNotificationFuture;
@@ -75,10 +81,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       "assets/images/play_together_logo_no_text.png"),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Thông báo',
-                  style: TextStyle(
-                      fontSize: 18,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
@@ -88,14 +94,27 @@ class _NotificationsPageState extends State<NotificationsPage> {
               child: FutureBuilder(
                 future: loadListNotifications(),
                 builder: (context, snapshot) {
+                  if (_listNotification.isEmpty) {
+                    checkEmptyNoti = true;
+                  } else {
+                    checkEmptyNoti = false;
+                  }
                   return Padding(
                       padding: const EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: List.generate(
-                            _listNotification.length,
-                            (index) => buildListNotification(
-                                _listNotification[index])),
-                      ));
+                      child: Column(children: [
+                        Column(
+                          children: List.generate(
+                              _listNotification.isNotEmpty
+                                  ? _listNotification.length
+                                  : 0,
+                              (index) => buildListNotification(
+                                  _listNotification[index])),
+                        ),
+                        // Visibility(
+                        //     visible: checkEmptyNoti,
+                        //     child: Text('Không có thông báo',
+                        //         style: GoogleFonts.montserrat())),
+                      ]));
                 },
               ),
             ),

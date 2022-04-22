@@ -5,6 +5,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HistoryHiringCard extends StatefulWidget {
   final TokenModel tokenModel;
@@ -76,12 +77,14 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   children: [
                     Text(
                       widget.orderDetailModel.toUser!.name,
-                      style: const TextStyle(fontSize: 18, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, color: Colors.black),
                     ),
                     const SizedBox(height: 5),
                     Text(
                       date + ', ' + time,
-                      style: const TextStyle(fontSize: 15, color: Colors.grey),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15, color: Colors.grey),
                     )
                   ],
                 ),
@@ -89,10 +92,11 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                 Visibility(
                   visible: checkStatus,
                   child: Text(
-                    widget.orderDetailModel.totalPrices
+                    widget.orderDetailModel.finalPrices
                         .toStringAsFixed(0)
                         .toVND(),
-                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                    style: GoogleFonts.montserrat(
+                        fontSize: 18, color: Colors.black),
                   ),
                 ),
               ],
@@ -107,13 +111,13 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   child: GestureDetector(
                     onTap: () {},
                     child: Row(
-                      children: const [
+                      children: [
                         Text(
                           'Đặt lại ',
-                          style:
-                              TextStyle(fontSize: 15, color: Color(0xff8980FF)),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: const Color(0xff8980FF)),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward,
                           size: 20,
                           color: Color(0xff8980FF),
@@ -141,87 +145,87 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
   Widget createStatus(String status) {
     if (status == 'Processing') {
       checkReorder = false;
-      return const Text(
+      return Text(
         'Đang thuê',
-        style: TextStyle(fontSize: 15, color: Colors.red),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.red),
       );
     }
 
     if (status == 'Starting') {
       checkReorder = false;
-      return const Text(
+      return Text(
         'Đang xử lý',
-        style: TextStyle(fontSize: 15, color: Colors.yellow),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.amber),
       );
     }
 
     if (status == 'Finish') {
       checkReorder = false;
-      return const Text(
+      return Text(
         'Hoàn thành',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.green),
       );
     }
 
     if (status == 'Cancel') {
       checkReorder = true;
-      return const Text(
+      return Text(
         'Hủy yêu cầu',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.grey),
       );
     }
 
     if (status == 'Hirer Finish Soon') {
       checkReorder = true;
-      return const Text(
-        'Kết thúc sớm',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+      return Text(
+        'Người thuê kết thúc sớm',
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.green),
       );
     }
 
     if (status == 'Player Finish Soon') {
       checkReorder = true;
-      return const Text(
-        'Kết thúc sớm',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+      return Text(
+        'Người chơi kết thúc sớm',
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.green),
       );
     }
 
     if (status == 'OverTime') {
       checkReorder = true;
-      return const Text(
+      return Text(
         'Quá giờ chấp nhận',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.grey),
       );
     }
 
     if (status == 'Reject') {
       checkReorder = true;
-      return const Text(
+      return Text(
         'Bị từ chối',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.grey),
       );
     }
 
     if (status == 'Complete') {
       checkReorder = true;
-      return const Text(
+      return Text(
         'Hoàn thành',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.green),
       );
     }
 
     if (status == 'Interrupt') {
       checkReorder = true;
-      return const Text(
+      return Text(
         'Người dùng bị khóa',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 15, color: Colors.grey),
       );
     }
 
     return Text(
       status,
-      style: const TextStyle(fontSize: 15, color: Colors.black),
+      style: GoogleFonts.montserrat(fontSize: 15, color: Colors.black),
     );
   }
 }

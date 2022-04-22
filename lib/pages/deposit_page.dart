@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/personal_page.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:momo_vn/momo_vn.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class DepositPage extends StatefulWidget {
-  const DepositPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+  const DepositPage(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<DepositPage> createState() => _DepositPageState();
@@ -59,10 +69,10 @@ class _DepositPageState extends State<DepositPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
+            title: Text(
               'Thanh toán qua MOMO',
-              style: TextStyle(
-                  fontSize: 18,
+              style: GoogleFonts.montserrat(
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.normal),
             ),
@@ -70,8 +80,6 @@ class _DepositPageState extends State<DepositPage> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -89,23 +97,20 @@ class _DepositPageState extends State<DepositPage> {
                         print(money);
                       });
                     },
-                    style: const TextStyle(fontSize: 20),
+                    style: GoogleFonts.montserrat(fontSize: 20),
                     decoration: InputDecoration(
-                        counter: Container(), hintText: " Nhập số tiền"),
+                        counter: Container(),
+                        hintText: " Nhập số tiền",
+                        hintStyle: GoogleFonts.montserrat()),
                     maxLength: 11,
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                Text('đ', style: TextStyle(fontSize: 15, color: Colors.black)),
+                Text('đ',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15, color: Colors.black)),
               ],
             ),
-            Row(
-              children: [
-                Text(_paymentStatus.isEmpty
-                    ? "CHƯA THANH TOÁN"
-                    : _paymentStatus),
-              ],
-            )
           ],
         )),
         bottomNavigationBar: BottomAppBar(
@@ -115,35 +120,28 @@ class _DepositPageState extends State<DepositPage> {
               child: AcceptProfileButton(
                   text: 'Nạp tiền',
                   onPress: () async {
-                    if (money.length < 2) {
-                      print("Không đủ điều kiện");
-                    } else {
-                      money = displayController.text.replaceAll(",", "");
-                      convertMoney = double.parse(money);
-                      print("Đủ điều kiện: " + convertMoney.toString());
-                      print(convertMoney.round());
-                      MomoPaymentInfo options = MomoPaymentInfo(
-                          merchantName: "Play Together",
-                          appScheme:
-                              "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAhy6gKyTqR",
-                          merchantCode: 'MOMOVLRE20220224',
-                          partnerCode: 'MOMOVLRE20220224',
-                          amount: convertMoney.round(),
-                          orderId:
-                              'MOMOVLRE20220224' + DateTime.now().toString(),
-                          orderLabel: 'Nạp tiền vào app Play Together',
-                          merchantNameLabel: "NẠP TIỀN VÀO APP PLAY TOGETHER",
-                          fee: 0,
-                          description: 'Nạp tiền Play Together',
-                          username: '',
-                          partner: 'merchant',
-                          extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
-                          isTestMode: true);
-                      try {
-                        _momoPay.open(options);
-                      } catch (e) {
-                        debugPrint(e.toString());
-                      }
+                    money = displayController.text.replaceAll(",", "");
+                    convertMoney = double.parse(money);
+                    MomoPaymentInfo options = MomoPaymentInfo(
+                        merchantName: "Play Together",
+                        appScheme:
+                            "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAhy6gKyTqR",
+                        merchantCode: 'MOMOVLRE20220224',
+                        partnerCode: 'MOMOVLRE20220224',
+                        amount: convertMoney.round(),
+                        orderId: 'MOMOVLRE20220224' + DateTime.now().toString(),
+                        orderLabel: 'Nạp tiền vào app Play Together',
+                        merchantNameLabel: "NẠP TIỀN VÀO APP PLAY TOGETHER",
+                        fee: 0,
+                        description: 'Nạp tiền Play Together',
+                        username: '',
+                        partner: 'merchant',
+                        extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
+                        isTestMode: true);
+                    try {
+                      _momoPay.open(options);
+                    } catch (e) {
+                      debugPrint(e.toString());
                     }
                   })),
         ));
@@ -158,6 +156,24 @@ class _DepositPageState extends State<DepositPage> {
   void _setState() {
     _paymentStatus = 'Đã chuyển thanh toán';
     if (_momoPaymentResult.isSuccess == true) {
+      money = money.replaceAll(",", "");
+      convertMoney = double.parse(money);
+      DepositModel depositModel = DepositModel(
+          money: convertMoney,
+          momoTransactionId: _momoPaymentResult.token.toString());
+      Future<bool?> makeDonateFuture =
+          UserService().depositMoney(widget.tokenModel.message, depositModel);
+      makeDonateFuture.then((_depositMoney) {
+        if (_depositMoney == true) {
+          helper.pushInto(
+              context,
+              PersonalPage(
+                tokenModel: widget.tokenModel,
+                userModel: widget.userModel,
+              ),
+              true);
+        }
+      });
       print(_momoPaymentResult.status.toString() + "Status");
       print(_momoPaymentResult.extra.toString() + "Extra");
       print(_momoPaymentResult.isSuccess.toString() + "isSuccess");
@@ -182,7 +198,9 @@ class _DepositPageState extends State<DepositPage> {
       _setState();
     });
     Fluttertoast.showToast(
-        msg: "THÀNH CÔNG: " + response.phoneNumber.toString(),
+        msg: "NẠP TIỀN THÀNH CÔNG",
+        textColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(137, 128, 255, 1),
         toastLength: Toast.LENGTH_SHORT);
   }
 
@@ -192,7 +210,9 @@ class _DepositPageState extends State<DepositPage> {
       _setState();
     });
     Fluttertoast.showToast(
-        msg: "THẤT BẠI: " + response.message.toString(),
+        msg: "NẠP TIỀN THẤT BẠI",
+        textColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(137, 128, 255, 1),
         toastLength: Toast.LENGTH_SHORT);
   }
 }

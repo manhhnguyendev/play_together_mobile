@@ -14,6 +14,7 @@ import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/widgets/charity_card.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class CharityPage extends StatefulWidget {
   final UserModel userModel;
@@ -35,22 +36,27 @@ class _CharityPageState extends State<CharityPage> {
   late String search;
   final _controller = TextEditingController();
   List<CharityModel> _listCharity = [];
+  bool checkFirstTime = true;
 
   Future loadListCharity() {
     Future<ResponseListModel<CharityModel>?> listCharityModelFuture =
         CharityService().getAllCharities(widget.tokenModel.message);
     listCharityModelFuture.then((_charityList) {
-      _listCharity = _charityList!.content;
-      if (_listCharity.isEmpty) {
-        for (var item in _listCharity) {
-          Future<ResponseModel<CharityModel>?> charityFuture = CharityService()
-              .getCharityById(item.id, widget.tokenModel.message);
-          charityFuture.then((value) {
-            if (value != null) {
-              _listCharity.add(value.content);
-            }
-          });
+      if (checkFirstTime) {
+        _listCharity = _charityList!.content;
+        if (_listCharity.isEmpty) {
+          for (var item in _listCharity) {
+            Future<ResponseModel<CharityModel>?> charityFuture =
+                CharityService()
+                    .getCharityById(item.id, widget.tokenModel.message);
+            charityFuture.then((value) {
+              if (value != null) {
+                _listCharity.add(value.content);
+              }
+            });
+          }
         }
+        checkFirstTime = false;
       }
     });
     return listCharityModelFuture;
@@ -101,12 +107,10 @@ class _CharityPageState extends State<CharityPage> {
                           }
                         },
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 30 / 375 * size.width,
-                              vertical: 9 / 512 * size.height),
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
+                          hintStyle: GoogleFonts.montserrat(),
                           hintText: "Tìm kiếm hội từ thiện",
                           prefixIcon: const Icon(
                             Icons.search,

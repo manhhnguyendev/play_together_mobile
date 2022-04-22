@@ -30,3 +30,5 @@ const String chat =
     "https://play-together.azurewebsites.net/api/play-together/v1/chats";
 const String recommend =
     "https://play-together.azurewebsites.net/api/play-together/v1/recommends";
+const String email =
+    "https://play-together.azurewebsites.net/api/play-together/v1/email";

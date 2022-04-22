@@ -390,7 +390,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
     if (status == 'Starting') {
       return Text(
         'Đang xử lý',
-        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.yellow),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.amber),
       );
     }
 

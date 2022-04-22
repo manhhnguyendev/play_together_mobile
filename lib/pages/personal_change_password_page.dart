@@ -8,6 +8,7 @@ import 'package:play_together_mobile/services/password_service.dart';
 import 'package:play_together_mobile/widgets/login_error_form.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class PersonalChangePassword extends StatefulWidget {
   final UserModel userModel;
@@ -76,10 +77,10 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Thay đổi mật khẩu',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -122,9 +123,6 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
             child: AcceptProfileButton(
                 text: 'Cập nhật',
                 onPress: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Cập nhật thành công"),
-                  ));
                   if (_formKey.currentState == null) {
                     print("_formKey.currentState is null!");
                   } else if (_formKey.currentState!.validate()) {
@@ -152,7 +150,10 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                                 ),
                                 true);
                           });
-                          print("Thay đổi mật khẩu thành công");
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Cập nhật mật khẩu thành công"),
+                          ));
                         }
                       });
                     }
@@ -164,6 +165,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
 
   TextFormField buildOldPasswordField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: currentPasswordController,
       onSaved: (newValue) => oldPassword = newValue!,
       onChanged: (value) {
@@ -192,6 +194,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Mật khẩu cũ",
           hintText: "Nhập vào mật khẩu cũ",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -202,7 +206,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     oldPassObsecure = !oldPassObsecure;
@@ -218,6 +222,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
 
   TextFormField buildPasswordField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: newPasswordController,
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
@@ -246,6 +251,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Mật khẩu mới",
           hintText: "Nhập vào mật khẩu mới",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -256,7 +263,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     passObsecure = !passObsecure;
@@ -272,6 +279,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
 
   TextFormField buildConfirmField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: confirmNewPasswordController,
       onSaved: (newValue) => confirmPass = newValue!,
       onChanged: (value) {
@@ -299,6 +307,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           labelText: "Nhập lại mật khẩu mới",
           hintText: "Nhập lại mật khẩu mới",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           enabledBorder: const OutlineInputBorder(
             gapPadding: 10,
           ),
@@ -309,7 +319,7 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
               gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
           errorBorder: (const OutlineInputBorder(
               gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-          errorStyle: const TextStyle(height: 0, color: Colors.black),
+          errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
           suffixIcon: IconButton(
               onPressed: () => setState(() {
                     confirmObsecure = !confirmObsecure;

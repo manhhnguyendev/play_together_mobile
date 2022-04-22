@@ -12,6 +12,7 @@ import 'package:play_together_mobile/helpers/helper.dart' as helper;
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HistoryPage extends StatefulWidget {
   final UserModel userModel;
@@ -30,46 +31,10 @@ class _HistoryPageState extends State<HistoryPage> {
   List<OrderModel> _listOrder = [];
   final List<OrderDetailModel> _listCreateOrder = [];
   final List<OrderDetailModel> _listReceiveOrder = [];
+  bool checkListCreateOrder = true;
+  bool checkListReceiveOrder = true;
   bool checkEmptyCreateOrder = false;
   bool checkEmptyReceiveOrder = false;
-
-  Future loadListFromCreateUser() {
-    Future<ResponseListModel<OrderModel>?> listOrderFromCreateUserModelFuture =
-        OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
-    listOrderFromCreateUserModelFuture.then((_createOrderList) {
-      if (_createOrderList!.content.isNotEmpty) {
-        for (var item in _createOrderList.content) {
-          Future<ResponseModel<OrderDetailModel>?> orderFuture = OrderService()
-              .getDetailOrderById(item.id, widget.tokenModel.message);
-          orderFuture.then((value) {
-            if (value != null) {
-              _listCreateOrder.add(value.content);
-            }
-          });
-        }
-      }
-    });
-    return listOrderFromCreateUserModelFuture;
-  }
-
-  Future loadListFromReceiveUser() {
-    Future<ResponseListModel<OrderModel>?> listOrderFromReceiveUserModelFuture =
-        OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
-    listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
-      if (_receiveOrderList!.content.isNotEmpty) {
-        for (var item in _receiveOrderList.content) {
-          Future<ResponseModel<OrderDetailModel>?> orderFuture = OrderService()
-              .getDetailOrderById(item.id, widget.tokenModel.message);
-          orderFuture.then((value) {
-            if (value != null) {
-              _listReceiveOrder.add(value.content);
-            }
-          });
-        }
-      }
-    });
-    return listOrderFromReceiveUserModelFuture;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,14 +54,14 @@ class _HistoryPageState extends State<HistoryPage> {
                       "assets/images/play_together_logo_no_text.png"),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Lịch sử hoạt động',
-                  style: TextStyle(
-                      fontSize: 18,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
-                bottom: const TabBar(
+                bottom: TabBar(
                     indicatorColor: Colors.grey,
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.black,
@@ -104,7 +69,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       Tab(
                         child: Text(
                           'Đi thuê',
-                          style: TextStyle(
+                          style: GoogleFonts.montserrat(
                               fontSize: 16,
                               color: Colors.black,
                               fontWeight: FontWeight.normal),
@@ -112,7 +77,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       ),
                       Tab(
                         child: Text('Được thuê',
-                            style: TextStyle(
+                            style: GoogleFonts.montserrat(
                                 fontSize: 16,
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal)),
@@ -135,15 +100,16 @@ class _HistoryPageState extends State<HistoryPage> {
                               children: [
                                 Column(
                                   children: List.generate(
-                                      _listCreateOrder == null
-                                          ? 0
-                                          : _listCreateOrder.length,
+                                      _listCreateOrder.isNotEmpty
+                                          ? _listCreateOrder.length
+                                          : 0,
                                       (index) => buildListHistory(
                                           _listCreateOrder[index])),
                                 ),
                                 Visibility(
                                     visible: checkEmptyCreateOrder,
-                                    child: const Text('Không có dữ liệu'))
+                                    child: Text('Không có dữ liệu',
+                                        style: GoogleFonts.montserrat())),
                               ],
                             ),
                           );
@@ -163,15 +129,16 @@ class _HistoryPageState extends State<HistoryPage> {
                               children: [
                                 Column(
                                   children: List.generate(
-                                      _listReceiveOrder == null
-                                          ? 0
-                                          : _listReceiveOrder.length,
+                                      _listReceiveOrder.isNotEmpty
+                                          ? _listReceiveOrder.length
+                                          : 0,
                                       (index) => buildListHistory(
                                           _listReceiveOrder[index])),
                                 ),
                                 Visibility(
                                     visible: checkEmptyReceiveOrder,
-                                    child: const Text('Không có dữ liệu'))
+                                    child: Text('Không có dữ liệu',
+                                        style: GoogleFonts.montserrat()))
                               ],
                             ),
                           );
@@ -295,5 +262,51 @@ class _HistoryPageState extends State<HistoryPage> {
       }
     });
     return getStatusUser;
+  }
+
+  Future loadListFromCreateUser() {
+    Future<ResponseListModel<OrderModel>?> listOrderFromCreateUserModelFuture =
+        OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
+    listOrderFromCreateUserModelFuture.then((_createOrderList) {
+      if (checkListCreateOrder) {
+        if (_createOrderList!.content.isNotEmpty) {
+          for (var item in _createOrderList.content) {
+            Future<ResponseModel<OrderDetailModel>?> orderFuture =
+                OrderService()
+                    .getDetailOrderById(item.id, widget.tokenModel.message);
+            orderFuture.then((value) {
+              if (value != null) {
+                _listCreateOrder.add(value.content);
+              }
+            });
+          }
+        }
+        checkListCreateOrder = false;
+      }
+    });
+    return listOrderFromCreateUserModelFuture;
+  }
+
+  Future loadListFromReceiveUser() {
+    Future<ResponseListModel<OrderModel>?> listOrderFromReceiveUserModelFuture =
+        OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
+    listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
+      if (checkListReceiveOrder) {
+        if (_receiveOrderList!.content.isNotEmpty) {
+          for (var item in _receiveOrderList.content) {
+            Future<ResponseModel<OrderDetailModel>?> orderFuture =
+                OrderService()
+                    .getDetailOrderById(item.id, widget.tokenModel.message);
+            orderFuture.then((value) {
+              if (value != null) {
+                _listReceiveOrder.add(value.content);
+              }
+            });
+          }
+        }
+        checkListReceiveOrder = false;
+      }
+    });
+    return listOrderFromReceiveUserModelFuture;
   }
 }

@@ -5,6 +5,7 @@ import 'package:play_together_mobile/models/transaction_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/services/transaction_service.dart';
 import 'package:play_together_mobile/widgets/transaction_card.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TransactionPage extends StatefulWidget {
   final UserModel userModel;
@@ -66,10 +67,10 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Lịch sử giao dịch',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -114,10 +115,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Tất cả',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.normal),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 11, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -161,10 +162,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           });
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Nhận tiền',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.normal),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 11, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -206,10 +207,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Trừ tiền',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.normal),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 11, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -251,10 +252,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Nạp tiền',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.normal),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 11, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -296,10 +297,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Rút tiền',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.normal),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 11, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -341,10 +342,10 @@ class _TransactionPageState extends State<TransactionPage> {
                           }
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Donate',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.normal),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 11, fontWeight: FontWeight.normal),
                       ),
                     ),
                   ),
@@ -370,15 +371,16 @@ class _TransactionPageState extends State<TransactionPage> {
                         children: [
                           Column(
                             children: List.generate(
-                                listAllTransaction == null
-                                    ? 0
-                                    : listAllTransaction.length,
+                                listAllTransaction.isNotEmpty
+                                    ? listAllTransaction.length
+                                    : 0,
                                 (index) => buildListTransaction(
                                     listAllTransaction[index])),
                           ),
                           Visibility(
                               visible: checkExistTransaction,
-                              child: const Text('Không có dữ liệu'))
+                              child: Text('Không có dữ liệu',
+                                  style: GoogleFonts.montserrat()))
                         ],
                       ),
                     );

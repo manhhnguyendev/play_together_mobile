@@ -186,7 +186,7 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
 
     if (status == 'Processing') {
       return Text(
-        'Đang xử lý',
+        'Đang thương lượng',
         style: GoogleFonts.montserrat(fontSize: 18, color: Colors.amber),
       );
     }
@@ -200,7 +200,7 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
 
     if (status == 'Online') {
       return Text(
-        'Có thể thuê',
+        'Đang online',
         style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }

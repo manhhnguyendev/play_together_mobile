@@ -264,7 +264,25 @@ class UserService {
         Uri.parse('${apiUrl.users}/un-active-balance'),
         headers: configJson.headerAuth(token),
       );
-      if (response.statusCode == 204) {
+      if (response.statusCode == 200) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> depositMoney(dynamic token, DepositModel depositModel) async {
+    Response response;
+    bool? result;
+    try {
+      response = await post(
+        Uri.parse('${apiUrl.users}/deposit'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(depositModel.toJson()),
+      );
+      if (response.statusCode == 200) {
         result = true;
       }
     } on Exception {

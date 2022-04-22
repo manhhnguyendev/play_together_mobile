@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ReportCommentPage extends StatefulWidget {
   final RatingModel ratingModel;

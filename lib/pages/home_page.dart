@@ -692,6 +692,7 @@ class _HomePageState extends State<HomePage> {
                         _listOrder[0].toUserId, widget.tokenModel.message);
                 getPlayerModel.then((playerModel) {
                   if (playerModel != null) {
+                    if (!mounted) return;
                     setState(() {
                       helper.pushInto(
                           context,

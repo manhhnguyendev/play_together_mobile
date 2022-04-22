@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
   final OrderDetailModel orderDetailModel;
@@ -22,11 +23,10 @@ class HistoryHiringDetail extends StatefulWidget {
 }
 
 class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
-  final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
-  bool checkEndEarly = true;
-  bool checkRating = true;
   bool checkFinalPrice = true;
   bool checkReason = true;
+  bool checkRating = true;
+  bool checkComment = true;
   int rate = 5;
   @override
   Widget build(BuildContext context) {
@@ -44,20 +44,6 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
         .format(DateTime.parse(widget.orderDetailModel.processExpired));
     String timeExpired = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderDetailModel.processExpired));
-
-    if (widget.orderDetailModel.status == "Hirer Finish Soon") {
-      checkEndEarly = true;
-    } else if (widget.orderDetailModel.status == "Player Finish Soon") {
-      checkEndEarly = true;
-    } else if (widget.orderDetailModel.status == "Reject") {
-      checkEndEarly = true;
-    } else if (widget.orderDetailModel.status == "OverTime") {
-      checkEndEarly = true;
-    } else if (widget.orderDetailModel.status == "Cancel") {
-      checkEndEarly = true;
-    } else {
-      checkEndEarly = false;
-    }
 
     if (widget.orderDetailModel.status == "Reject") {
       checkFinalPrice = true;
@@ -79,21 +65,40 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       checkReason = false;
     }
 
-    if (widget.orderDetailModel.ratings!.isNotEmpty) {
+    if (widget.orderDetailModel.ratings![0].comment.isNotEmpty) {
+      checkComment = true;
+    } else if (widget.orderDetailModel.ratings![0].comment != null) {
+      checkComment = true;
+    } else if (widget.orderDetailModel.ratings![0].comment != "") {
+      checkComment = true;
+    } else {
+      checkComment = false;
+    }
+
+    if (widget.orderDetailModel.ratings![0].rate.toString().isNotEmpty) {
+      checkRating = true;
+    } else if (widget.orderDetailModel.ratings![0].rate.toString() != null) {
+      checkRating = true;
+    } else if (widget.orderDetailModel.ratings![0].rate.toString() != "") {
       checkRating = true;
     } else {
       checkRating = false;
     }
 
-    var _controller = TextEditingController();
-    _controller.text = widget.orderDetailModel.ratings!.isNotEmpty
-        ? widget.orderDetailModel.ratings![0].comment
-        : "";
+    var rating = widget.orderDetailModel.ratings![0].rate.toString() != null
+        ? widget.orderDetailModel.ratings![0].rate.toString()
+        : '';
+
+    var _commentController = TextEditingController();
+    _commentController.text =
+        widget.orderDetailModel.ratings![0].comment != null
+            ? widget.orderDetailModel.ratings![0].comment
+            : '';
 
     var _reasonController = TextEditingController();
     _reasonController.text = widget.orderDetailModel.reason != null
         ? widget.orderDetailModel.reason!
-        : "";
+        : '';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -114,10 +119,10 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Chi tiết lượt thuê',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -155,7 +160,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                                   widget.userModel.id
                               ? widget.orderDetailModel.user!.name
                               : widget.orderDetailModel.toUser!.name,
-                          style: const TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                       ],
                     ),
@@ -197,7 +202,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                                   widget.userModel.id
                               ? widget.orderDetailModel.toUser!.name
                               : widget.orderDetailModel.user!.name,
-                          style: const TextStyle(fontSize: 18),
+                          style: GoogleFonts.montserrat(fontSize: 18),
                         ),
                       ],
                     ),
@@ -221,18 +226,18 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                 child: Row(
                   children: [
-                    const Text(
+                    Text(
                       'Thời lượng thuê: ',
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     ),
                     const Spacer(),
                     Text(
                       widget.orderDetailModel.totalTimes.toString(),
-                      style: const TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     ),
-                    const Text(
+                    Text(
                       ' giờ',
-                      style: TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     ),
                   ],
                 ),
@@ -241,16 +246,16 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                 child: Row(
                   children: [
-                    const Text(
-                      'Tổng chi phí: ',
-                      style: TextStyle(fontSize: 15),
+                    Text(
+                      'Chi phí dự kiến: ',
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     ),
                     const Spacer(),
                     Text(
                       widget.orderDetailModel.totalPrices
                           .toStringAsFixed(0)
                           .toVND(),
-                      style: const TextStyle(fontSize: 15),
+                      style: GoogleFonts.montserrat(fontSize: 15),
                     ),
                   ],
                 ),
@@ -261,16 +266,16 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        'Tổng chi phí cuối cùng: ',
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        'Chi phí cuối cùng: ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       const Spacer(),
                       Text(
                         widget.orderDetailModel.finalPrices
                             .toStringAsFixed(0)
                             .toVND(),
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],
                   ),
@@ -282,14 +287,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        'Thời gian bắt đầu',
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        'Thời gian bắt đầu: ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       const Spacer(),
                       Text(
                         dateStart + ", " + timeStart,
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],
                   ),
@@ -301,14 +306,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      const Text(
-                        'Thời gian kết thúc',
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        'Thời gian kết thúc: ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       const Spacer(),
                       Text(
                         dateFinish + ", " + timeFinish,
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],
                   ),
@@ -320,14 +325,14 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
                   child: Row(
                     children: [
-                      const Text(
+                      Text(
                         'Thời gian: ',
-                        style: TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       const Spacer(),
                       Text(
                         dateExpired + ", " + timeExpired,
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],
                   ),
@@ -338,9 +343,9 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 child: Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.fromLTRB(15, 15, 25, 0),
-                  child: const Text(
+                  child: Text(
                     'Lý do :',
-                    style: TextStyle(fontSize: 15),
+                    style: GoogleFonts.montserrat(fontSize: 15),
                   ),
                 ),
               ),
@@ -349,6 +354,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: TextField(
+                    style: GoogleFonts.montserrat(fontSize: 15),
                     controller: _reasonController,
                     enabled: false,
                     decoration: const InputDecoration(
@@ -367,25 +373,22 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     children: [
                       Text(
                         'Đánh giá: ',
-                        style: TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
                       Text(
-                        widget.orderDetailModel.ratings!.isNotEmpty
-                            ? widget.orderDetailModel.ratings![0].rate
-                                .toString()
-                            : "",
-                        style: TextStyle(fontSize: 15),
+                        rating,
+                        style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],
                   ),
                 ),
               ),
               Visibility(
-                visible: checkRating,
+                visible: checkComment,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
                   child: Container(
@@ -393,7 +396,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
                     child: TextField(
-                      controller: _controller,
+                      style: GoogleFonts.montserrat(),
+                      controller: _commentController,
                       enabled: false,
                       decoration: const InputDecoration(
                         contentPadding:
@@ -413,71 +417,71 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
 
   Widget createStatus(String status) {
     if (status == 'Processing') {
-      return const Text(
+      return Text(
         'Đang thuê',
-        style: TextStyle(fontSize: 15, color: Colors.red),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.red),
       );
     }
 
     if (status == 'Starting') {
-      return const Text(
+      return Text(
         'Đang xử lý',
-        style: TextStyle(fontSize: 15, color: Colors.yellow),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.amber),
       );
     }
 
     if (status == 'Cancel') {
-      return const Text(
+      return Text(
         'Hủy yêu cầu',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.grey),
       );
     }
 
     if (status == 'Hirer Finish Soon') {
-      return const Text(
-        'Kết thúc sớm',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+      return Text(
+        'Người thuê kết thúc sớm',
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.green),
       );
     }
 
     if (status == 'Player Finish Soon') {
-      return const Text(
-        'Kết thúc sớm',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+      return Text(
+        'Người chơi kết thúc sớm',
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.green),
       );
     }
 
     if (status == 'OverTime') {
-      return const Text(
+      return Text(
         'Quá giờ chấp nhận',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.grey),
       );
     }
 
     if (status == 'Reject') {
-      return const Text(
+      return Text(
         'Bị từ chối',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.grey),
       );
     }
 
     if (status == 'Complete') {
-      return const Text(
+      return Text(
         'Hoàn thành',
-        style: TextStyle(fontSize: 15, color: Colors.green),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.green),
       );
     }
 
     if (status == 'Interrupt') {
-      return const Text(
+      return Text(
         'Người dùng bị khóa',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
+        style: GoogleFonts.montserrat(fontSize: 17, color: Colors.grey),
       );
     }
 
     return Text(
       status,
-      style: const TextStyle(fontSize: 15, color: Colors.black),
+      style: GoogleFonts.montserrat(fontSize: 15, color: Colors.black),
     );
   }
 }

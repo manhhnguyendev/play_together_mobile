@@ -269,3 +269,23 @@ class ServiceUserModel {
         "maxHourHire": maxHourHire,
       };
 }
+
+class DepositModel {
+  String momoTransactionId;
+  double money;
+
+  DepositModel({
+    required this.momoTransactionId,
+    required this.money,
+  });
+
+  factory DepositModel.fromJson(Map<String, dynamic> json) => DepositModel(
+        momoTransactionId: json['momoTransactionId'] as String,
+        money: json['money'] as double,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "momoTransactionId": momoTransactionId,
+        "money": money,
+      };
+}

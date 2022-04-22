@@ -8,6 +8,7 @@ import 'package:play_together_mobile/services/game_service.dart';
 import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UpdateHobbiesPage extends StatefulWidget {
   final UserModel userModel;
@@ -66,24 +67,6 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                     }
                   }
                 });
-
-                // for (var hobby in listHobbies) {
-                //   print(hobby.id + " id id");
-                //   listDeleteHobbies.add(hobby.id);
-                // }
-                // print(listDeleteHobbies);
-                // for (var hobby in listHobbies) {
-                //   listGamesCheckBox
-                //       .add(CheckBoxState(title: hobby.game.name, value: true));
-                // }
-                // for (var cbState in listGamesCheckBox) {
-                //   for (var games in listAllGames) {
-                //     if (games.name != cbState.title) {
-                //       listGamesCheckBox
-                //           .add(CheckBoxState(title: games.name, value: false));
-                //     }
-                //   }
-                // }
               }
             });
           });
@@ -113,23 +96,15 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                       Icons.arrow_back_ios,
                     ),
                     onPressed: () {
-                      // if (!checkUpdate) {
-                      //
-                      // } else {
-                      //   ScaffoldMessenger.of(context)
-                      //       .showSnackBar(const SnackBar(
-                      //     content: Text("Ấn cập nhật sở thích"),
-                      //   ));
-                      // }
                       Navigator.pop(context);
                     },
                   ),
                 ),
                 centerTitle: true,
-                title: const Text(
+                title: Text(
                   'Cài đặt sở thích',
-                  style: TextStyle(
-                      fontSize: 18,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.normal),
                 ),
@@ -140,11 +115,11 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
                     child: Text(
                       'Bạn thích tựa games nào?',
-                      style: TextStyle(fontSize: 18),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
                   const SizedBox(
@@ -229,7 +204,7 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
       ),
       title: Text(
         cbState.title,
-        style: const TextStyle(fontSize: 15),
+        style: GoogleFonts.montserrat(fontSize: 15),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/services/report_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class ReportPage extends StatefulWidget {
   final OrderModel? orderModel;
@@ -42,10 +43,10 @@ class _ReportPageState extends State<ReportPage> {
               },
             ),
           ),
-          title: const Text(
+          title: Text(
             'Tố cáo',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -54,7 +55,7 @@ class _ReportPageState extends State<ReportPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(
@@ -74,7 +75,7 @@ class _ReportPageState extends State<ReportPage> {
               widget.orderModel!.user!.id == widget.userModel!.id
                   ? widget.orderModel!.user!.name
                   : widget.orderModel!.toUser!.name,
-              style: const TextStyle(fontSize: 20),
+              style: GoogleFonts.montserrat(fontSize: 20),
             ),
             const SizedBox(
               height: 10,
@@ -86,17 +87,20 @@ class _ReportPageState extends State<ReportPage> {
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
                 child: TextFormField(
+                  style: GoogleFonts.montserrat(),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   maxLength: 1000,
                   onChanged: (newValue) => reportMessage = newValue,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 10.0),
                     counterText: "",
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     labelText: "Nhập lý do tố cáo của bạn...",
                     hintText: "Nhập vào lý do tố cáo",
+                    hintStyle: GoogleFonts.montserrat(),
+                    labelStyle: GoogleFonts.montserrat(),
                     border: InputBorder.none,
                   ),
                 ),

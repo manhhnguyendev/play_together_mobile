@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CountdownWidget extends StatefulWidget {
   const CountdownWidget({Key? key}) : super(key: key);
@@ -52,15 +53,13 @@ class _CountdownWidgetState extends State<CountdownWidget>
   bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: AnimatedBuilder(
-        animation: controller,
-        builder: (context, child) => Text(
-          countText,
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.normal,
-          ),
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) => Text(
+        countText,
+        style: GoogleFonts.montserrat(
+          fontSize: 40,
+          fontWeight: FontWeight.normal,
         ),
       ),
     );
