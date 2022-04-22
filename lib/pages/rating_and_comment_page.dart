@@ -501,7 +501,10 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         ),
                         Visibility(
                             visible: checkExist,
-                            child: const Text('Không có dữ liệu'))
+                            child: Text(
+                              'Không có dữ liệu',
+                              style: GoogleFonts.montserrat(),
+                            ))
                       ],
                     ),
                   );

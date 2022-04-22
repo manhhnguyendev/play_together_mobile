@@ -10,6 +10,7 @@ import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class UserCategoriesPage extends StatefulWidget {
   final UserModel userModel;
@@ -86,9 +87,9 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            const Text(
+                            Text(
                               'Bạn thích tựa game nào (Chọn ít nhất 1 tựa game):',
-                              style: TextStyle(fontSize: 17),
+                              style: GoogleFonts.montserrat(fontSize: 17),
                             ),
                             const SizedBox(
                               height: 10,
@@ -169,7 +170,7 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
         }),
         title: Text(
           cbState.title,
-          style: const TextStyle(fontSize: 15),
+          style: GoogleFonts.montserrat(fontSize: 15),
         ),
       );
 }

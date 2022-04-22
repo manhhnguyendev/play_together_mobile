@@ -398,7 +398,7 @@ class _FilterPageState extends State<FilterPage> {
                           Row(
                             children: [
                               Text(
-                                'Có thể thuê',
+                                'Đang online',
                                 style: GoogleFonts.montserrat(
                                     fontWeight: statusOrder == 1
                                         ? FontWeight.bold

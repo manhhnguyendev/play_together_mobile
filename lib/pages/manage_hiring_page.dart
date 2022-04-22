@@ -142,6 +142,12 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                                 content: Text(
                                                     "Cập nhật trạng thái thành công"),
                                               ));
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "Thêm kỹ năng để cập nhật trạng thái"),
+                                              ));
                                             }
                                           });
                                         });

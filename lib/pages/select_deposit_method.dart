@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/deposit_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SelectDepositMethodPage extends StatefulWidget {
-  const SelectDepositMethodPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+
+  const SelectDepositMethodPage(
+      {Key? key, required this.userModel, required this.tokenModel})
+      : super(key: key);
 
   @override
   State<SelectDepositMethodPage> createState() =>
@@ -31,10 +39,10 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Phương thức thanh toán',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -47,7 +55,11 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DepositPage()),
+                MaterialPageRoute(
+                    builder: (context) => DepositPage(
+                          tokenModel: widget.tokenModel,
+                          userModel: widget.userModel,
+                        )),
               );
             },
             child: Container(
@@ -83,14 +95,16 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                       children: [
                         Text(
                           "Thanh toán qua MOMO",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, color: Colors.black),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
                           "Hỗ trợ từ 8:30 -> 22:00 (trừ CN, ngày lễ)",
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -132,14 +146,16 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                       children: [
                         Text(
                           "Thanh toán qua Paypal",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, color: Colors.black),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
                           "(Sắp ra mắt)",
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -179,14 +195,16 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                       children: [
                         Text(
                           "Thanh toán Internet banking",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, color: Colors.black),
                         ),
                         SizedBox(
                           height: 5,
                         ),
                         Text(
                           "(Sắp ra mắt)",
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
                         ),
                       ],
                     ),

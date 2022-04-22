@@ -4,6 +4,7 @@ import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_donate_page.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CharityDetailPage extends StatefulWidget {
   final CharityModel charityModel;
@@ -66,7 +67,7 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                 ),
                 Text(
                   widget.charityModel.organizationName,
-                  style: const TextStyle(fontSize: 20),
+                  style: GoogleFonts.montserrat(fontSize: 20),
                 ),
               ],
             ),
@@ -74,15 +75,15 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: const Text(
+            child: Text(
               "Giới thiệu",
-              style: TextStyle(fontSize: 18),
+              style: GoogleFonts.montserrat(fontSize: 18),
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 0, 15),
             child: TextFormField(
-              style: const TextStyle(fontSize: 15),
+              style: GoogleFonts.montserrat(fontSize: 15),
               enabled: false,
               controller: descriptionController,
               maxLines: null,
@@ -105,9 +106,9 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
           Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: const Text(
+            child: Text(
               "Thông tin liên hệ",
-              style: TextStyle(fontSize: 18),
+              style: GoogleFonts.montserrat(fontSize: 18),
             ),
           ),
           Padding(
@@ -116,39 +117,40 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Địa chỉ:",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     widget.charityModel.address,
-                    style: const TextStyle(fontSize: 15),
+                    style: GoogleFonts.montserrat(fontSize: 15),
                     maxLines: 2,
                   ),
                   Row(
                     children: [
-                      const Text(
+                      Text(
                         "Điện thoại: ",
-                        style: TextStyle(
+                        style: GoogleFonts.montserrat(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         widget.charityModel.phone,
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                         maxLines: 2,
                       ),
                     ],
                   ),
                   Row(
                     children: [
-                      const Text(
+                      Text(
                         "Email: ",
-                        style: TextStyle(
+                        style: GoogleFonts.montserrat(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         widget.charityModel.email,
-                        style: const TextStyle(fontSize: 15),
+                        style: GoogleFonts.montserrat(fontSize: 15),
                         maxLines: 2,
                       ),
                     ],

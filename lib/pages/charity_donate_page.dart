@@ -8,6 +8,7 @@ import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:google_fonts/google_fonts.dart';
 
 class DonateCharityPage extends StatefulWidget {
   final CharityModel charityModel;
@@ -56,8 +57,8 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
           centerTitle: true,
           title: Text(
             widget.charityModel.organizationName,
-            style: const TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -72,19 +73,19 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
+                const Icon(
                   Icons.attach_money_sharp,
                   color: Color(0xff8089FF),
                   size: 22,
                 ),
                 Text(
                   'Số dư khả dụng: ',
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 Text(
                   formatter.format(widget.userModel.userBalance.activeBalance) +
                       "đ",
-                  style: TextStyle(fontSize: 18),
+                  style: GoogleFonts.montserrat(fontSize: 18),
                 )
               ],
             ),
@@ -104,15 +105,16 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                       money = value;
                     });
                   },
-                  style: const TextStyle(fontSize: 20),
+                  style: GoogleFonts.montserrat(fontSize: 20),
                   decoration: InputDecoration(
                       counter: Container(), hintText: " Nhập số tiền"),
                   maxLength: 11,
                   keyboardType: TextInputType.number,
                 ),
               ),
-              const Text('đ',
-                  style: TextStyle(fontSize: 20, color: Colors.black)),
+              Text('đ',
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20, color: Colors.black)),
             ],
           ),
           Padding(
@@ -122,17 +124,20 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.black)),
               child: TextFormField(
+                style: GoogleFonts.montserrat(),
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 maxLength: 1000,
                 onChanged: (newValue) => message = newValue,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                   counterText: "",
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   labelText: "Nhập lời nhắn của bạn...",
                   hintText: "Nhập vào lời nhắn của bạn",
+                  hintStyle: GoogleFonts.montserrat(),
+                  labelStyle: GoogleFonts.montserrat(),
                   border: InputBorder.none,
                 ),
               ),
@@ -157,6 +162,9 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                           widget.tokenModel.message, makeDonateModel);
                   makeDonateFuture.then((_makeDonateModel) {
                     if (_makeDonateModel == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Gửi từ thiện thành công"),
+                      ));
                       setState(() {
                         helper.pushInto(
                             context,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/pages/select_withdraw_method.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EnterWithdrawAmount extends StatefulWidget {
   const EnterWithdrawAmount({Key? key}) : super(key: key);
@@ -11,12 +12,6 @@ class EnterWithdrawAmount extends StatefulWidget {
 }
 
 class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
-  // MaskedTextController customController = MaskedTextController(
-  //   mask: '000.000.000.000',
-  // );
-  // MaskedTextController convertController = MaskedTextController(
-  //   mask: '000000000000', //convert lưu vào DB
-  // );
   var displayController = TextEditingController();
   String money = "";
   double convertMoney = 0;
@@ -42,10 +37,10 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
+            title: Text(
               'Rút tiền',
-              style: TextStyle(
-                  fontSize: 18,
+              style: GoogleFonts.montserrat(
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.normal),
             ),
@@ -73,14 +68,16 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
                       });
                     },
                     //textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20),
+                    style: GoogleFonts.montserrat(fontSize: 20),
                     decoration: InputDecoration(
                         counter: Container(), hintText: " Nhập số tiền"),
                     maxLength: 11,
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                Text('đ', style: TextStyle(fontSize: 15, color: Colors.black)),
+                Text('đ',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15, color: Colors.black)),
               ],
             ),
           ],

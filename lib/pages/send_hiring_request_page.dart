@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/email_model.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
@@ -259,30 +261,52 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                               totalTimes: chooseTime,
                               message: beginMessage,
                               games: games);
-                          Future<ResponseModel<OrderModel>?> orderModelFuture =
-                              OrderService().createOrderRequest(
-                                  widget.playerModel!.id,
-                                  createOrderModel,
-                                  widget.tokenModel.message);
-                          orderModelFuture.then((order) {
-                            if (order != null) {
-                              setState(() {
-                                orderModel = order.content;
-                                print('OrderId: ' + orderModel!.id);
-                                helper.pushInto(
-                                    context,
-                                    HiringNegotiatingPage(
-                                        tokenModel: widget.tokenModel,
-                                        userModel: widget.userModel,
-                                        orderModel: orderModel,
-                                        playerModel: widget.playerModel),
-                                    true);
-                              });
-                            }
-                          });
+                          if (beginMessage.isNotEmpty) {
+                            Future<ResponseModel<OrderModel>?>
+                                orderModelFuture = OrderService()
+                                    .createOrderRequest(
+                                        widget.playerModel!.id,
+                                        createOrderModel,
+                                        widget.tokenModel.message);
+                            orderModelFuture.then((order) {
+                              if (order != null) {
+                                SendEmailModel sendEmailModel = SendEmailModel(
+                                    toEmail: widget.playerModel!.email,
+                                    subject: 'BẠN CÓ MỘT YÊU CẦU THUÊ',
+                                    body: 'Bạn có một yêu cầu thuê từ ' +
+                                        widget.userModel.name +
+                                        ' yêu cầu sẽ hết hạn sau 5 phút');
+                                Future<bool?> sendEmail = EmailService()
+                                    .sendEmail(sendEmailModel,
+                                        widget.tokenModel.message);
+                                setState(() {
+                                  orderModel = order.content;
+                                  print('OrderId: ' + orderModel!.id);
+                                  helper.pushInto(
+                                      context,
+                                      HiringNegotiatingPage(
+                                          tokenModel: widget.tokenModel,
+                                          userModel: widget.userModel,
+                                          orderModel: orderModel,
+                                          playerModel: widget.playerModel),
+                                      true);
+                                });
+                              }
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Vui lòng nhập lời nhắn"),
+                            ));
+                          }
                         });
                       }
-                    : () {},
+                    : () {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Số dư hiện tại không đủ"),
+                        ));
+                      },
                 height: 50,
                 width: 150),
           )),
@@ -332,7 +356,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
 
     if (status == 'Online') {
       return Text(
-        'Có thể thuê',
+        'Đang online',
         style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }

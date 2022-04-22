@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PoliciesPage extends StatefulWidget {
   const PoliciesPage({Key? key}) : super(key: key);
@@ -33,10 +33,10 @@ class _PoliciesPageState extends State<PoliciesPage> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Chính sách',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -46,7 +46,8 @@ class _PoliciesPageState extends State<PoliciesPage> {
           child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: TextField(
-          decoration: InputDecoration(
+          style: GoogleFonts.montserrat(),
+          decoration: const InputDecoration(
             border: InputBorder.none,
           ),
           controller: _textEditingController,
@@ -54,16 +55,6 @@ class _PoliciesPageState extends State<PoliciesPage> {
           maxLines: null,
         ),
       )),
-      // bottomNavigationBar: BottomAppBar(
-      //   elevation: 0,
-      //   child: Padding(
-      //       padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-      //       child: AcceptProfileButton(
-      //           text: 'Cập nhật',
-      //           onPress: () {
-
-      //           })),
-      // ),
     );
   }
 }

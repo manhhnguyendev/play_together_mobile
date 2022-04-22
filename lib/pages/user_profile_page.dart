@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'dart:io';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserProfilePage extends StatefulWidget {
   final UserModel userModel;
@@ -257,10 +258,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
           ),
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Thông tin tài khoản',
-            style: TextStyle(
-                fontSize: 18,
+            style: GoogleFonts.montserrat(
+                fontSize: 20,
                 color: Colors.black,
                 fontWeight: FontWeight.normal),
           ),
@@ -271,7 +272,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -312,9 +313,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                 alignment: Alignment.centerLeft,
                 child: Row(children: [
-                  const Text(
+                  Text(
                     'Hình ảnh',
-                    style: TextStyle(
+                    style: GoogleFonts.montserrat(
                       fontSize: 18,
                     ),
                   ),
@@ -417,14 +418,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         padding: const EdgeInsets.all(0.0),
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               flex: 1,
                               child: Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Text(
                                   "Giới tính:",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(220, 100, 100, 100),
+                                  style: GoogleFonts.montserrat(
+                                      color: const Color.fromARGB(
+                                          220, 100, 100, 100),
                                       fontSize: 16),
                                 ),
                               ),
@@ -507,6 +509,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   TextFormField buildNameField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: nameController,
       maxLength: 30,
       keyboardType: TextInputType.name,
@@ -525,23 +528,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
         }
         return null;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         counterText: "",
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-        labelText: "Họ",
-        hintText: "Nhập vào họ",
-        enabledBorder: OutlineInputBorder(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        labelText: "Tên",
+        hintText: "Nhập vào tên",
+        hintStyle: GoogleFonts.montserrat(),
+        labelStyle: GoogleFonts.montserrat(),
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
       ),
     );
   }
@@ -564,7 +569,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         gender = true;
                       });
                     }),
-                const Text("Nam")
+                Text("Nam", style: GoogleFonts.montserrat(fontSize: 15)),
               ],
             ),
           ),
@@ -581,7 +586,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         gender = false;
                       });
                     }),
-                const Text("Nữ"),
+                Text(
+                  "Nữ",
+                  style: GoogleFonts.montserrat(fontSize: 15),
+                ),
               ],
             ),
           )
@@ -596,23 +604,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
       onSaved: (newValue) {
         dateDisplay.value = newValue!;
       },
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         counterText: "",
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         labelText: "Sinh nhật của bạn",
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           gapPadding: 10,
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black)),
-        errorBorder: (OutlineInputBorder(
+        errorBorder: (const OutlineInputBorder(
             gapPadding: 10, borderSide: BorderSide(color: Colors.black))),
-        errorStyle: TextStyle(height: 0, color: Colors.black),
-        suffixIcon: Icon(
+        errorStyle: GoogleFonts.montserrat(height: 0, color: Colors.black),
+        suffixIcon: const Icon(
           Icons.calendar_today,
         ),
       ),
@@ -658,6 +666,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       height: 200,
       decoration: BoxDecoration(border: Border.all(color: Colors.black)),
       child: TextFormField(
+        style: GoogleFonts.montserrat(),
         controller: descriptionController,
         maxLines: null,
         keyboardType: TextInputType.multiline,
@@ -666,12 +675,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
         onChanged: (value) {
           description = value;
         },
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           counterText: "",
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
           labelText: "Giới thiệu sơ lược",
           hintText: "Giới thiệu bản thân bạn ...",
+          hintStyle: GoogleFonts.montserrat(),
+          labelStyle: GoogleFonts.montserrat(),
           border: InputBorder.none,
         ),
       ),

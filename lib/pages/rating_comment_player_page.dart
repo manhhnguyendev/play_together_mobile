@@ -36,10 +36,10 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Kết thúc thuê',
-          style: TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.normal),
+          style: GoogleFonts.montserrat(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
       ),
       body: SingleChildScrollView(
@@ -58,7 +58,7 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
             ),
             Text(
               widget.orderModel!.toUser!.name,
-              style: const TextStyle(fontSize: 20),
+              style: GoogleFonts.montserrat(fontSize: 20),
             ),
             const SizedBox(
               height: 25,
@@ -85,17 +85,20 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.black)),
                 child: TextFormField(
+                  style: GoogleFonts.montserrat(),
                   maxLines: null,
                   keyboardType: TextInputType.multiline,
                   maxLength: 1000,
                   onChanged: (newValue) => comment = newValue,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 10.0),
                     counterText: "",
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     labelText: "Nhập đánh giá của bạn...",
                     hintText: "Nhập vào đánh giá người chơi của bạn",
+                    hintStyle: GoogleFonts.montserrat(),
+                    labelStyle: GoogleFonts.montserrat(),
                     border: InputBorder.none,
                   ),
                 ),

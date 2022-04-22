@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WithdrawPage extends StatefulWidget {
   const WithdrawPage({Key? key}) : super(key: key);
@@ -31,10 +32,10 @@ class _WithdrawPageState extends State<WithdrawPage> {
               ),
             ),
             centerTitle: true,
-            title: const Text(
+            title: Text(
               'Thanh toán qua MOMO',
-              style: TextStyle(
-                  fontSize: 18,
+              style: GoogleFonts.montserrat(
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.normal),
             ),
@@ -42,8 +43,6 @@ class _WithdrawPageState extends State<WithdrawPage> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,16 +58,18 @@ class _WithdrawPageState extends State<WithdrawPage> {
                       });
                     },
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20),
+                    style: GoogleFonts.montserrat(fontSize: 20),
                     decoration: InputDecoration(
                         counter: Container(), hintText: " Nhập số điện thoại"),
                     maxLength: 10,
                     controller: customController,
-                    inputFormatters: [],
+                    inputFormatters: const [],
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                Text('đ', style: TextStyle(fontSize: 15, color: Colors.black)),
+                Text('đ',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15, color: Colors.black)),
               ],
             ),
           ],

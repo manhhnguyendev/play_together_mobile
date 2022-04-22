@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NotificationCard extends StatefulWidget {
   final UserModel userModel;
@@ -46,7 +47,8 @@ class _NotificationCardState extends State<NotificationCard> {
                   children: [
                     Text(
                       widget.notificationModel.title,
-                      style: const TextStyle(fontSize: 18, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, color: Colors.black),
                     ),
                     const SizedBox(
                       height: 5,
@@ -61,7 +63,8 @@ class _NotificationCardState extends State<NotificationCard> {
                   children: [
                     Text(
                       date + ', ' + time,
-                      style: const TextStyle(fontSize: 15, color: Colors.black),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15, color: Colors.black),
                     ),
                   ],
                 ),

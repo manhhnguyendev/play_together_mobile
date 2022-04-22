@@ -3,6 +3,7 @@ import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_detail_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CharityCard extends StatefulWidget {
   final UserModel userModel;
@@ -60,24 +61,24 @@ class _CharityCardState extends State<CharityCard> {
                     children: [
                       Text(
                         widget.charityModel.organizationName,
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 17, color: Colors.black),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
                         widget.charityModel.address,
-                        style:
-                            const TextStyle(fontSize: 15, color: Colors.black),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 15, color: Colors.black),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
                         widget.charityModel.phone,
-                        style:
-                            const TextStyle(fontSize: 15, color: Colors.black),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 15, color: Colors.black),
                       ),
                       const SizedBox(
                         height: 5,

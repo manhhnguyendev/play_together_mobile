@@ -531,7 +531,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
 
     if (status == 'Online') {
       return Text(
-        'Có thể thuê',
+        'Đang online',
         style: GoogleFonts.montserrat(fontSize: 18, color: Colors.green),
       );
     }
