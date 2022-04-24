@@ -1,8 +1,8 @@
-import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/models/order_model.dart';
 
 class ChatModel {
   String id;
-  UserModel? user;
+  OrderUserModel? user;
   String message;
   String createdDate;
   bool isActive;
@@ -17,7 +17,7 @@ class ChatModel {
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
         id: json['id'] as String,
-        user: (json['user']) != null ? UserModel.fromJson(json['user']) : null,
+        user: (json['user']) != null ? OrderUserModel.fromJson(json['user']) : null,
         message: json['message'] as String,
         createdDate: json['createdDate'] as String,
         isActive: json['isActive'] as bool,

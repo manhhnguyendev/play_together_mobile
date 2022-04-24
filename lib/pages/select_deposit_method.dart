@@ -63,14 +63,14 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
               );
             },
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(border: Border.all(width: 0.1)),
               width: double.infinity,
               child: Row(children: [
                 Expanded(
                   flex: 1,
                   child: Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       border: Border.all(width: 0.2),
                       color: Colors.white,
@@ -82,7 +82,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Expanded(
@@ -98,7 +98,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                           style: GoogleFonts.montserrat(
                               fontSize: 18, color: Colors.black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
@@ -114,14 +114,14 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(border: Border.all(width: 0.1)),
             width: double.infinity,
             child: Row(children: [
               Expanded(
                 flex: 1,
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     border: Border.all(width: 0.2),
                     color: Colors.white,
@@ -133,7 +133,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Expanded(
@@ -149,7 +149,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                           style: GoogleFonts.montserrat(
                               fontSize: 18, color: Colors.black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(
@@ -163,14 +163,14 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
             ]),
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(border: Border.all(width: 0.1)),
             width: double.infinity,
             child: Row(children: [
               Expanded(
                 flex: 1,
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     border: Border.all(width: 0.2),
                     color: Colors.white,
@@ -182,7 +182,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Expanded(
@@ -198,7 +198,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                           style: GoogleFonts.montserrat(
                               fontSize: 18, color: Colors.black),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Text(

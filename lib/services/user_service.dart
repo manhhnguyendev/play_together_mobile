@@ -45,10 +45,10 @@ class UserService {
     return result;
   }
 
-  Future<ResponseListModel<UserModel>?> getAllUsersIsNewAccount(
+  Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsNewAccount(
       dynamic token) async {
     Response response;
-    ResponseListModel<UserModel>? result;
+    ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}?IsNewAccount=true&IsPlayer=true&PageSize=5'),
@@ -56,7 +56,7 @@ class UserService {
       );
       if (response.statusCode == 200) {
         result =
-            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
+            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -64,10 +64,10 @@ class UserService {
     return result;
   }
 
-  Future<ResponseListModel<UserModel>?> getAllUsersIsSameHobbies(
+  Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsSameHobbies(
       dynamic token) async {
     Response response;
-    ResponseListModel<UserModel>? result;
+    ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -76,7 +76,7 @@ class UserService {
       );
       if (response.statusCode == 200) {
         result =
-            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
+            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -84,10 +84,10 @@ class UserService {
     return result;
   }
 
-  Future<ResponseListModel<UserModel>?> getAllUsersIsOrderByRating(
+  Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsOrderByRating(
       dynamic token) async {
     Response response;
-    ResponseListModel<UserModel>? result;
+    ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -96,7 +96,7 @@ class UserService {
       );
       if (response.statusCode == 200) {
         result =
-            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
+            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -104,10 +104,10 @@ class UserService {
     return result;
   }
 
-  Future<ResponseListModel<UserModel>?> getAllUsersIsRecentOrder(
+  Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsRecentOrder(
       dynamic token) async {
     Response response;
-    ResponseListModel<UserModel>? result;
+    ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -116,7 +116,7 @@ class UserService {
       );
       if (response.statusCode == 200) {
         result =
-            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
+            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -264,7 +264,7 @@ class UserService {
         Uri.parse('${apiUrl.users}/un-active-balance'),
         headers: configJson.headerAuth(token),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {

@@ -27,9 +27,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final List<PlayerModel> _listPlayerSearch = [];
+  final List<PlayerModel> _listPlayerFilter = [];
   final _controller = TextEditingController();
-  List<UserModel>? listPlayerSearch;
-  List<PlayerModel> listPlayerFilter = [];
+  List<GetAllUserModel> listPlayerSearch =[];
+  List<GetAllUserModel> listPlayerFilter = [];
   bool checkFirstTime = true;
   bool checkFilter = true;
   bool checkListSearch = true;
@@ -165,7 +166,7 @@ class _SearchPageState extends State<SearchPage> {
                     setState(() {
                       checkListFilter = true;
                       checkListSearch = false;
-                      Future<ResponseListModel<PlayerModel>?>
+                      Future<ResponseListModel<GetAllUserModel>?>
                           getPlayerByFilter = SearchService()
                               .searchUserByFilter(
                                   _controller.text,
@@ -185,6 +186,18 @@ class _SearchPageState extends State<SearchPage> {
                           if (checkFilter) {
                             setState(() {
                               listPlayerFilter = value.content;
+                              if (_listPlayerFilter.isEmpty) {
+                                for (var item in listPlayerFilter) {
+                                  Future<ResponseModel<PlayerModel>?> getPlayerById = UserService()
+                                      .getPlayerById(item.id, widget.tokenModel.message);
+                                  getPlayerById.then((value) {
+                                    if (value != null) {
+                                      _listPlayerFilter.add(value.content);
+                                      print(_listPlayerFilter.length);
+                                    }
+                                  });
+                                }
+                              }
                             });
                             checkFilter = false;
                           }
@@ -216,9 +229,9 @@ class _SearchPageState extends State<SearchPage> {
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: Column(
                                 children: List.generate(
-                                    listPlayerFilter.length,
+                                    _listPlayerFilter.length,
                                     (index) => buildListSearch(
-                                        listPlayerFilter[index]))))),
+                                        _listPlayerFilter[index]))))),
                   )
                 ],
               ),
@@ -234,7 +247,7 @@ class _SearchPageState extends State<SearchPage> {
       );
 
   Future loadListSearchPlayer() {
-    Future<ResponseListModel<UserModel>?> getListSearchUser = SearchService()
+    Future<ResponseListModel<GetAllUserModel>?> getListSearchUser = SearchService()
         .searchUser(widget.searchValue.toString(), widget.tokenModel.message);
     getListSearchUser.then((_userList) {
       if (checkFirstTime) {
@@ -242,10 +255,10 @@ class _SearchPageState extends State<SearchPage> {
         setState(() {
           listPlayerSearch = _userList!.content;
           if (_listPlayerSearch.isEmpty) {
-            for (var item in listPlayerSearch!) {
-              Future<ResponseModel<PlayerModel>?> playerFuture = UserService()
+            for (var item in listPlayerSearch) {
+              Future<ResponseModel<PlayerModel>?> getPlayerById = UserService()
                   .getPlayerById(item.id, widget.tokenModel.message);
-              playerFuture.then((value) {
+              getPlayerById.then((value) {
                 if (value != null) {
                   _listPlayerSearch.add(value.content);
                 }

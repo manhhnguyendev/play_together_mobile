@@ -34,7 +34,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
     with TickerProviderStateMixin {
   List listGamesChoosen = [];
   late AnimationController controller;
-  int time = 5;
+  int time = 0;
   UserModel? lateUser;
   final today = DateTime.now();
 
@@ -45,6 +45,7 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
       if (value != null) {
         if (value.content.status.contains('Online')) {
           lateUser = value.content;
+          if (!mounted) return;
           setState(() {
             helper.pushInto(
                 context,
@@ -65,17 +66,20 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   @override
   void initState() {
     super.initState();
+    time = helper.getDayElapsed(DateTime.now().toString(), widget.orderModel!.processExpired);
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: time * 60),
+      duration: Duration(seconds: time),
     );
     controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
       if (controller.value == 0) {
         setState(() {
-          Future<bool?> cancelFuture = OrderService().cancelOrderRequest(
-              widget.orderModel!.id, widget.tokenModel.message);
-          cancelFuture.then((check) {
+          RejectOrderModel rejectOrder = RejectOrderModel(
+              isAccept: false, reason: 'Quá thời gian chấp thuận');
+          Future<bool?> rejectFuture = OrderService().rejectOrderRequest(
+              widget.orderModel!.id, widget.tokenModel.message, rejectOrder);
+          rejectFuture.then((check) {
             if (check == true) {
               setState(() {
                 helper.pushInto(
@@ -374,21 +378,22 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
               future: checkStatus(),
               builder: (context, snapshot) {
                 return AlertDialog(
-                    title: Text("Từ chối nhận đơn thuê này?"),
+                    title: Text("Từ chối nhận đơn thuê này?", style: GoogleFonts.montserrat(fontSize: 17),),
                     content: TextField(
+                      style: GoogleFonts.montserrat(),
                       controller: customController,
                     ),
                     actions: <Widget>[
                       MaterialButton(
                         elevation: 5.0,
-                        child: Text('Không'),
+                        child: Text('Không', style: GoogleFonts.montserrat(),),
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
                       MaterialButton(
                         elevation: 5.0,
-                        child: Text('Có'),
+                        child: Text('Có', style: GoogleFonts.montserrat(),),
                         onPressed: () {
                           RejectOrderModel isReject = RejectOrderModel(
                               isAccept: false, reason: customController.text);

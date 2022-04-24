@@ -518,7 +518,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                 Text(
                     gameOfUser.rankId != "None"
                         ? (gameOfUser.rank != null
-                            ? " : " + gameOfUser.rank.name
+                            ? " : " + gameOfUser.rank!.name
                             : '')
                         : '',
                     style: GoogleFonts.montserrat(fontSize: 15)),

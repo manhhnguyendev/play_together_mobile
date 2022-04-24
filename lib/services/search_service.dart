@@ -8,10 +8,10 @@ import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class SearchService {
-  Future<ResponseListModel<UserModel>?> searchUser(
+  Future<ResponseListModel<GetAllUserModel>?> searchUser(
       String search, dynamic token) async {
     Response response;
-    ResponseListModel<UserModel>? result;
+    ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse('${apiUrl.users}?Search=$search&IsPlayer=true'),
@@ -19,7 +19,7 @@ class SearchService {
       );
       if (response.statusCode == 200) {
         result =
-            ResponseListModel<UserModel>.fromJson(json.decode(response.body));
+            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -27,7 +27,7 @@ class SearchService {
     return result;
   }
 
-  Future<ResponseListModel<PlayerModel>?> searchUserByFilter(
+  Future<ResponseListModel<GetAllUserModel>?> searchUserByFilter(
       String search,
       bool isMale,
       bool isFemale,
@@ -49,7 +49,7 @@ class SearchService {
       gender = "";
     }
     Response response;
-    ResponseListModel<PlayerModel>? result;
+    ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse(
@@ -58,7 +58,7 @@ class SearchService {
       );
       if (response.statusCode == 200) {
         result =
-            ResponseListModel<PlayerModel>.fromJson(json.decode(response.body));
+            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;

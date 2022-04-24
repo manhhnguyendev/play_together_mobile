@@ -7,7 +7,7 @@ import 'package:play_together_mobile/models/user_model.dart';
 
 class ResponseModel<T> {
   late T content;
-  ErrorModel error;
+  ErrorModel? error;
   bool isSuccess;
   String responseTime;
 
@@ -106,9 +106,9 @@ class CharityModelResponse extends ResponseModel<CharityModel> {
 }
 
 class ErrorModel {
-  int code;
-  String type;
-  String message;
+  Null code;
+  Null type;
+  Null message;
 
   ErrorModel({
     required this.code,
@@ -117,9 +117,9 @@ class ErrorModel {
   });
 
   factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
-        code: json['code'] as int,
-        type: json['type'] as String,
-        message: json['message'] as String,
+        code: json['code'] as Null,
+        type: json['type'] as Null,
+        message: json['message'] as Null,
       );
 
   Map<String, dynamic> toJson() => {

@@ -17,6 +17,7 @@ class LoginService {
         body: jsonEncode(loginModel.toJson()),
       );
       if (response.statusCode == 200) {
+
         result = TokenModel.fromJson(json.decode(response.body));
       }
     } on Exception {

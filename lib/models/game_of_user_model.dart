@@ -6,7 +6,7 @@ class GameOfUserModel {
   String gameId;
   GamesModel game;
   String rankId;
-  RankModel rank;
+  RankModel? rank;
 
   GameOfUserModel({
     required this.id,
@@ -24,9 +24,7 @@ class GameOfUserModel {
             ? GamesModel.fromJson(json['game'])
             : GamesModel.fromJson(json),
         rankId: json['rankId'] as String,
-        rank: (json['rank']) != null
-            ? RankModel.fromJson(json['rank'])
-            : RankModel.fromJson(json),
+        rank: (json['rank']) != null ? RankModel.fromJson(json['rank']) : null,
       );
 
   Map<String, dynamic> toJson() => {

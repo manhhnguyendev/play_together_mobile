@@ -49,7 +49,7 @@ class _WithdrawPageState extends State<WithdrawPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.only(top: 15),
                   width: 350,
                   child: TextField(
                     onChanged: (value) {
