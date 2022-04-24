@@ -1,8 +1,8 @@
-import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/models/hobbies_model.dart';
 
 class RatingModel {
   String id;
-  UserModel? user;
+  HobbiesUserModel? user;
   int rate;
   String createdDate;
   String comment;
@@ -17,7 +17,9 @@ class RatingModel {
 
   factory RatingModel.fromJson(Map<String, dynamic> json) => RatingModel(
         id: json['id'] as String,
-        user: (json['user']) != null ? UserModel.fromJson(json['user']) : null,
+        user: (json['user']) != null
+            ? HobbiesUserModel.fromJson(json['user'])
+            : null,
         rate: json['rate'] as int,
         comment: json['comment'] as String,
         createdDate: json['createdDate'] as String,

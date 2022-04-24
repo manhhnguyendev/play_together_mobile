@@ -241,7 +241,7 @@ class _FilterPageState extends State<FilterPage> {
                                       sortOrder = 3;
                                       sortByHobby = false;
                                       sortByRating = false;
-                                      sortByPrice = true;
+                                      sortByPrice = false;
                                       sortByAlphabet = false;
                                     });
                                   }),

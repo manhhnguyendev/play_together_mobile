@@ -1,5 +1,3 @@
-import 'package:play_together_mobile/models/response_list_model.dart';
-
 class TokenModel {
   String message;
   bool success;

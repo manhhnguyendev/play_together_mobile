@@ -142,13 +142,14 @@ class OrderService {
     return result;
   }
 
-  Future<bool?> cancelOrderRequest(String orderId, dynamic token) async {
+  Future<bool?> cancelOrderRequest(String orderId, dynamic token, CancelOrderModel cancelOrderModel) async {
     Response response;
     bool? result;
     try {
       response = await put(
         Uri.parse('${apiUrl.users}/orders/cancel/$orderId'),
         headers: configJson.headerAuth(token),
+        body: jsonEncode(cancelOrderModel.toJson()),
       );
       if (response.statusCode == 204) {
         result = true;

@@ -504,8 +504,8 @@ class _PersonalPageState extends State<PersonalPage> {
                             'Trung tâm hỗ trợ',
                             style: GoogleFonts.montserrat(fontSize: 20),
                           ),
-                          Spacer(),
-                          Icon(
+                          const Spacer(),
+                          const Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey,
                             size: 15,

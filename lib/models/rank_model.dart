@@ -10,9 +10,9 @@ class RankModel {
   });
 
   factory RankModel.fromJson(Map<String, dynamic> json) => RankModel(
-        id: json['id'] as String,
-        no: json['no'] as int,
-        name: json['name'] as String,
+        id: json['id'],
+        no: json['no'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toJson() => {

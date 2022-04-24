@@ -20,7 +20,7 @@ class ResponseListModel<T> {
   bool hasPrevious;
   bool hasNext;
   late List<T> content;
-  ErrorModel error;
+  ErrorModel? error;
   bool isSuccess;
   String responseTime;
 
@@ -70,6 +70,8 @@ class ResponseListModel<T> {
     } else if (T == PlayerModel) {
       return ListPlayerModelModelResponse.fromJson(json)
           as ResponseListModel<T>;
+    } else if (T == GetAllUserModel) {
+      return ListGetAllUserModelResponse.fromJson(json) as ResponseListModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -80,6 +82,15 @@ class ListUserModelResponse extends ResponseListModel<UserModel> {
       : super._fromJson(json) {
     content = (json['content'] as List<dynamic>)
         .map((dynamic item) => UserModel.fromJson(item))
+        .toList();
+  }
+}
+
+class ListGetAllUserModelResponse extends ResponseListModel<GetAllUserModel> {
+  ListGetAllUserModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = (json['content'] as List<dynamic>)
+        .map((dynamic item) => GetAllUserModel.fromJson(item))
         .toList();
   }
 }
@@ -204,9 +215,9 @@ class ListChatModelResponse extends ResponseListModel<ChatModel> {
 }
 
 class ErrorModel {
-  int code;
-  String type;
-  String message;
+  Null code;
+  Null type;
+  Null message;
 
   ErrorModel({
     required this.code,
@@ -215,9 +226,9 @@ class ErrorModel {
   });
 
   factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
-        code: json['code'] as int,
-        type: json['type'] as String,
-        message: json['message'] as String,
+        code: json['code'] as Null,
+        type: json['type'] as Null,
+        message: json['message'] as Null,
       );
 
   Map<String, dynamic> toJson() => {

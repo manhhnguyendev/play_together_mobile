@@ -47,6 +47,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
             if (order != null) {
               lateOrder = order.content;
               lateUser = value.content;
+              if (!mounted) return;
               setState(() {
                 helper.pushInto(
                     context,

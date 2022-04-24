@@ -1,10 +1,7 @@
-import 'package:play_together_mobile/models/game_model.dart';
-import 'package:play_together_mobile/models/user_model.dart';
-
 class HobbiesModel {
   String id;
-  UserModel user;
-  GamesModel game;
+  HobbiesUserModel user;
+  HobbiesGameModel game;
 
   HobbiesModel({
     required this.id,
@@ -15,17 +12,67 @@ class HobbiesModel {
   factory HobbiesModel.fromJson(Map<String, dynamic> json) => HobbiesModel(
         id: json['id'] as String,
         user: (json['user']) != null
-            ? UserModel.fromJson(json['user'])
-            : UserModel.fromJson(json),
+            ? HobbiesUserModel.fromJson(json['user'])
+            : HobbiesUserModel.fromJson(json),
         game: (json['game']) != null
-            ? GamesModel.fromJson(json['game'])
-            : GamesModel.fromJson(json),
+            ? HobbiesGameModel.fromJson(json['game'])
+            : HobbiesGameModel.fromJson(json),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "user": user,
         "game": game,
+      };
+}
+
+class HobbiesUserModel {
+  String id;
+  String name;
+  String avatar;
+
+  HobbiesUserModel({
+    required this.id,
+    required this.name,
+    required this.avatar,
+  });
+
+  factory HobbiesUserModel.fromJson(Map<String, dynamic> json) =>
+      HobbiesUserModel(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        avatar: json['avatar'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "avatar": avatar,
+      };
+}
+
+class HobbiesGameModel {
+  String name;
+  String displayName;
+  String otherName;
+
+  HobbiesGameModel({
+    required this.name,
+    required this.displayName,
+    required this.otherName,
+  });
+
+  factory HobbiesGameModel.fromJson(Map<String, dynamic> json) =>
+      HobbiesGameModel(
+        name: json['name'] as String,
+        displayName: json['displayName'] as String,
+        otherName: json['otherName'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "displayName": displayName,
+        "otherName": otherName,
       };
 }
 

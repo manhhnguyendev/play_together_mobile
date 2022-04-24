@@ -148,8 +148,8 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                                 isExpanded: true,
                                 menuMaxHeight: 5 * 48,
                                 hint: Text(
-                                  _gameOfUserModel.rank.name != null
-                                      ? _gameOfUserModel.rank.name
+                                  _gameOfUserModel.rank != null
+                                      ? _gameOfUserModel.rank!.name
                                       : '',
                                   style: GoogleFonts.montserrat(
                                       color: Colors.black, fontSize: 15),

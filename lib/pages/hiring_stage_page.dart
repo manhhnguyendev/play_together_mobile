@@ -35,7 +35,8 @@ class HiringPage extends StatefulWidget {
 class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   List listGamesChoosen = [];
   late AnimationController controller;
-  int hour = 2;
+  int time = 0;
+
   double progress = 1.0;
   UserModel? lateUser;
   OrderModel? lateOrder;
@@ -53,6 +54,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
             if (order != null) {
               lateOrder = order.content;
               lateUser = value.content;
+              if (!mounted) return;
               setState(() {
                 helper.pushInto(
                     context,
@@ -79,22 +81,24 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    time = helper.getDayElapsed(DateTime.now().toString(), DateTime.parse(widget.orderModel!.timeStart).add(Duration(hours: widget.orderModel!.totalTimes)).toString());
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: widget.orderModel!.totalTimes * 60 * 60),
+      duration: Duration(seconds: time),
     );
     controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
     controller.addListener(() {
       if (controller.value == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => EndOrderPage(
-                    tokenModel: widget.tokenModel,
-                    userModel: widget.userModel!,
-                    orderModel: widget.orderModel,
-                  )),
-        );
+        setState(() {
+          helper.pushInto(
+              context,
+              EndOrderPage(
+                tokenModel: widget.tokenModel,
+                userModel: widget.userModel!,
+                orderModel: widget.orderModel,
+              ),
+              true);
+        });
       }
     });
   }

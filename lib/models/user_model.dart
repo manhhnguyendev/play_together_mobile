@@ -36,7 +36,7 @@ class UserModel {
         id: json['id'] as String,
         avatar: json['avatar'] as String,
         name: json['name'] as String,
-        isPlayer: json['isPlayer'] as bool,
+        isPlayer: json['isPlayer'],
         dateOfBirth: json['dateOfBirth'] as String,
         city: json['city'] as String,
         gender: json['gender'] as bool,
@@ -68,6 +68,55 @@ class UserModel {
         "userBalance": userBalance,
         "status": status,
         "isActive": isActive,
+      };
+}
+
+class GetAllUserModel {
+  String id;
+  String avatar;
+  String name;
+  bool isPlayer;
+  double rate;
+  int numOfRate;
+  String status;
+  double pricePerHour;
+  String createdDate;
+
+  GetAllUserModel({
+    required this.id,
+    required this.avatar,
+    required this.name,
+    required this.isPlayer,
+    required this.rate,
+    required this.numOfRate,
+    required this.status,
+    required this.pricePerHour,
+    required this.createdDate,
+  });
+
+  factory GetAllUserModel.fromJson(Map<String, dynamic> json) =>
+      GetAllUserModel(
+        id: json['id'] as String,
+        avatar: json['avatar'] as String,
+        name: json['name'] as String,
+        isPlayer: json['isPlayer'] as bool,
+        rate: json['rate'] as double,
+        numOfRate: json['numOfRate'] as int,
+        status: json['status'] as String,
+        pricePerHour: json['pricePerHour'] as double,
+        createdDate: json['createdDate'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "avatar": avatar,
+        "name": name,
+        "isPlayer": isPlayer,
+        "rate": rate,
+        "numOfRate": numOfRate,
+        "status": status,
+        "pricePerHour": pricePerHour,
+        "createdDate": createdDate,
       };
 }
 

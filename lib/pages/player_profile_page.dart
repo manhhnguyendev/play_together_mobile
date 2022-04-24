@@ -493,7 +493,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
               Text(
                   gameOfUser.rankId != "None"
                       ? (gameOfUser.rank != null
-                          ? " : " + gameOfUser.rank.name
+                          ? " : " + gameOfUser.rank!.name
                           : '')
                       : '',
                   style: GoogleFonts.montserrat(fontSize: 15)),

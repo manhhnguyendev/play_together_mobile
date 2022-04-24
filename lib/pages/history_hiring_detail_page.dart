@@ -23,6 +23,9 @@ class HistoryHiringDetail extends StatefulWidget {
 }
 
 class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
+  String? rating;
+  final _commentController = TextEditingController();
+  final _reasonController = TextEditingController();
   bool checkFinalPrice = true;
   bool checkReason = true;
   bool checkRating = true;
@@ -55,47 +58,35 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       checkFinalPrice = false;
     }
 
-    if (widget.orderDetailModel.reason!.isNotEmpty) {
+    if (widget.orderDetailModel.reason != null) {
       checkReason = true;
-    } else if (widget.orderDetailModel.reason! != null) {
-      checkReason = true;
-    } else if (widget.orderDetailModel.reason! != "") {
-      checkReason = true;
-    } else {
+    }else {
       checkReason = false;
     }
 
-    if (widget.orderDetailModel.ratings![0].comment.isNotEmpty) {
-      checkComment = true;
-    } else if (widget.orderDetailModel.ratings![0].comment != null) {
-      checkComment = true;
-    } else if (widget.orderDetailModel.ratings![0].comment != "") {
+    if (widget.orderDetailModel.ratings!.isNotEmpty){
       checkComment = true;
     } else {
       checkComment = false;
     }
 
-    if (widget.orderDetailModel.ratings![0].rate.toString().isNotEmpty) {
-      checkRating = true;
-    } else if (widget.orderDetailModel.ratings![0].rate.toString() != null) {
-      checkRating = true;
-    } else if (widget.orderDetailModel.ratings![0].rate.toString() != "") {
+    if (widget.orderDetailModel.ratings!.isNotEmpty){
       checkRating = true;
     } else {
       checkRating = false;
     }
 
-    var rating = widget.orderDetailModel.ratings![0].rate.toString() != null
-        ? widget.orderDetailModel.ratings![0].rate.toString()
-        : '';
+     rating = widget.orderDetailModel.status == 'Reject' ? ''
+         : widget.orderDetailModel.status == 'OverTime' ? ''
+         : widget.orderDetailModel.status == 'Cancel' ? ''
+         : widget.orderDetailModel.ratings![0].rate.toString();
 
-    var _commentController = TextEditingController();
     _commentController.text =
-        widget.orderDetailModel.ratings![0].comment != null
-            ? widget.orderDetailModel.ratings![0].comment
-            : '';
+    (widget.orderDetailModel.status == 'Reject' ? ''
+        : widget.orderDetailModel.status == 'OverTime' ? ''
+        : widget.orderDetailModel.status == 'Cancel' ? ''
+        : widget.orderDetailModel.ratings![0].comment);
 
-    var _reasonController = TextEditingController();
     _reasonController.text = widget.orderDetailModel.reason != null
         ? widget.orderDetailModel.reason!
         : '';
@@ -380,7 +371,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                         color: Colors.amber,
                       ),
                       Text(
-                        rating,
+                        rating!,
                         style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],
