@@ -91,7 +91,7 @@ class UserService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?IsSkillSameHobbies=true&IsPlayer=true&PageSize=5'),
+            '${apiUrl.users}?IsOrderByRating=true&PageSize=5'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

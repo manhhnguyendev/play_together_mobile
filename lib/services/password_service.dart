@@ -53,6 +53,7 @@ class PasswordService {
         headers: configJson.headerAuth(token),
         body: jsonEncode(changePasswordModel.toJson()),
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         result = true;
       }
