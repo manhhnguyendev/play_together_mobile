@@ -7,15 +7,17 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HistoryHiringDetail extends StatefulWidget {
-  final OrderDetailModel orderDetailModel;
+  final OrderModel orderModel;
   final UserModel userModel;
   final TokenModel tokenModel;
+  final OrderDetailModel orderDetailModel;
 
   const HistoryHiringDetail(
       {Key? key,
-      required this.orderDetailModel,
+      required this.orderModel,
       required this.tokenModel,
-      required this.userModel})
+      required this.userModel,
+      required this.orderDetailModel})
       : super(key: key);
 
   @override
@@ -31,6 +33,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   bool checkRating = true;
   bool checkComment = true;
   int rate = 5;
+
   @override
   Widget build(BuildContext context) {
     bool checkExpired =
@@ -60,37 +63,45 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
 
     if (widget.orderDetailModel.reason != null) {
       checkReason = true;
-    }else {
+    } else {
       checkReason = false;
     }
 
-    if (widget.orderDetailModel.ratings!.isNotEmpty){
+    if (widget.orderDetailModel.ratings!.isNotEmpty) {
       checkComment = true;
     } else {
       checkComment = false;
     }
 
-    if (widget.orderDetailModel.ratings!.isNotEmpty){
+    if (widget.orderDetailModel.ratings!.isNotEmpty) {
       checkRating = true;
     } else {
       checkRating = false;
     }
 
-     rating = widget.orderDetailModel.status == 'Reject' ? ''
-         : widget.orderDetailModel.status == 'OverTime' ? ''
-         : widget.orderDetailModel.status == 'Cancel' ? ''
-         : widget.orderDetailModel.ratings![0].rate.toString();
+    rating = widget.orderDetailModel.status == 'Reject'
+        ? ''
+        : widget.orderDetailModel.status == 'OverTime'
+            ? ''
+            : widget.orderDetailModel.status == 'Cancel'
+                ? ''
+                : widget.orderDetailModel.ratings!.isEmpty
+                    ? ''
+                    : widget.orderDetailModel.ratings![0].rate.toString();
 
-    _commentController.text =
-    (widget.orderDetailModel.status == 'Reject' ? ''
-        : widget.orderDetailModel.status == 'OverTime' ? ''
-        : widget.orderDetailModel.status == 'Cancel' ? ''
-        : widget.orderDetailModel.ratings![0].comment);
+    _commentController.text = (widget.orderDetailModel.status == 'Reject'
+        ? ''
+        : widget.orderDetailModel.status == 'OverTime'
+            ? ''
+            : widget.orderDetailModel.status == 'Cancel'
+                ? ''
+                : widget.orderDetailModel.ratings!.isEmpty
+                    ? ''
+                    : widget.orderDetailModel.ratings![0].comment);
 
     _reasonController.text = widget.orderDetailModel.reason != null
         ? widget.orderDetailModel.reason!
         : '';
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(

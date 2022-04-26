@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
-import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/filter_page.dart';
 import 'package:play_together_mobile/services/search_service.dart';
-import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/search_player_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,13 +24,13 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final List<PlayerModel> _listPlayerSearch = [];
-  final List<PlayerModel> _listPlayerFilter = [];
   final _controller = TextEditingController();
-  List<GetAllUserModel> listPlayerSearch =[];
+  List<GetAllUserModel> listPlayerSearch = [];
   List<GetAllUserModel> listPlayerFilter = [];
   bool checkFirstTime = true;
+  bool checkSearchFirstTime = true;
   bool checkFilter = true;
+  bool checkOnSubmit = true;
   bool checkListSearch = true;
   bool checkListFilter = false;
   bool isMale = true;
@@ -62,7 +60,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = widget.searchValue.toString();
+    if (checkSearchFirstTime) {
+      _controller.text = widget.searchValue.toString();
+      checkSearchFirstTime = false;
+    }
+    _controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: _controller.text.length));
     Size size = MediaQuery.of(context).size;
     return FutureBuilder(
         future: loadListSearchPlayer(),
@@ -85,11 +88,22 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
+                  style: GoogleFonts.montserrat(),
                   controller: _controller,
+                  onSubmitted: (value) {
+                    _controller.text = value;
+                    Future<ResponseListModel<GetAllUserModel>?>
+                        getListSearchUser = SearchService()
+                            .searchUser(value, widget.tokenModel.message);
+                    getListSearchUser.then((_userList) {
+                      setState(() {
+                        listPlayerSearch = _userList!.content;
+                      });
+                    });
+                  },
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: 40 / 375 * size.width,
-                        vertical: 9 / 512 * size.height),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 9 / 512 * size.height),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -186,18 +200,6 @@ class _SearchPageState extends State<SearchPage> {
                           if (checkFilter) {
                             setState(() {
                               listPlayerFilter = value.content;
-                              if (_listPlayerFilter.isEmpty) {
-                                for (var item in listPlayerFilter) {
-                                  Future<ResponseModel<PlayerModel>?> getPlayerById = UserService()
-                                      .getPlayerById(item.id, widget.tokenModel.message);
-                                  getPlayerById.then((value) {
-                                    if (value != null) {
-                                      _listPlayerFilter.add(value.content);
-                                      print(_listPlayerFilter.length);
-                                    }
-                                  });
-                                }
-                              }
                             });
                             checkFilter = false;
                           }
@@ -218,9 +220,9 @@ class _SearchPageState extends State<SearchPage> {
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: Column(
                                 children: List.generate(
-                                    _listPlayerSearch.length,
+                                    listPlayerSearch.length,
                                     (index) => buildListSearch(
-                                        _listPlayerSearch[index]))))),
+                                        listPlayerSearch[index]))))),
                   ),
                   Visibility(
                     visible: checkListFilter,
@@ -229,9 +231,9 @@ class _SearchPageState extends State<SearchPage> {
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: Column(
                                 children: List.generate(
-                                    _listPlayerFilter.length,
+                                    listPlayerFilter.length,
                                     (index) => buildListSearch(
-                                        _listPlayerFilter[index]))))),
+                                        listPlayerFilter[index]))))),
                   )
                 ],
               ),
@@ -240,31 +242,21 @@ class _SearchPageState extends State<SearchPage> {
         });
   }
 
-  Widget buildListSearch(PlayerModel _playerModel) => SearchPlayerCard(
+  Widget buildListSearch(GetAllUserModel _playerModel) => SearchPlayerCard(
         playerModel: _playerModel,
         tokenModel: widget.tokenModel,
         userModel: widget.userModel,
       );
 
   Future loadListSearchPlayer() {
-    Future<ResponseListModel<GetAllUserModel>?> getListSearchUser = SearchService()
-        .searchUser(widget.searchValue.toString(), widget.tokenModel.message);
+    Future<ResponseListModel<GetAllUserModel>?> getListSearchUser =
+        SearchService().searchUser(
+            widget.searchValue.toString(), widget.tokenModel.message);
     getListSearchUser.then((_userList) {
       if (checkFirstTime) {
         checkListSearch = true;
         setState(() {
           listPlayerSearch = _userList!.content;
-          if (_listPlayerSearch.isEmpty) {
-            for (var item in listPlayerSearch) {
-              Future<ResponseModel<PlayerModel>?> getPlayerById = UserService()
-                  .getPlayerById(item.id, widget.tokenModel.message);
-              getPlayerById.then((value) {
-                if (value != null) {
-                  _listPlayerSearch.add(value.content);
-                }
-              });
-            }
-          }
         });
         checkFirstTime = false;
       }

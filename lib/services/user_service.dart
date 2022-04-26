@@ -64,14 +64,14 @@ class UserService {
     return result;
   }
 
-  Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsSameHobbies(
+  Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsSkillSameHobbies(
       dynamic token) async {
     Response response;
     ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?IsSameHobbies=true&IsPlayer=true&PageSize=5'),
+            '${apiUrl.users}?IsSkillSameHobbies=true&IsPlayer=true&PageSize=5'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -91,7 +91,7 @@ class UserService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?IsOrderByRating=true&IsPlayer=true&PageSize=5'),
+            '${apiUrl.users}?IsSkillSameHobbies=true&IsPlayer=true&PageSize=5'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -154,6 +154,25 @@ class UserService {
       if (response.statusCode == 200) {
         result =
             ResponseModel<PlayerModel>.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseModel<GetAllUserModel>?> getPlayerRecommendById(
+      String id, dynamic token) async {
+    Response response;
+    ResponseModel<GetAllUserModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/$id'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result =
+        ResponseModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;

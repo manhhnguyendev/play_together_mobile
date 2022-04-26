@@ -81,7 +81,11 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    time = helper.getDayElapsed(DateTime.now().toString(), DateTime.parse(widget.orderModel!.timeStart).add(Duration(hours: widget.orderModel!.totalTimes)).toString());
+    time = helper.getDayElapsed(
+        DateTime.now().toString(),
+        DateTime.parse(widget.orderModel!.timeStart)
+            .add(Duration(hours: widget.orderModel!.totalTimes))
+            .toString());
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: time),
@@ -117,6 +121,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   }
 
   bool isPlaying = false;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

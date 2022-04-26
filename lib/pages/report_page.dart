@@ -24,6 +24,7 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   String reportMessage = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +65,8 @@ class _ReportPageState extends State<ReportPage> {
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
                     widget.orderModel!.user!.id == widget.userModel!.id
-                        ? widget.orderModel!.user!.avatar
-                        : widget.orderModel!.toUser!.avatar),
+                        ? widget.orderModel!.toUser!.avatar
+                        : widget.orderModel!.user!.avatar),
               ),
             ),
             const SizedBox(
@@ -73,8 +74,8 @@ class _ReportPageState extends State<ReportPage> {
             ),
             Text(
               widget.orderModel!.user!.id == widget.userModel!.id
-                  ? widget.orderModel!.user!.name
-                  : widget.orderModel!.toUser!.name,
+                  ? widget.orderModel!.toUser!.name
+                  : widget.orderModel!.user!.name,
               style: GoogleFonts.montserrat(fontSize: 20),
             ),
             const SizedBox(

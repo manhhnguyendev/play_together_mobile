@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
@@ -26,6 +27,7 @@ class ReceiveRequestPage extends StatefulWidget {
       required this.userModel,
       required this.tokenModel})
       : super(key: key);
+
   @override
   State<ReceiveRequestPage> createState() => _ReceiveRequestPageState();
 }
@@ -66,7 +68,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   @override
   void initState() {
     super.initState();
-    time = helper.getDayElapsed(DateTime.now().toString(), widget.orderModel!.processExpired);
+    time = helper.getDayElapsed(
+        DateTime.now().toString(), widget.orderModel!.processExpired);
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: time),
@@ -346,15 +349,23 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                                   widget.tokenModel.message, isAccept);
                           acceptFuture.then((accept) {
                             if (accept == true) {
-                              setState(() {
-                                helper.pushInto(
-                                    context,
-                                    HiringPage(
-                                      tokenModel: widget.tokenModel,
-                                      userModel: widget.userModel,
-                                      orderModel: widget.orderModel,
-                                    ),
-                                    true);
+                              Future<ResponseModel<OrderModel>?>
+                                  getOrderByIdFuture =
+                                  OrderService().getOrderById(widget.orderModel!.id,
+                                      widget.tokenModel.message);
+                              getOrderByIdFuture.then((orderPlayer) {
+                                if (orderPlayer != null) {
+                                  setState(() {
+                                    helper.pushInto(
+                                        context,
+                                        HiringPage(
+                                          tokenModel: widget.tokenModel,
+                                          userModel: widget.userModel,
+                                          orderModel: orderPlayer.content,
+                                        ),
+                                        true);
+                                  });
+                                }
                               });
                             }
                           });
@@ -378,7 +389,10 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
               future: checkStatus(),
               builder: (context, snapshot) {
                 return AlertDialog(
-                    title: Text("Từ chối nhận đơn thuê này?", style: GoogleFonts.montserrat(fontSize: 17),),
+                    title: Text(
+                      "Từ chối nhận đơn thuê này?",
+                      style: GoogleFonts.montserrat(fontSize: 17),
+                    ),
                     content: TextField(
                       style: GoogleFonts.montserrat(),
                       controller: customController,
@@ -386,14 +400,20 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                     actions: <Widget>[
                       MaterialButton(
                         elevation: 5.0,
-                        child: Text('Không', style: GoogleFonts.montserrat(),),
+                        child: Text(
+                          'Không',
+                          style: GoogleFonts.montserrat(),
+                        ),
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
                       MaterialButton(
                         elevation: 5.0,
-                        child: Text('Có', style: GoogleFonts.montserrat(),),
+                        child: Text(
+                          'Có',
+                          style: GoogleFonts.montserrat(),
+                        ),
                         onPressed: () {
                           RejectOrderModel isReject = RejectOrderModel(
                               isAccept: false, reason: customController.text);
