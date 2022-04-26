@@ -164,7 +164,7 @@ class _ReportCommentPageState extends State<ReportCommentPage> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
             child: SecondMainButton(
-                text: 'Kết thúc',
+                text: 'Tố cáo',
                 onPress: () {
                   if (checkReason == true && _controller.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

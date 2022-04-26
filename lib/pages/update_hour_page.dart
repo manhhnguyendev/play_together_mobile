@@ -236,6 +236,11 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                                       content: Text("Xóa thành công"),
                                     ));
                                   });
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Xóa thất bại"),
+                                  ));
                                 }
                               });
                             },
