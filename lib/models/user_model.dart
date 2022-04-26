@@ -15,6 +15,12 @@ class UserModel {
   UserBalanceModel userBalance;
   String status;
   bool isActive;
+  double rate;
+  int numOfRate;
+  int numOfOrder;
+  int totalTimeOrder;
+  int numOfFinishOnTime;
+  BehaviorModel behaviorPoint;
 
   UserModel({
     required this.id,
@@ -30,6 +36,12 @@ class UserModel {
     required this.userBalance,
     required this.status,
     required this.isActive,
+    required this.rate,
+    required this.numOfRate,
+    required this.numOfOrder,
+    required this.totalTimeOrder,
+    required this.numOfFinishOnTime,
+    required this.behaviorPoint,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -52,6 +64,14 @@ class UserModel {
             : UserBalanceModel.fromJson(json),
         status: json['status'] as String,
         isActive: json['isActive'] as bool,
+        rate: json['rate'] as double,
+        numOfRate: json['numOfRate'] as int,
+        numOfOrder: json['numOfOrder'] as int,
+        totalTimeOrder: json['totalTimeOrder'] as int,
+        numOfFinishOnTime: json['totalTimeOrder'] as int,
+        behaviorPoint: (json['behaviorPoint']) != null
+            ? BehaviorModel.fromJson(json['behaviorPoint'])
+            : BehaviorModel.fromJson(json),
       );
 
   Map<String, dynamic> toJson() => {
@@ -68,6 +88,35 @@ class UserModel {
         "userBalance": userBalance,
         "status": status,
         "isActive": isActive,
+        "rate": rate,
+        "numOfRate": numOfRate,
+        "numOfOrder": numOfOrder,
+        "totalTimeOrder": totalTimeOrder,
+        "numOfFinishOnTime": numOfFinishOnTime,
+        "behaviorPoint": behaviorPoint
+      };
+}
+
+class BehaviorModel {
+  String id;
+  int point;
+  int satisfiedPoint;
+
+  BehaviorModel({
+    required this.id,
+    required this.point,
+    required this.satisfiedPoint,
+  });
+
+  factory BehaviorModel.fromJson(Map<String, dynamic> json) => BehaviorModel(
+      id: json['id'] as String,
+      point: json['point'] as int,
+      satisfiedPoint: json['satisfiedPoint'] as int);
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "point": point,
+        "satisfiedPoint": satisfiedPoint,
       };
 }
 

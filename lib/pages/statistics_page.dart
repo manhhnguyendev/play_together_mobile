@@ -167,6 +167,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 'Đánh giá',
                                 style: GoogleFonts.montserrat(
                                   fontSize: 18,
+                                  textStyle: TextStyle(
+                                      decoration: TextDecoration.underline),
                                 ),
                               ),
                               const SizedBox(
@@ -181,7 +183,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 height: 5,
                               ),
                               Text(
-                                '4.5',
+                                widget.userModel.rate.toStringAsFixed(1),
                                 style: GoogleFonts.montserrat(
                                   fontSize: 15,
                                 ),
@@ -252,6 +254,43 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   )
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+            child: Container(
+              decoration: BoxDecoration(border: Border.all(width: 1)),
+              child: Column(children: [
+                Text('Độ uy tín',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 18, color: Colors.black)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                  child: Row(children: [
+                    Text('Điểm hành vi:',
+                        style: GoogleFonts.montserrat(
+                            fontSize: 15, color: Colors.black)),
+                    Spacer(),
+                    Text(widget.userModel.behaviorPoint.point.toString(),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 15, color: Colors.black)),
+                  ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  child: Row(children: [
+                    Text('Điểm thỏa mãn:',
+                        style: GoogleFonts.montserrat(
+                            fontSize: 15, color: Colors.black)),
+                    Spacer(),
+                    Text(
+                        widget.userModel.behaviorPoint.satisfiedPoint
+                            .toString(),
+                        style: GoogleFonts.montserrat(
+                            fontSize: 15, color: Colors.black)),
+                  ]),
+                ),
+              ]),
             ),
           ),
         ],

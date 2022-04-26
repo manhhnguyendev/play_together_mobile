@@ -206,6 +206,11 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                                     .showSnackBar(const SnackBar(
                                   content: Text("Xóa thành công"),
                                 ));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Xóa thất bại"),
+                                ));
                               }
                             });
                           });
