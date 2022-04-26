@@ -47,7 +47,7 @@ class _BottomBarState extends State<BottomBar> {
         BottomNavigationBarItem(
           icon: Icon(Icons.health_and_safety_outlined),
           activeIcon: Icon(Icons.health_and_safety_rounded, size: 30),
-          label: "Hội từ thiện",
+          label: "Quyên góp",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_outlined, size: 30),
