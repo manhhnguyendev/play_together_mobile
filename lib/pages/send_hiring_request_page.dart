@@ -247,68 +247,64 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                 onPress: (widget.playerModel!.pricePerHour * chooseTime) <=
                         widget.userModel.userBalance.balance
                     ? () {
-                        setState(() {
-                          for (var item in listGamesChoosen) {
-                            for (var game in widget.listGameAndRank!) {
-                              if (game.game.name.contains(item)) {
-                                GameOrderModel gameOfOrder =
-                                    GameOrderModel(gameId: game.gameId);
-                                games.add(gameOfOrder);
-                              }
+                        for (var item in listGamesChoosen) {
+                          for (var game in widget.listGameAndRank!) {
+                            if (game.game.name.contains(item)) {
+                              GameOrderModel gameOfOrder =
+                                  GameOrderModel(gameId: game.gameId);
+                              games.add(gameOfOrder);
                             }
                           }
-                          CreateOrderModel createOrderModel = CreateOrderModel(
-                              totalTimes: chooseTime,
-                              message: beginMessage,
-                              games: games);
-                          print(games.length);
-                          if (games.isNotEmpty) {
-                            if (beginMessage.isNotEmpty) {
-                              Future<ResponseModel<OrderModel>?>
-                                  orderModelFuture = OrderService()
-                                      .createOrderRequest(
-                                          widget.playerModel!.id,
-                                          createOrderModel,
-                                          widget.tokenModel.message);
-                              orderModelFuture.then((order) {
-                                if (order != null) {
-                                  SendEmailModel sendEmailModel =
-                                      SendEmailModel(
-                                          toEmail: widget.playerModel!.email,
-                                          subject: 'BẠN CÓ MỘT YÊU CẦU THUÊ',
-                                          body: 'Bạn có một yêu cầu thuê từ ' +
-                                              widget.userModel.name +
-                                              ' yêu cầu sẽ hết hạn sau 5 phút');
-                                  Future<bool?> sendEmail = EmailService()
-                                      .sendEmail(sendEmailModel,
-                                          widget.tokenModel.message);
-                                  setState(() {
-                                    orderModel = order.content;
-                                    print('OrderId: ' + orderModel!.id);
-                                    helper.pushInto(
-                                        context,
-                                        HiringNegotiatingPage(
-                                            tokenModel: widget.tokenModel,
-                                            userModel: widget.userModel,
-                                            orderModel: orderModel,
-                                            playerModel: widget.playerModel),
-                                        true);
-                                  });
-                                }
-                              });
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Vui lòng nhập lời nhắn"),
-                              ));
-                            }
+                        }
+                        CreateOrderModel createOrderModel = CreateOrderModel(
+                            totalTimes: chooseTime,
+                            message: beginMessage,
+                            games: games);
+                        if (games.isNotEmpty) {
+                          if (beginMessage.isNotEmpty) {
+                            Future<ResponseModel<OrderModel>?>
+                                orderModelFuture = OrderService()
+                                    .createOrderRequest(
+                                        widget.playerModel!.id,
+                                        createOrderModel,
+                                        widget.tokenModel.message);
+                            orderModelFuture.then((order) {
+                              if (order != null) {
+                                SendEmailModel sendEmailModel = SendEmailModel(
+                                    toEmail: widget.playerModel!.email,
+                                    subject: 'BẠN CÓ MỘT YÊU CẦU THUÊ',
+                                    body: 'Bạn có một yêu cầu thuê từ ' +
+                                        widget.userModel.name +
+                                        ' yêu cầu sẽ hết hạn sau 5 phút');
+                                Future<bool?> sendEmail = EmailService()
+                                    .sendEmail(sendEmailModel,
+                                        widget.tokenModel.message);
+                                setState(() {
+                                  orderModel = order.content;
+                                  print('OrderId: ' + orderModel!.id);
+                                  helper.pushInto(
+                                      context,
+                                      HiringNegotiatingPage(
+                                          tokenModel: widget.tokenModel,
+                                          userModel: widget.userModel,
+                                          orderModel: orderModel,
+                                          playerModel: widget.playerModel),
+                                      true);
+                                });
+                              }
+                            });
                           } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
-                              content: Text("Vui lòng chọn tựa game"),
+                              content: Text("Vui lòng nhập lời nhắn"),
                             ));
                           }
-                        });
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Vui lòng chọn tựa game"),
+                          ));
+                        }
                       }
                     : () {
                         ScaffoldMessenger.of(context)
@@ -322,24 +318,26 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
     );
   }
 
-  Widget buildSingleCheckBox(CheckBoxState cbState) => CheckboxListTile(
-        controlAffinity: ListTileControlAffinity.leading,
-        activeColor: const Color(0xff8980FF),
-        value: cbState.value,
-        onChanged: (value) => setState(() {
-          if (value == true) {
-            cbState.value = value!;
-            listGamesChoosen.add(cbState.title);
-          } else {
-            cbState.value = value!;
-            listGamesChoosen.remove(cbState.title);
-          }
-        }),
-        title: Text(
-          cbState.title,
-          style: GoogleFonts.montserrat(fontSize: 15),
-        ),
-      );
+  Widget buildSingleCheckBox(CheckBoxState cbState) {
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      activeColor: const Color(0xff8980FF),
+      value: cbState.value,
+      onChanged: (value) => setState(() {
+        if (cbState.value) {
+          listGamesChoosen.remove(cbState.title);
+          cbState.value = value!;
+        } else {
+          listGamesChoosen.add(cbState.title);
+          cbState.value = value!;
+        }
+      }),
+      title: Text(
+        cbState.title,
+        style: GoogleFonts.montserrat(fontSize: 15),
+      ),
+    );
+  }
 
   Widget createStatus(String status) {
     if (status == 'Hiring') {

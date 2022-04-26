@@ -117,26 +117,31 @@ class _ReportPageState extends State<ReportPage> {
             child: SecondMainButton(
                 text: 'Gửi',
                 onPress: () {
-                  ReportCreateModel reportCreateModel = ReportCreateModel(
-                      reportMessage:
-                          reportMessage != "" ? reportMessage : reportMessage);
-                  Future<bool?> reportFuture = ReportService().createReport(
-                      widget.orderModel!.id,
-                      widget.tokenModel.message,
-                      reportCreateModel);
-                  reportFuture.then((rate) {
-                    if (rate == true) {
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            HistoryPage(
-                              tokenModel: widget.tokenModel,
-                              userModel: widget.userModel!,
-                            ),
-                            true);
-                      });
-                    }
-                  });
+                  ReportCreateModel reportCreateModel =
+                      ReportCreateModel(reportMessage: reportMessage);
+                  if (reportMessage.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Vui lòng nhập lý do tố cáo!"),
+                    ));
+                  } else {
+                    Future<bool?> reportFuture = ReportService().createReport(
+                        widget.orderModel!.id,
+                        widget.tokenModel.message,
+                        reportCreateModel);
+                    reportFuture.then((rate) {
+                      if (rate == true) {
+                        setState(() {
+                          helper.pushInto(
+                              context,
+                              HistoryPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel!,
+                              ),
+                              true);
+                        });
+                      }
+                    });
+                  }
                 },
                 height: 50,
                 width: 200),
