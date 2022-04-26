@@ -115,25 +115,34 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                 text: 'Gửi',
                 onPress: () {
                   RatingCreateModel rateComment = RatingCreateModel(
-                      rate: ratingStar.round(),
-                      comment: comment != "" ? comment : comment);
-                  Future<bool?> rateFuture = RatingService().createRating(
-                      widget.orderModel!.id,
-                      widget.tokenModel.message,
-                      rateComment);
-                  rateFuture.then((rate) {
-                    if (rate == true) {
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            HistoryPage(
-                              tokenModel: widget.tokenModel,
-                              userModel: widget.userModel!,
-                            ),
-                            true);
-                      });
-                    }
-                  });
+                      rate: ratingStar.round(), comment: comment);
+                  if (ratingStar.round().toString().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Vui lòng đánh giá!"),
+                    ));
+                  } else if (comment.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Vui lòng nhập bình luận!"),
+                    ));
+                  } else {
+                    Future<bool?> rateFuture = RatingService().createRating(
+                        widget.orderModel!.id,
+                        widget.tokenModel.message,
+                        rateComment);
+                    rateFuture.then((rate) {
+                      if (rate == true) {
+                        setState(() {
+                          helper.pushInto(
+                              context,
+                              HistoryPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel!,
+                              ),
+                              true);
+                        });
+                      }
+                    });
+                  }
                 },
                 height: 50,
                 width: 200),
