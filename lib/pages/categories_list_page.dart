@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CategoriesListPage extends StatefulWidget {
   final String title;
-  final List<PlayerModel> playerList;
+  final List<GetAllUserModel> playerList;
   final UserModel userModel;
   final TokenModel tokenModel;
 
@@ -63,7 +63,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
     );
   }
 
-  Widget buildListSearch(PlayerModel _playerModel) => SearchPlayerCard(
+  Widget buildListSearch(GetAllUserModel _playerModel) => SearchPlayerCard(
         playerModel: _playerModel,
         tokenModel: widget.tokenModel,
         userModel: widget.userModel,

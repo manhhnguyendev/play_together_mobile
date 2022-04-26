@@ -10,7 +10,6 @@ import 'package:play_together_mobile/pages/categories_list_page.dart';
 import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
-import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/search_history_recommend_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
@@ -37,11 +36,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<PlayerModel> _listPlayerIsSkillSameHobbies = [];
-  final List<PlayerModel> _listPlayerIsOrderByRating = [];
-  final List<PlayerModel> _listPlayerIsRecentOrder = [];
-  final List<PlayerModel> _listPlayerIsNewAccount = [];
-  final List<PlayerModel> _listPlayerRecommend = [];
+  List<GetAllUserModel> listPlayerRecommend = [];
   List<GetAllUserModel> listPlayerIsSkillSameHobbies = [];
   List<GetAllUserModel> listPlayerIsOrderByRating = [];
   List<GetAllUserModel> listPlayerIsRecentOrder = [];
@@ -70,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           if (listPlayerIsRecentOrder.isNotEmpty) {
             checkRecentOrder = true;
           }
-          if (listGetResultRecommend.isNotEmpty) {
+          if (listPlayerRecommend.isNotEmpty) {
             checkRecommend = true;
           }
           getListPlayerId();
@@ -110,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                   builder: (context) => CategoriesListPage(
                                     title: 'Đề xuất cho bạn',
-                                    playerList: _listPlayerRecommend,
+                                    playerList: listPlayerRecommend,
                                     tokenModel: widget.tokenModel,
                                     userModel: widget.userModel,
                                   ),
@@ -155,15 +150,15 @@ class _HomePageState extends State<HomePage> {
                                         return ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount:
-                                              _listPlayerRecommend.isNotEmpty
-                                                  ? _listPlayerRecommend.length
+                                              listPlayerRecommend.isNotEmpty
+                                                  ? listPlayerRecommend.length
                                                   : 0,
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             if (lateUser != null) {
                                               return PlayerCard(
                                                 playerModel:
-                                                    _listPlayerRecommend[index],
+                                                    listPlayerRecommend[index],
                                                 tokenModel: widget.tokenModel,
                                                 userModel: lateUser!,
                                               );
@@ -189,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                 builder: (context) => CategoriesListPage(
                                   title: 'Top người chơi ưa thích',
-                                  playerList: _listPlayerIsOrderByRating,
+                                  playerList: listPlayerIsOrderByRating,
                                   tokenModel: widget.tokenModel,
                                   userModel: widget.userModel,
                                 ),
@@ -227,16 +222,16 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsOrderByRating
+                                        itemCount: listPlayerIsOrderByRating
                                                 .isNotEmpty
-                                            ? _listPlayerIsOrderByRating.length
+                                            ? listPlayerIsOrderByRating.length
                                             : 0,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           if (lateUser != null) {
                                             return PlayerCard(
                                               playerModel:
-                                                  _listPlayerIsOrderByRating[
+                                                  listPlayerIsOrderByRating[
                                                       index],
                                               tokenModel: widget.tokenModel,
                                               userModel: lateUser!,
@@ -262,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                 builder: (context) => CategoriesListPage(
                                   title: 'Các người chơi mới',
-                                  playerList: _listPlayerIsNewAccount,
+                                  playerList: listPlayerIsNewAccount,
                                   tokenModel: widget.tokenModel,
                                   userModel: widget.userModel,
                                 ),
@@ -301,16 +296,15 @@ class _HomePageState extends State<HomePage> {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
                                         itemCount:
-                                            _listPlayerIsNewAccount.isNotEmpty
-                                                ? _listPlayerIsNewAccount.length
+                                            listPlayerIsNewAccount.isNotEmpty
+                                                ? listPlayerIsNewAccount.length
                                                 : 0,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           if (lateUser != null) {
                                             return PlayerCard(
                                               playerModel:
-                                                  _listPlayerIsNewAccount[
-                                                      index],
+                                                  listPlayerIsNewAccount[index],
                                               tokenModel: widget.tokenModel,
                                               userModel: lateUser!,
                                             );
@@ -335,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                 builder: (context) => CategoriesListPage(
                                   title: 'Có thể bạn sẽ thích',
-                                  playerList: _listPlayerIsSkillSameHobbies,
+                                  playerList: listPlayerIsSkillSameHobbies,
                                   tokenModel: widget.tokenModel,
                                   userModel: widget.userModel,
                                 ),
@@ -373,9 +367,9 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context, snapshot) {
                                       return ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: _listPlayerIsSkillSameHobbies
+                                        itemCount: listPlayerIsSkillSameHobbies
                                                 .isNotEmpty
-                                            ? _listPlayerIsSkillSameHobbies
+                                            ? listPlayerIsSkillSameHobbies
                                                 .length
                                             : 0,
                                         itemBuilder:
@@ -383,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                                           if (lateUser != null) {
                                             return PlayerCard(
                                               playerModel:
-                                                  _listPlayerIsSkillSameHobbies[
+                                                  listPlayerIsSkillSameHobbies[
                                                       index],
                                               tokenModel: widget.tokenModel,
                                               userModel: lateUser!,
@@ -411,7 +405,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                   builder: (context) => CategoriesListPage(
                                     title: 'Thuê lại',
-                                    playerList: _listPlayerIsRecentOrder,
+                                    playerList: listPlayerIsRecentOrder,
                                     tokenModel: widget.tokenModel,
                                     userModel: widget.userModel,
                                   ),
@@ -455,16 +449,16 @@ class _HomePageState extends State<HomePage> {
                                       builder: (context, snapshot) {
                                         return ListView.builder(
                                           scrollDirection: Axis.horizontal,
-                                          itemCount: _listPlayerIsRecentOrder
+                                          itemCount: listPlayerIsRecentOrder
                                                   .isNotEmpty
-                                              ? _listPlayerIsRecentOrder.length
+                                              ? listPlayerIsRecentOrder.length
                                               : 0,
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             if (lateUser != null) {
                                               return PlayerCard(
                                                 playerModel:
-                                                    _listPlayerIsRecentOrder[
+                                                    listPlayerIsRecentOrder[
                                                         index],
                                                 tokenModel: widget.tokenModel,
                                                 userModel: lateUser!,
@@ -524,18 +518,11 @@ class _HomePageState extends State<HomePage> {
         for (var result in listResultRecommend) {
           score = double.parse(result.score);
           if (score > 3.5) {
-            listGetResultRecommend.add(result);
-          }
-        }
-        if (listGetResultRecommend.isNotEmpty) {
-          for (var item in listGetResultRecommend) {
-            Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
-                UserService()
-                    .getPlayerById(item.playerId, widget.tokenModel.message);
+            Future<ResponseModel<GetAllUserModel>?> getPlayerByIdFuture =
+                UserService().getPlayerRecommendById(
+                    result.playerId, widget.tokenModel.message);
             getPlayerByIdFuture.then((value) {
-              if (value != null) {
-                _listPlayerRecommend.add(value.content);
-              }
+              listPlayerRecommend.add(value!.content);
             });
           }
         }
@@ -552,17 +539,6 @@ class _HomePageState extends State<HomePage> {
     listPlayerIsOrderByRatingFuture.then((_playerList) {
       if (checkFirstOrderByRating) {
         listPlayerIsOrderByRating = _playerList!.content;
-        if (_listPlayerIsOrderByRating.isEmpty) {
-          for (var item in listPlayerIsOrderByRating) {
-            Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            getPlayerByIdFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsOrderByRating.add(value.content);
-              }
-            });
-          }
-        }
         checkFirstOrderByRating = false;
       }
     });
@@ -575,17 +551,6 @@ class _HomePageState extends State<HomePage> {
     listPlayerIsNewAccountFuture.then((_playerList) {
       if (checkFirstIsNewAccount) {
         listPlayerIsNewAccount = _playerList!.content;
-        if (_listPlayerIsNewAccount.isEmpty) {
-          for (var item in listPlayerIsNewAccount) {
-            Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            getPlayerByIdFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsNewAccount.add(value.content);
-              }
-            });
-          }
-        }
         checkFirstIsNewAccount = false;
       }
     });
@@ -595,22 +560,10 @@ class _HomePageState extends State<HomePage> {
   Future loadListPlayerIsSkillSameHobbies() {
     Future<ResponseListModel<GetAllUserModel>?>
         listPlayerIsSkillSameHobbiesFuture =
-        UserService().getAllUsersIsSameHobbies(widget.tokenModel.message);
+        UserService().getAllUsersIsSkillSameHobbies(widget.tokenModel.message);
     listPlayerIsSkillSameHobbiesFuture.then((_playerList) {
       if (checkFirstIsSkillSameHobbies) {
         listPlayerIsSkillSameHobbies = _playerList!.content;
-
-        if (_listPlayerIsSkillSameHobbies.isEmpty) {
-          for (var item in listPlayerIsSkillSameHobbies) {
-            Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            getPlayerByIdFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsSkillSameHobbies.add(value.content);
-              }
-            });
-          }
-        }
         checkFirstIsSkillSameHobbies = false;
       }
     });
@@ -623,17 +576,6 @@ class _HomePageState extends State<HomePage> {
     listPlayerIsRecentOrderFuture.then((_playerList) {
       if (checkFirstIsRecentOrder) {
         listPlayerIsRecentOrder = _playerList!.content;
-        if (_listPlayerIsRecentOrder.isEmpty) {
-          for (var item in listPlayerIsRecentOrder) {
-            Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
-                UserService().getPlayerById(item.id, widget.tokenModel.message);
-            getPlayerByIdFuture.then((value) {
-              if (value != null) {
-                _listPlayerIsRecentOrder.add(value.content);
-              }
-            });
-          }
-        }
         checkFirstIsRecentOrder = false;
       }
     });

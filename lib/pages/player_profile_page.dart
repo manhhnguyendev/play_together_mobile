@@ -441,7 +441,13 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text(
-                                  "Bạn không thể thuê, vui lòng tắt nhận thuê để thực hiện"),
+                                  "Bạn không thể thuê! Vui lòng tắt nhận thuê để thực hiện"),
+                            ));
+                          } else if (widget.playerModel.status == "Hiring" || widget.playerModel.status == "Processing") {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Bạn không thể thuê! Người chơi hiện đang bận, vui lòng thuê lại sau"),
                             ));
                           } else {
                             Navigator.push(
@@ -517,7 +523,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
 
     if (status == 'Processing') {
       return Text(
-        'Đang xử lý',
+        'Đang thương lượng',
         style: GoogleFonts.montserrat(fontSize: 18, color: Colors.amber),
       );
     }

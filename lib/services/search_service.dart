@@ -72,7 +72,7 @@ class SearchService {
     ResponseListModel<CharityModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.charities}?Name=$search'),
+        Uri.parse('${apiUrl.charities}?Name=$search&IsActive=true'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {

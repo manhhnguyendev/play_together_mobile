@@ -25,6 +25,7 @@ class SearchHistoryAndRecommendPage extends StatefulWidget {
 class _SearchHistoryAndRecommendPageState
     extends State<SearchHistoryAndRecommendPage> {
   final _controller = TextEditingController();
+
   List<SearchHistoryModel> listSearchHistory = [];
   List<SearchHistoryModel> listHotSearch = [];
   List<GamesModel> listMostFavoriteGame = [];
@@ -55,6 +56,7 @@ class _SearchHistoryAndRecommendPageState
             borderRadius: BorderRadius.circular(15),
           ),
           child: TextField(
+
             style: GoogleFonts.montserrat(),
             controller: _controller,
             onSubmitted: (value) {
@@ -69,10 +71,8 @@ class _SearchHistoryAndRecommendPageState
                     ),
                   ));
             },
+
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: 40 / 375 * size.width,
-                  vertical: 9 / 512 * size.height),
               border: InputBorder.none,
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
@@ -179,7 +179,15 @@ class _SearchHistoryAndRecommendPageState
     return GestureDetector(
       onTap: () {
         setState(() {
-          _controller.text = searchHistory;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchPage(
+                  tokenModel: widget.tokenModel,
+                  userModel: widget.userModel,
+                  searchValue: searchHistory,
+                ),
+              ));
         });
       },
       child: Padding(
@@ -209,7 +217,15 @@ class _SearchHistoryAndRecommendPageState
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _controller.text = gameType;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchPage(
+                    tokenModel: widget.tokenModel,
+                    userModel: widget.userModel,
+                    searchValue: gameType,
+                  ),
+                ));
           });
         },
         child: Container(

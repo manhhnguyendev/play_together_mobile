@@ -47,16 +47,26 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
       if (value != null) {
         if (value.content.status.contains('Hiring')) {
           lateUser = value.content;
-          setState(() {
-            helper.pushInto(
-                context,
-                HiringPage(
-                  tokenModel: widget.tokenModel,
-                  userModel: lateUser,
-                  orderModel: widget.orderModel,
-                ),
-                true);
+          Future<ResponseModel<OrderModel>?>
+          getOrderByIdFuture =
+          OrderService().getOrderById(widget.orderModel!.id,
+              widget.tokenModel.message);
+          getOrderByIdFuture.then((orderUser) {
+            if(orderUser!= null){
+              setState(() {
+                helper.pushInto(
+                    context,
+                    HiringPage(
+                      tokenModel: widget.tokenModel,
+                      userModel: lateUser,
+                      orderModel: orderUser.content,
+                    ),
+                    true);
+              });
+            }
+
           });
+
         } else if (value.content.status.contains('Online')) {
           lateUser = value.content;
           if (!mounted) return;

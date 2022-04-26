@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
@@ -10,7 +11,7 @@ import 'package:play_together_mobile/services/user_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchPlayerCard extends StatefulWidget {
-  final PlayerModel playerModel;
+  final GetAllUserModel playerModel;
   final UserModel userModel;
   final TokenModel tokenModel;
 
@@ -46,15 +47,22 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
         builder: (context, snapshot) {
           return GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PlayerProfilePage(
-                          userModel: widget.userModel,
-                          playerModel: widget.playerModel,
-                          tokenModel: widget.tokenModel,
-                        )),
-              );
+              Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
+                  UserService().getPlayerById(
+                      widget.playerModel.id, widget.tokenModel.message);
+              getPlayerByIdFuture.then((playerDetail) {
+                if (playerDetail != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerProfilePage(
+                              userModel: widget.userModel,
+                              playerModel: playerDetail.content,
+                              tokenModel: widget.tokenModel,
+                            )),
+                  );
+                }
+              });
             },
             child: Column(
               children: [

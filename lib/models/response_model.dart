@@ -37,6 +37,8 @@ class ResponseModel<T> {
       return NotificationModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == OrderDetailModel) {
       return OrderDetailModelResponse.fromJson(json) as ResponseModel<T>;
+    }else if (T == GetAllUserModel) {
+      return GetAllUserModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == BehaviorModel) {
       return BehaviorModelResponse.fromJson(json) as ResponseModel<T>;
     }
@@ -48,6 +50,13 @@ class UserModelResponse extends ResponseModel<UserModel> {
   UserModelResponse.fromJson(Map<String, dynamic> json)
       : super._fromJson(json) {
     content = UserModel.fromJson(json["content"]);
+  }
+}
+
+class GetAllUserModelResponse extends ResponseModel<GetAllUserModel> {
+  GetAllUserModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = GetAllUserModel.fromJson(json["content"]);
   }
 }
 

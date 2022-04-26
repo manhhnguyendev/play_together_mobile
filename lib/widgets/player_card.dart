@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/player_profile_page.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 
 class PlayerCard extends StatefulWidget {
   final double width, aspectRatio;
   final UserModel userModel;
   final TokenModel tokenModel;
-  final PlayerModel playerModel;
+  final GetAllUserModel playerModel;
 
   const PlayerCard({
     Key? key,
@@ -35,15 +37,22 @@ class _PlayerCardState extends State<PlayerCard> {
           width: widget.width / 365 * size.width,
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PlayerProfilePage(
-                          userModel: widget.userModel,
-                          playerModel: widget.playerModel,
-                          tokenModel: widget.tokenModel,
-                        )),
-              );
+              Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
+                  UserService().getPlayerById(
+                      widget.playerModel.id, widget.tokenModel.message);
+              getPlayerByIdFuture.then((playerDetail) {
+                if (playerDetail != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlayerProfilePage(
+                              userModel: widget.userModel,
+                              playerModel: playerDetail.content,
+                              tokenModel: widget.tokenModel,
+                            )),
+                  );
+                }
+              });
             },
             child: Column(
               children: [

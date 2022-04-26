@@ -299,31 +299,39 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                           .finishSoonOrder(widget.orderModel!.id,
                               widget.tokenModel.message, finishSoonModel);
                       finishFuture.then((finish) {
-                        if (finish == true) {
-                          Future<ResponseModel<OrderModel>?> checkStatusOrder =
-                              OrderService().getOrderById(widget.orderModel!.id,
-                                  widget.tokenModel.message);
-                          checkStatusOrder.then((order) {
-                            if (order != null) {
-                              setState(() {
-                                lateOrder = order.content;
-                                helper.pushInto(
-                                    context,
-                                    EndOrderPage(
-                                      tokenModel: widget.tokenModel,
-                                      userModel: lateUser ?? widget.userModel,
-                                      orderModel:
-                                          lateOrder ?? widget.orderModel,
-                                    ),
-                                    true);
-                              });
-                            }
-                          });
+                        if (reason.isNotEmpty) {
+                          if (finish == true) {
+                            Future<ResponseModel<OrderModel>?>
+                                checkStatusOrder = OrderService().getOrderById(
+                                    widget.orderModel!.id,
+                                    widget.tokenModel.message);
+                            checkStatusOrder.then((order) {
+                              if (order != null) {
+                                setState(() {
+                                  lateOrder = order.content;
+                                  helper.pushInto(
+                                      context,
+                                      EndOrderPage(
+                                        tokenModel: widget.tokenModel,
+                                        userModel: lateUser ?? widget.userModel,
+                                        orderModel:
+                                            lateOrder ?? widget.orderModel,
+                                      ),
+                                      true);
+                                });
+                              }
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Bạn chỉ có thể kết thúc sau khi hoàn thành 1/10 thời gian thuê"),
+                            ));
+                          }
                         } else {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text(
-                                "Bạn chỉ có thể kết thúc sau khi hoàn thành 1/10 thời gian thuê"),
+                            content: Text("Vui lòng nhập lý do!"),
                           ));
                         }
                       });

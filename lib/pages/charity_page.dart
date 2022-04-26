@@ -10,6 +10,7 @@ import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/services/charity_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/search_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
 import 'package:play_together_mobile/widgets/charity_card.dart';
@@ -37,6 +38,7 @@ class _CharityPageState extends State<CharityPage> {
   final _controller = TextEditingController();
   List<CharityModel> _listCharity = [];
   bool checkFirstTime = true;
+  bool checkSearchFirstTime = true;
 
   Future loadListCharity() {
     Future<ResponseListModel<CharityModel>?> listCharityModelFuture =
@@ -65,6 +67,10 @@ class _CharityPageState extends State<CharityPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    if (checkSearchFirstTime) {
+      _controller.text = "";
+      checkSearchFirstTime = false;
+    }
     return FutureBuilder(
         future: checkStatus(),
         builder: (context, snapshot) {
@@ -96,15 +102,18 @@ class _CharityPageState extends State<CharityPage> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: TextField(
+                        style: GoogleFonts.montserrat(),
                         controller: _controller,
-                        onChanged: (value) {
-                          search = value;
-                          setState(() {});
-                        },
                         onSubmitted: (value) {
-                          if (search.isNotEmpty && value.isNotEmpty) {
-                            setState(() {});
-                          }
+                          _controller.text = value;
+                          Future<ResponseListModel<CharityModel>?>
+                          getListSearchUser = SearchService()
+                              .searchCharityByName(value, widget.tokenModel.message);
+                          getListSearchUser.then((_userList) {
+                            setState(() {
+                              _listCharity = _userList!.content;
+                            });
+                          });
                         },
                         decoration: InputDecoration(
                           border: InputBorder.none,

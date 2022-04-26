@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/order_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/services/order_service.dart';
 
 class HistoryHiringCard extends StatefulWidget {
   final TokenModel tokenModel;
   final UserModel userModel;
-  final OrderDetailModel orderDetailModel;
+  final OrderModel orderModel;
 
   const HistoryHiringCard(
       {Key? key,
-      required this.orderDetailModel,
+      required this.orderModel,
       required this.tokenModel,
       required this.userModel})
       : super(key: key);
@@ -27,27 +29,28 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
   bool checkReorder = false;
   bool checkStatus = true;
+
   @override
   Widget build(BuildContext context) {
     String date = "";
     String time = "";
-    if (widget.orderDetailModel.timeStart != "0001-01-01T00:00:00") {
+    if (widget.orderModel.timeStart != "0001-01-01T00:00:00") {
       date = DateFormat('dd/MM/yyyy')
-          .format(DateTime.parse(widget.orderDetailModel.timeStart));
+          .format(DateTime.parse(widget.orderModel.timeStart));
       time = DateFormat('hh:mm a')
-          .format(DateTime.parse(widget.orderDetailModel.timeStart));
+          .format(DateTime.parse(widget.orderModel.timeStart));
     } else {
       date = DateFormat('dd/MM/yyyy')
-          .format(DateTime.parse(widget.orderDetailModel.processExpired));
+          .format(DateTime.parse(widget.orderModel.processExpired));
       time = DateFormat('hh:mm a')
-          .format(DateTime.parse(widget.orderDetailModel.processExpired));
+          .format(DateTime.parse(widget.orderModel.processExpired));
     }
 
-    if (widget.orderDetailModel.status == "Reject") {
+    if (widget.orderModel.status == "Reject") {
       checkStatus = false;
-    } else if (widget.orderDetailModel.status == "OverTime") {
+    } else if (widget.orderModel.status == "OverTime") {
       checkStatus = false;
-    } else if (widget.orderDetailModel.status == "Cancel") {
+    } else if (widget.orderModel.status == "Cancel") {
       checkStatus = false;
     } else {
       checkStatus = true;
@@ -57,15 +60,23 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HistoryHiringDetail(
-                      orderDetailModel: widget.orderDetailModel,
-                      userModel: widget.userModel,
-                      tokenModel: widget.tokenModel,
-                    )),
-          );
+          Future<ResponseModel<OrderDetailModel>?> orderFuture = OrderService()
+              .getDetailOrderById(
+                  widget.orderModel.id, widget.tokenModel.message);
+          orderFuture.then((orderDetailModel) {
+            if (orderDetailModel != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HistoryHiringDetail(
+                          orderModel: widget.orderModel,
+                          userModel: widget.userModel,
+                          tokenModel: widget.tokenModel,
+                          orderDetailModel: orderDetailModel.content,
+                        )),
+              );
+            }
+          });
         },
         child: Column(
           children: [
@@ -76,7 +87,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.orderDetailModel.toUser!.name,
+                      widget.orderModel.toUser!.name,
                       style: GoogleFonts.montserrat(
                           fontSize: 18, color: Colors.black),
                     ),
@@ -92,9 +103,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                 Visibility(
                   visible: checkStatus,
                   child: Text(
-                    widget.orderDetailModel.finalPrices
-                        .toStringAsFixed(0)
-                        .toVND(),
+                    widget.orderModel.finalPrices.toStringAsFixed(0).toVND(),
                     style: GoogleFonts.montserrat(
                         fontSize: 18, color: Colors.black),
                   ),
@@ -127,7 +136,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   ),
                 ),
                 const Spacer(),
-                createStatus(widget.orderDetailModel.status),
+                createStatus(widget.orderModel.status),
               ],
             ),
             const SizedBox(
