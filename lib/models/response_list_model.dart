@@ -9,6 +9,7 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/search_history_model.dart';
+import 'package:play_together_mobile/models/system_feedback_model.dart';
 import 'package:play_together_mobile/models/transaction_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
@@ -72,6 +73,9 @@ class ResponseListModel<T> {
           as ResponseListModel<T>;
     } else if (T == GetAllUserModel) {
       return ListGetAllUserModelResponse.fromJson(json) as ResponseListModel<T>;
+    } else if (T == SystemFeedbackModel) {
+      return ListSystemFeedbackModelResponse.fromJson(json)
+          as ResponseListModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -210,6 +214,16 @@ class ListChatModelResponse extends ResponseListModel<ChatModel> {
       : super._fromJson(json) {
     content = (json['content'] as List<dynamic>)
         .map((dynamic item) => ChatModel.fromJson(item))
+        .toList();
+  }
+}
+
+class ListSystemFeedbackModelResponse
+    extends ResponseListModel<SystemFeedbackModel> {
+  ListSystemFeedbackModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = (json['content'] as List<dynamic>)
+        .map((dynamic item) => SystemFeedbackModel.fromJson(item))
         .toList();
   }
 }

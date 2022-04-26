@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
+import 'package:play_together_mobile/models/system_feedback_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
@@ -17,6 +18,7 @@ import 'package:play_together_mobile/pages/policies_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/pages/statistics_page.dart';
+import 'package:play_together_mobile/pages/system_feedback_page.dart';
 import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/pages/update_hobbies_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
@@ -497,7 +499,16 @@ class _PersonalPageState extends State<PersonalPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SystemFeedbackPage(
+                                userModel: widget.userModel,
+                                tokenModel: widget.tokenModel,
+                              ),
+                            ));
+                      },
                       child: Row(
                         children: [
                           Text(
