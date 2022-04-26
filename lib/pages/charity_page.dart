@@ -120,7 +120,7 @@ class _CharityPageState extends State<CharityPage> {
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           hintStyle: GoogleFonts.montserrat(),
-                          hintText: "Tìm kiếm để quyên góp ",
+                          hintText: "Tìm kiếm",
                           prefixIcon: const Icon(
                             Icons.search,
                             color: Colors.grey,

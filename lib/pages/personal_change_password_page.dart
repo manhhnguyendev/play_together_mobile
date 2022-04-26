@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/password_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -150,10 +151,12 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                                 ),
                                 true);
                           });
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Cập nhật mật khẩu thành công"),
-                          ));
+                          Fluttertoast.showToast(
+                              msg: "Thay đổi mật khẩu thành công",
+                              textColor: Colors.white,
+                              backgroundColor:
+                              const Color.fromRGBO(137, 128, 255, 1),
+                              toastLength: Toast.LENGTH_SHORT);
                         }
                       });
                     }
