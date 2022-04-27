@@ -691,14 +691,51 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Widget buildImageItem(ImageModel imageLink) => Padding(
         padding: const EdgeInsets.only(left: 10),
-        child: Container(
-          width: 150,
-          height: 100,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                  image: NetworkImage(imageLink.imageLink),
-                  fit: BoxFit.cover)), //sua asset image thanh network
+        child: GestureDetector(
+          onTap: () {
+            showDialog(
+                context: this.context,
+                builder: (_) => new Dialog(
+                      backgroundColor: Colors.transparent,
+                      child: Stack(children: [
+                        Container(
+                            alignment: FractionalOffset.center,
+                            height:
+                                MediaQuery.of(this.context).size.height * 0.6,
+                            padding: const EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                image: DecorationImage(
+                                    image: NetworkImage(imageLink.imageLink),
+                                    fit: BoxFit.cover))),
+                        Positioned(
+                            bottom: 0,
+                            right: -5,
+                            child: RawMaterialButton(
+                              onPressed: () {
+                                //chooseAvatarFromGallery();
+                              },
+                              elevation: 2.0,
+                              fillColor: const Color(0xFFF5F6F9),
+                              child: const Icon(
+                                Icons.delete_outline_outlined,
+                                color: Colors.black,
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              shape: const CircleBorder(),
+                            )),
+                      ]),
+                    ));
+          },
+          child: Container(
+            width: 150,
+            height: 100,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                image: DecorationImage(
+                    image: NetworkImage(imageLink.imageLink),
+                    fit: BoxFit.cover)), //sua asset image thanh network
+          ),
         ),
       );
 }

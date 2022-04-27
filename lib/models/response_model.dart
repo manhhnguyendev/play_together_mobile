@@ -3,6 +3,7 @@ import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
+import 'package:play_together_mobile/models/system_feedback_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class ResponseModel<T> {
@@ -39,6 +40,9 @@ class ResponseModel<T> {
       return OrderDetailModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == BehaviorModel) {
       return BehaviorModelResponse.fromJson(json) as ResponseModel<T>;
+    } else if (T == SystemFeedbackDetailModel) {
+      return SystemFeedbackDetailModelResponse.fromJson(json)
+          as ResponseModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -111,6 +115,14 @@ class BehaviorModelResponse extends ResponseModel<BehaviorModel> {
   BehaviorModelResponse.fromJson(Map<String, dynamic> json)
       : super._fromJson(json) {
     content = BehaviorModel.fromJson(json["content"]);
+  }
+}
+
+class SystemFeedbackDetailModelResponse
+    extends ResponseModel<SystemFeedbackDetailModel> {
+  SystemFeedbackDetailModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = SystemFeedbackDetailModel.fromJson(json["content"]);
   }
 }
 

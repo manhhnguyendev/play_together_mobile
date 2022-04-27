@@ -4,6 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:play_together_mobile/models/system_feedback_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/feedback_details_page.dart';
+import 'package:play_together_mobile/services/system_feedback_service.dart';
+
+import '../models/response_model.dart';
 
 class FeedbackCard extends StatefulWidget {
   final TokenModel tokenModel;
@@ -23,6 +27,7 @@ class FeedbackCard extends StatefulWidget {
 class _FeedbackCardState extends State<FeedbackCard> {
   String date = "";
   String time = "";
+  late SystemFeedbackDetailModel systemFeedbackDetailModel;
   @override
   Widget build(BuildContext context) {
     date = DateFormat('dd/MM/yyyy')
@@ -31,7 +36,26 @@ class _FeedbackCardState extends State<FeedbackCard> {
         .format(DateTime.parse(widget.systemFeedbackModel.createdDate));
     return Container(
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Future<ResponseModel<SystemFeedbackDetailModel>?>
+              getFeedbackDetailFuture = SystemFeedbackService()
+                  .getFeedbackDetail(
+                      widget.systemFeedbackModel.id, widget.tokenModel.message);
+          getFeedbackDetailFuture.then((value) {
+            if (value != null) {
+              systemFeedbackDetailModel = value.content;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FeedbackDetailPage(
+                      userModel: widget.userModel,
+                      tokenModel: widget.tokenModel,
+                      systemFeedbackDetailModel: systemFeedbackDetailModel,
+                    ),
+                  ));
+            }
+          });
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,21 +97,23 @@ class _FeedbackCardState extends State<FeedbackCard> {
     );
   }
 
-  Widget buildApproveStatus(bool status) {
-    if (status != null) {
-      if (status) {
-        return Text('Đã duyệt',
-            style: GoogleFonts.montserrat(
-                fontSize: 15,
-                color: Colors.green,
-                fontWeight: FontWeight.normal));
-      } else {
-        return Text('Bị từ chối',
-            style: GoogleFonts.montserrat(
-                fontSize: 15,
-                color: Colors.red,
-                fontWeight: FontWeight.normal));
-      }
+  Widget buildApproveStatus(int status) {
+    if (status == 1) {
+      return Text('Đã duyệt',
+          style: GoogleFonts.montserrat(
+              fontSize: 15,
+              color: Colors.green,
+              fontWeight: FontWeight.normal));
+    } else if (status == 0) {
+      return Text('Bị từ chối',
+          style: GoogleFonts.montserrat(
+              fontSize: 15, color: Colors.red, fontWeight: FontWeight.normal));
+    } else if (status == -1) {
+      return Text('Chờ xét duyệt',
+          style: GoogleFonts.montserrat(
+              fontSize: 15,
+              color: Colors.amber,
+              fontWeight: FontWeight.normal));
     } else {
       return Text('Chờ xét duyệt',
           style: GoogleFonts.montserrat(
