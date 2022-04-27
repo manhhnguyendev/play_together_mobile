@@ -3,7 +3,7 @@ class SystemFeedbackModel {
   String title;
   String typeOfFeedback;
   String createdDate;
-  bool isApprove;
+  int isApprove;
 
   SystemFeedbackModel({
     required this.id,
@@ -19,7 +19,7 @@ class SystemFeedbackModel {
           title: json['title'] as String,
           typeOfFeedback: json['typeOfFeedback'] as String,
           createdDate: json['createdDate'] as String,
-          isApprove: json['isApprove'] as bool);
+          isApprove: json['isApprove'] as int);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -52,5 +52,34 @@ class CreateFeedBacksModel {
         "title": title,
         "message": message,
         "typeOfFeedback": typeOfFeedback,
+      };
+}
+
+class SystemFeedbackDetailModel {
+  String title;
+  String message;
+  String typeOfFeedback;
+  int isApprove;
+
+  SystemFeedbackDetailModel({
+    required this.title,
+    required this.message,
+    required this.typeOfFeedback,
+    required this.isApprove,
+  });
+
+  factory SystemFeedbackDetailModel.fromJson(Map<String, dynamic> json) =>
+      SystemFeedbackDetailModel(
+        title: json['title'] as String,
+        message: json['message'] as String,
+        typeOfFeedback: json['typeOfFeedback'] as String,
+        isApprove: json['isApprove'] as int,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "message": message,
+        "typeOfFeedback": typeOfFeedback,
+        "isApprove": isApprove,
       };
 }
