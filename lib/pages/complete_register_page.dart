@@ -235,12 +235,14 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                             ),
                           ),
                         ),
+                        FormError(listError: listErrorProvince),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         buildBirthdayField(),
+                        FormError(listError: listErrorBirthday),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -493,8 +495,19 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
           lastDate: DateTime(DateTime.now().year + 1),
         ).then((date) {
           dateOfBirth = date!;
+          if (listErrorBirthday.contains(birthdayNullError)) {
+            removeError(listErrorBirthday, error: birthdayNullError);
+          }
           convertBirthday();
         });
+      },
+      validator: (value) {
+        if ((value!.isEmpty) &&
+            !listErrorBirthday.contains(birthdayNullError)) {
+          addError(listErrorBirthday, error: birthdayNullError);
+          return "";
+        }
+        return null;
       },
     );
   }
@@ -515,6 +528,9 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
           elevation: 16,
           onChanged: (value) {
             city = value as String;
+            if (listErrorProvince.contains(cityNullError)) {
+              removeError(listErrorProvince, error: cityNullError);
+            }
             setState(() {
               city = value;
             });
