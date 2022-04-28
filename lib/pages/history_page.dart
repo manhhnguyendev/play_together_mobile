@@ -3,10 +3,8 @@ import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
-import 'package:play_together_mobile/pages/home_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/widgets/history_hiring_card.dart';
 import 'package:play_together_mobile/widgets/bottom_bar.dart';
@@ -185,83 +183,6 @@ class _HistoryPageState extends State<HistoryPage> {
               checkOrderPlayer.then(((orderPlayer) {
                 _listOrder = orderPlayer!.content;
                 if (_listOrder[0].toUserId == widget.userModel.id) {
-                  if (helper.getDayElapsed(
-                          DateTime.now().toString(),
-                          DateTime.parse(orderPlayer.content[0].timeStart)
-                              .add(Duration(
-                                  hours: orderPlayer.content[0].totalTimes))
-                              .toString()) <=
-                      0) {
-                    Future<bool?> finishOrderFuture = OrderService()
-                        .finishOrder(orderPlayer.content[0].id,
-                            widget.tokenModel.message);
-                    finishOrderFuture.then((check) {
-                      if (check == true) {
-                        setState(() {
-                          helper.pushInto(
-                              context,
-                              EndOrderPage(
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel,
-                                orderModel: _listOrder[0],
-                              ),
-                              true);
-                        });
-                      }
-                    });
-                  } else if ((helper.getDayElapsed(
-                          DateTime.now().toString(),
-                          DateTime.parse(orderPlayer.content[0].timeStart)
-                              .add(Duration(
-                                  hours: orderPlayer.content[0].totalTimes))
-                              .toString()) >
-                      1)) {
-                    lateUser = value.content;
-                    setState(() {
-                      helper.pushInto(
-                          context,
-                          HiringPage(
-                              orderModel: _listOrder[0],
-                              tokenModel: widget.tokenModel,
-                              userModel: lateUser!),
-                          true);
-                    });
-                  }
-                }
-              }));
-            } else {
-              _listOrder = orderUser.content;
-              if (_listOrder[0].userId == widget.userModel.id) {
-                if (helper.getDayElapsed(
-                        DateTime.now().toString(),
-                        DateTime.parse(orderUser.content[0].timeStart)
-                            .add(Duration(
-                                hours: orderUser.content[0].totalTimes))
-                            .toString()) <=
-                    0) {
-                  Future<bool?> finishOrderFuture = OrderService().finishOrder(
-                      orderUser.content[0].id, widget.tokenModel.message);
-                  finishOrderFuture.then((check) {
-                    if (check == true) {
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            EndOrderPage(
-                              tokenModel: widget.tokenModel,
-                              userModel: widget.userModel,
-                              orderModel: _listOrder[0],
-                            ),
-                            true);
-                      });
-                    }
-                  });
-                } else if (helper.getDayElapsed(
-                        DateTime.now().toString(),
-                        DateTime.parse(orderUser.content[0].timeStart)
-                            .add(Duration(
-                                hours: orderUser.content[0].totalTimes))
-                            .toString()) >
-                    1) {
                   lateUser = value.content;
                   setState(() {
                     helper.pushInto(
@@ -273,6 +194,20 @@ class _HistoryPageState extends State<HistoryPage> {
                         true);
                   });
                 }
+              }));
+            } else {
+              _listOrder = orderUser.content;
+              if (_listOrder[0].userId == widget.userModel.id) {
+                lateUser = value.content;
+                setState(() {
+                  helper.pushInto(
+                      context,
+                      HiringPage(
+                          orderModel: _listOrder[0],
+                          tokenModel: widget.tokenModel,
+                          userModel: lateUser!),
+                      true);
+                });
               }
             }
           }));
@@ -287,90 +222,39 @@ class _HistoryPageState extends State<HistoryPage> {
               checkOrderPlayer.then(((orderPlayer) {
                 _listOrder = orderPlayer!.content;
                 if (_listOrder[0].toUserId == widget.userModel.id) {
-                  if (helper.getDayElapsed(DateTime.now().toString(),
-                          orderPlayer.content[0].processExpired) <
-                      0) {
-                    RejectOrderModel rejectOrder = RejectOrderModel(
-                        isAccept: false, reason: 'Quá thời gian chấp thuận');
-                    Future<bool?> rejectFuture = OrderService()
-                        .rejectOrderRequest(orderPlayer.content[0].id,
-                            widget.tokenModel.message, rejectOrder);
-                    rejectFuture.then((check) {
-                      if (check == true) {
-                        setState(() {
-                          helper.pushInto(
-                              context,
-                              HomePage(
-                                tokenModel: widget.tokenModel,
-                                userModel: widget.userModel,
-                              ),
-                              true);
-                        });
-                      }
-                    });
-                  } else if (helper.getDayElapsed(DateTime.now().toString(),
-                          orderPlayer.content[0].processExpired) >
-                      1) {
-                    lateUser = value.content;
-                    setState(() {
-                      helper.pushInto(
-                          context,
-                          ReceiveRequestPage(
-                              orderModel: _listOrder[0],
-                              tokenModel: widget.tokenModel,
-                              userModel: lateUser!),
-                          true);
-                    });
-                  }
+                  lateUser = value.content;
+                  setState(() {
+                    helper.pushInto(
+                        context,
+                        ReceiveRequestPage(
+                            orderModel: _listOrder[0],
+                            tokenModel: widget.tokenModel,
+                            userModel: lateUser!),
+                        true);
+                  });
                 }
               }));
             } else {
               _listOrder = orderUser.content;
               if (_listOrder[0].userId == widget.userModel.id) {
-                if (helper.getDayElapsed(DateTime.now().toString(),
-                        orderUser.content[0].processExpired) <=
-                    0) {
-                  CancelOrderModel cancelOrder =
-                      CancelOrderModel(reason: 'Quá thời gian gửi yêu cầu');
-                  Future<bool?> cancelFuture = OrderService()
-                      .cancelOrderRequest(orderUser.content[0].id,
-                          widget.tokenModel.message, cancelOrder);
-                  cancelFuture.then((check) {
-                    if (check == true) {
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            HomePage(
+                lateUser = value.content;
+                Future<ResponseModel<PlayerModel>?> getPlayerModel =
+                    UserService().getPlayerById(
+                        _listOrder[0].toUserId, widget.tokenModel.message);
+                getPlayerModel.then((playerModel) {
+                  if (playerModel != null) {
+                    setState(() {
+                      helper.pushInto(
+                          context,
+                          HiringNegotiatingPage(
+                              orderModel: _listOrder[0],
                               tokenModel: widget.tokenModel,
-                              userModel: widget.userModel,
-                            ),
-                            true);
-                      });
-                    }
-                  });
-                } else if (helper.getDayElapsed(DateTime.now().toString(),
-                        orderUser.content[0].processExpired) >
-                    1) {
-                  lateUser = value.content;
-                  Future<ResponseModel<PlayerModel>?> getPlayerModel =
-                      UserService().getPlayerById(
-                          _listOrder[0].toUserId, widget.tokenModel.message);
-                  getPlayerModel.then((playerModel) {
-                    if (playerModel != null) {
-                      if (!mounted) return;
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            HiringNegotiatingPage(
-                                orderModel: _listOrder[0],
-                                tokenModel: widget.tokenModel,
-                                userModel: lateUser!,
-                                playerModel: playerModel.content),
-                            true);
-                      });
-                    }
-                  });
-                }
+                              userModel: lateUser!,
+                              playerModel: playerModel.content),
+                          true);
+                    });
+                  }
+                });
               }
             }
           }));

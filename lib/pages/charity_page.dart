@@ -46,18 +46,6 @@ class _CharityPageState extends State<CharityPage> {
     listCharityModelFuture.then((_charityList) {
       if (checkFirstTime) {
         _listCharity = _charityList!.content;
-        if (_listCharity.isEmpty) {
-          for (var item in _listCharity) {
-            Future<ResponseModel<CharityModel>?> charityFuture =
-                CharityService()
-                    .getCharityById(item.id, widget.tokenModel.message);
-            charityFuture.then((value) {
-              if (value != null) {
-                _listCharity.add(value.content);
-              }
-            });
-          }
-        }
         checkFirstTime = false;
       }
     });
@@ -107,8 +95,9 @@ class _CharityPageState extends State<CharityPage> {
                         onSubmitted: (value) {
                           _controller.text = value;
                           Future<ResponseListModel<CharityModel>?>
-                          getListSearchUser = SearchService()
-                              .searchCharityByName(value, widget.tokenModel.message);
+                              getListSearchUser = SearchService()
+                                  .searchCharityByName(
+                                      value, widget.tokenModel.message);
                           getListSearchUser.then((_userList) {
                             setState(() {
                               _listCharity = _userList!.content;
@@ -140,7 +129,9 @@ class _CharityPageState extends State<CharityPage> {
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Column(
                               children: List.generate(
-                                  _listCharity.length,
+                                  _listCharity.isNotEmpty
+                                      ? _listCharity.length
+                                      : 0,
                                   (index) =>
                                       buildListSearch(_listCharity[index]))));
                     })),

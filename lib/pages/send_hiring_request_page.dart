@@ -6,6 +6,7 @@ import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
+import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
@@ -177,12 +178,21 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             child: Row(
               children: [
                 Text(
-                  'Số dư hiện tại ',
+                  'Số dư khả dụng ',
                   style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 const Spacer(),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectDepositMethodPage(
+                                  userModel: widget.userModel,
+                                  tokenModel: widget.tokenModel,
+                                )),
+                      );
+                    },
                     icon: const Icon(Icons.add_circle_outline)),
                 Text(
                   widget.userModel.userBalance.balance
@@ -309,7 +319,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                     : () {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text("Số dư hiện tại không đủ"),
+                          content: Text("Số dư khả dụng không đủ"),
                         ));
                       },
                 height: 50,

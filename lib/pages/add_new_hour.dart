@@ -620,28 +620,25 @@ class _AddNewHourState extends State<AddNewHour> {
                   if (dayOfWeek == 1) {
                     valid = false;
                   }
-
-                  if (fromHour.isEmpty) {
+                  if (fromHour.isEmpty || fromHour == null || fromHour == "") {
                     valid = false;
                   }
-
-                  if (toHour.isEmpty) {
+                  if (toHour.isEmpty || toHour == null || toHour == "") {
                     valid = false;
                   }
-
-                  if (int.parse(fromHour) > int.parse(toHour)) {
-                    valid = false;
-                  } else if (int.parse(fromHour) == int.parse(toHour)) {
-                    if (int.parse(fromMinute) > int.parse(toMinute)) {
+                  if (fromHour.isNotEmpty && toHour.isNotEmpty) {
+                    if (int.parse(fromHour) > int.parse(toHour)) {
                       valid = false;
+                    } else if (int.parse(fromHour) == int.parse(toHour)) {
+                      if (int.parse(fromMinute) > int.parse(toMinute)) {
+                        valid = false;
+                      }
                     }
                   }
-
-                  if (valid) {
+                  if (valid == true) {
                     newFromHour =
                         int.parse(fromHour) * 60 + int.parse(fromMinute);
                     newToHour = int.parse(toHour) * 60 + int.parse(toMinute);
-
                     CreateOnlineHourModel newModel = CreateOnlineHourModel(
                         fromHour: newFromHour,
                         toHour: newToHour,
@@ -655,7 +652,6 @@ class _AddNewHourState extends State<AddNewHour> {
                               .showSnackBar(const SnackBar(
                             content: Text("Thêm thành công"),
                           ));
-
                           Navigator.pop(context);
                         });
                       } else {
@@ -665,9 +661,13 @@ class _AddNewHourState extends State<AddNewHour> {
                         ));
                       }
                     });
-                  } else if (dayOfWeek != null) {
+                  } else if (dayOfWeek == 1) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng chọn ngày"),
+                    ));
+                  } else if (fromHour.isEmpty || toHour.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Vui lòng nhập giờ"),
                     ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

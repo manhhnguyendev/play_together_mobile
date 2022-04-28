@@ -131,31 +131,47 @@ class _RegisterPageState extends State<RegisterPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          Future<String?> checkEmailFuture =
-                                              EmailService().checkEmail(
-                                                  emailController.text);
-                                          checkEmailFuture.then((_checkEmail) {
-                                            if (_checkEmail == 'false') {
-                                              sendOtp();
-                                              Fluttertoast.showToast(
-                                                  msg: "Lấy mã OTP thành công",
-                                                  textColor: Colors.white,
-                                                  backgroundColor:
-                                                      const Color.fromRGBO(
-                                                          137, 128, 255, 1),
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT);
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                  msg: "Email đã được sử dụng",
-                                                  textColor: Colors.white,
-                                                  backgroundColor:
-                                                      const Color.fromRGBO(
-                                                          137, 128, 255, 1),
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT);
-                                            }
-                                          });
+                                          if (emailController.text == null ||
+                                              emailController.text.isEmpty ||
+                                              emailController.text == "") {
+                                            Fluttertoast.showToast(
+                                                msg: "Vui lòng nhập Email",
+                                                textColor: Colors.white,
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        137, 128, 255, 1),
+                                                toastLength:
+                                                    Toast.LENGTH_SHORT);
+                                          } else {
+                                            Future<String?> checkEmailFuture =
+                                                EmailService().checkEmail(
+                                                    emailController.text);
+                                            checkEmailFuture
+                                                .then((_checkEmail) {
+                                              if (_checkEmail == 'false') {
+                                                sendOtp();
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        "Lấy mã OTP thành công",
+                                                    textColor: Colors.white,
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            137, 128, 255, 1),
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT);
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        "Email đã được sử dụng",
+                                                    textColor: Colors.white,
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            137, 128, 255, 1),
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT);
+                                              }
+                                            });
+                                          }
                                         },
                                         child: Text("Lấy mã OTP",
                                             textAlign: TextAlign.center,
@@ -192,10 +208,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                         color: const Color.fromRGBO(
                                             165, 165, 165, 1),
                                         onPressed: () {
-                                          confirmEmail = verify();
-                                          if (confirmEmail == true) {
+                                          if (otpController.text == null ||
+                                              otpController.text.isEmpty ||
+                                              otpController.text == "") {
                                             Fluttertoast.showToast(
-                                                msg: "Xác thực thành công",
+                                                msg: "Vui lòng nhập mã OTP",
                                                 textColor: Colors.white,
                                                 backgroundColor:
                                                     const Color.fromRGBO(
@@ -203,14 +220,26 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 toastLength:
                                                     Toast.LENGTH_SHORT);
                                           } else {
-                                            Fluttertoast.showToast(
-                                                msg: "Mã OTP không chính xác",
-                                                textColor: Colors.white,
-                                                backgroundColor:
-                                                    const Color.fromRGBO(
-                                                        137, 128, 255, 1),
-                                                toastLength:
-                                                    Toast.LENGTH_SHORT);
+                                            confirmEmail = verify();
+                                            if (confirmEmail == true) {
+                                              Fluttertoast.showToast(
+                                                  msg: "Xác thực thành công",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg: "Mã OTP không chính xác",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            }
                                           }
                                         },
                                         child: Text("Xác thực",

@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/transaction_page.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class WithdrawPage extends StatefulWidget {
-  const WithdrawPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+  final double money;
+  const WithdrawPage(
+      {Key? key,
+      required this.userModel,
+      required this.tokenModel,
+      required this.money})
+      : super(key: key);
 
   @override
   State<WithdrawPage> createState() => _WithdrawPageState();
 }
 
 class _WithdrawPageState extends State<WithdrawPage> {
-  final customController = TextEditingController();
+  final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,24 +66,18 @@ class _WithdrawPageState extends State<WithdrawPage> {
                   padding: const EdgeInsets.only(top: 15),
                   width: 350,
                   child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        customController.text = value;
-                      });
-                    },
                     textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(fontSize: 20),
                     decoration: InputDecoration(
-                        counter: Container(), hintText: " Nhập số điện thoại"),
+                        counter: Container(),
+                        hintText: " Nhập số điện thoại",
+                        hintStyle: GoogleFonts.montserrat()),
                     maxLength: 10,
-                    controller: customController,
+                    controller: phoneController,
                     inputFormatters: const [],
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.phone,
                   ),
                 ),
-                Text('đ',
-                    style: GoogleFonts.montserrat(
-                        fontSize: 15, color: Colors.black)),
               ],
             ),
           ],
@@ -78,7 +86,41 @@ class _WithdrawPageState extends State<WithdrawPage> {
           elevation: 0,
           child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-              child: AcceptProfileButton(text: 'Rút tiền', onPress: () {})),
+              child: AcceptProfileButton(
+                  text: 'Rút tiền',
+                  onPress: () {
+                    if (phoneController.text.isEmpty ||
+                        phoneController.text == "" ||
+                        phoneController.text.length < 10) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Vui lòng nhập số điện thoại"),
+                      ));
+                    } else {
+                      WithdrawModel withdrawModel = WithdrawModel(
+                          moneyWithdraw: widget.money,
+                          phoneNumberMomo: phoneController.text);
+                      Future<bool?> withdrawMoneyFuture = UserService()
+                          .withdrawMoney(
+                              widget.tokenModel.message, withdrawModel);
+                      withdrawMoneyFuture.then((_withdrawMoney) {
+                        if (_withdrawMoney == true) {
+                          helper.pushInto(
+                              context,
+                              TransactionPage(
+                                tokenModel: widget.tokenModel,
+                                userModel: widget.userModel,
+                              ),
+                              true);
+                          Fluttertoast.showToast(
+                              msg: "RÚT TIỀN THÀNH CÔNG",
+                              textColor: Colors.white,
+                              backgroundColor:
+                                  const Color.fromRGBO(137, 128, 255, 1),
+                              toastLength: Toast.LENGTH_SHORT);
+                        }
+                      });
+                    }
+                  })),
         ));
   }
 }

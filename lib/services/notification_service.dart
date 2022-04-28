@@ -17,6 +17,7 @@ class NotificationService {
         Uri.parse('${apiUrl.notification}/?IsNew=true'),
         headers: configJson.headerAuth(token),
       );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         result = ResponseListModel<NotificationModel>.fromJson(
             json.decode(response.body));

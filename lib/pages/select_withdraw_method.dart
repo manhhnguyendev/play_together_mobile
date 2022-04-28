@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/withdraw_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SelectWithdrawMethod extends StatefulWidget {
-  const SelectWithdrawMethod({Key? key}) : super(key: key);
+  final UserModel userModel;
+  final TokenModel tokenModel;
+  final double money;
+  const SelectWithdrawMethod(
+      {Key? key,
+      required this.userModel,
+      required this.tokenModel,
+      required this.money})
+      : super(key: key);
 
   @override
   State<SelectWithdrawMethod> createState() => _SelectWithdrawMethodState();
@@ -42,162 +52,166 @@ class _SelectWithdrawMethodState extends State<SelectWithdrawMethod> {
       ),
       body: Column(
         children: [
-      GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WithdrawPage()),
-          );
-        },
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(border: Border.all()),
-          width: double.infinity,
-          child: Row(children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 0.2),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ClipRRect(
-                  child: Image.asset("assets/images/momologo.png",
-                      fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Thanh toán qua MOMO",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Hỗ trợ từ 8:30 -> 22:00 (trừ CN, ngày lễ)",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 15, color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ]),
-        ),
-      ),
-      Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(border: Border.all()),
-        width: double.infinity,
-        child: Row(children: [
-          Expanded(
-            flex: 1,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => WithdrawPage(
+                        money: widget.money,
+                        tokenModel: widget.tokenModel,
+                        userModel: widget.userModel)),
+              );
+            },
             child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(width: 0.2),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: ClipRRect(
-                child: Image.asset("assets/images/paypallogo.png",
-                    fit: BoxFit.cover),
-              ),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(border: Border.all(width: 0.1)),
+              width: double.infinity,
+              child: Row(children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.2),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ClipRRect(
+                      child: Image.asset("assets/images/momologo.png",
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Thanh toán qua MOMO",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, color: Colors.black),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Hỗ trợ từ 8:30 -> 22:00 (trừ CN, ngày lễ)",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ]),
             ),
           ),
-          const SizedBox(
-            width: 5,
-          ),
-          Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Thanh toán qua Paypal",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "(Sắp ra mắt)",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 15, color: Colors.grey),
-                    ),
-                  ],
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(border: Border.all(width: 0.1)),
+            width: double.infinity,
+            child: Row(children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.2),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ClipRRect(
+                    child: Image.asset("assets/images/paypallogo.png",
+                        fit: BoxFit.cover),
+                  ),
                 ),
-              ))
-        ]),
-      ),
-      Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(border: Border.all()),
-        width: double.infinity,
-        child: Row(children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(width: 0.2),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
               ),
-              child: ClipRRect(
-                child: Image.asset("assets/images/onlinebankinglogo.png",
-                    fit: BoxFit.cover),
+              const SizedBox(
+                width: 5,
               ),
-            ),
+              Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Thanh toán qua Paypal",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, color: Colors.black),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "(Sắp ra mắt)",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ))
+            ]),
           ),
-          const SizedBox(
-            width: 5,
-          ),
-          Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Thanh toán Internet banking",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 18, color: Colors.black),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "(Sắp ra mắt)",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 15, color: Colors.grey),
-                    ),
-                  ],
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(border: Border.all(width: 0.1)),
+            width: double.infinity,
+            child: Row(children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 0.2),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ClipRRect(
+                    child: Image.asset("assets/images/onlinebankinglogo.png",
+                        fit: BoxFit.cover),
+                  ),
                 ),
-              ))
-        ]),
-      ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Thanh toán Internet banking",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, color: Colors.black),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "(Sắp ra mắt)",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 15, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ))
+            ]),
+          ),
         ],
       ),
     );

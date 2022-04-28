@@ -82,7 +82,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     time = helper.getDayElapsed(
-        DateTime.now().toString(),
+        DateTime.now().add(const Duration(milliseconds: 500)).toString(),
         DateTime.parse(widget.orderModel!.timeStart)
             .add(Duration(hours: widget.orderModel!.totalTimes))
             .toString());

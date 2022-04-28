@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
-import 'package:play_together_mobile/models/system_feedback_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/enter_withdraw_amount.dart';
@@ -34,11 +33,15 @@ import 'package:google_fonts/google_fonts.dart';
 class PersonalPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+  final double? balance;
+  final double? activeBalance;
 
   const PersonalPage({
     Key? key,
     required this.userModel,
     required this.tokenModel,
+    this.balance,
+    this.activeBalance,
   }) : super(key: key);
 
   @override
@@ -65,7 +68,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     height: 40,
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
                     child: Row(
                       children: [
                         SizedBox(
@@ -148,13 +151,13 @@ class _PersonalPageState extends State<PersonalPage> {
                                 ),
                                 Row(children: [
                                   Text(
-                                    (lateUser != null
-                                        ? lateUser!.userBalance.balance
+                                    widget.balance != null
+                                        ? widget.balance!
                                             .toStringAsFixed(0)
                                             .toVND()
-                                        : widget.userModel.userBalance.balance
+                                        : lateUser!.userBalance.balance
                                             .toStringAsFixed(0)
-                                            .toVND()),
+                                            .toVND(),
                                     style: GoogleFonts.montserrat(
                                         fontSize: 22,
                                         color: const Color(0xff320444)),
@@ -162,7 +165,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                   IconButton(
                                     icon: const Icon(
                                       FontAwesomeIcons.arrowsRotate,
-                                      size: 20,
+                                      size: 18,
                                     ),
                                     onPressed: () {
                                       setState(() {
@@ -190,12 +193,11 @@ class _PersonalPageState extends State<PersonalPage> {
                                           GoogleFonts.montserrat(fontSize: 15),
                                     ),
                                     Text(
-                                      lateUser != null
-                                          ? lateUser!.userBalance.activeBalance
+                                      widget.activeBalance != null
+                                          ? widget.activeBalance!
                                               .toStringAsFixed(0)
                                               .toVND()
-                                          : widget.userModel.userBalance
-                                              .activeBalance
+                                          : lateUser!.userBalance.activeBalance
                                               .toStringAsFixed(0)
                                               .toVND(),
                                       style: GoogleFonts.montserrat(
@@ -255,7 +257,10 @@ class _PersonalPageState extends State<PersonalPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const EnterWithdrawAmount()),
+                                              EnterWithdrawAmount(
+                                                tokenModel: widget.tokenModel,
+                                                userModel: widget.userModel,
+                                              )),
                                     );
                                   },
                                   child: Column(
@@ -284,7 +289,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 7, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -431,14 +436,29 @@ class _PersonalPageState extends State<PersonalPage> {
                     padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StatisticsPage(
-                                userModel: widget.userModel,
-                                tokenModel: widget.tokenModel,
-                              ),
-                            ));
+                        Future<ResponseModel<StatisticModel>?> statisticFuture =
+                            UserService()
+                                .getUserStatistic(widget.tokenModel.message);
+                        statisticFuture.then((value) {
+                          if (value != null) {
+                            Future<ResponseModel<UserModel>?>
+                                getUserProfileFuture = UserService()
+                                    .getUserProfile(widget.tokenModel.message);
+                            getUserProfileFuture.then((userProfile) {
+                              if (userProfile != null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => StatisticsPage(
+                                        userModel: userProfile.content,
+                                        tokenModel: widget.tokenModel,
+                                        statisticModel: value.content,
+                                      ),
+                                    ));
+                              }
+                            });
+                          }
+                        });
                       },
                       child: Row(
                         children: [

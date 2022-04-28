@@ -1,7 +1,7 @@
 class ReportModel {
-  final String id;
-  final String reportMessage;
-  final String createdDate;
+  String id;
+  String reportMessage;
+  String createdDate;
 
   ReportModel({
     required this.id,
@@ -20,7 +20,7 @@ class ReportModel {
 }
 
 class ReportCreateModel {
-  final String reportMessage;
+  String reportMessage;
 
   ReportCreateModel({
     required this.reportMessage,
@@ -33,5 +33,34 @@ class ReportCreateModel {
 
   Map<String, dynamic> toJson() => {
         "reportMessage": reportMessage,
+      };
+}
+
+class ReportOrderModel {
+  String id;
+  String reportMessage;
+  bool isApprove;
+  String createdDate;
+
+  ReportOrderModel({
+    required this.id,
+    required this.reportMessage,
+    required this.isApprove,
+    required this.createdDate,
+  });
+
+  factory ReportOrderModel.fromJson(Map<String, dynamic> json) =>
+      ReportOrderModel(
+        id: json['id'] as String,
+        reportMessage: json['reportMessage'] as String,
+        isApprove: json['isApprove'] as bool,
+        createdDate: json['createdDate'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "reportMessage": reportMessage,
+        "isApprove": isApprove,
+        "createDate": createdDate
       };
 }

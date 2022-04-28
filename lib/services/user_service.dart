@@ -4,8 +4,10 @@ import 'package:http/http.dart';
 import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
 import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
 import 'package:play_together_mobile/models/game_of_user_model.dart';
+import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class UserService {
@@ -55,8 +57,8 @@ class UserService {
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result =
-            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
+        result = ResponseListModel<GetAllUserModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -75,8 +77,8 @@ class UserService {
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result =
-            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
+        result = ResponseListModel<GetAllUserModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -90,13 +92,12 @@ class UserService {
     ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
-        Uri.parse(
-            '${apiUrl.users}?IsOrderByRating=true&PageSize=5'),
+        Uri.parse('${apiUrl.users}?IsOrderByRating=true&PageSize=5'),
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result =
-            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
+        result = ResponseListModel<GetAllUserModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -115,8 +116,8 @@ class UserService {
         headers: configJson.headerAuth(token),
       );
       if (response.statusCode == 200) {
-        result =
-            ResponseListModel<GetAllUserModel>.fromJson(json.decode(response.body));
+        result = ResponseListModel<GetAllUserModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -172,7 +173,7 @@ class UserService {
       );
       if (response.statusCode == 200) {
         result =
-        ResponseModel<GetAllUserModel>.fromJson(json.decode(response.body));
+            ResponseModel<GetAllUserModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -199,6 +200,43 @@ class UserService {
     return result;
   }
 
+  Future<ResponseModel<UserBalanceModel>?> getUserBalance(
+      String userId, dynamic token) async {
+    Response response;
+    ResponseModel<UserBalanceModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/$userId/balance'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = ResponseModel<UserBalanceModel>.fromJson(
+            json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseModel<StatisticModel>?> getUserStatistic(dynamic token) async {
+    Response response;
+    ResponseModel<StatisticModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/statistic'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result =
+            ResponseModel<StatisticModel>.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
   Future<ResponseListModel<GameOfUserModel>?> getGameOfUser(
       String userId, dynamic token) async {
     Response response;
@@ -211,6 +249,25 @@ class UserService {
       if (response.statusCode == 200) {
         result = ResponseListModel<GameOfUserModel>.fromJson(
             json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseListModel<ImageModel>?> getImagesOfUser(
+      String userId, dynamic token) async {
+    Response response;
+    ResponseListModel<ImageModel>? result;
+    try {
+      response = await get(
+        Uri.parse('${apiUrl.users}/$userId/images'),
+        headers: configJson.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result =
+            ResponseListModel<ImageModel>.fromJson(json.decode(response.body));
       }
     } on Exception {
       rethrow;
@@ -302,6 +359,25 @@ class UserService {
         body: jsonEncode(depositModel.toJson()),
       );
       if (response.statusCode == 200) {
+        result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<bool?> withdrawMoney(
+      dynamic token, WithdrawModel withdrawModel) async {
+    Response response;
+    bool? result;
+    try {
+      response = await put(
+        Uri.parse('${apiUrl.users}/withdraw'),
+        headers: configJson.headerAuth(token),
+        body: jsonEncode(withdrawModel.toJson()),
+      );
+      if (response.statusCode == 204) {
         result = true;
       }
     } on Exception {

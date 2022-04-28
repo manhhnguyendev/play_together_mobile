@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:play_together_mobile/helpers/api_url.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
@@ -183,7 +184,10 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                                         (RankModel value) {
                                   return DropdownMenuItem<RankModel>(
                                     value: value,
-                                    child: Text(value.name),
+                                    child: Text(
+                                      value.name,
+                                      style: GoogleFonts.montserrat(),
+                                    ),
                                   );
                                 }).toList(),
                               ),

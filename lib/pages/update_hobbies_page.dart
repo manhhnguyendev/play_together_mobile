@@ -139,47 +139,54 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                   child: AcceptProfileButton(
                       text: 'Cập nhật',
                       onPress: () {
-                        setState(() {
-                          isPress = true;
-                          listCreateHobbies.clear();
-                          listDeleteHobbies.clear();
-                        });
-                        for (var gameChoose in listGamesChoosen) {
-                          for (var game in listAllGames) {
-                            if (game.name.contains(gameChoose)) {
-                              CreateHobbiesModel createHobbies =
-                                  CreateHobbiesModel(gameId: game.id);
-                              listCreateHobbies.add(createHobbies);
+                        if (listGamesChoosen.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Vui lòng chọn ít nhất 1 sở thích"),
+                          ));
+                        } else {
+                          setState(() {
+                            isPress = true;
+                            listCreateHobbies.clear();
+                            listDeleteHobbies.clear();
+                          });
+                          for (var gameChoose in listGamesChoosen) {
+                            for (var game in listAllGames) {
+                              if (game.name.contains(gameChoose)) {
+                                CreateHobbiesModel createHobbies =
+                                    CreateHobbiesModel(gameId: game.id);
+                                listCreateHobbies.add(createHobbies);
+                              }
                             }
                           }
-                        }
-                        for (var hobby in listHobbies) {
-                          DeleteHobbiesModel deleteHobbies =
-                              DeleteHobbiesModel(hobbyId: hobby.id);
-                          listDeleteHobbies.add(deleteHobbies);
-                        }
-                        Future<bool?> deleteHobbiesFuture = HobbiesService()
-                            .deleteHobbies(
-                                listDeleteHobbies, widget.tokenModel.message);
-                        deleteHobbiesFuture.then((_listDeleteHobbies) {
-                          if (_listDeleteHobbies == true) {
-                            Future<bool?> createHobbiesFuture = HobbiesService()
-                                .createHobbies(listCreateHobbies,
-                                    widget.tokenModel.message);
-                            createHobbiesFuture.then((_listCreateHobbies) {
-                              if (_listCreateHobbies == true) {
-                                setState(() {
-                                  isPress = false;
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text("Cập nhật thành công"),
-                                  ));
-                                  print('Cập nhật thành công');
-                                });
-                              }
-                            });
+                          for (var hobby in listHobbies) {
+                            DeleteHobbiesModel deleteHobbies =
+                                DeleteHobbiesModel(hobbyId: hobby.id);
+                            listDeleteHobbies.add(deleteHobbies);
                           }
-                        });
+                          Future<bool?> deleteHobbiesFuture = HobbiesService()
+                              .deleteHobbies(
+                                  listDeleteHobbies, widget.tokenModel.message);
+                          deleteHobbiesFuture.then((_listDeleteHobbies) {
+                            if (_listDeleteHobbies == true) {
+                              Future<bool?> createHobbiesFuture =
+                                  HobbiesService().createHobbies(
+                                      listCreateHobbies,
+                                      widget.tokenModel.message);
+                              createHobbiesFuture.then((_listCreateHobbies) {
+                                if (_listCreateHobbies == true) {
+                                  setState(() {
+                                    isPress = false;
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      content: Text("Cập nhật thành công"),
+                                    ));
+                                  });
+                                }
+                              });
+                            }
+                          });
+                        }
                       })),
             ),
           );

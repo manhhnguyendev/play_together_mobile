@@ -119,7 +119,12 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                   child: MainButton(
                     text: "HOÀN TẤT",
                     onPress: () {
-                      if (listGamesChoosen.isNotEmpty) {
+                      if (listGamesChoosen.isEmpty) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Vui lòng chọn ít nhất 1 tựa game"),
+                        ));
+                      } else {
                         for (var gameChoose in listGamesChoosen) {
                           for (var game in listGames!) {
                             if (game.name.contains(gameChoose)) {

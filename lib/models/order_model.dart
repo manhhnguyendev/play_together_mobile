@@ -1,5 +1,6 @@
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
+import 'package:play_together_mobile/models/report_model.dart';
 
 class OrderModel {
   String id;
@@ -134,6 +135,7 @@ class OrderDetailModel {
   double totalPrices;
   double finalPrices;
   List<RatingOrderModel>? ratings;
+  List<ReportOrderModel>? reports;
   String status;
   String timeStart;
   String timeFinish;
@@ -152,6 +154,7 @@ class OrderDetailModel {
     required this.totalPrices,
     required this.finalPrices,
     required this.ratings,
+    required this.reports,
     required this.status,
     required this.timeStart,
     required this.timeFinish,
@@ -184,6 +187,11 @@ class OrderDetailModel {
                 .map((ratings) => RatingOrderModel.fromJson(ratings))
                 .toList()
             : <RatingOrderModel>[],
+        reports: (json['reports'] as List<dynamic>?) != null
+            ? (json['reports'] as List<dynamic>)
+                .map((reports) => ReportOrderModel.fromJson(reports))
+                .toList()
+            : <ReportOrderModel>[],
         status: json['status'] as String,
         timeStart: json['timeStart'] as String,
         timeFinish: json['timeFinish'] as String,
@@ -203,6 +211,7 @@ class OrderDetailModel {
         "totalPrices": totalPrices,
         "finalPrices": finalPrices,
         "ratings": ratings,
+        "reports": reports,
         "status": status,
         "timeStart": timeStart,
         "timeFinish": timeFinish,
@@ -292,6 +301,7 @@ class RejectOrderModel {
         "reason": reason,
       };
 }
+
 class CancelOrderModel {
   String reason;
 
@@ -305,8 +315,8 @@ class CancelOrderModel {
       );
 
   Map<String, dynamic> toJson() => {
-    "reason": reason,
-  };
+        "reason": reason,
+      };
 }
 
 class FinishSoonOrderModel {

@@ -4,12 +4,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/rating_and_comment_user_page.dart';
+import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 
 class StatisticsPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+  final StatisticModel statisticModel;
   const StatisticsPage(
-      {Key? key, required this.userModel, required this.tokenModel})
+      {Key? key,
+      required this.userModel,
+      required this.tokenModel,
+      required this.statisticModel})
       : super(key: key);
 
   @override
@@ -92,7 +97,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '100' '%',
+                                        widget.statisticModel.item3
+                                                .toStringAsFixed(0) +
+                                            ' %',
                                         style: GoogleFonts.montserrat(
                                             fontSize: 15, color: Colors.green),
                                       ),
@@ -120,7 +127,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '100' '%',
+                                        widget.statisticModel.item4
+                                                .toStringAsFixed(0) +
+                                            ' %',
                                         style: GoogleFonts.montserrat(
                                             fontSize: 15, color: Colors.green),
                                       ),
@@ -167,8 +176,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 'Đánh giá',
                                 style: GoogleFonts.montserrat(
                                   fontSize: 18,
-                                  textStyle: TextStyle(
-                                      decoration: TextDecoration.underline),
                                 ),
                               ),
                               const SizedBox(
@@ -183,17 +190,67 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 height: 5,
                               ),
                               Text(
-                                widget.userModel.rate.toStringAsFixed(1),
+                                ' ' + widget.userModel.rate.toStringAsFixed(1),
                                 style: GoogleFonts.montserrat(
                                   fontSize: 15,
                                 ),
-                              )
+                              ),
+                              Text(
+                                'Xem chi tiết',
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 12,
+                                    textStyle: const TextStyle(
+                                        decoration: TextDecoration.underline)),
+                              ),
                             ],
                           ),
                         ))
                   ],
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+            child: Container(
+              decoration: BoxDecoration(border: Border.all(width: 1)),
+              child: Column(children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                Text('Thống kê đơn thuê',
+                    style: GoogleFonts.montserrat(fontSize: 18)),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                  child: Row(children: [
+                    Text('Tổng thời gian thuê:',
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                    const Spacer(),
+                    Text(widget.userModel.totalTimeOrder.toString(),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                  ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+                  child: Row(children: [
+                    Text('Số đơn thuê đã nhận:',
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                    const Spacer(),
+                    Text(widget.userModel.numOfOrder.toString(),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                  ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  child: Row(children: [
+                    Text('Số đơn thuê hoàn thành đúng giờ:',
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                    const Spacer(),
+                    Text(widget.userModel.numOfFinishOnTime.toString(),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                  ]),
+                ),
+              ]),
             ),
           ),
           Padding(
@@ -221,7 +278,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         Column(
                           children: [
                             Text(
-                              '1.000.000' 'đ',
+                              widget.statisticModel.item1
+                                  .toStringAsFixed(0)
+                                  .toVND(),
                               style: GoogleFonts.montserrat(
                                   fontSize: 15, color: Colors.green),
                             ),
@@ -237,7 +296,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         Column(
                           children: [
                             Text(
-                              '15.000.000' 'đ',
+                              widget.statisticModel.item2
+                                  .toStringAsFixed(0)
+                                  .toVND(),
                               style: GoogleFonts.montserrat(
                                   fontSize: 15, color: Colors.green),
                             ),
@@ -261,33 +322,30 @@ class _StatisticsPageState extends State<StatisticsPage> {
             child: Container(
               decoration: BoxDecoration(border: Border.all(width: 1)),
               child: Column(children: [
-                Text('Độ uy tín',
-                    style: GoogleFonts.montserrat(
-                        fontSize: 18, color: Colors.black)),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text('Độ uy tín', style: GoogleFonts.montserrat(fontSize: 18)),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
                   child: Row(children: [
                     Text('Điểm hành vi:',
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15, color: Colors.black)),
-                    Spacer(),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                    const Spacer(),
                     Text(widget.userModel.behaviorPoint.point.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15, color: Colors.black)),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
                   ]),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: Row(children: [
                     Text('Điểm thỏa mãn:',
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15, color: Colors.black)),
-                    Spacer(),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
+                    const Spacer(),
                     Text(
                         widget.userModel.behaviorPoint.satisfiedPoint
                             .toString(),
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15, color: Colors.black)),
+                        style: GoogleFonts.montserrat(fontSize: 15)),
                   ]),
                 ),
               ]),

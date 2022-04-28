@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
@@ -8,6 +10,7 @@ import 'package:play_together_mobile/pages/history_page.dart';
 import 'package:play_together_mobile/pages/notification_page.dart';
 import 'package:play_together_mobile/pages/personal_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 
 class BottomBar extends StatefulWidget {
   final int bottomBarIndex;
@@ -103,14 +106,23 @@ class _BottomBarState extends State<BottomBar> {
               isRightToLeft,
             );
           } else if (index == 4) {
-            helper.pushInto(
-              context,
-              PersonalPage(
-                userModel: widget.userModel,
-                tokenModel: widget.tokenModel,
-              ),
-              isRightToLeft,
-            );
+            Future<ResponseModel<UserBalanceModel>?> getUserBalanceFuture =
+                UserService().getUserBalance(
+                    widget.userModel.id, widget.tokenModel.message);
+            getUserBalanceFuture.then((value) {
+              if (value != null) {
+                helper.pushInto(
+                  context,
+                  PersonalPage(
+                    userModel: widget.userModel,
+                    tokenModel: widget.tokenModel,
+                    activeBalance: value.content.activeBalance,
+                    balance: value.content.balance,
+                  ),
+                  isRightToLeft,
+                );
+              }
+            });
           }
         }
       },

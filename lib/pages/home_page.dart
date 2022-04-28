@@ -618,10 +618,9 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           helper.pushInto(
                               context,
-                              EndOrderPage(
+                              HomePage(
                                 tokenModel: widget.tokenModel,
                                 userModel: widget.userModel,
-                                orderModel: _listOrder[0],
                               ),
                               true);
                         });
@@ -664,10 +663,9 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         helper.pushInto(
                             context,
-                            EndOrderPage(
+                            HomePage(
                               tokenModel: widget.tokenModel,
                               userModel: widget.userModel,
-                              orderModel: _listOrder[0],
                             ),
                             true);
                       });

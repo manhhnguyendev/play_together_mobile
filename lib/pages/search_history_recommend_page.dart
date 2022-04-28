@@ -56,7 +56,6 @@ class _SearchHistoryAndRecommendPageState
             borderRadius: BorderRadius.circular(15),
           ),
           child: TextField(
-
             style: GoogleFonts.montserrat(),
             controller: _controller,
             onSubmitted: (value) {
@@ -71,7 +70,6 @@ class _SearchHistoryAndRecommendPageState
                     ),
                   ));
             },
-
             decoration: InputDecoration(
               border: InputBorder.none,
               focusedBorder: InputBorder.none,

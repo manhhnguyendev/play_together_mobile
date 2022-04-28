@@ -33,7 +33,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   List<OrderModel> _listOrder = [];
   List<NotificationModel> _listNotification = [];
   bool checkFirstTime = true;
-  bool checkEmptyNoti = false;
+  bool checkEmptyNotification = false;
 
   Future loadListNotifications() {
     Future<ResponseListModel<NotificationModel>?> listNotificationFuture =
@@ -41,18 +41,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
     listNotificationFuture.then((_notificationList) {
       if (checkFirstTime) {
         _listNotification = _notificationList!.content;
-        if (_listNotification.isEmpty) {
-          for (var item in _listNotification) {
-            Future<ResponseModel<NotificationModel>?> orderFuture =
-                NotificationService()
-                    .getNotificationById(item.id, widget.tokenModel.message);
-            orderFuture.then((value) {
-              if (value != null) {
-                _listNotification.add(value.content);
-              }
-            });
-          }
-        }
         checkFirstTime = false;
       }
     });
@@ -95,9 +83,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 future: loadListNotifications(),
                 builder: (context, snapshot) {
                   if (_listNotification.isEmpty) {
-                    checkEmptyNoti = true;
+                    checkEmptyNotification = true;
                   } else {
-                    checkEmptyNoti = false;
+                    checkEmptyNotification = false;
                   }
                   return Padding(
                       padding: const EdgeInsets.only(top: 10),
@@ -110,10 +98,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               (index) => buildListNotification(
                                   _listNotification[index])),
                         ),
-                        // Visibility(
-                        //     visible: checkEmptyNoti,
-                        //     child: Text('Không có thông báo',
-                        //         style: GoogleFonts.montserrat())),
+                        Visibility(
+                            visible: checkEmptyNotification,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text('Không có thông báo',
+                                  style: GoogleFonts.montserrat()),
+                            )),
                       ]));
                 },
               ),

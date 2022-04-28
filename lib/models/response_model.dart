@@ -4,19 +4,16 @@ import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/system_feedback_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class ResponseModel<T> {
   late T content;
-  ErrorModel? error;
   bool isSuccess;
   String responseTime;
 
   ResponseModel._fromJson(Map<String, dynamic> parsedJson)
-      : error = (parsedJson['error']) != null
-            ? ErrorModel.fromJson(parsedJson['error'])
-            : ErrorModel.fromJson(parsedJson),
-        isSuccess = parsedJson['isSuccess'],
+      : isSuccess = parsedJson['isSuccess'],
         responseTime = parsedJson['responseTime'];
 
   factory ResponseModel.fromJson(Map<String, dynamic> json) {
@@ -38,13 +35,17 @@ class ResponseModel<T> {
       return NotificationModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == OrderDetailModel) {
       return OrderDetailModelResponse.fromJson(json) as ResponseModel<T>;
-    }else if (T == GetAllUserModel) {
+    } else if (T == GetAllUserModel) {
       return GetAllUserModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == BehaviorModel) {
       return BehaviorModelResponse.fromJson(json) as ResponseModel<T>;
+    } else if (T == UserBalanceModel) {
+      return UserBalanceModelResponse.fromJson(json) as ResponseModel<T>;
     } else if (T == SystemFeedbackDetailModel) {
       return SystemFeedbackDetailModelResponse.fromJson(json)
           as ResponseModel<T>;
+    } else if (T == StatisticModel) {
+      return StatisticModelResponse.fromJson(json) as ResponseModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -61,6 +62,20 @@ class GetAllUserModelResponse extends ResponseModel<GetAllUserModel> {
   GetAllUserModelResponse.fromJson(Map<String, dynamic> json)
       : super._fromJson(json) {
     content = GetAllUserModel.fromJson(json["content"]);
+  }
+}
+
+class UserBalanceModelResponse extends ResponseModel<UserBalanceModel> {
+  UserBalanceModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = UserBalanceModel.fromJson(json["content"]);
+  }
+}
+
+class StatisticModelResponse extends ResponseModel<StatisticModel> {
+  StatisticModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = StatisticModel.fromJson(json["content"]);
   }
 }
 
@@ -133,28 +148,4 @@ class SystemFeedbackDetailModelResponse
       : super._fromJson(json) {
     content = SystemFeedbackDetailModel.fromJson(json["content"]);
   }
-}
-
-class ErrorModel {
-  Null code;
-  Null type;
-  Null message;
-
-  ErrorModel({
-    required this.code,
-    required this.type,
-    required this.message,
-  });
-
-  factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
-        code: json['code'] as Null,
-        type: json['type'] as Null,
-        message: json['message'] as Null,
-      );
-
-  Map<String, dynamic> toJson() => {
-        "code": code,
-        "type": type,
-        "message": message,
-      };
 }

@@ -115,7 +115,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
     listDrop = [];
     listDrop = drop
         .map((val) => DropdownMenuItem<String>(
-              child: Text(val),
+              child: Text(val, style: GoogleFonts.montserrat()),
               value: val,
             ))
         .toList();
@@ -461,6 +461,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
 
   TextFormField buildBirthdayField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: dateOfBirthController,
       onSaved: (newValue) {
         dateDisplay.value = newValue!;

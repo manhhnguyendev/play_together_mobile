@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_donate_page.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -166,15 +169,23 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
             child: AcceptProfileButton(
                 text: 'Gửi tiền từ thiện',
                 onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DonateCharityPage(
-                              charityModel: widget.charityModel,
-                              tokenModel: widget.tokenModel,
-                              userModel: widget.userModel,
-                            )),
-                  );
+                  Future<ResponseModel<UserBalanceModel>?>
+                      getUserServiceFuture = UserService().getUserBalance(
+                          widget.userModel.id, widget.tokenModel.message);
+                  getUserServiceFuture.then((value) {
+                    if (value != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DonateCharityPage(
+                                  charityModel: widget.charityModel,
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                  activeBalance: value.content.activeBalance,
+                                )),
+                      );
+                    }
+                  });
                 })),
       ),
     );
