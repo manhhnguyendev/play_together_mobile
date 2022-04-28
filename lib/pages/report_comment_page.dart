@@ -168,7 +168,7 @@ class _ReportCommentPageState extends State<ReportCommentPage> {
                 onPress: () {
                   if (checkReason == true && _controller.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Báo cáo thất bại"),
+                      content: Text("Vui lòng nhập lý do!"),
                     ));
                   } else {
                     _controller.text = reason;

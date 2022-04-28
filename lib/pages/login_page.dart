@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                                         }
                                       });
                                       Fluttertoast.showToast(
-                                          msg: "Đăng nhập thành công",
+                                          msg: "ĐĂNG NHẬP THÀNH CÔNG",
                                           textColor: Colors.white,
                                           backgroundColor: const Color.fromRGBO(
                                               137, 128, 255, 1),

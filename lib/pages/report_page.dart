@@ -117,13 +117,15 @@ class _ReportPageState extends State<ReportPage> {
             child: SecondMainButton(
                 text: 'Gửi',
                 onPress: () {
-                  ReportCreateModel reportCreateModel =
-                      ReportCreateModel(reportMessage: reportMessage);
-                  if (reportMessage.isEmpty) {
+                  if (reportMessage == null ||
+                      reportMessage.isEmpty ||
+                      reportMessage == "") {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng nhập lý do tố cáo!"),
                     ));
                   } else {
+                    ReportCreateModel reportCreateModel =
+                        ReportCreateModel(reportMessage: reportMessage);
                     Future<bool?> reportFuture = ReportService().createReport(
                         widget.orderModel!.id,
                         widget.tokenModel.message,

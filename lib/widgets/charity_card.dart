@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/charity_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/services/charity_service.dart';
 
 class CharityCard extends StatefulWidget {
   final UserModel userModel;
@@ -26,15 +28,21 @@ class _CharityCardState extends State<CharityCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CharityDetailPage(
-                    charityModel: widget.charityModel,
-                    userModel: widget.userModel,
-                    tokenModel: widget.tokenModel,
-                  )),
-        );
+        Future<ResponseModel<CharityModel>?> charityFuture = CharityService()
+            .getCharityById(widget.charityModel.id, widget.tokenModel.message);
+        charityFuture.then((value) {
+          if (value != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CharityDetailPage(
+                        charityModel: widget.charityModel,
+                        userModel: widget.userModel,
+                        tokenModel: widget.tokenModel,
+                      )),
+            );
+          }
+        });
       },
       child: Column(
         children: [

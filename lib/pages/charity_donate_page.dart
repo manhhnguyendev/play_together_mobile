@@ -4,7 +4,7 @@ import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/charity_page.dart';
+import 'package:play_together_mobile/pages/transaction_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
 import 'package:intl/intl.dart';
@@ -15,14 +15,14 @@ class DonateCharityPage extends StatefulWidget {
   final CharityModel charityModel;
   final UserModel userModel;
   final TokenModel tokenModel;
-  final MakeDonateModel? makeDonateModel;
+  final double activeBalance;
 
   const DonateCharityPage({
     Key? key,
     required this.charityModel,
     required this.userModel,
     required this.tokenModel,
-    this.makeDonateModel,
+    required this.activeBalance,
   }) : super(key: key);
 
   @override
@@ -85,8 +85,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                   style: GoogleFonts.montserrat(fontSize: 18),
                 ),
                 Text(
-                  formatter.format(widget.userModel.userBalance.activeBalance) +
-                      "đ",
+                  formatter.format(widget.activeBalance) + "đ",
                   style: GoogleFonts.montserrat(fontSize: 18),
                 )
               ],
@@ -110,7 +109,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                   style: GoogleFonts.montserrat(fontSize: 20),
                   decoration: InputDecoration(
                       counter: Container(), hintText: " Nhập số tiền"),
-                  maxLength: 11,
+                  maxLength: 10,
                   keyboardType: TextInputType.number,
                 ),
               ),
@@ -154,33 +153,62 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
             child: AcceptProfileButton(
                 text: 'Gửi tiền từ thiện',
                 onPress: () {
-                  money = money.replaceAll(",", "");
-                  convertMoney = double.parse(money);
-                  MakeDonateModel makeDonateModel = MakeDonateModel(
-                      money: convertMoney,
-                      message: message != "" ? message : message);
-                  Future<bool?> makeDonateFuture = UserService()
-                      .makeDonateToCharity(widget.charityModel.id,
-                          widget.tokenModel.message, makeDonateModel);
-                  makeDonateFuture.then((_makeDonateModel) {
-                    if (_makeDonateModel == true) {
-                      setState(() {
-                        helper.pushInto(
-                            context,
-                            CharityPage(
-                              tokenModel: widget.tokenModel,
-                              userModel: widget.userModel,
-                            ),
-                            true);
-                      });
-                      Fluttertoast.showToast(
-                          msg: "Gửi từ thiện thành công",
-                          textColor: Colors.white,
-                          backgroundColor:
-                              const Color.fromRGBO(137, 128, 255, 1),
-                          toastLength: Toast.LENGTH_SHORT);
+                  if (money == null || money.isEmpty || money == "") {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Vui lòng nhập số tiền!"),
+                    ));
+                  } else if (money.length <= 4) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Số tiền gửi từ thiện tối thiểu là 1.000đ"),
+                    ));
+                  } else {
+                    if (message == null || message.isEmpty || message == "") {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Vui lòng nhập lời nhắn!"),
+                      ));
+                    } else {
+                      money = money.replaceAll(",", "");
+                      convertMoney = double.parse(money);
+                      MakeDonateModel makeDonateModel = MakeDonateModel(
+                          money: convertMoney, message: message);
+                      if (convertMoney > widget.activeBalance) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Số dư khả dụng không đủ!"),
+                        ));
+                      } else {
+                        Future<bool?> makeDonateFuture = UserService()
+                            .makeDonateToCharity(widget.charityModel.id,
+                                widget.tokenModel.message, makeDonateModel);
+                        makeDonateFuture.then((_makeDonateModel) {
+                          if (_makeDonateModel == true) {
+                            setState(() {
+                              helper.pushInto(
+                                  context,
+                                  TransactionPage(
+                                    tokenModel: widget.tokenModel,
+                                    userModel: widget.userModel,
+                                  ),
+                                  true);
+                            });
+                            Fluttertoast.showToast(
+                                msg: "Gửi từ thiện thành công",
+                                textColor: Colors.white,
+                                backgroundColor:
+                                    const Color.fromRGBO(137, 128, 255, 1),
+                                toastLength: Toast.LENGTH_SHORT);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Gửi từ thiện thất bại",
+                                textColor: Colors.white,
+                                backgroundColor:
+                                    const Color.fromRGBO(137, 128, 255, 1),
+                                toastLength: Toast.LENGTH_SHORT);
+                          }
+                        });
+                      }
                     }
-                  });
+                  }
                 })),
       ),
     );

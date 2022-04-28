@@ -114,17 +114,19 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
             child: SecondMainButton(
                 text: 'Gửi',
                 onPress: () {
-                  RatingCreateModel rateComment = RatingCreateModel(
-                      rate: ratingStar.round(), comment: comment);
-                  if (ratingStar.round().toString().isEmpty) {
+                  if (ratingStar.round() < 0) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng đánh giá!"),
                     ));
-                  } else if (comment.isEmpty) {
+                  } else if (comment == null ||
+                      comment.isEmpty ||
+                      comment == "") {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Vui lòng nhập bình luận!"),
+                      content: Text("Vui lòng nhập đánh giá!"),
                     ));
                   } else {
+                    RatingCreateModel rateComment = RatingCreateModel(
+                        rate: ratingStar.round(), comment: comment);
                     Future<bool?> rateFuture = RatingService().createRating(
                         widget.orderModel!.id,
                         widget.tokenModel.message,

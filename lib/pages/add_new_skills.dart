@@ -82,31 +82,45 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
                   child: AcceptProfileButton(
                       text: 'Cập nhật',
                       onPress: () {
-                        for (var gameChoose in listGamesChoosen) {
-                          for (var game in listAllGames) {
-                            if (game.name.contains(gameChoose)) {
-                              CreateGameOfUserModel createGameOfUser =
-                                  CreateGameOfUserModel(
-                                      gameId: game.id, rankId: "");
-                              listCreateGameOfUser.add(createGameOfUser);
+                        if (listGamesChoosen.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Vui lòng chọn kỹ năng!"),
+                          ));
+                        } else if ((listGameOfUser.length +
+                                listGamesChoosen.length) <=
+                            5) {
+                          for (var gameChoose in listGamesChoosen) {
+                            for (var game in listAllGames) {
+                              if (game.name.contains(gameChoose)) {
+                                CreateGameOfUserModel createGameOfUser =
+                                    CreateGameOfUserModel(
+                                        gameId: game.id, rankId: "");
+                                listCreateGameOfUser.add(createGameOfUser);
+                              }
                             }
                           }
+                          Future<bool?> createGameOfUserModel =
+                              GameOfUserService().createGameOfUser(
+                                  listCreateGameOfUser,
+                                  widget.tokenModel.message);
+                          createGameOfUserModel.then((_listCreateGameOfUser) {
+                            if (_listCreateGameOfUser == true) {
+                              setState(() {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Thêm thành công"),
+                                ));
+                                Navigator.pop(context);
+                              });
+                            }
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Chỉ được thêm tối đa 5 kỹ năng"),
+                          ));
                         }
-                        Future<bool?> createGameOfUserModel =
-                            GameOfUserService().createGameOfUser(
-                                listCreateGameOfUser,
-                                widget.tokenModel.message);
-                        createGameOfUserModel.then((_listCreateGameOfUser) {
-                          if (_listCreateGameOfUser == true) {
-                            setState(() {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Thêm thành công"),
-                              ));
-                              Navigator.pop(context);
-                            });
-                          }
-                        });
                       })),
             ),
           );

@@ -32,7 +32,7 @@ class _NotificationCardState extends State<NotificationCard> {
     time = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.notificationModel.createdDate));
     return Container(
-      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+      padding: const EdgeInsets.fromLTRB(10, 5, 15, 5),
       child: GestureDetector(
         onTap: () {},
         child: Column(

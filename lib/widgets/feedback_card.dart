@@ -34,65 +34,62 @@ class _FeedbackCardState extends State<FeedbackCard> {
         .format(DateTime.parse(widget.systemFeedbackModel.createdDate));
     time = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.systemFeedbackModel.createdDate));
-    return Container(
-      child: GestureDetector(
-        onTap: () {
-          Future<ResponseModel<SystemFeedbackDetailModel>?>
-              getFeedbackDetailFuture = SystemFeedbackService()
-                  .getFeedbackDetail(
-                      widget.systemFeedbackModel.id, widget.tokenModel.message);
-          getFeedbackDetailFuture.then((value) {
-            if (value != null) {
-              systemFeedbackDetailModel = value.content;
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FeedbackDetailPage(
-                      userModel: widget.userModel,
-                      tokenModel: widget.tokenModel,
-                      systemFeedbackDetailModel: systemFeedbackDetailModel,
-                    ),
-                  ));
-            }
-          });
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              SizedBox(
-                width: 250,
-                child: Text(
-                  widget.systemFeedbackModel.title,
-                  style: GoogleFonts.montserrat(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal),
-                ),
-              ),
-              Spacer(),
-              SizedBox(
-                width: 120,
-                child: Container(
-                    alignment: Alignment.centerRight,
-                    child: buildApproveStatus(
-                        widget.systemFeedbackModel.isApprove)),
-              ),
-            ]),
+    return GestureDetector(
+      onTap: () {
+        Future<ResponseModel<SystemFeedbackDetailModel>?>
+            getFeedbackDetailFuture = SystemFeedbackService().getFeedbackDetail(
+                widget.systemFeedbackModel.id, widget.tokenModel.message);
+        getFeedbackDetailFuture.then((value) {
+          if (value != null) {
+            systemFeedbackDetailModel = value.content;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FeedbackDetailPage(
+                    userModel: widget.userModel,
+                    tokenModel: widget.tokenModel,
+                    systemFeedbackDetailModel: systemFeedbackDetailModel,
+                  ),
+                ));
+          }
+        });
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
             SizedBox(
-              height: 10,
+              width: 250,
+              child: Text(
+                widget.systemFeedbackModel.title,
+                style: GoogleFonts.montserrat(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal),
+              ),
             ),
-            Text(
-              date + ', ' + time,
-              style: GoogleFonts.montserrat(
-                  fontSize: 15,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal),
+            Spacer(),
+            SizedBox(
+              width: 120,
+              child: Container(
+                  alignment: Alignment.centerRight,
+                  child:
+                      buildApproveStatus(widget.systemFeedbackModel.isApprove)),
             ),
-            Divider(),
-          ],
-        ),
+          ]),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            date + ', ' + time,
+            style: GoogleFonts.montserrat(
+                fontSize: 15,
+                color: Colors.grey,
+                fontWeight: FontWeight.normal),
+          ),
+          Divider(),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -61,7 +62,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       checkFinalPrice = false;
     }
 
-    if (widget.orderDetailModel.reason != null) {
+    if (widget.orderDetailModel.reason!.isNotEmpty ||
+        widget.orderDetailModel.reason != "") {
       checkReason = true;
     } else {
       checkReason = false;
@@ -378,11 +380,12 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                         style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       const Icon(
-                        Icons.star,
+                        FontAwesomeIcons.solidStar,
                         color: Colors.amber,
+                        size: 15,
                       ),
                       Text(
-                        rating!,
+                        ' ' + rating!,
                         style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                     ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/game_of_orders_model.dart';
-import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
@@ -69,7 +68,8 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
   void initState() {
     super.initState();
     time = helper.getDayElapsed(
-        DateTime.now().toString(), widget.orderModel!.processExpired);
+        DateTime.now().add(const Duration(milliseconds: 400)).toString(),
+        widget.orderModel!.processExpired);
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: time),
@@ -350,9 +350,9 @@ class _ReceiveRequestPageState extends State<ReceiveRequestPage>
                           acceptFuture.then((accept) {
                             if (accept == true) {
                               Future<ResponseModel<OrderModel>?>
-                                  getOrderByIdFuture =
-                                  OrderService().getOrderById(widget.orderModel!.id,
-                                      widget.tokenModel.message);
+                                  getOrderByIdFuture = OrderService()
+                                      .getOrderById(widget.orderModel!.id,
+                                          widget.tokenModel.message);
                               getOrderByIdFuture.then((orderPlayer) {
                                 if (orderPlayer != null) {
                                   setState(() {

@@ -3,6 +3,7 @@ import 'package:play_together_mobile/models/chat_model.dart';
 import 'package:play_together_mobile/models/game_model.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
+import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
@@ -21,7 +22,6 @@ class ResponseListModel<T> {
   bool hasPrevious;
   bool hasNext;
   late List<T> content;
-  ErrorModel? error;
   bool isSuccess;
   String responseTime;
 
@@ -32,9 +32,6 @@ class ResponseListModel<T> {
         totalCount = parsedJson['totalCount'],
         hasPrevious = parsedJson['hasPrevious'],
         hasNext = parsedJson['hasNext'],
-        error = (parsedJson['error']) != null
-            ? ErrorModel.fromJson(parsedJson['error'])
-            : ErrorModel.fromJson(parsedJson),
         isSuccess = parsedJson['isSuccess'],
         responseTime = parsedJson['responseTime'];
 
@@ -76,6 +73,8 @@ class ResponseListModel<T> {
     } else if (T == SystemFeedbackModel) {
       return ListSystemFeedbackModelResponse.fromJson(json)
           as ResponseListModel<T>;
+    } else if (T == ImageModel) {
+      return ListImageModelResponse.fromJson(json) as ResponseListModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -95,6 +94,15 @@ class ListGetAllUserModelResponse extends ResponseListModel<GetAllUserModel> {
       : super._fromJson(json) {
     content = (json['content'] as List<dynamic>)
         .map((dynamic item) => GetAllUserModel.fromJson(item))
+        .toList();
+  }
+}
+
+class ListImageModelResponse extends ResponseListModel<ImageModel> {
+  ListImageModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = (json['content'] as List<dynamic>)
+        .map((dynamic item) => ImageModel.fromJson(item))
         .toList();
   }
 }
@@ -226,28 +234,4 @@ class ListSystemFeedbackModelResponse
         .map((dynamic item) => SystemFeedbackModel.fromJson(item))
         .toList();
   }
-}
-
-class ErrorModel {
-  Null code;
-  Null type;
-  Null message;
-
-  ErrorModel({
-    required this.code,
-    required this.type,
-    required this.message,
-  });
-
-  factory ErrorModel.fromJson(Map<String, dynamic> json) => ErrorModel(
-        code: json['code'] as Null,
-        type: json['type'] as Null,
-        message: json['message'] as Null,
-      );
-
-  Map<String, dynamic> toJson() => {
-        "code": code,
-        "type": type,
-        "message": message,
-      };
 }

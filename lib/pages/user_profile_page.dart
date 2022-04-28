@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/helpers/const.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/personal_page.dart';
 import 'package:play_together_mobile/services/image_service.dart';
@@ -51,7 +54,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   late String city;
   late DateTime dateOfBirth;
   late bool gender;
-  double val = 0;
   bool checkFirstTime = true;
   String name = "";
   String description = "";
@@ -60,6 +62,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   File? _imageFile;
   List<String>? imagesLink = [];
   List<File>? listImageFile = [];
+  List<ImageModel> listUserImages = [];
+  List<AddImageModel> listAddImages = [];
   ValueNotifier<String> dateDisplay =
       ValueNotifier<String>("Ngày sinh của bạn");
   List<DropdownMenuItem<String>> listDrop = [];
@@ -129,27 +133,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
     'Yên Bái',
   ];
 
-  chooseImagesFromGallery() async {
-    int i = 1;
-    var images = await ImagePicker().pickMultiImage();
-    for (var _image in images!) {
-      listImageFile!.add(File(_image.path));
-    }
-    for (var img in listImageFile!) {
-      val = i / listImageFile!.length;
-      String fileName = basename(img.path);
-      Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child('images/$fileName');
-      UploadTask uploadTask = firebaseStorageRef.putFile(img);
-      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => img);
-      taskSnapshot.ref.getDownloadURL().then((value) {
-        setState(() {
-          imagesLink?.add(value);
-          print(imagesLink);
-        });
-      });
-      i++;
-    }
+  Future getUserImages() {
+    Future<ResponseListModel<ImageModel>?> getUserImagesFuture = UserService()
+        .getImagesOfUser(widget.userModel.id, widget.tokenModel.message);
+    getUserImagesFuture.then((value) {
+      if (value != null) {
+        listUserImages = value.content;
+      }
+    });
+    return getUserImagesFuture;
   }
 
   chooseAvatarFromGallery() async {
@@ -175,7 +167,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
     listDrop = [];
     listDrop = drop
         .map((val) => DropdownMenuItem<String>(
-              child: Text(val),
+              child: Text(
+                val,
+                style: GoogleFonts.montserrat(),
+              ),
               value: val,
             ))
         .toList();
@@ -319,54 +314,58 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       fontSize: 18,
                     ),
                   ),
-                  RawMaterialButton(
-                    onPressed: () {
-                      chooseImagesFromGallery();
-                    },
-                    child: const Icon(Icons.add_box_outlined),
-                  ),
-                  RawMaterialButton(
-                    onPressed: () {
-                      for (var img in imagesLink!) {
-                        if (imagesLink != null) {
+                  IconButton(
+                    onPressed: () async {
+                      var images = await ImagePicker().pickMultiImage();
+                      for (var _image in images!) {
+                        listImageFile!.add(File(_image.path));
+                      }
+                      for (var img in listImageFile!) {
+                        String fileName = basename(img.path);
+                        Reference firebaseStorageRef = FirebaseStorage.instance
+                            .ref()
+                            .child('images/$fileName');
+                        UploadTask uploadTask = firebaseStorageRef.putFile(img);
+                        TaskSnapshot taskSnapshot =
+                            await uploadTask.whenComplete(() => img);
+                        taskSnapshot.ref.getDownloadURL().then((value) {
                           addImageModel.userId = widget.userModel.id;
-                          addImageModel.imageLink = img;
+                          addImageModel.imageLink = value;
                           Future<ResponseModel<AddImageModel>?>
                               listImageModelFuture = ImageService().addImages(
                                   addImageModel, widget.tokenModel.message);
-                          listImageModelFuture.then((_addImageModel) {});
-                        }
-                        Future<ResponseModel<UserModel>?> userModelFuture =
-                            UserService()
-                                .getUserProfile(widget.tokenModel.message);
-                        userModelFuture.then((_userModel) {
-                          if (_userModel != null) {
+                          listImageModelFuture.then((_addImageModel) {
                             setState(() {
-                              helper.pushInto(
-                                  context,
-                                  PersonalPage(
-                                      userModel: _userModel.content,
-                                      tokenModel: widget.tokenModel),
-                                  true);
+                              ScaffoldMessenger.of(this.context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Thêm thành công!"),
+                              ));
                             });
-                          }
+                          });
                         });
                       }
                     },
-                    child: const Text('Upload Images'),
+                    icon: const Icon(Icons.add_box_outlined),
                   ),
                 ]),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: List.generate(
-                          widget.userModel.images.length,
-                          (index) =>
-                              buildImageItem(widget.userModel.images[index]))),
-                ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: FutureBuilder(
+                    future: getUserImages(),
+                    builder: (context, snapshot) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                              children: List.generate(
+                                  listUserImages.length,
+                                  (index) =>
+                                      buildImageItem(listUserImages[index]))),
+                        ),
+                      );
+                    }),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
@@ -483,17 +482,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 .getUserProfile(widget.tokenModel.message);
                         userModelFuture.then((_userModel) {
                           if (_userModel != null) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Cập nhật thành công"),
-                            ));
-                            setState(() {
-                              helper.pushInto(
+                            Future<ResponseModel<UserBalanceModel>?>
+                                getUserBalanceFuture = UserService()
+                                    .getUserBalance(widget.userModel.id,
+                                        widget.tokenModel.message);
+                            getUserBalanceFuture.then((value) {
+                              if (value != null) {
+                                helper.pushInto(
                                   context,
                                   PersonalPage(
-                                      userModel: _userModel.content,
-                                      tokenModel: widget.tokenModel),
-                                  true);
+                                    userModel: _userModel.content,
+                                    tokenModel: widget.tokenModel,
+                                    activeBalance: value.content.activeBalance,
+                                    balance: value.content.balance,
+                                  ),
+                                  true,
+                                );
+                                Fluttertoast.showToast(
+                                    msg: "Cập nhật thông tin thành công",
+                                    textColor: Colors.white,
+                                    backgroundColor:
+                                        const Color.fromRGBO(137, 128, 255, 1),
+                                    toastLength: Toast.LENGTH_SHORT);
+                              }
                             });
                           }
                         });
@@ -600,6 +611,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   TextFormField buildBirthdayField() {
     return TextFormField(
+      style: GoogleFonts.montserrat(),
       controller: dateOfBirthController,
       onSaved: (newValue) {
         dateDisplay.value = newValue!;
@@ -689,53 +701,67 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Widget buildImageItem(ImageModel imageLink) => Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: GestureDetector(
-          onTap: () {
-            showDialog(
-                context: this.context,
-                builder: (_) => new Dialog(
-                      backgroundColor: Colors.transparent,
-                      child: Stack(children: [
-                        Container(
-                            alignment: FractionalOffset.center,
-                            height:
-                                MediaQuery.of(this.context).size.height * 0.6,
-                            padding: const EdgeInsets.all(20.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                image: DecorationImage(
-                                    image: NetworkImage(imageLink.imageLink),
-                                    fit: BoxFit.cover))),
-                        Positioned(
-                            bottom: 0,
-                            right: -5,
-                            child: RawMaterialButton(
-                              onPressed: () {
-                                //chooseAvatarFromGallery();
-                              },
-                              elevation: 2.0,
-                              fillColor: const Color(0xFFF5F6F9),
-                              child: const Icon(
-                                Icons.delete_outline_outlined,
-                                color: Colors.black,
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              shape: const CircleBorder(),
-                            )),
-                      ]),
-                    ));
-          },
-          child: Container(
-            width: 150,
-            height: 100,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                    image: NetworkImage(imageLink.imageLink),
-                    fit: BoxFit.cover)), //sua asset image thanh network
-          ),
+  Widget buildImageItem(ImageModel imageLink) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: GestureDetector(
+        onTap: () {
+          showDialog(
+              context: this.context,
+              builder: (BuildContext dialogContext) => Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: Stack(children: [
+                      Container(
+                          alignment: FractionalOffset.center,
+                          height: MediaQuery.of(this.context).size.height * 0.6,
+                          padding: const EdgeInsets.all(20.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              image: DecorationImage(
+                                  image: NetworkImage(imageLink.imageLink),
+                                  fit: BoxFit.cover))),
+                      Positioned(
+                          bottom: 0,
+                          right: -20,
+                          child: RawMaterialButton(
+                            onPressed: () {
+                              Future<bool?> deleteImageFuture = ImageService()
+                                  .deleteImage(
+                                      imageLink.id, widget.tokenModel.message);
+                              deleteImageFuture.then((value) {
+                                if (value == true) {
+                                  setState(() {
+                                    ScaffoldMessenger.of(this.context)
+                                        .showSnackBar(const SnackBar(
+                                      content: Text("Xoá thành công!"),
+                                    ));
+                                    Navigator.pop(dialogContext);
+                                  });
+                                }
+                              });
+                            },
+                            elevation: 2.0,
+                            fillColor: const Color(0xFFF5F6F9),
+                            child: const Icon(
+                              Icons.delete_outline_outlined,
+                              color: Colors.black,
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            shape: const CircleBorder(),
+                          )),
+                    ]),
+                  ));
+        },
+        child: Container(
+          width: 150,
+          height: 100,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              image: DecorationImage(
+                  image: NetworkImage(imageLink.imageLink),
+                  fit: BoxFit.cover)), //sua asset image thanh network
         ),
-      );
+      ),
+    );
+  }
 }

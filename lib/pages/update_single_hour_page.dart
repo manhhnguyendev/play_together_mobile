@@ -346,7 +346,6 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                               .showSnackBar(const SnackBar(
                             content: Text("Cập nhật thành công"),
                           ));
-
                           Navigator.pop(context);
                         });
                       } else {

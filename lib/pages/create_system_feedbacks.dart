@@ -33,7 +33,10 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
   void loadData() {
     listDrop = drop
         .map((val) => DropdownMenuItem<String>(
-              child: Text(val),
+              child: Text(
+                val,
+                style: GoogleFonts.montserrat(),
+              ),
               value: val,
             ))
         .toList();
@@ -217,7 +220,10 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
             isExpanded: true,
             value: displayType,
             menuMaxHeight: 3 * 48,
-            hint: Text('Thể loại phản hồi'),
+            hint: Text(
+              'Thể loại phản hồi',
+              style: GoogleFonts.montserrat(),
+            ),
             items: listDrop,
             iconSize: 20.0,
             elevation: 16,

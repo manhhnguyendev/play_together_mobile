@@ -68,7 +68,7 @@ class UserModel {
         numOfRate: json['numOfRate'] as int,
         numOfOrder: json['numOfOrder'] as int,
         totalTimeOrder: json['totalTimeOrder'] as int,
-        numOfFinishOnTime: json['totalTimeOrder'] as int,
+        numOfFinishOnTime: json['numOfFinishOnTime'] as int,
         behaviorPoint: (json['behaviorPoint']) != null
             ? BehaviorModel.fromJson(json['behaviorPoint'])
             : BehaviorModel.fromJson(json),
@@ -385,5 +385,53 @@ class DepositModel {
   Map<String, dynamic> toJson() => {
         "momoTransactionId": momoTransactionId,
         "money": money,
+      };
+}
+
+class WithdrawModel {
+  double moneyWithdraw;
+  String phoneNumberMomo;
+
+  WithdrawModel({
+    required this.moneyWithdraw,
+    required this.phoneNumberMomo,
+  });
+
+  factory WithdrawModel.fromJson(Map<String, dynamic> json) => WithdrawModel(
+        moneyWithdraw: json['moneyWithdraw'] as double,
+        phoneNumberMomo: json['phoneNumberMomo'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "moneyWithdraw": moneyWithdraw,
+        "phoneNumberMomo": phoneNumberMomo,
+      };
+}
+
+class StatisticModel {
+  double item1;
+  double item2;
+  double item3;
+  double item4;
+
+  StatisticModel({
+    required this.item1,
+    required this.item2,
+    required this.item3,
+    required this.item4,
+  });
+
+  factory StatisticModel.fromJson(Map<String, dynamic> json) => StatisticModel(
+        item1: json['item1'] as double,
+        item2: json['item2'] as double,
+        item3: json['item3'] as double,
+        item4: json['item4'] as double,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "item1": item1,
+        "item2": item2,
+        "item3": item3,
+        "item4": item4,
       };
 }

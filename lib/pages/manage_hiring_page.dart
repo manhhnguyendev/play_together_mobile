@@ -125,7 +125,13 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                       activeColor: const Color(0xff8980FF),
                                       value: isPlayer,
                                       onChanged: (value) {
-                                        setState(() {
+                                        if (listGamesOfUser.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                                "Thêm kỹ năng để cập nhật trạng thái"),
+                                          ));
+                                        } else {
                                           checkOnChange = true;
                                           isPlayer = value;
                                           IsPlayerModel isPlayerModel =
@@ -136,21 +142,18 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                                   widget.tokenModel.message);
                                           updateIsPlayer.then((value) {
                                             if (value == true) {
-                                              checkOnChange = false;
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Cập nhật trạng thái thành công"),
-                                              ));
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Thêm kỹ năng để cập nhật trạng thái"),
-                                              ));
+                                              setState(() {
+                                                checkOnChange = false;
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      "Cập nhật trạng thái thành công"),
+                                                ));
+                                              });
                                             }
                                           });
-                                        });
+                                        }
                                       }),
                                 ),
                               )
@@ -233,28 +236,38 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                           child: SecondMainButton(
                               text: 'Cập nhật',
                               onPress: () {
-                                checkOnPress = true;
-                                money = money.replaceAll(",", "");
-                                convertMoney = double.parse(money);
-                                ServiceUserModel serviceUserModel =
-                                    ServiceUserModel(
-                                        pricePerHour: convertMoney,
-                                        maxHourHire: maxHourHire);
-                                Future<bool?> updatePersonalServiceInfo =
-                                    UserService().updatePersonalServiceInfo(
-                                        serviceUserModel,
-                                        widget.tokenModel.message);
-                                updatePersonalServiceInfo.then((value) {
-                                  if (value == true) {
-                                    setState(() {
-                                      checkOnPress = false;
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text("Cập nhật thành công"),
-                                      ));
-                                    });
-                                  }
-                                });
+                                if (money.isEmpty ||
+                                    money == "" ||
+                                    money == null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content:
+                                        Text("Vui lòng nhập chi phí mỗi giờ!"),
+                                  ));
+                                } else {
+                                  checkOnPress = true;
+                                  money = money.replaceAll(",", "");
+                                  convertMoney = double.parse(money);
+                                  ServiceUserModel serviceUserModel =
+                                      ServiceUserModel(
+                                          pricePerHour: convertMoney,
+                                          maxHourHire: maxHourHire);
+                                  Future<bool?> updatePersonalServiceInfo =
+                                      UserService().updatePersonalServiceInfo(
+                                          serviceUserModel,
+                                          widget.tokenModel.message);
+                                  updatePersonalServiceInfo.then((value) {
+                                    if (value == true) {
+                                      setState(() {
+                                        checkOnPress = false;
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text("Cập nhật thành công"),
+                                        ));
+                                      });
+                                    }
+                                  });
+                                }
                               },
                               height: 50,
                               width: 200),

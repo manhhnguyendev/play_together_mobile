@@ -293,13 +293,18 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 child: SecondMainButton(
                     text: 'Kết thúc',
                     onPress: () {
-                      FinishSoonOrderModel finishSoonModel =
-                          FinishSoonOrderModel(reason: reason);
-                      Future<bool?> finishFuture = OrderService()
-                          .finishSoonOrder(widget.orderModel!.id,
-                              widget.tokenModel.message, finishSoonModel);
-                      finishFuture.then((finish) {
-                        if (reason.isNotEmpty) {
+                      if (reason == null || reason.isEmpty || reason == "") {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Vui lòng nhập lý do!"),
+                        ));
+                      } else {
+                        FinishSoonOrderModel finishSoonModel =
+                            FinishSoonOrderModel(reason: reason);
+                        Future<bool?> finishFuture = OrderService()
+                            .finishSoonOrder(widget.orderModel!.id,
+                                widget.tokenModel.message, finishSoonModel);
+                        finishFuture.then((finish) {
                           if (finish == true) {
                             Future<ResponseModel<OrderModel>?>
                                 checkStatusOrder = OrderService().getOrderById(
@@ -307,6 +312,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                                     widget.tokenModel.message);
                             checkStatusOrder.then((order) {
                               if (order != null) {
+                                if (!mounted) return;
                                 setState(() {
                                   lateOrder = order.content;
                                   helper.pushInto(
@@ -328,13 +334,8 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                                   "Bạn chỉ có thể kết thúc sau khi hoàn thành 1/10 thời gian thuê"),
                             ));
                           }
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Vui lòng nhập lý do!"),
-                          ));
-                        }
-                      });
+                        });
+                      }
                     },
                     height: 50,
                     width: 200),

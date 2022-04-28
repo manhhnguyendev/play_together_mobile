@@ -4,10 +4,14 @@ import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
+import 'package:play_together_mobile/pages/end_order_page.dart';
 import 'package:play_together_mobile/pages/history_hiring_detail_page.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_together_mobile/pages/player_profile_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
+import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class HistoryHiringCard extends StatefulWidget {
   final TokenModel tokenModel;
@@ -60,21 +64,55 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: GestureDetector(
         onTap: () {
-          Future<ResponseModel<OrderDetailModel>?> orderFuture = OrderService()
-              .getDetailOrderById(
+          Future<ResponseModel<OrderDetailModel>?> orderDetailFuture =
+              OrderService().getDetailOrderById(
                   widget.orderModel.id, widget.tokenModel.message);
-          orderFuture.then((orderDetailModel) {
+          orderDetailFuture.then((orderDetailModel) {
             if (orderDetailModel != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HistoryHiringDetail(
-                          orderModel: widget.orderModel,
-                          userModel: widget.userModel,
-                          tokenModel: widget.tokenModel,
-                          orderDetailModel: orderDetailModel.content,
-                        )),
-              );
+              if (orderDetailModel.content.ratings!.isEmpty &&
+                  orderDetailModel.content.reports!.isEmpty) {
+                Future<ResponseModel<OrderModel>?> orderFuture = OrderService()
+                    .getOrderById(
+                        orderDetailModel.content.id, widget.tokenModel.message);
+                orderFuture.then((order) {
+                  if (order != null) {
+                    if (helper.getDayElapsed(DateTime.now().toString(),
+                            order.content.timeFinish) >=
+                        -10800) {
+                      helper.pushInto(
+                          context,
+                          EndOrderPage(
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel,
+                            orderModel: order.content,
+                          ),
+                          true);
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HistoryHiringDetail(
+                                  orderModel: widget.orderModel,
+                                  userModel: widget.userModel,
+                                  tokenModel: widget.tokenModel,
+                                  orderDetailModel: orderDetailModel.content,
+                                )),
+                      );
+                    }
+                  }
+                });
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HistoryHiringDetail(
+                            orderModel: widget.orderModel,
+                            userModel: widget.userModel,
+                            tokenModel: widget.tokenModel,
+                            orderDetailModel: orderDetailModel.content,
+                          )),
+                );
+              }
             }
           });
         },
@@ -118,7 +156,25 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                 Visibility(
                   visible: true,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
+                          UserService().getPlayerById(
+                              widget.orderModel.toUserId,
+                              widget.tokenModel.message);
+                      getPlayerByIdFuture.then((playerDetail) {
+                        if (playerDetail != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PlayerProfilePage(
+                                      userModel: widget.userModel,
+                                      playerModel: playerDetail.content,
+                                      tokenModel: widget.tokenModel,
+                                    )),
+                          );
+                        }
+                      });
+                    },
                     child: Row(
                       children: [
                         Text(

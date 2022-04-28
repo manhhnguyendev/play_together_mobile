@@ -47,12 +47,10 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
       if (value != null) {
         if (value.content.status.contains('Hiring')) {
           lateUser = value.content;
-          Future<ResponseModel<OrderModel>?>
-          getOrderByIdFuture =
-          OrderService().getOrderById(widget.orderModel!.id,
-              widget.tokenModel.message);
+          Future<ResponseModel<OrderModel>?> getOrderByIdFuture = OrderService()
+              .getOrderById(widget.orderModel!.id, widget.tokenModel.message);
           getOrderByIdFuture.then((orderUser) {
-            if(orderUser!= null){
+            if (orderUser != null) {
               setState(() {
                 helper.pushInto(
                     context,
@@ -64,9 +62,7 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
                     true);
               });
             }
-
           });
-
         } else if (value.content.status.contains('Online')) {
           lateUser = value.content;
           if (!mounted) return;
@@ -92,7 +88,8 @@ class _HiringNegotiatingPageState extends State<HiringNegotiatingPage>
   void initState() {
     super.initState();
     time = helper.getDayElapsed(
-        DateTime.now().toString(), widget.orderModel!.processExpired);
+        DateTime.now().add(const Duration(milliseconds: 400)).toString(),
+        widget.orderModel!.processExpired);
     controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: time),
