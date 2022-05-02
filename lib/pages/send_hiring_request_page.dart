@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:play_together_mobile/models/email_model.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
@@ -83,7 +85,8 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
           elevation: 0,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);
@@ -291,7 +294,6 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                                         widget.tokenModel.message);
                                 setState(() {
                                   orderModel = order.content;
-                                  print('OrderId: ' + orderModel!.id);
                                   helper.pushInto(
                                       context,
                                       HiringNegotiatingPage(

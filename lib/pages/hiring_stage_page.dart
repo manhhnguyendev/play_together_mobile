@@ -304,7 +304,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Column(
                       children: List.generate(
-                          widget.orderModel!.gameOfOrders != null
+                          widget.orderModel!.gameOfOrders.isNotEmpty
                               ? widget.orderModel!.gameOfOrders.length
                               : 0,
                           (index) => buildGamesChoosenField(
@@ -401,7 +401,7 @@ class _HiringPageState extends State<HiringPage> with TickerProviderStateMixin {
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "• " + game.game.name,
-          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
+          style: GoogleFonts.montserrat(fontSize: 15),
         ),
       );
 }

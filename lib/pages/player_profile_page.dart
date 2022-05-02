@@ -40,6 +40,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   late List<OnlineHourModel> fridayList;
   late List<OnlineHourModel> saturdayList;
   late List<OnlineHourModel> sundayList;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,8 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                 elevation: 0,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(Icons.arrow_back_ios),
                     onPressed: () {
                       Navigator.pop(context);
@@ -70,6 +72,11 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   future: getAllDatings(),
                   builder: (context, snapshot) {
                     loadDating();
+                    if (listGameAndRank.isEmpty) {
+                      isLoading = true;
+                    } else {
+                      isLoading = false;
+                    }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -281,14 +288,26 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                           padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
                           child: Container(
                             alignment: Alignment.topLeft,
-                            child: Column(
-                              children: List.generate(
-                                  listGameAndRank.isNotEmpty
-                                      ? listGameAndRank.length
-                                      : 0,
-                                  (index) => buildGameAndRankPlayer(
-                                      listGameAndRank[index])),
-                            ),
+                            child: isLoading
+                                ? const Center(
+                                    child: SizedBox(
+                                      height: 30.0,
+                                      width: 30.0,
+                                      child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Color.fromRGBO(
+                                                      137, 128, 255, 1))),
+                                    ),
+                                  )
+                                : Column(
+                                    children: List.generate(
+                                        listGameAndRank.isNotEmpty
+                                            ? listGameAndRank.length
+                                            : 0,
+                                        (index) => buildGameAndRankPlayer(
+                                            listGameAndRank[index])),
+                                  ),
                           ),
                         ),
                         Container(
@@ -438,7 +457,12 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                     SecondMainButton(
                         text: 'Thuê',
                         onPress: () {
-                          if (widget.userModel.isPlayer == true) {
+                          if (widget.playerModel.id == widget.userModel.id) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Bạn không thể thuê chính mình!"),
+                            ));
+                          } else if (widget.userModel.isPlayer == true) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text(
@@ -474,29 +498,17 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
         });
   }
 
-  // Widget buildImageItem(String imageLink) => Padding(
-  //       padding: const EdgeInsets.only(left: 10),
-  //       child: Container(
-  //         width: 150,
-  //         height: 100,
-  //         decoration: BoxDecoration(
-  //             color: Colors.white,
-  //             image: DecorationImage(
-  //                 image: NetworkImage(imageLink), fit: BoxFit.cover)),
-  //       ),
-  //     );
-
   Widget buildImageItem(String imageLink) => Padding(
         padding: const EdgeInsets.only(left: 10),
         child: GestureDetector(
           onTap: () {
             showDialog(
-                context: this.context,
-                builder: (_) => new Dialog(
+                context: context,
+                builder: (_) => Dialog(
                       backgroundColor: Colors.transparent,
                       child: Container(
                           alignment: FractionalOffset.center,
-                          height: MediaQuery.of(this.context).size.height * 0.6,
+                          height: MediaQuery.of(context).size.height * 0.6,
                           padding: const EdgeInsets.all(20.0),
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -511,8 +523,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 image: DecorationImage(
-                    image: NetworkImage(imageLink),
-                    fit: BoxFit.cover)), //sua asset image thanh network
+                    image: NetworkImage(imageLink), fit: BoxFit.cover)),
           ),
         ),
       );

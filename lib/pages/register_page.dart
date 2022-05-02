@@ -58,13 +58,13 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   EmailAuth? emailAuth;
+
   @override
   void initState() {
     super.initState();
     emailAuth = EmailAuth(
       sessionName: "Play Together",
     );
-    //emailAuth!.config(remoteServerConfiguration);
   }
 
   bool verify() {
@@ -127,57 +127,60 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(5),
-                                      child: FlatButton(
-                                        color: const Color.fromRGBO(
-                                            165, 165, 165, 1),
-                                        onPressed: () {
-                                          if (emailController.text == null ||
-                                              emailController.text.isEmpty ||
-                                              emailController.text == "") {
-                                            Fluttertoast.showToast(
-                                                msg: "Vui lòng nhập Email",
-                                                textColor: Colors.white,
-                                                backgroundColor:
-                                                    const Color.fromRGBO(
-                                                        137, 128, 255, 1),
-                                                toastLength:
-                                                    Toast.LENGTH_SHORT);
-                                          } else {
-                                            Future<String?> checkEmailFuture =
-                                                EmailService().checkEmail(
-                                                    emailController.text);
-                                            checkEmailFuture
-                                                .then((_checkEmail) {
-                                              if (_checkEmail == 'false') {
-                                                sendOtp();
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        "Lấy mã OTP thành công",
-                                                    textColor: Colors.white,
-                                                    backgroundColor:
-                                                        const Color.fromRGBO(
-                                                            137, 128, 255, 1),
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT);
-                                              } else {
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        "Email đã được sử dụng",
-                                                    textColor: Colors.white,
-                                                    backgroundColor:
-                                                        const Color.fromRGBO(
-                                                            137, 128, 255, 1),
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT);
-                                              }
-                                            });
-                                          }
-                                        },
-                                        child: Text("Lấy mã OTP",
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.montserrat(
-                                                color: Colors.white,
-                                                fontSize: 14)),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color:
+                                              Color.fromRGBO(165, 165, 165, 1),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            if (emailController.text.isEmpty ||
+                                                emailController.text == "") {
+                                              Fluttertoast.showToast(
+                                                  msg: "Vui lòng nhập Email",
+                                                  textColor: Colors.white,
+                                                  backgroundColor:
+                                                      const Color.fromRGBO(
+                                                          137, 128, 255, 1),
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT);
+                                            } else {
+                                              Future<String?> checkEmailFuture =
+                                                  EmailService().checkEmail(
+                                                      emailController.text);
+                                              checkEmailFuture
+                                                  .then((_checkEmail) {
+                                                if (_checkEmail == 'false') {
+                                                  sendOtp();
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          "Lấy mã OTP thành công",
+                                                      textColor: Colors.white,
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                              137, 128, 255, 1),
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          "Email đã được sử dụng",
+                                                      textColor: Colors.white,
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                              137, 128, 255, 1),
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT);
+                                                }
+                                              });
+                                            }
+                                          },
+                                          child: Text("Lấy mã OTP",
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                  color: Colors.white,
+                                                  fontSize: 14)),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -204,26 +207,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(5),
-                                      child: FlatButton(
-                                        color: const Color.fromRGBO(
-                                            165, 165, 165, 1),
-                                        onPressed: () {
-                                          if (otpController.text == null ||
-                                              otpController.text.isEmpty ||
-                                              otpController.text == "") {
-                                            Fluttertoast.showToast(
-                                                msg: "Vui lòng nhập mã OTP",
-                                                textColor: Colors.white,
-                                                backgroundColor:
-                                                    const Color.fromRGBO(
-                                                        137, 128, 255, 1),
-                                                toastLength:
-                                                    Toast.LENGTH_SHORT);
-                                          } else {
-                                            confirmEmail = verify();
-                                            if (confirmEmail == true) {
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color:
+                                              Color.fromRGBO(165, 165, 165, 1),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            if (otpController.text.isEmpty ||
+                                                otpController.text == "") {
                                               Fluttertoast.showToast(
-                                                  msg: "Xác thực thành công",
+                                                  msg: "Vui lòng nhập mã OTP",
                                                   textColor: Colors.white,
                                                   backgroundColor:
                                                       const Color.fromRGBO(
@@ -231,21 +225,34 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   toastLength:
                                                       Toast.LENGTH_SHORT);
                                             } else {
-                                              Fluttertoast.showToast(
-                                                  msg: "Mã OTP không chính xác",
-                                                  textColor: Colors.white,
-                                                  backgroundColor:
-                                                      const Color.fromRGBO(
-                                                          137, 128, 255, 1),
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT);
+                                              confirmEmail = verify();
+                                              if (confirmEmail == true) {
+                                                Fluttertoast.showToast(
+                                                    msg: "Xác thực thành công",
+                                                    textColor: Colors.white,
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            137, 128, 255, 1),
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT);
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        "Mã OTP không chính xác",
+                                                    textColor: Colors.white,
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            137, 128, 255, 1),
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT);
+                                              }
                                             }
-                                          }
-                                        },
-                                        child: Text("Xác thực",
-                                            style: GoogleFonts.montserrat(
-                                                color: Colors.white,
-                                                fontSize: 14)),
+                                          },
+                                          child: Text("Xác thực",
+                                              style: GoogleFonts.montserrat(
+                                                  color: Colors.white,
+                                                  fontSize: 14)),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -271,7 +278,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       text: "TIẾP TỤC",
                       onPress: () {
                         if (_formKey.currentState == null) {
-                          print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           if (listErrorEmail.length == 1 &&

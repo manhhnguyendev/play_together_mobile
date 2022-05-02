@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 
@@ -13,8 +13,8 @@ class RatingService {
     bool? result;
     try {
       response = await post(
-        Uri.parse('${apiUrl.ratings}/$orderId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.ratings}/$orderId'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
       if (response.statusCode == 200) {
@@ -32,11 +32,10 @@ class RatingService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.ratings}/violate/$rateId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.ratings}/violate/$rateId'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(reportCommentModel.toJson()),
       );
-      print(response.statusCode);
       if (response.statusCode == 204) {
         result = true;
       }
@@ -47,13 +46,14 @@ class RatingService {
   }
 
   Future<ResponseListModel<RatingModel>?> getAllRating(
-      String userId, double vote, dynamic token) async {
+      String userId, double vote, dynamic token, int pageSize) async {
     Response response;
     ResponseListModel<RatingModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$userId/ratings?Vote=$vote&IsNew=true'),
-        headers: configJson.headerAuth(token),
+        Uri.parse(
+            '${api_url.users}/$userId/ratings?Vote=$vote&IsNew=true&PageSize=$pageSize'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =

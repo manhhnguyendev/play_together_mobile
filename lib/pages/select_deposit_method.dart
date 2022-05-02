@@ -29,7 +29,8 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -48,8 +49,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
           ),
         ),
       ),
-      body: Container(
-          child: Column(
+      body: Column(
         children: [
           GestureDetector(
             onTap: () {
@@ -212,7 +212,7 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
             ]),
           ),
         ],
-      )),
+      ),
     );
   }
 }

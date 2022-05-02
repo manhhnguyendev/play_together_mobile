@@ -47,7 +47,8 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -153,7 +154,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
             child: AcceptProfileButton(
                 text: 'Gửi tiền từ thiện',
                 onPress: () {
-                  if (money == null || money.isEmpty || money == "") {
+                  if (money.isEmpty || money == "") {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng nhập số tiền!"),
                     ));
@@ -162,7 +163,7 @@ class _DonateCharityPageState extends State<DonateCharityPage> {
                       content: Text("Số tiền gửi từ thiện tối thiểu là 1.000đ"),
                     ));
                   } else {
-                    if (message == null || message.isEmpty || message == "") {
+                    if (message.isEmpty || message == "") {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Vui lòng nhập lời nhắn!"),
                       ));

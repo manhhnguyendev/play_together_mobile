@@ -56,7 +56,6 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                     for (var hobby in listHobbies) {
                       listGamesChoosen.add(hobby.game.name);
                     }
-                    print(listGamesChoosen);
                     checkAddChoosen = false;
                   }
                   for (var item in listGamesCheckBox) {
@@ -91,7 +90,8 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(
                       Icons.arrow_back_ios,
                     ),

@@ -29,6 +29,7 @@ import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:flutter_format_money_vietnam/flutter_format_money_vietnam.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PersonalPage extends StatefulWidget {
   final UserModel userModel;
@@ -95,6 +96,17 @@ class _PersonalPageState extends State<PersonalPage> {
                                 const SizedBox(
                                   height: 5,
                                 ),
+                                // IconButton(
+                                //     onPressed: () async {
+                                //       const url =
+                                //           "https://test-payment.momo.vn/v2/gateway/pay?t=TU9NT1ZGVFIyMDIyMDMyNXxNT01PVkZUUjIwMjIwMzI1XzA4NDE0NDk2LTBlNjItNDdkOC04MTI3LWY3OTQ2MDQxNTI0ZQ==";
+                                //       if (await canLaunch(url)) {
+                                //         await launch(url);
+                                //       } else {
+                                //         throw "Could not launch $url";
+                                //       }
+                                //     },
+                                //     icon: Icon(FontAwesomeIcons.moneyBill)),
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -576,7 +588,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                           context, const LoginPage(), true);
                                     });
                                     Fluttertoast.showToast(
-                                        msg: "Đăng xuất thành công",
+                                        msg: "ĐĂNG XUẤT THÀNH CÔNG",
                                         textColor: Colors.white,
                                         backgroundColor: const Color.fromRGBO(
                                             137, 128, 255, 1),
@@ -600,7 +612,9 @@ class _PersonalPageState extends State<PersonalPage> {
                               ),
                             );
                           }
-                          return const CircularProgressIndicator();
+                          return const SizedBox(
+                            height: 0,
+                          );
                         }),
                   ),
                 ],

@@ -42,7 +42,8 @@ class _CharityDetailPageState extends State<CharityDetailPage> {
           elevation: 0,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);

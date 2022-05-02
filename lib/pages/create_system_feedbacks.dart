@@ -57,7 +57,8 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -210,8 +211,8 @@ class _CreateFeedbackPageState extends State<CreateFeedbackPage> {
     );
   }
 
-  Container buildTypeOfFeedbackField() {
-    return Container(
+  SizedBox buildTypeOfFeedbackField() {
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: DropdownButtonHideUnderline(
         child: ButtonTheme(

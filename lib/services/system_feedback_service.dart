@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/system_feedback_model.dart';
@@ -14,8 +14,8 @@ class SystemFeedbackService {
     ResponseListModel<SystemFeedbackModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.feedback}?IsNew=true&GetAll=true'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.feedback}?IsNew=true&GetAll=true'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<SystemFeedbackModel>.fromJson(
@@ -33,8 +33,8 @@ class SystemFeedbackService {
     ResponseModel<SystemFeedbackDetailModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.feedback}/$feedbackId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.feedback}/$feedbackId'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<SystemFeedbackDetailModel>.fromJson(
@@ -52,8 +52,8 @@ class SystemFeedbackService {
     bool? result = false;
     try {
       response = await post(
-        Uri.parse(apiUrl.feedback),
-        headers: configJson.headerAuth(token),
+        Uri.parse(api_url.feedback),
+        headers: config_json.headerAuth(token),
         body: json.encoder.convert(createFeedBacksModel),
       );
       if (response.statusCode == 200) {

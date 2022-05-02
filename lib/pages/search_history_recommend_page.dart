@@ -42,7 +42,8 @@ class _SearchHistoryAndRecommendPageState
         backgroundColor: Colors.white,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: FlatButton(
+          child: TextButton(
+            style: TextButton.styleFrom(primary: Colors.black),
             child: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pop(context);

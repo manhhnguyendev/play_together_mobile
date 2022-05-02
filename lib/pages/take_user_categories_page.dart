@@ -103,7 +103,6 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                                         listGamesCheckBox[index])),
                               ),
                             ),
-                            //GoBackButton(text: "QUAY LẠI", onPress: () {})
                           ],
                         )),
                   ),

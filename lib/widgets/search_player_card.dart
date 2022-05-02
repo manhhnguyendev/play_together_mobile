@@ -170,7 +170,7 @@ class _SearchPlayerCardState extends State<SearchPlayerCard> {
 
   Widget buildGamesString(List<GameOfUserModel> gamesOfUserModel) {
     String games = "";
-    if (gamesOfUserModel == null) {
+    if (gamesOfUserModel.isEmpty) {
       return Text('', style: GoogleFonts.montserrat(fontSize: 15));
     } else {
       for (var i = 0; i < gamesOfUserModel.length; i++) {

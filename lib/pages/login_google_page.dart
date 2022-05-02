@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:play_together_mobile/models/hobbies_model.dart';
@@ -9,6 +10,7 @@ import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/home_page.dart';
+import 'package:play_together_mobile/pages/login_page.dart';
 import 'package:play_together_mobile/pages/take_user_categories_page.dart';
 import 'package:play_together_mobile/services/hobbies_service.dart';
 import 'package:play_together_mobile/services/login_google_service.dart';
@@ -59,82 +61,100 @@ class _GoogleButtonState extends State<LoginGooglePage> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: FlatButton(
-                        color: const Color.fromRGBO(219, 68, 50, 1),
-                        onPressed: () {
-                          _googleSignIn.signIn().then((result) {
-                            result!.authentication.then((googleKey) {
-                              loginGoogle.providerName = providerName;
-                              loginGoogle.idToken = googleKey.idToken!;
-                              Future<TokenModel?> loginGoogleModelFuture =
-                                  LoginGoogleService().loginGoogle(loginGoogle);
-                              loginGoogleModelFuture.then((value) {
-                                if (value != null) {
-                                  tokenModel = value;
-                                  Future<ResponseModel<UserModel>?>
-                                      hirerModelFuture = UserService()
-                                          .getUserProfile(value.message);
-                                  hirerModelFuture.then((hirer) {
-                                    if (hirer != null) {
-                                      userModel = hirer.content;
-                                      Future<ResponseListModel<HobbiesModel>?>
-                                          hobbiesFuture =
-                                          HobbiesService().getHobbiesOfUser(
-                                              userModel.id, tokenModel.message);
-                                      hobbiesFuture.then((listHobbies) {
-                                        if (listHobbies!.content.isNotEmpty) {
-                                          setState(() {
-                                            helper.pushInto(
-                                                context,
-                                                HomePage(
-                                                  userModel: userModel,
-                                                  tokenModel: tokenModel,
-                                                ),
-                                                true);
-                                          });
-                                        } else if (listHobbies
-                                            .content.isEmpty) {
-                                          setState(() {
-                                            helper.pushInto(
-                                                context,
-                                                UserCategoriesPage(
-                                                  userModel: userModel,
-                                                  tokenModel: tokenModel,
-                                                ),
-                                                true);
-                                          });
-                                        }
-                                      });
-                                      Fluttertoast.showToast(
-                                          msg: "ĐĂNG NHẬP THÀNH CÔNG",
-                                          textColor: Colors.white,
-                                          backgroundColor: const Color.fromRGBO(
-                                              137, 128, 255, 1),
-                                          toastLength: Toast.LENGTH_SHORT);
-                                    }
-                                  });
-                                }
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(219, 68, 50, 1),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            _googleSignIn.signIn().then((result) {
+                              result!.authentication.then((googleKey) {
+                                loginGoogle.providerName = providerName;
+                                loginGoogle.idToken = googleKey.idToken!;
+                                Future<TokenModel?> loginGoogleModelFuture =
+                                    LoginGoogleService()
+                                        .loginGoogle(loginGoogle);
+                                loginGoogleModelFuture.then((value) {
+                                  if (value != null) {
+                                    tokenModel = value;
+                                    Future<ResponseModel<UserModel>?>
+                                        hirerModelFuture = UserService()
+                                            .getUserProfile(value.message);
+                                    hirerModelFuture.then((hirer) {
+                                      if (hirer != null) {
+                                        userModel = hirer.content;
+                                        Future<ResponseListModel<HobbiesModel>?>
+                                            hobbiesFuture = HobbiesService()
+                                                .getHobbiesOfUser(userModel.id,
+                                                    tokenModel.message);
+                                        hobbiesFuture.then((listHobbies) {
+                                          if (listHobbies!.content.isNotEmpty) {
+                                            setState(() {
+                                              helper.pushInto(
+                                                  context,
+                                                  HomePage(
+                                                    userModel: userModel,
+                                                    tokenModel: tokenModel,
+                                                  ),
+                                                  true);
+                                            });
+                                          } else if (listHobbies
+                                              .content.isEmpty) {
+                                            setState(() {
+                                              helper.pushInto(
+                                                  context,
+                                                  UserCategoriesPage(
+                                                    userModel: userModel,
+                                                    tokenModel: tokenModel,
+                                                  ),
+                                                  true);
+                                            });
+                                          }
+                                        });
+                                        Fluttertoast.showToast(
+                                            msg: "ĐĂNG NHẬP THÀNH CÔNG",
+                                            textColor: Colors.white,
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    137, 128, 255, 1),
+                                            toastLength: Toast.LENGTH_SHORT);
+                                      }
+                                    });
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Tài khoản đã tồn tại",
+                                        textColor: Colors.white,
+                                        backgroundColor: const Color.fromRGBO(
+                                            137, 128, 255, 1),
+                                        toastLength: Toast.LENGTH_SHORT);
+                                    setState(() {
+                                      _googleSignIn.signOut();
+                                      helper.pushInto(
+                                          context, const LoginPage(), true);
+                                    });
+                                  }
+                                });
                               });
                             });
-                          });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: size.width * 0.1,
-                              height: size.height * 0.1,
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/images/google_logo.png"),
-                                      fit: BoxFit.cover)),
-                            ),
-                            Text("ĐĂNG NHẬP BẰNG GOOGLE",
-                                style: GoogleFonts.montserrat(
-                                    color: Colors.white, fontSize: 18.0)),
-                          ],
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                FontAwesomeIcons.googlePlusG,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Text("ĐĂNG NHẬP BẰNG GOOGLE",
+                                  style: GoogleFonts.montserrat(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.normal)),
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/image_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 
@@ -13,8 +13,8 @@ class ImageService {
     bool? result;
     try {
       response = await post(
-        Uri.parse('${apiUrl.images}/multi-images'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.images}/multi-images'),
+        headers: config_json.headerAuth(token),
         body: json.encoder.convert(listImages),
       );
       if (response.statusCode == 200) {
@@ -32,8 +32,8 @@ class ImageService {
     ResponseModel<AddImageModel>? result;
     try {
       response = await post(
-        Uri.parse(apiUrl.images),
-        headers: configJson.headerAuth(token),
+        Uri.parse(api_url.images),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(addImageModel.toJson()),
       );
       if (response.statusCode == 200) {
@@ -51,8 +51,8 @@ class ImageService {
     bool? result;
     try {
       response = await delete(
-        Uri.parse('${apiUrl.images}/$imageId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.images}/$imageId'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 204) {
         result = true;

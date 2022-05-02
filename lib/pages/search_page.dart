@@ -24,6 +24,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final ScrollController _scrollControllerSearch = ScrollController();
   final _controller = TextEditingController();
   List<GetAllUserModel> listPlayerSearch = [];
   List<GetAllUserModel> listPlayerFilter = [];
@@ -57,6 +58,40 @@ class _SearchPageState extends State<SearchPage> {
   double newEndPrice = 5000000;
   String defaultGameId = "";
   String newDefaultGameId = "";
+  int pageSizeSearch = 10;
+  bool checkHasNextSearch = false;
+  bool checkGetDataSearch = false;
+  int pageSizeFilter = 10;
+  bool checkHasNextFilter = false;
+  bool checkGetDataFilter = false;
+  bool checkEmptySearch = false;
+  bool checkEmptyFilter = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollControllerSearch.addListener(() {
+      if (_scrollControllerSearch.position.maxScrollExtent ==
+          _scrollControllerSearch.position.pixels) {
+        getMoreDataSearch();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollControllerSearch.dispose();
+    super.dispose();
+  }
+
+  void getMoreDataSearch() {
+    setState(() {
+      if (checkHasNextSearch == false) {
+        pageSizeSearch += 10;
+        checkGetDataSearch = true;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +105,23 @@ class _SearchPageState extends State<SearchPage> {
     return FutureBuilder(
         future: loadListSearchPlayer(),
         builder: (context, snapshot) {
+          if (listPlayerSearch.isEmpty && checkHasNextSearch != false) {
+            checkEmptySearch = true;
+          } else {
+            checkEmptySearch = false;
+          }
+          if (listPlayerFilter.isEmpty) {
+            checkEmptyFilter = true;
+          } else {
+            checkEmptyFilter = false;
+          }
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 1,
               backgroundColor: Colors.white,
-              leading: FlatButton(
+              leading: TextButton(
+                style: TextButton.styleFrom(primary: Colors.black),
                 child: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
                   Navigator.pop(context);
@@ -93,11 +139,14 @@ class _SearchPageState extends State<SearchPage> {
                   onSubmitted: (value) {
                     _controller.text = value;
                     Future<ResponseListModel<GetAllUserModel>?>
-                        getListSearchUser = SearchService()
-                            .searchUser(value, widget.tokenModel.message);
+                        getListSearchUser = SearchService().searchUser(
+                            value, widget.tokenModel.message, pageSizeSearch);
                     getListSearchUser.then((_userList) {
                       setState(() {
                         listPlayerSearch = _userList!.content;
+                        if (_userList.hasNext == false) {
+                          checkHasNextSearch = true;
+                        }
                       });
                     });
                   },
@@ -211,6 +260,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             body: SingleChildScrollView(
+              controller: _scrollControllerSearch,
               child: Column(
                 children: [
                   Visibility(
@@ -218,11 +268,24 @@ class _SearchPageState extends State<SearchPage> {
                     child: SingleChildScrollView(
                         child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                            child: Column(
-                                children: List.generate(
-                                    listPlayerSearch.length,
-                                    (index) => buildListSearch(
-                                        listPlayerSearch[index]))))),
+                            child: Column(children: [
+                              Column(
+                                  children: List.generate(
+                                      listPlayerSearch.length,
+                                      (index) => buildListSearch(
+                                          listPlayerSearch[index]))),
+                              Visibility(
+                                  visible: checkEmptySearch,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text('Không có dữ liệu',
+                                        style: GoogleFonts.montserrat()),
+                                  )),
+                              Visibility(
+                                visible: !checkHasNextSearch,
+                                child: _buildProgressIndicatorSearch(),
+                              ),
+                            ]))),
                   ),
                   Visibility(
                     visible: checkListFilter,
@@ -230,16 +293,41 @@ class _SearchPageState extends State<SearchPage> {
                         child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: Column(
-                                children: List.generate(
-                                    listPlayerFilter.length,
-                                    (index) => buildListSearch(
-                                        listPlayerFilter[index]))))),
+                              children: [
+                                Column(
+                                    children: List.generate(
+                                        listPlayerFilter.length,
+                                        (index) => buildListSearch(
+                                            listPlayerFilter[index]))),
+                                Visibility(
+                                    visible: checkEmptyFilter,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Không có dữ liệu',
+                                          style: GoogleFonts.montserrat()),
+                                    )),
+                              ],
+                            ))),
                   )
                 ],
               ),
             ),
           );
         });
+  }
+
+  Widget _buildProgressIndicatorSearch() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: !checkHasNextSearch ? 1.0 : 00,
+          child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromRGBO(137, 128, 255, 1))),
+        ),
+      ),
+    );
   }
 
   Widget buildListSearch(GetAllUserModel _playerModel) => SearchPlayerCard(
@@ -250,15 +338,23 @@ class _SearchPageState extends State<SearchPage> {
 
   Future loadListSearchPlayer() {
     Future<ResponseListModel<GetAllUserModel>?> getListSearchUser =
-        SearchService().searchUser(
-            widget.searchValue.toString(), widget.tokenModel.message);
+        SearchService().searchUser(widget.searchValue.toString(),
+            widget.tokenModel.message, pageSizeSearch);
     getListSearchUser.then((_userList) {
-      if (checkFirstTime) {
-        checkListSearch = true;
-        setState(() {
-          listPlayerSearch = _userList!.content;
-        });
-        checkFirstTime = false;
+      if (_userList != null) {
+        if (checkFirstTime || checkGetDataSearch) {
+          checkListSearch = true;
+          if (!mounted) return;
+          setState(() {
+            listPlayerSearch = _userList.content;
+            if (_userList.hasNext == false) {
+              checkHasNextSearch = true;
+            } else {
+              checkHasNextSearch = false;
+            }
+          });
+          checkFirstTime = false;
+        }
       }
     });
     return getListSearchUser;

@@ -20,19 +20,24 @@ class GoBackButton extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
-          //side: BorderSide(color: Colors.black, width: 0.1),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: FlatButton(
-              color: const Color.fromRGBO(112, 113, 123, 1),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              onPressed: onPress,
-              child: Text(
-                text,
-                style:
-                    GoogleFonts.montserrat(color: Colors.white, fontSize: 18.0),
-              )),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(112, 113, 123, 1),
+            ),
+            child: TextButton(
+                style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 40)),
+                onPressed: onPress,
+                child: Text(
+                  text,
+                  style: GoogleFonts.montserrat(
+                      color: Colors.white, fontSize: 18.0),
+                )),
+          ),
         ),
       ),
     );

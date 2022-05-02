@@ -25,6 +25,7 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
   String money = "";
   double convertMoney = 0;
   String messages = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +37,8 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
             elevation: 1,
             leading: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: FlatButton(
+              child: TextButton(
+                style: TextButton.styleFrom(primary: Colors.black),
                 child: const Icon(
                   Icons.arrow_back_ios,
                 ),
@@ -57,35 +59,27 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.only(top: 15),
                   width: 350,
                   child: TextField(
-                    cursorColor: Color(0xff320444),
-
+                    cursorColor: const Color(0xff320444),
                     inputFormatters: [ThousandsFormatter()],
                     controller: displayController,
                     onChanged: (value) {
                       setState(() {
-                        money = value; //1 VNĐ
-                        print(money + " gia tri luu");
+                        money = value;
                       });
                     },
-                    //textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(
-                        fontSize: 20, color: Color(0xff320444)),
+                        fontSize: 20, color: const Color(0xff320444)),
                     decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xff320444)),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xff320444)),
                       ),
                       counter: Container(),
@@ -112,25 +106,38 @@ class _EnterWithdrawAmountState extends State<EnterWithdrawAmount> {
                   onPress: () {
                     if (money.isEmpty || money == "") {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Vui lòng nhập số tiền"),
+                        content: Text("Vui lòng nhập số tiền!"),
                       ));
-                    } else if (money.length < 6) {
+                    } else if (double.parse(money.replaceAll(",", "")) <
+                        10000) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Số tiền rút tối thiểu là 10.000đ"),
+                      ));
+                    } else if (double.parse(money.replaceAll(",", "")) >=
+                        50000000) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Số tiền rút tối đa là 50.000.000đ"),
                       ));
                     } else {
                       money = money.replaceAll(",", "");
                       convertMoney = double.parse(money);
-                      print("Đủ điều kiện: " + convertMoney.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SelectWithdrawMethod(
-                                  money: convertMoney,
-                                  tokenModel: widget.tokenModel,
-                                  userModel: widget.userModel,
-                                )),
-                      );
+                      if (widget.userModel.userBalance.activeBalance >=
+                          convertMoney) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SelectWithdrawMethod(
+                                    money: convertMoney,
+                                    tokenModel: widget.tokenModel,
+                                    userModel: widget.userModel,
+                                  )),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Số dư khả dụng không đủ!"),
+                        ));
+                      }
                     }
                   })),
         ));

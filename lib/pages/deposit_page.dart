@@ -14,6 +14,7 @@ import 'package:play_together_mobile/helpers/helper.dart' as helper;
 class DepositPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const DepositPage(
       {Key? key, required this.userModel, required this.tokenModel})
       : super(key: key);
@@ -25,7 +26,6 @@ class DepositPage extends StatefulWidget {
 class _DepositPageState extends State<DepositPage> {
   late MomoVn _momoPay;
   late PaymentResponse _momoPaymentResult;
-  late String _paymentStatus;
 
   final displayController = TextEditingController();
   String money = "";
@@ -39,7 +39,6 @@ class _DepositPageState extends State<DepositPage> {
     _momoPay = MomoVn();
     _momoPay.on(MomoVn.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _momoPay.on(MomoVn.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _paymentStatus = "";
     initPlatformState();
   }
 
@@ -59,7 +58,8 @@ class _DepositPageState extends State<DepositPage> {
             elevation: 1,
             leading: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: FlatButton(
+              child: TextButton(
+                style: TextButton.styleFrom(primary: Colors.black),
                 child: const Icon(
                   Icons.arrow_back_ios,
                 ),
@@ -94,7 +94,6 @@ class _DepositPageState extends State<DepositPage> {
                     onChanged: (value) {
                       setState(() {
                         money = value;
-                        print(money);
                       });
                     },
                     style: GoogleFonts.montserrat(fontSize: 20),
@@ -120,9 +119,19 @@ class _DepositPageState extends State<DepositPage> {
               child: AcceptProfileButton(
                   text: 'Nạp tiền',
                   onPress: () async {
-                    if (money == null || money.isEmpty || money == "") {
+                    if (money.isEmpty || money == "") {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Vui lòng nhập số tiền!"),
+                      ));
+                    } else if (double.parse(money.replaceAll(",", "")) <
+                        10000) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Số tiền nạp tối thiểu là 10.000đ"),
+                      ));
+                    } else if (double.parse(money.replaceAll(",", "")) >=
+                        50000000) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Số tiền nạp tối đa là 50.000.000đ"),
                       ));
                     } else {
                       money = displayController.text.replaceAll(",", "");
@@ -161,7 +170,6 @@ class _DepositPageState extends State<DepositPage> {
   }
 
   void _setState() {
-    _paymentStatus = 'Đã chuyển thanh toán';
     if (_momoPaymentResult.isSuccess == true) {
       money = money.replaceAll(",", "");
       convertMoney = double.parse(money);
@@ -181,22 +189,7 @@ class _DepositPageState extends State<DepositPage> {
               true);
         }
       });
-      print(_momoPaymentResult.status.toString() + "Status");
-      print(_momoPaymentResult.extra.toString() + "Extra");
-      print(_momoPaymentResult.isSuccess.toString() + "isSuccess");
-      print(_momoPaymentResult.message.toString() + "message");
-      print(_momoPaymentResult.phoneNumber.toString() + "phoneNumber");
-      print(_momoPaymentResult.token.toString() + "token");
-      _paymentStatus += "\nTình trạng: Thành công.";
-      _paymentStatus +=
-          "\nSố điện thoại: " + _momoPaymentResult.phoneNumber.toString();
-      _paymentStatus += "\nExtra: " + _momoPaymentResult.extra!;
-      _paymentStatus += "\nToken: " + _momoPaymentResult.token.toString();
-    } else {
-      _paymentStatus += "\nTình trạng: Thất bại.";
-      _paymentStatus += "\nExtra: " + _momoPaymentResult.extra.toString();
-      _paymentStatus += "\nMã lỗi: " + _momoPaymentResult.status.toString();
-    }
+    } else {}
   }
 
   void _handlePaymentSuccess(PaymentResponse response) {

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class MainButton extends StatelessWidget {
   final String text;
   final Function() onPress;
+
   const MainButton({
     Key? key,
     required this.text,
@@ -23,15 +24,21 @@ class MainButton extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: FlatButton(
-              color: const Color.fromRGBO(137, 128, 255, 1),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              onPressed: onPress,
-              child: Text(
-                text,
-                style:
-                    GoogleFonts.montserrat(color: Colors.white, fontSize: 18.0),
-              )),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(137, 128, 255, 1),
+            ),
+            child: TextButton(
+                style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 40)),
+                onPressed: onPress,
+                child: Text(
+                  text,
+                  style: GoogleFonts.montserrat(
+                      color: Colors.white, fontSize: 18.0),
+                )),
+          ),
         ),
       ),
     );

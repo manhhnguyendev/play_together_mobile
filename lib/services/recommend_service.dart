@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/recommend_model.dart';
 
 class RecommendService {
@@ -12,8 +12,8 @@ class RecommendService {
     List<ResultRecommendModel>? result;
     try {
       response = await post(
-        Uri.parse(apiUrl.recommend),
-        headers: configJson.header(),
+        Uri.parse(api_url.recommend),
+        headers: config_json.header(),
         body: json.encoder.convert(recommendModel),
       );
       if (response.statusCode == 200) {

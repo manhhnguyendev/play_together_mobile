@@ -26,7 +26,9 @@ class EndOrderPage extends StatefulWidget {
 }
 
 class _EndOrderPageState extends State<EndOrderPage> {
-  late bool checkEndEarly;
+  bool checkEndEarly = true;
+  bool checkPlayer = true;
+  bool checkHirer = true;
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +45,28 @@ class _EndOrderPageState extends State<EndOrderPage> {
         .format(DateTime.parse(widget.orderModel!.processExpired));
     String timeExpired = DateFormat('hh:mm a')
         .format(DateTime.parse(widget.orderModel!.processExpired));
-    checkEndEarly = true;
     var _reasonController = TextEditingController();
     _reasonController.text =
         widget.orderModel!.reason != null ? widget.orderModel!.reason! : "";
+
+    if (widget.orderModel!.reason != "") {
+      checkEndEarly = true;
+    } else {
+      checkEndEarly = false;
+    }
+
+    if (widget.orderModel!.toUserId == widget.userModel!.id) {
+      checkPlayer = true;
+    } else {
+      checkPlayer = false;
+    }
+
+    if (widget.orderModel!.userId == widget.userModel!.id) {
+      checkHirer = true;
+    } else {
+      checkHirer = false;
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -190,40 +210,89 @@ class _EndOrderPageState extends State<EndOrderPage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Chi phí dự kiến: ',
-                        style: GoogleFonts.montserrat(fontSize: 17),
-                      ),
-                      const Spacer(),
-                      Text(
-                        (widget.orderModel!.totalPrices
-                            .toStringAsFixed(0)
-                            .toVND()),
-                        style: GoogleFonts.montserrat(fontSize: 17),
-                      ),
-                    ],
+                Visibility(
+                  visible: checkHirer,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Chi phí dự kiến: ',
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                        const Spacer(),
+                        Text(
+                          (widget.orderModel!.totalPrices
+                              .toStringAsFixed(0)
+                              .toVND()),
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Chi phí cuối cùng:',
-                        style: GoogleFonts.montserrat(fontSize: 17),
-                      ),
-                      const Spacer(),
-                      Text(
-                        widget.orderModel!.finalPrices
-                            .toStringAsFixed(0)
-                            .toVND(),
-                        style: GoogleFonts.montserrat(fontSize: 17),
-                      ),
-                    ],
+                Visibility(
+                  visible: checkPlayer,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Số tiền dự kiến: ',
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                        const Spacer(),
+                        Text(
+                          (widget.orderModel!.totalPrices
+                              .toStringAsFixed(0)
+                              .toVND()),
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: checkHirer,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Chi phí cuối cùng:',
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                        const Spacer(),
+                        Text(
+                          (widget.orderModel!.finalPrices /
+                                  (1 - widget.orderModel!.percentSub))
+                              .toStringAsFixed(0)
+                              .toVND(),
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: checkPlayer,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 20, 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Số tiền nhận được:',
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                        const Spacer(),
+                        Text(
+                          widget.orderModel!.finalPrices
+                              .toStringAsFixed(0)
+                              .toVND(),
+                          style: GoogleFonts.montserrat(fontSize: 17),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Visibility(
@@ -295,7 +364,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
                   padding: const EdgeInsets.fromLTRB(15, 0, 25, 0),
                   child: Column(
                     children: List.generate(
-                        widget.orderModel!.gameOfOrders != null
+                        widget.orderModel!.gameOfOrders.isNotEmpty
                             ? widget.orderModel!.gameOfOrders.length
                             : 0,
                         (index) => buildGamesChoosenField(
@@ -416,7 +485,6 @@ class _EndOrderPageState extends State<EndOrderPage> {
     }
 
     if (status == 'Player Finish Soon') {
-      //Player Finish Soon
       return Text(
         'Người chơi kết thúc sớm',
         style: GoogleFonts.montserrat(fontSize: 17, color: Colors.green),
@@ -455,7 +523,7 @@ class _EndOrderPageState extends State<EndOrderPage> {
         padding: const EdgeInsets.fromLTRB(15, 5, 25, 5),
         child: Text(
           "• " + game.game.name,
-          style: GoogleFonts.montserrat(color: Colors.black, fontSize: 15),
+          style: GoogleFonts.montserrat(fontSize: 15),
         ),
       );
 }

@@ -71,7 +71,8 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -128,7 +129,6 @@ class _PersonalChangePasswordState extends State<PersonalChangePassword> {
                 text: 'Cập nhật',
                 onPress: () {
                   if (_formKey.currentState == null) {
-                    print("_formKey.currentState is null!");
                   } else if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     if (listErrorPass.length == 1 &&

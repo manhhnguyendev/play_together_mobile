@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
@@ -53,6 +55,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
   List<OnlineHourModel> listOnlineHours = [];
   List<GameOfUserModel> listGamesOfUser = [];
   UserServiceModel? lateUserService;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,11 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
             displayController.text = formatter.format(pricePerHour);
             checkFirstTime = false;
           }
+          if (lateUserService == null) {
+            isLoading = true;
+          } else {
+            isLoading = false;
+          }
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(50),
@@ -72,7 +80,8 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(
                       Icons.arrow_back_ios,
                     ),
@@ -91,410 +100,478 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
-              child: FutureBuilder(
-                  future: getAllDatings(),
-                  builder: (context, snapshot) {
-                    loadDating();
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: createStatus(),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
-                          child: Row(
+            body: isLoading
+                ? const Center(
+                    child: SizedBox(
+                      height: 40.0,
+                      width: 40.0,
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Color.fromRGBO(137, 128, 255, 1))),
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: FutureBuilder(
+                        future: getAllDatings(),
+                        builder: (context, snapshot) {
+                          loadDating();
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Nhận yêu cầu thuê',
-                                style: GoogleFonts.montserrat(fontSize: 18),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: createStatus(),
+                                ),
                               ),
-                              const Spacer(),
-                              SizedBox(
-                                height: 60,
-                                width: 80,
-                                child: FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: Switch(
-                                      activeColor: const Color(0xff8980FF),
-                                      value: isPlayer,
-                                      onChanged: (value) {
-                                        if (listGamesOfUser.isEmpty) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text(
-                                                "Thêm kỹ năng để cập nhật trạng thái"),
-                                          ));
-                                        } else {
-                                          checkOnChange = true;
-                                          isPlayer = value;
-                                          IsPlayerModel isPlayerModel =
-                                              IsPlayerModel(isPlayer: isPlayer);
-                                          Future<bool?> updateIsPlayer =
-                                              UserService().updateIsPlayer(
-                                                  isPlayerModel,
-                                                  widget.tokenModel.message);
-                                          updateIsPlayer.then((value) {
-                                            if (value == true) {
-                                              setState(() {
-                                                checkOnChange = false;
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Nhận yêu cầu thuê',
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 18),
+                                    ),
+                                    const Spacer(),
+                                    SizedBox(
+                                      height: 60,
+                                      width: 80,
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: Switch(
+                                            activeColor:
+                                                const Color(0xff8980FF),
+                                            value: isPlayer,
+                                            onChanged: (value) {
+                                              if (listGamesOfUser.isEmpty) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                         const SnackBar(
                                                   content: Text(
-                                                      "Cập nhật trạng thái thành công"),
+                                                      "Thêm kỹ năng để cập nhật trạng thái"),
                                                 ));
-                                              });
-                                            }
-                                          });
-                                        }
-                                      }),
+                                              } else {
+                                                checkOnChange = true;
+                                                isPlayer = value;
+                                                IsPlayerModel isPlayerModel =
+                                                    IsPlayerModel(
+                                                        isPlayer: isPlayer);
+                                                Future<bool?> updateIsPlayer =
+                                                    UserService()
+                                                        .updateIsPlayer(
+                                                            isPlayerModel,
+                                                            widget.tokenModel
+                                                                .message);
+                                                updateIsPlayer.then((value) {
+                                                  if (value == true) {
+                                                    setState(() {
+                                                      checkOnChange = false;
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              const SnackBar(
+                                                        content: Text(
+                                                            "Cập nhật trạng thái thành công"),
+                                                      ));
+                                                    });
+                                                  }
+                                                });
+                                              }
+                                            }),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Số giờ tối đa',
-                                style: GoogleFonts.montserrat(fontSize: 18),
                               ),
-                              const Spacer(),
-                              SizedBox(
-                                width: 100,
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  value: maxHourHire,
-                                  icon: const Icon(Icons.keyboard_arrow_down),
-                                  items: listHour.map((item) {
-                                    return DropdownMenuItem(
-                                      child: Text(
-                                        item.toString(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Số giờ tối đa',
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 18),
+                                    ),
+                                    const Spacer(),
+                                    SizedBox(
+                                      width: 100,
+                                      child: DropdownButton(
+                                        isExpanded: true,
+                                        value: maxHourHire,
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down),
+                                        items: listHour.map((item) {
+                                          return DropdownMenuItem(
+                                            child: Text(
+                                              item.toString(),
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 18),
+                                            ),
+                                            value: item,
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            maxHourHire =
+                                                int.parse(value.toString());
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Text(
+                                      ' giờ',
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Chi phí mỗi giờ',
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 18),
+                                    ),
+                                    const Spacer(),
+                                    SizedBox(
+                                      width: 120,
+                                      child: TextField(
+                                        inputFormatters: [ThousandsFormatter()],
+                                        controller: displayController,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            money = value;
+                                          });
+                                        },
                                         style: GoogleFonts.montserrat(
                                             fontSize: 18),
+                                        decoration: InputDecoration(
+                                          counter: Container(),
+                                          focusedBorder:
+                                              const UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff320444),
+                                                      width: 1)),
+                                        ),
+                                        maxLength: 11,
+                                        keyboardType: TextInputType.number,
                                       ),
-                                      value: item,
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      maxHourHire = int.parse(value.toString());
-                                    });
-                                  },
+                                    ),
+                                    Text('đ',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18)),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                ' giờ',
-                                style: GoogleFonts.montserrat(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Chi phí mỗi giờ',
-                                style: GoogleFonts.montserrat(fontSize: 18),
-                              ),
-                              const Spacer(),
-                              SizedBox(
-                                width: 120,
-                                child: TextField(
-                                  inputFormatters: [ThousandsFormatter()],
-                                  controller: displayController,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      money = value;
-                                    });
-                                  },
-                                  style: GoogleFonts.montserrat(fontSize: 18),
-                                  decoration: InputDecoration(
-                                    counter: Container(),
-                                  ),
-                                  maxLength: 11,
-                                  keyboardType: TextInputType.number,
-                                ),
-                              ),
-                              Text('đ',
-                                  style: GoogleFonts.montserrat(fontSize: 18)),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: SecondMainButton(
-                              text: 'Cập nhật',
-                              onPress: () {
-                                if (money.isEmpty ||
-                                    money == "" ||
-                                    money == null) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content:
-                                        Text("Vui lòng nhập chi phí mỗi giờ!"),
-                                  ));
-                                } else {
-                                  checkOnPress = true;
-                                  money = money.replaceAll(",", "");
-                                  convertMoney = double.parse(money);
-                                  ServiceUserModel serviceUserModel =
-                                      ServiceUserModel(
-                                          pricePerHour: convertMoney,
-                                          maxHourHire: maxHourHire);
-                                  Future<bool?> updatePersonalServiceInfo =
-                                      UserService().updatePersonalServiceInfo(
-                                          serviceUserModel,
-                                          widget.tokenModel.message);
-                                  updatePersonalServiceInfo.then((value) {
-                                    if (value == true) {
-                                      setState(() {
-                                        checkOnPress = false;
+                              Container(
+                                alignment: Alignment.center,
+                                child: SecondMainButton(
+                                    text: 'Cập nhật',
+                                    onPress: () {
+                                      if (money.isEmpty || money == "") {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
-                                          content: Text("Cập nhật thành công"),
+                                          content: Text(
+                                              "Vui lòng nhập chi phí mỗi giờ!"),
                                         ));
-                                      });
-                                    }
-                                  });
-                                }
-                              },
-                              height: 50,
-                              width: 200),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Divider(
-                            thickness: 1,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Kỹ năng',
-                                style: GoogleFonts.montserrat(fontSize: 18),
+                                      } else if (money.length < 5) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "Chi phí mỗi giờ tối thiểu là 10.000đ"),
+                                        ));
+                                      } else if (double.parse(
+                                              money.replaceAll(",", "")) >=
+                                          5000000) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "Chi phí mỗi giờ tối đa là 5.000.000đ"),
+                                        ));
+                                      } else {
+                                        checkOnPress = true;
+                                        money = money.replaceAll(",", "");
+                                        convertMoney = double.parse(money);
+                                        ServiceUserModel serviceUserModel =
+                                            ServiceUserModel(
+                                                pricePerHour: convertMoney,
+                                                maxHourHire: maxHourHire);
+                                        Future<bool?>
+                                            updatePersonalServiceInfo =
+                                            UserService()
+                                                .updatePersonalServiceInfo(
+                                                    serviceUserModel,
+                                                    widget.tokenModel.message);
+                                        updatePersonalServiceInfo.then((value) {
+                                          if (value == true) {
+                                            setState(() {
+                                              checkOnPress = false;
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content:
+                                                    Text("Cập nhật thành công"),
+                                              ));
+                                            });
+                                          }
+                                        });
+                                      }
+                                    },
+                                    height: 50,
+                                    width: 180),
                               ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () async {
-                                  final check = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UpdateGameSkillsPage(
-                                              tokenModel: widget.tokenModel,
-                                              userModel: widget.userModel,
-                                            )),
-                                  );
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  'Chỉnh sửa kỹ năng',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 15,
-                                    color: Colors.grey,
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Divider(
+                                  thickness: 1,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Kỹ năng',
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 18),
+                                    ),
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final check = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UpdateGameSkillsPage(
+                                                    tokenModel:
+                                                        widget.tokenModel,
+                                                    userModel: widget.userModel,
+                                                  )),
+                                        );
+                                        setState(() {});
+                                      },
+                                      child: Text(
+                                        'Chỉnh sửa kỹ năng',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    const Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 15,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Container(
+                                  alignment: Alignment.topLeft,
+                                  child: FutureBuilder(
+                                    future: getGameOfUser(),
+                                    builder: (context, snapshot) {
+                                      return Column(
+                                        children: List.generate(
+                                            listGamesOfUser.isNotEmpty
+                                                ? listGamesOfUser.length
+                                                : 0,
+                                            (index) => buildGameOfUser(
+                                                listGamesOfUser[index])),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_ios,
-                                size: 15,
-                                color: Colors.grey,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Container(
-                            alignment: Alignment.topLeft,
-                            child: FutureBuilder(
-                              future: getGameOfUser(),
-                              builder: (context, snapshot) {
-                                return Column(
-                                  children: List.generate(
-                                      listGamesOfUser.isNotEmpty
-                                          ? listGamesOfUser.length
-                                          : 0,
-                                      (index) => buildGameOfUser(
-                                          listGamesOfUser[index])),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Divider(
-                            thickness: 1,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Giờ online',
-                                style: GoogleFonts.montserrat(fontSize: 18),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () async {
-                                  final check = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UpdateHourPage(
-                                              tokenModel: widget.tokenModel,
-                                              userModel: widget.userModel,
-                                            )),
-                                  );
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  'Chỉnh sửa giờ',
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 15,
-                                    color: Colors.grey,
-                                  ),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Divider(
+                                  thickness: 1,
                                 ),
                               ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_ios,
-                                size: 15,
-                                color: Colors.grey,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Thứ 2:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Giờ online',
+                                      style:
+                                          GoogleFonts.montserrat(fontSize: 18),
+                                    ),
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final check = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UpdateHourPage(
+                                                    tokenModel:
+                                                        widget.tokenModel,
+                                                    userModel: widget.userModel,
+                                                  )),
+                                        );
+                                        setState(() {});
+                                      },
+                                      child: Text(
+                                        'Chỉnh sửa giờ',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    const Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 15,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              buildListDating(mondayList),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Thứ 3:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Thứ 2:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(mondayList),
+                                  ],
                                 ),
                               ),
-                              buildListDating(tuesdayList),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Thứ 4:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Thứ 3:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(tuesdayList),
+                                  ],
                                 ),
                               ),
-                              buildListDating(wednesdayList),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Thứ 5:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Thứ 4:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(wednesdayList),
+                                  ],
                                 ),
                               ),
-                              buildListDating(thursdayList),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Thứ 6:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Thứ 5:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(thursdayList),
+                                  ],
                                 ),
                               ),
-                              buildListDating(fridayList),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Thứ 7:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Thứ 6:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(fridayList),
+                                  ],
                                 ),
                               ),
-                              buildListDating(saturdayList),
-                            ],
-                          ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(30, 5, 0, 5),
-                                child: Text(
-                                  'Chủ Nhật:',
-                                  style: GoogleFonts.montserrat(fontSize: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Thứ 7:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(saturdayList),
+                                  ],
                                 ),
                               ),
-                              buildListDating(sundayList),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 5, 0, 5),
+                                      child: Text(
+                                        'Chủ Nhật:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                    buildListDating(sundayList),
+                                  ],
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
-            ),
+                          );
+                        }),
+                  ),
           );
         });
   }

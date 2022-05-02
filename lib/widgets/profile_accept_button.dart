@@ -23,9 +23,11 @@ class AcceptProfileButton extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: FlatButton(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+          child: TextButton(
+              style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 40)),
               onPressed: onPress,
               child: Text(
                 text,

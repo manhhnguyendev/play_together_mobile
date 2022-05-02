@@ -27,6 +27,7 @@ class RatingCommentPage extends StatefulWidget {
 }
 
 class _RatingCommentPageState extends State<RatingCommentPage> {
+  final ScrollController _scrollController = ScrollController();
   bool check5star = false;
   bool check4star = false;
   bool check3star = false;
@@ -36,15 +37,35 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
   List<RatingModel> listAllRating = [];
   double vote = 0;
   bool checkExist = false;
+  int pageSize = 10;
+  bool checkHasNext = false;
+  bool checkGetData = false;
+  bool checkFirstTime = true;
 
-  Future loadListRating() {
-    Future<ResponseListModel<RatingModel>?> listAllRatingModelFuture =
-        RatingService().getAllRating(
-            widget.playerModel!.id, vote, widget.tokenModel.message);
-    listAllRatingModelFuture.then((_ratingList) {
-      listAllRating = _ratingList!.content;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        getMoreData();
+      }
     });
-    return listAllRatingModelFuture;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void getMoreData() {
+    setState(() {
+      if (checkHasNext == false) {
+        pageSize += 10;
+        checkGetData = true;
+      }
+    });
   }
 
   @override
@@ -60,7 +81,8 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -80,6 +102,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             Padding(
@@ -95,15 +118,19 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           border: Border.all(
                             color: const Color(0xff8980FF),
                           ),
+                          color: checkAll
+                              ? const Color(0xff8980FF).withOpacity(1)
+                              : const Color(0xff8980FF).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
                           width: width * 0.3,
                           height: height * 0.05,
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               setState(() {
                                 if (!checkAll) {
+                                  pageSize = 10;
                                   check5star = false;
                                   check4star = false;
                                   check3star = false;
@@ -121,9 +148,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal),
                             ),
-                            color: checkAll
-                                ? const Color(0xff8980FF).withOpacity(1)
-                                : const Color(0xff8980FF).withOpacity(0.1),
+                            style: TextButton.styleFrom(primary: Colors.black),
                           ),
                         ),
                       ),
@@ -135,15 +160,19 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                           border: Border.all(
                             color: const Color(0xff8980FF),
                           ),
+                          color: check5star
+                              ? const Color(0xff8980FF).withOpacity(1)
+                              : const Color(0xff8980FF).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
                           width: width * 0.31,
                           height: height * 0.05,
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               setState(() {
                                 if (!check5star) {
+                                  pageSize = 10;
                                   check5star = true;
                                   check4star = false;
                                   check3star = false;
@@ -152,6 +181,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   checkAll = false;
                                   vote = 5;
                                 } else {
+                                  pageSize = 10;
                                   check5star = false;
                                   check4star = false;
                                   check3star = false;
@@ -204,9 +234,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 ),
                               ],
                             ),
-                            color: check5star
-                                ? const Color(0xff8980FF).withOpacity(1)
-                                : const Color(0xff8980FF).withOpacity(0.1),
+                            style: TextButton.styleFrom(primary: Colors.black),
                           ),
                         ),
                       ),
@@ -220,20 +248,23 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        //4 sao
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color(0xff8980FF),
                           ),
+                          color: check4star
+                              ? const Color(0xff8980FF).withOpacity(1)
+                              : const Color(0xff8980FF).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
                           width: width * 0.26,
                           height: height * 0.05,
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               setState(() {
                                 if (!check4star) {
+                                  pageSize = 10;
                                   check4star = true;
                                   check5star = false;
                                   check3star = false;
@@ -242,6 +273,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   checkAll = false;
                                   vote = 4;
                                 } else {
+                                  pageSize = 10;
                                   check5star = false;
                                   check4star = false;
                                   check3star = false;
@@ -286,9 +318,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 ),
                               ],
                             ),
-                            color: check4star
-                                ? const Color(0xff8980FF).withOpacity(1)
-                                : const Color(0xff8980FF).withOpacity(0.1),
+                            style: TextButton.styleFrom(primary: Colors.black),
                           ),
                         ),
                       ),
@@ -296,20 +326,23 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         width: 10,
                       ),
                       Container(
-                        //3 sao
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color(0xff8980FF),
                           ),
+                          color: check3star
+                              ? const Color(0xff8980FF).withOpacity(1)
+                              : const Color(0xff8980FF).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
                           width: width * 0.22,
                           height: height * 0.05,
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               setState(() {
                                 if (!check3star) {
+                                  pageSize = 10;
                                   check3star = true;
                                   check4star = false;
                                   check5star = false;
@@ -318,6 +351,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   checkAll = false;
                                   vote = 3;
                                 } else {
+                                  pageSize = 10;
                                   check5star = false;
                                   check4star = false;
                                   check3star = false;
@@ -354,9 +388,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 ),
                               ],
                             ),
-                            color: check3star
-                                ? const Color(0xff8980FF).withOpacity(1)
-                                : const Color(0xff8980FF).withOpacity(0.1),
+                            style: TextButton.styleFrom(primary: Colors.black),
                           ),
                         ),
                       ),
@@ -364,20 +396,23 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         width: 10,
                       ),
                       Container(
-                        // 2 sao
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color(0xff8980FF),
                           ),
+                          color: check2star
+                              ? const Color(0xff8980FF).withOpacity(1)
+                              : const Color(0xff8980FF).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
                           width: width * 0.19,
                           height: height * 0.05,
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               setState(() {
                                 if (!check2star) {
+                                  pageSize = 10;
                                   check2star = true;
                                   check4star = false;
                                   check3star = false;
@@ -386,6 +421,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   checkAll = false;
                                   vote = 2;
                                 } else {
+                                  pageSize = 10;
                                   vote = 0;
                                   check5star = false;
                                   check4star = false;
@@ -414,9 +450,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 ),
                               ],
                             ),
-                            color: check2star
-                                ? const Color(0xff8980FF).withOpacity(1)
-                                : const Color(0xff8980FF).withOpacity(0.1),
+                            style: TextButton.styleFrom(primary: Colors.black),
                           ),
                         ),
                       ),
@@ -424,20 +458,23 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                         width: 10,
                       ),
                       Container(
-                        // 1 sao
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color(0xff8980FF),
                           ),
+                          color: check1star
+                              ? const Color(0xff8980FF).withOpacity(1)
+                              : const Color(0xff8980FF).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: SizedBox(
                           width: width * 0.15,
                           height: height * 0.05,
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               setState(() {
                                 if (!check1star) {
+                                  pageSize = 10;
                                   check1star = true;
                                   check4star = false;
                                   check3star = false;
@@ -446,6 +483,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                   checkAll = false;
                                   vote = 1;
                                 } else {
+                                  pageSize = 10;
                                   vote = 0;
                                   check5star = false;
                                   check4star = false;
@@ -466,9 +504,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                                 ),
                               ],
                             ),
-                            color: check1star
-                                ? const Color(0xff8980FF).withOpacity(1)
-                                : const Color(0xff8980FF).withOpacity(0.1),
+                            style: TextButton.styleFrom(primary: Colors.black),
                           ),
                         ),
                       ),
@@ -485,7 +521,7 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
             FutureBuilder(
                 future: loadListRating(),
                 builder: (context, snapshot) {
-                  if (listAllRating.isEmpty) {
+                  if (listAllRating.isEmpty && checkHasNext != false) {
                     checkExist = true;
                   } else {
                     checkExist = false;
@@ -496,7 +532,9 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                       children: [
                         Column(
                           children: List.generate(
-                              listAllRating == null ? 0 : listAllRating.length,
+                              listAllRating.isNotEmpty
+                                  ? listAllRating.length
+                                  : 0,
                               (index) => buildRatingList(listAllRating[index])),
                         ),
                         Visibility(
@@ -504,12 +542,30 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
                             child: Text(
                               'Không có dữ liệu',
                               style: GoogleFonts.montserrat(),
-                            ))
+                            )),
+                        Visibility(
+                          visible: !checkHasNext,
+                          child: _buildProgressIndicator(),
+                        ),
                       ],
                     ),
                   );
                 })
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: !checkHasNext ? 1.0 : 00,
+          child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromRGBO(137, 128, 255, 1))),
         ),
       ),
     );
@@ -521,4 +577,31 @@ class _RatingCommentPageState extends State<RatingCommentPage> {
         playerModel: widget.playerModel,
         checkCanReport: widget.checkCanReport,
       );
+
+  Future loadListRating() {
+    Future<ResponseListModel<RatingModel>?> listAllRatingModelFuture =
+        RatingService().getAllRating(
+            widget.playerModel!.id, vote, widget.tokenModel.message, pageSize);
+    listAllRatingModelFuture.then((_ratingList) {
+      if (_ratingList != null) {
+        if (checkFirstTime ||
+            checkGetData ||
+            check1star ||
+            check2star ||
+            check3star ||
+            check4star ||
+            check5star ||
+            checkAll) {
+          listAllRating = _ratingList.content;
+          if (_ratingList.hasNext == false) {
+            checkHasNext = true;
+          } else {
+            checkHasNext = false;
+          }
+          checkFirstTime = false;
+        }
+      }
+    });
+    return listAllRatingModelFuture;
+  }
 }

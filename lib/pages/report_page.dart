@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/report_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
@@ -37,7 +38,8 @@ class _ReportPageState extends State<ReportPage> {
           centerTitle: true,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);
@@ -117,9 +119,7 @@ class _ReportPageState extends State<ReportPage> {
             child: SecondMainButton(
                 text: 'Gửi',
                 onPress: () {
-                  if (reportMessage == null ||
-                      reportMessage.isEmpty ||
-                      reportMessage == "") {
+                  if (reportMessage.isEmpty || reportMessage == "") {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng nhập lý do tố cáo!"),
                     ));
@@ -141,6 +141,12 @@ class _ReportPageState extends State<ReportPage> {
                               ),
                               true);
                         });
+                        Fluttertoast.showToast(
+                            msg: "Tố cáo thành công!",
+                            textColor: Colors.white,
+                            backgroundColor:
+                                const Color.fromRGBO(137, 128, 255, 1),
+                            toastLength: Toast.LENGTH_SHORT);
                       }
                     });
                   }

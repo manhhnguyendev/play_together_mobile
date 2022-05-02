@@ -18,6 +18,7 @@ class OrderModel {
   String timeStart;
   String timeFinish;
   String processExpired;
+  double percentSub;
 
   OrderModel({
     required this.id,
@@ -35,6 +36,7 @@ class OrderModel {
     required this.timeStart,
     required this.timeFinish,
     required this.processExpired,
+    required this.percentSub,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -61,6 +63,7 @@ class OrderModel {
         timeStart: json['timeStart'] as String,
         timeFinish: json['timeFinish'] as String,
         processExpired: json['processExpired'] as String,
+    percentSub: json['percentSub'] as double,
       );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +82,7 @@ class OrderModel {
         "timeStart": timeStart,
         "timeFinish": timeFinish,
         "processExpired": processExpired,
+    "percentSub": percentSub,
       };
 }
 
@@ -140,6 +144,7 @@ class OrderDetailModel {
   String timeStart;
   String timeFinish;
   String processExpired;
+  double percentSub;
 
   OrderDetailModel({
     required this.id,
@@ -159,6 +164,7 @@ class OrderDetailModel {
     required this.timeStart,
     required this.timeFinish,
     required this.processExpired,
+    required this.percentSub,
   });
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>
@@ -196,6 +202,7 @@ class OrderDetailModel {
         timeStart: json['timeStart'] as String,
         timeFinish: json['timeFinish'] as String,
         processExpired: json['processExpired'] as String,
+        percentSub: json['percentSub'] as double,
       );
 
   Map<String, dynamic> toJson() => {
@@ -216,6 +223,7 @@ class OrderDetailModel {
         "timeStart": timeStart,
         "timeFinish": timeFinish,
         "processExpired": processExpired,
+    "percentSub": percentSub,
       };
 }
 

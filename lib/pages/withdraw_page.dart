@@ -12,6 +12,7 @@ class WithdrawPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
   final double money;
+
   const WithdrawPage(
       {Key? key,
       required this.userModel,
@@ -25,6 +26,7 @@ class WithdrawPage extends StatefulWidget {
 
 class _WithdrawPageState extends State<WithdrawPage> {
   final phoneController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,8 @@ class _WithdrawPageState extends State<WithdrawPage> {
             elevation: 1,
             leading: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: FlatButton(
+              child: TextButton(
+                style: TextButton.styleFrom(primary: Colors.black),
                 child: const Icon(
                   Icons.arrow_back_ios,
                 ),
@@ -113,6 +116,13 @@ class _WithdrawPageState extends State<WithdrawPage> {
                               true);
                           Fluttertoast.showToast(
                               msg: "RÚT TIỀN THÀNH CÔNG",
+                              textColor: Colors.white,
+                              backgroundColor:
+                                  const Color.fromRGBO(137, 128, 255, 1),
+                              toastLength: Toast.LENGTH_SHORT);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "RÚT TIỀN THẤT BẠI",
                               textColor: Colors.white,
                               backgroundColor:
                                   const Color.fromRGBO(137, 128, 255, 1),

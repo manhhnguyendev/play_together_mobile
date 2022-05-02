@@ -33,7 +33,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
