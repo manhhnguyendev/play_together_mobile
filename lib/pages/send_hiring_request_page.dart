@@ -11,7 +11,6 @@ import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
-import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -386,21 +385,5 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       status,
       style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
     );
-  }
-
-  Future checkStatus() {
-    Future<ResponseModel<UserModel>?> getStatusUser =
-        UserService().getUserProfile(widget.tokenModel.message);
-    getStatusUser.then((value) {
-      if (value != null) {
-        if (value.content.status.contains('Online')) {
-          if (!mounted) return;
-          setState(() {
-            lateUser = value.content;
-          });
-        }
-      }
-    });
-    return getStatusUser;
   }
 }
