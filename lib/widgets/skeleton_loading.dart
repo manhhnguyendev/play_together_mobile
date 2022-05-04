@@ -24,7 +24,6 @@ class _SkeletonLoadingState extends State<SkeletonLoading> {
             child: Container(
               width: 180,
               height: 30,
-              // padding: EdgeInsets.all(1 / 1000 * size.width),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   shape: BoxShape.rectangle,

@@ -3,7 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/rating_and_comment_page.dart';
 import 'package:play_together_mobile/pages/send_hiring_request_page.dart';
@@ -476,16 +478,27 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                                   "Bạn không thể thuê! Người chơi hiện đang bận, vui lòng thuê lại sau"),
                             ));
                           } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SendHiringRequestPage(
-                                        userModel: widget.userModel,
-                                        listGameAndRank: listGameAndRank,
-                                        playerModel: widget.playerModel,
-                                        tokenModel: widget.tokenModel,
-                                      )),
-                            );
+                            Future<ResponseModel<UserBalanceModel>?>
+                                getUserBalanceFuture = UserService()
+                                    .getUserBalance(widget.userModel.id,
+                                        widget.tokenModel.message);
+                            getUserBalanceFuture.then((value) {
+                              if (value != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SendHiringRequestPage(
+                                            userModel: widget.userModel,
+                                            listGameAndRank: listGameAndRank,
+                                            playerModel: widget.playerModel,
+                                            tokenModel: widget.tokenModel,
+                                            activeBalance:
+                                                value.content.activeBalance,
+                                          )),
+                                );
+                              }
+                            });
                           }
                         },
                         height: 50,
@@ -548,9 +561,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       : '',
                   style: GoogleFonts.montserrat(fontSize: 15)),
             ]),
-            const SizedBox(
-              height: 5,
-            )
           ],
         ),
       ),

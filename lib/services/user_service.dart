@@ -5,6 +5,7 @@ import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
 import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/momo_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
@@ -88,12 +89,12 @@ class UserService {
   }
 
   Future<ResponseListModel<GetAllUserModel>?> getAllUsersIsOrderByRating(
-      dynamic token, int pageSize) async {
+      dynamic token) async {
     Response response;
     ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
-        Uri.parse('${api_url.users}?IsOrderByRating=true&PageSize=$pageSize'),
+        Uri.parse('${api_url.users}?IsOrderByRating=true&PageSize=5'),
         headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
@@ -380,6 +381,45 @@ class UserService {
       );
       if (response.statusCode == 204) {
         result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseModel<MomoModel>?> getLinkMomo(
+      MomoCreateModel momoCreateModel, dynamic token) async {
+    Response response;
+    ResponseModel<MomoModel>? result;
+    try {
+      response = await post(
+        Uri.parse(api_url.momo),
+        headers: config_json.headerAuth(token),
+        body: jsonEncode(momoCreateModel.toJson()),
+      );
+      if (response.statusCode == 200) {
+        result = ResponseModel<MomoModel>.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseListModel<UnActiveBalanceModel>?> getListUnActiveBalance(
+      dynamic token) async {
+    Response response;
+    ResponseListModel<UnActiveBalanceModel>? result;
+    try {
+      response = await get(
+        Uri.parse(
+            '${api_url.users}/un-active-balance?IsNew=true&isRelease=false'),
+        headers: config_json.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = ResponseListModel<UnActiveBalanceModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;

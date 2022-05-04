@@ -11,6 +11,7 @@ import 'package:play_together_mobile/models/user_model.dart';
 import 'package:play_together_mobile/pages/categories_list_page.dart';
 import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/pages/hiring_stage_page.dart';
+import 'package:play_together_mobile/pages/login_page.dart';
 import 'package:play_together_mobile/pages/receive_request_page.dart';
 import 'package:play_together_mobile/services/order_service.dart';
 import 'package:play_together_mobile/services/recommend_service.dart';
@@ -44,7 +45,6 @@ class _HomePageState extends State<HomePage> {
   List<GetAllUserModel> listPlayerIsRecentOrder = [];
   List<GetAllUserModel> listPlayerIsNewAccount = [];
   List<ResultRecommendModel> listResultRecommend = [];
-  List<ResultRecommendModel> listGetResultRecommend = [];
   List<RecommendModel> listRecommend = [];
   List<OrderModel> _listOrder = [];
   List listPlayerToRecommend = [];
@@ -58,11 +58,10 @@ class _HomePageState extends State<HomePage> {
   bool checkFirstTime = true;
   bool checkFirstTimeRecommend = true;
   bool checkRecommend = false;
-  int totalCount = 0;
-
+  bool checkUserRecommend = false;
   bool checkSkeleton = true;
   late Timer _timer;
-  int _start = 4;
+  int _start = 3;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
@@ -107,6 +106,11 @@ class _HomePageState extends State<HomePage> {
             checkRecommend = true;
           }
           getListPlayerId();
+          if (listPlayerRecommend.isEmpty) {
+            checkUserRecommend = true;
+          } else {
+            checkUserRecommend = false;
+          }
           return Scaffold(
             appBar: Appbar(
               height: 70,
@@ -303,82 +307,94 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CategoriesListPage(
-                                        title: 'Top người chơi ưa thích',
-                                        playerList: listPlayerIsOrderByRating,
-                                        tokenModel: widget.tokenModel,
-                                        userModel: widget.userModel,
-                                      ),
-                                    ));
-                              },
-                              child: Row(children: [
-                                Text(
-                                  "Top người chơi ưa thích",
-                                  style: GoogleFonts.montserrat(
-                                    fontSize: 18,
-                                    color: Colors.black,
+                          Visibility(
+                            visible: checkUserRecommend,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CategoriesListPage(
+                                          title: 'Top người chơi ưa thích',
+                                          playerList: listPlayerIsOrderByRating,
+                                          tokenModel: widget.tokenModel,
+                                          userModel: widget.userModel,
+                                        ),
+                                      ));
+                                },
+                                child: Row(children: [
+                                  Text(
+                                    "Top người chơi ưa thích",
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Icon(
-                                  FontAwesomeIcons.arrowAltCircleRight,
-                                  size: 18,
-                                ),
-                              ]),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Icon(
+                                    FontAwesomeIcons.arrowAltCircleRight,
+                                    size: 18,
+                                  ),
+                                ]),
+                              ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
+                          Visibility(
+                            visible: checkUserRecommend,
+                            child: const SizedBox(
+                              height: 10,
+                            ),
                           ),
-                          SingleChildScrollView(
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: SizedBox(
-                                      height: 230.0,
-                                      child: FutureBuilder(
-                                          future:
-                                              loadListPlayerIsOrderByRating(),
-                                          builder: (context, snapshot) {
-                                            return ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount:
-                                                  listPlayerIsOrderByRating
-                                                          .isNotEmpty
-                                                      ? listPlayerIsOrderByRating
-                                                          .length
-                                                      : 0,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                if (lateUser != null) {
-                                                  return PlayerCard(
-                                                    playerModel:
-                                                        listPlayerIsOrderByRating[
-                                                            index],
-                                                    tokenModel:
-                                                        widget.tokenModel,
-                                                    userModel: lateUser!,
+                          Visibility(
+                            visible: checkUserRecommend,
+                            child: SingleChildScrollView(
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: SizedBox(
+                                        height: 230.0,
+                                        child: FutureBuilder(
+                                            future:
+                                                loadListPlayerIsOrderByRating(),
+                                            builder: (context, snapshot) {
+                                              return ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount:
+                                                    listPlayerIsOrderByRating
+                                                            .isNotEmpty
+                                                        ? listPlayerIsOrderByRating
+                                                            .length
+                                                        : 0,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  if (lateUser != null) {
+                                                    return PlayerCard(
+                                                      playerModel:
+                                                          listPlayerIsOrderByRating[
+                                                              index],
+                                                      tokenModel:
+                                                          widget.tokenModel,
+                                                      userModel: lateUser!,
+                                                    );
+                                                  }
+                                                  return const SizedBox(
+                                                    height: 10,
                                                   );
-                                                }
-                                                return const SizedBox(
-                                                  height: 10,
-                                                );
-                                              },
-                                            );
-                                          })),
-                                ),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                },
+                                              );
+                                            })),
+                                  ),
+                                ],
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                              ),
                             ),
                           ),
                           Padding(
@@ -612,11 +628,10 @@ class _HomePageState extends State<HomePage> {
   Future loadListPlayerIsOrderByRating() {
     Future<ResponseListModel<GetAllUserModel>?>
         listPlayerIsOrderByRatingFuture =
-        UserService().getAllUsersIsOrderByRating(widget.tokenModel.message, 5);
+        UserService().getAllUsersIsOrderByRating(widget.tokenModel.message);
     listPlayerIsOrderByRatingFuture.then((_playerList) {
       if (checkFirstOrderByRating) {
         listPlayerIsOrderByRating = _playerList!.content;
-        totalCount = _playerList.totalCount;
         checkFirstOrderByRating = false;
       }
     });
@@ -669,6 +684,11 @@ class _HomePageState extends State<HomePage> {
           if (!mounted) return;
           setState(() {
             lateUser = value.content;
+          });
+        } else if (value.content.status.contains('Maintain')) {
+          if (!mounted) return;
+          setState(() {
+            helper.pushInto(context, const LoginPage(), true);
           });
         } else if (value.content.status.contains('Hiring')) {
           Future<ResponseListModel<OrderModel>?> checkOrderUser = OrderService()

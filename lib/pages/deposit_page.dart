@@ -1,14 +1,17 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:play_together_mobile/models/momo_model.dart';
+import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
-import 'package:play_together_mobile/pages/transaction_page.dart';
+import 'package:play_together_mobile/pages/personal_page.dart';
 import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/profile_accept_button.dart';
-import 'package:momo_vn/momo_vn.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
 
 class DepositPage extends StatefulWidget {
@@ -24,28 +27,12 @@ class DepositPage extends StatefulWidget {
 }
 
 class _DepositPageState extends State<DepositPage> {
-  late MomoVn _momoPay;
-  late PaymentResponse _momoPaymentResult;
-
   final displayController = TextEditingController();
   String money = "";
   String message = "";
   double convertMoney = 0;
   var formatter = NumberFormat('###,###,###');
-
-  @override
-  void initState() {
-    super.initState();
-    _momoPay = MomoVn();
-    _momoPay.on(MomoVn.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _momoPay.on(MomoVn.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    if (!mounted) return;
-    setState(() {});
-  }
+  String url = "";
 
   @override
   Widget build(BuildContext context) {
@@ -136,83 +123,30 @@ class _DepositPageState extends State<DepositPage> {
                     } else {
                       money = displayController.text.replaceAll(",", "");
                       convertMoney = double.parse(money);
-                      MomoPaymentInfo options = MomoPaymentInfo(
-                          merchantName: "Play Together",
-                          appScheme:
-                              "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAhy6gKyTqR",
-                          merchantCode: 'MOMOVLRE20220224',
-                          partnerCode: 'MOMOVLRE20220224',
-                          amount: convertMoney.round(),
-                          orderId:
-                              'MOMOVLRE20220224' + DateTime.now().toString(),
-                          orderLabel: 'Nạp tiền vào app Play Together',
-                          merchantNameLabel: "NẠP TIỀN VÀO APP PLAY TOGETHER",
-                          fee: 0,
-                          description: 'Nạp tiền Play Together',
-                          username: '',
-                          partner: 'merchant',
-                          extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
-                          isTestMode: true);
-                      try {
-                        _momoPay.open(options);
-                      } catch (e) {
-                        debugPrint(e.toString());
-                      }
+                      MomoCreateModel momoCreateModel = MomoCreateModel(
+                          userId: widget.userModel.id, amount: convertMoney);
+                      Future<ResponseModel<MomoModel>?> genUrl = UserService()
+                          .getLinkMomo(
+                              momoCreateModel, widget.tokenModel.message);
+                      genUrl.then((value) async {
+                        if (value != null) {
+                          url = value.content.payUrl;
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                            helper.pushInto(
+                                context,
+                                PersonalPage(
+                                  tokenModel: widget.tokenModel,
+                                  userModel: widget.userModel,
+                                ),
+                                true);
+                          } else {
+                            throw "Could not launch $url";
+                          }
+                        }
+                      });
                     }
                   })),
         ));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _momoPay.clear();
-  }
-
-  void _setState() {
-    if (_momoPaymentResult.isSuccess == true) {
-      money = money.replaceAll(",", "");
-      convertMoney = double.parse(money);
-      DepositModel depositModel = DepositModel(
-          money: convertMoney,
-          momoTransactionId: _momoPaymentResult.token.toString());
-      Future<bool?> makeDonateFuture =
-          UserService().depositMoney(widget.tokenModel.message, depositModel);
-      makeDonateFuture.then((_depositMoney) {
-        if (_depositMoney == true) {
-          helper.pushInto(
-              context,
-              TransactionPage(
-                tokenModel: widget.tokenModel,
-                userModel: widget.userModel,
-              ),
-              true);
-        }
-      });
-    } else {}
-  }
-
-  void _handlePaymentSuccess(PaymentResponse response) {
-    setState(() {
-      _momoPaymentResult = response;
-      _setState();
-    });
-    Fluttertoast.showToast(
-        msg: "NẠP TIỀN THÀNH CÔNG",
-        textColor: Colors.white,
-        backgroundColor: const Color.fromRGBO(137, 128, 255, 1),
-        toastLength: Toast.LENGTH_SHORT);
-  }
-
-  void _handlePaymentError(PaymentResponse response) {
-    setState(() {
-      _momoPaymentResult = response;
-      _setState();
-    });
-    Fluttertoast.showToast(
-        msg: "NẠP TIỀN THẤT BẠI",
-        textColor: Colors.white,
-        backgroundColor: const Color.fromRGBO(137, 128, 255, 1),
-        toastLength: Toast.LENGTH_SHORT);
   }
 }

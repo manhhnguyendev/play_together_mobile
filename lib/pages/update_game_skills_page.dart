@@ -27,12 +27,18 @@ class UpdateGameSkillsPage extends StatefulWidget {
 
 class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
   List<GameOfUserModel> listGameOfUser = [];
+  bool checkEmptyGameOfUser = false;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: getAllGameOfUser(),
         builder: (context, snapshot) {
+          if (listGameOfUser.isEmpty) {
+            checkEmptyGameOfUser = true;
+          } else {
+            checkEmptyGameOfUser = false;
+          }
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(50),
@@ -81,10 +87,19 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
             ),
             body: SingleChildScrollView(
               padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: List.generate(listGameOfUser.length,
-                    (index) => buildSkills(listGameOfUser[index])),
-              ),
+              child: Column(children: [
+                Column(
+                  children: List.generate(listGameOfUser.length,
+                      (index) => buildSkills(listGameOfUser[index])),
+                ),
+                Visibility(
+                    visible: checkEmptyGameOfUser,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text('Không có dữ liệu',
+                          style: GoogleFonts.montserrat()),
+                    )),
+              ]),
             ),
           );
         });
@@ -200,26 +215,35 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                     ),
                     IconButton(
                         onPressed: () {
-                          checkOnPress = true;
-                          Future<bool?> deleteFuture = GameOfUserService()
-                              .deleteGameOfUser(_gameOfUserModel.id,
-                                  widget.tokenModel.message);
-                          deleteFuture.then((value) {
-                            setState(() {
-                              if (value == true) {
-                                checkOnPress = false;
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("Xóa thành công"),
-                                ));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("Xóa thất bại"),
-                                ));
-                              }
+                          if (widget.userModel.isPlayer == true &&
+                              listGameOfUser.length <= 1) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Trạng thái nhận yêu cầu thuê đang bật, bạn cần có tối thiểu 1 kỹ năng"),
+                            ));
+                          } else {
+                            checkOnPress = true;
+                            Future<bool?> deleteFuture = GameOfUserService()
+                                .deleteGameOfUser(_gameOfUserModel.id,
+                                    widget.tokenModel.message);
+                            deleteFuture.then((value) {
+                              setState(() {
+                                if (value == true) {
+                                  checkOnPress = false;
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Xóa thành công"),
+                                  ));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Xóa thất bại"),
+                                  ));
+                                }
+                              });
                             });
-                          });
+                          }
                         },
                         icon: const Icon(
                           FontAwesomeIcons.solidTrashAlt,

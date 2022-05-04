@@ -98,14 +98,6 @@ class _SelectDepositMethodPageState extends State<SelectDepositMethodPage> {
                           style: GoogleFonts.montserrat(
                               fontSize: 18, color: Colors.black),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Hỗ trợ từ 8:30 -> 22:00 (trừ CN, ngày lễ)",
-                          style: GoogleFonts.montserrat(
-                              fontSize: 15, color: Colors.grey),
-                        ),
                       ],
                     ),
                   ),

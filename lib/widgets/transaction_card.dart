@@ -113,6 +113,26 @@ class _TransactionCardState extends State<TransactionCard> {
       );
     }
 
+    if (type == 'Report - Refund') {
+      return Text(
+        'Hoàn tiền từ việc tố cáo thành công',
+        style: GoogleFonts.montserrat(fontSize: 18),
+      );
+    }
+
+    if (type == 'Report') {
+      return Text(
+        'Trừ tiền từ việc bị tố cáo thành công',
+        style: GoogleFonts.montserrat(fontSize: 18),
+      );
+    }
+    if (type == 'Maintain - Refund') {
+      return Text(
+        'Hoàn tiền vì hệ thống bảo trì',
+        style: GoogleFonts.montserrat(fontSize: 18),
+      );
+    }
+
     return Text(
       type,
       style: GoogleFonts.montserrat(fontSize: 15, color: Colors.black),

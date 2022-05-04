@@ -65,9 +65,7 @@ dependencies:
   #Another
   provider: ^6.0.2
   image_picker: ^0.8.4+11
-  momo_vn: ^2.0.1
   pattern_formatter: ^2.0.0
-  page_transition: ^2.0.5
   url_launcher: ^6.1.0
   shimmer: ^2.0.0
   

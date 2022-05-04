@@ -34,3 +34,5 @@ const String email =
     "https://play-together.azurewebsites.net/api/play-together/v1/email";
 const String feedback =
     "https://play-together.azurewebsites.net/api/play-together/v1/feedbacks";
+const String momo =
+    "https://play-together.azurewebsites.net/api/play-together/v1/momo";

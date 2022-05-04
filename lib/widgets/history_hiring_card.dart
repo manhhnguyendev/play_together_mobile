@@ -151,7 +151,8 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   child: Text(
                     widget.orderModel.user!.id == widget.userModel.id
                         ? '− ' +
-                        (widget.orderModel.finalPrices/(1-widget.orderModel.percentSub))
+                            (widget.orderModel.finalPrices /
+                                    (1 - widget.orderModel.percentSub))
                                 .toStringAsFixed(0)
                                 .toVND()
                         : '+ ' +
@@ -299,7 +300,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
     if (status == 'Interrupt') {
       checkReorder = true;
       return Text(
-        'Người dùng bị khóa',
+        'Bị gián đoạn',
         style: GoogleFonts.montserrat(fontSize: 15, color: Colors.grey),
       );
     }

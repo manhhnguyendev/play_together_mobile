@@ -1,5 +1,6 @@
 import 'package:play_together_mobile/models/charity_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/momo_model.dart';
 import 'package:play_together_mobile/models/notification_model.dart';
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
@@ -46,6 +47,8 @@ class ResponseModel<T> {
           as ResponseModel<T>;
     } else if (T == StatisticModel) {
       return StatisticModelResponse.fromJson(json) as ResponseModel<T>;
+    } else if (T == MomoModel) {
+      return MoMoModelResponse.fromJson(json) as ResponseModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -69,6 +72,13 @@ class UserBalanceModelResponse extends ResponseModel<UserBalanceModel> {
   UserBalanceModelResponse.fromJson(Map<String, dynamic> json)
       : super._fromJson(json) {
     content = UserBalanceModel.fromJson(json["content"]);
+  }
+}
+
+class MoMoModelResponse extends ResponseModel<MomoModel> {
+  MoMoModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = MomoModel.fromJson(json["content"]);
   }
 }
 

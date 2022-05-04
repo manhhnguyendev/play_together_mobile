@@ -13,7 +13,7 @@ class RecommendService {
     try {
       response = await post(
         Uri.parse(api_url.recommend),
-        headers: config_json.header(),
+        headers: config_json.headerAuth(token),
         body: json.encoder.convert(recommendModel),
       );
       if (response.statusCode == 200) {

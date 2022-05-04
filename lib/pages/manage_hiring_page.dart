@@ -56,6 +56,7 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
   List<GameOfUserModel> listGamesOfUser = [];
   UserServiceModel? lateUserService;
   bool isLoading = false;
+  bool checkGameOfUserEmpty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -386,13 +387,33 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                                   child: FutureBuilder(
                                     future: getGameOfUser(),
                                     builder: (context, snapshot) {
+                                      if (listGamesOfUser.isEmpty) {
+                                        checkGameOfUserEmpty = true;
+                                      } else {
+                                        checkGameOfUserEmpty = false;
+                                      }
                                       return Column(
-                                        children: List.generate(
-                                            listGamesOfUser.isNotEmpty
-                                                ? listGamesOfUser.length
-                                                : 0,
-                                            (index) => buildGameOfUser(
-                                                listGamesOfUser[index])),
+                                        children: [
+                                          Column(
+                                            children: List.generate(
+                                                listGamesOfUser.isNotEmpty
+                                                    ? listGamesOfUser.length
+                                                    : 0,
+                                                (index) => buildGameOfUser(
+                                                    listGamesOfUser[index])),
+                                          ),
+                                          Visibility(
+                                            visible: checkGameOfUserEmpty,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                padding: const EdgeInsets.only(
+                                                    left: 15),
+                                                child: Text(' Không có dữ liệu',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontSize: 15))),
+                                          ),
+                                        ],
                                       );
                                     },
                                   ),
@@ -613,9 +634,6 @@ class _ManageHiringPageState extends State<ManageHiringPage> {
                         : '',
                     style: GoogleFonts.montserrat(fontSize: 15)),
               ]),
-              const SizedBox(
-                height: 5,
-              )
             ],
           ),
         ),

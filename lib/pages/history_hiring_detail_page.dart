@@ -542,7 +542,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
 
     if (status == 'Interrupt') {
       return Text(
-        'Người dùng bị khóa',
+        'Bị gián đoạn',
         style: GoogleFonts.montserrat(fontSize: 17, color: Colors.grey),
       );
     }

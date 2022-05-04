@@ -10,6 +10,7 @@ class StatisticsPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
   final StatisticModel statisticModel;
+
   const StatisticsPage(
       {Key? key,
       required this.userModel,
@@ -340,7 +341,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: Row(children: [
-                    Text('Điểm thỏa mãn:',
+                    Text('Điểm hài lòng:',
                         style: GoogleFonts.montserrat(fontSize: 15)),
                     const Spacer(),
                     Text(

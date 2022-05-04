@@ -11,6 +11,7 @@ import 'package:play_together_mobile/pages/hiring_negotiating_page.dart';
 import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/services/email_service.dart';
 import 'package:play_together_mobile/services/order_service.dart';
+import 'package:play_together_mobile/services/user_service.dart';
 import 'package:play_together_mobile/widgets/checkbox_state.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -22,6 +23,7 @@ class SendHiringRequestPage extends StatefulWidget {
   final PlayerModel? playerModel;
   final List<GameOfUserModel>? listGameAndRank;
   final TokenModel tokenModel;
+  final double? activeBalance;
 
   const SendHiringRequestPage({
     Key? key,
@@ -29,6 +31,7 @@ class SendHiringRequestPage extends StatefulWidget {
     required this.playerModel,
     required this.tokenModel,
     this.listGameAndRank,
+    this.activeBalance,
   }) : super(key: key);
 
   @override
@@ -36,6 +39,7 @@ class SendHiringRequestPage extends StatefulWidget {
 }
 
 class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
+  UserModel? lateUser;
   OrderModel? orderModel;
   bool checkFirstTime = true;
   int chooseTime = 0;
@@ -198,9 +202,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
                     },
                     icon: const Icon(Icons.add_circle_outline)),
                 Text(
-                  widget.userModel.userBalance.balance
-                      .toStringAsFixed(0)
-                      .toVND(),
+                  widget.activeBalance!.toStringAsFixed(0).toVND(),
                   style: GoogleFonts.montserrat(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -258,7 +260,7 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
             child: SecondMainButton(
                 text: 'Gửi yêu cầu',
                 onPress: (widget.playerModel!.pricePerHour * chooseTime) <=
-                        widget.userModel.userBalance.balance
+                        widget.activeBalance!
                     ? () {
                         for (var item in listGamesChoosen) {
                           for (var game in widget.listGameAndRank!) {
@@ -384,5 +386,21 @@ class _SendHiringRequestPageState extends State<SendHiringRequestPage> {
       status,
       style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
     );
+  }
+
+  Future checkStatus() {
+    Future<ResponseModel<UserModel>?> getStatusUser =
+        UserService().getUserProfile(widget.tokenModel.message);
+    getStatusUser.then((value) {
+      if (value != null) {
+        if (value.content.status.contains('Online')) {
+          if (!mounted) return;
+          setState(() {
+            lateUser = value.content;
+          });
+        }
+      }
+    });
+    return getStatusUser;
   }
 }

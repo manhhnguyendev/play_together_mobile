@@ -92,9 +92,7 @@ class _SystemFeedbackPageState extends State<SystemFeedbackPage> {
             body: SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                  children: List.generate(listFeedback.length,
-                      (index) => buildFeedbackCard(listFeedback[index]))),
+              child: buildListEmpty(listFeedback),
             )),
           );
         });
@@ -108,5 +106,19 @@ class _SystemFeedbackPageState extends State<SystemFeedbackPage> {
           userModel: widget.userModel,
           systemFeedbackModel: model),
     );
+  }
+
+  Widget buildListEmpty(List<SystemFeedbackModel> listFeedback) {
+    if (listFeedback.isNotEmpty) {
+      return Column(
+          children: List.generate(listFeedback.length,
+              (index) => buildFeedbackCard(listFeedback[index])));
+    } else {
+      return Container(
+        alignment: Alignment.center,
+        child: Text('Không có dữ liệu',
+            style: GoogleFonts.montserrat(fontSize: 15)),
+      );
+    }
   }
 }

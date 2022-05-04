@@ -32,6 +32,7 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
   bool checkFirstTime = true;
   bool checkAddChoosen = true;
   bool isPress = false;
+  bool isLoading = false;
 
   Future getAllGames() {
     Future<ResponseListModel<GamesModel>?> gameFuture =
@@ -81,6 +82,11 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
     return FutureBuilder(
         future: getAllGames(),
         builder: (context, snapshot) {
+          if (listHobbies.isEmpty) {
+            isLoading = true;
+          } else {
+            isLoading = false;
+          }
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: PreferredSize(
@@ -110,28 +116,39 @@ class _UpdateHobbiesPageState extends State<UpdateHobbiesPage> {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
-                    child: Text(
-                      'Bạn thích tựa games nào?',
-                      style: GoogleFonts.montserrat(fontSize: 18),
+            body: isLoading
+                ? const Center(
+                    child: SizedBox(
+                      height: 40.0,
+                      width: 40.0,
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Color.fromRGBO(137, 128, 255, 1))),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Column(
-                    children: List.generate(
-                      listGamesCheckBox.length,
-                      (index) => buildSingleCheckBox(listGamesCheckBox[index]),
-                    ),
-                  ),
-                ])),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
+                          child: Text(
+                            'Bạn thích tựa games nào?',
+                            style: GoogleFonts.montserrat(fontSize: 18),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          children: List.generate(
+                            listGamesCheckBox.length,
+                            (index) =>
+                                buildSingleCheckBox(listGamesCheckBox[index]),
+                          ),
+                        ),
+                      ])),
             bottomNavigationBar: BottomAppBar(
               elevation: 0,
               child: Padding(

@@ -67,31 +67,31 @@ class _SearchPageState extends State<SearchPage> {
   bool checkEmptySearch = false;
   bool checkEmptyFilter = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollControllerSearch.addListener(() {
-      if (_scrollControllerSearch.position.maxScrollExtent ==
-          _scrollControllerSearch.position.pixels) {
-        getMoreDataSearch();
-      }
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _scrollControllerSearch.addListener(() {
+  //     if (_scrollControllerSearch.position.maxScrollExtent ==
+  //         _scrollControllerSearch.position.pixels) {
+  //       getMoreDataSearch();
+  //     }
+  //   });
+  // }
 
-  @override
-  void dispose() {
-    _scrollControllerSearch.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _scrollControllerSearch.dispose();
+  //   super.dispose();
+  // }
 
-  void getMoreDataSearch() {
-    setState(() {
-      if (checkHasNextSearch == false) {
-        pageSizeSearch += 10;
-        checkGetDataSearch = true;
-      }
-    });
-  }
+  // void getMoreDataSearch() {
+  //   setState(() {
+  //     if (checkHasNextSearch == false) {
+  //       pageSizeSearch += 10;
+  //       checkGetDataSearch = true;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,16 +105,16 @@ class _SearchPageState extends State<SearchPage> {
     return FutureBuilder(
         future: loadListSearchPlayer(),
         builder: (context, snapshot) {
-          if (listPlayerSearch.isEmpty && checkHasNextSearch != false) {
-            checkEmptySearch = true;
-          } else {
-            checkEmptySearch = false;
-          }
-          if (listPlayerFilter.isEmpty) {
-            checkEmptyFilter = true;
-          } else {
-            checkEmptyFilter = false;
-          }
+          // if (listPlayerSearch.isEmpty && checkHasNextSearch != false) {
+          //   checkEmptySearch = true;
+          // } else {
+          //   checkEmptySearch = false;
+          // }
+          // if (listPlayerFilter.isEmpty) {
+          //   checkEmptyFilter = true;
+          // } else {
+          //   checkEmptyFilter = false;
+          // }
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -260,7 +260,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             body: SingleChildScrollView(
-              controller: _scrollControllerSearch,
+              // controller: _scrollControllerSearch,
               child: Column(
                 children: [
                   Visibility(
@@ -281,10 +281,10 @@ class _SearchPageState extends State<SearchPage> {
                                     child: Text('Không có dữ liệu',
                                         style: GoogleFonts.montserrat()),
                                   )),
-                              Visibility(
-                                visible: !checkHasNextSearch,
-                                child: _buildProgressIndicatorSearch(),
-                              ),
+                              // Visibility(
+                              //   visible: !checkHasNextSearch,
+                              //   child: _buildProgressIndicatorSearch(),
+                              // ),
                             ]))),
                   ),
                   Visibility(
@@ -316,19 +316,19 @@ class _SearchPageState extends State<SearchPage> {
         });
   }
 
-  Widget _buildProgressIndicatorSearch() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Opacity(
-          opacity: !checkHasNextSearch ? 1.0 : 00,
-          child: const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Color.fromRGBO(137, 128, 255, 1))),
-        ),
-      ),
-    );
-  }
+  // Widget _buildProgressIndicatorSearch() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Center(
+  //       child: Opacity(
+  //         opacity: !checkHasNextSearch ? 1.0 : 00,
+  //         child: const CircularProgressIndicator(
+  //             valueColor: AlwaysStoppedAnimation<Color>(
+  //                 Color.fromRGBO(137, 128, 255, 1))),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget buildListSearch(GetAllUserModel _playerModel) => SearchPlayerCard(
         playerModel: _playerModel,
@@ -342,16 +342,10 @@ class _SearchPageState extends State<SearchPage> {
             widget.tokenModel.message, pageSizeSearch);
     getListSearchUser.then((_userList) {
       if (_userList != null) {
-        if (checkFirstTime || checkGetDataSearch) {
+        if (checkFirstTime) {
           checkListSearch = true;
-          if (!mounted) return;
           setState(() {
             listPlayerSearch = _userList.content;
-            if (_userList.hasNext == false) {
-              checkHasNextSearch = true;
-            } else {
-              checkHasNextSearch = false;
-            }
           });
           checkFirstTime = false;
         }
