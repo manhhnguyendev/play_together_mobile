@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:play_together_mobile/models/online_hour_model.dart';
@@ -45,7 +47,8 @@ class _UpdateHourPageState extends State<UpdateHourPage> {
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(
                       Icons.arrow_back_ios,
                     ),

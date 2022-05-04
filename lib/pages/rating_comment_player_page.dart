@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/pages/history_page.dart';
+import 'package:play_together_mobile/pages/report_page.dart';
 import 'package:play_together_mobile/services/rating_service.dart';
 import 'package:play_together_mobile/widgets/second_main_button.dart';
 import 'package:play_together_mobile/helpers/helper.dart' as helper;
@@ -36,6 +38,26 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReportPage(
+                            orderModel: widget.orderModel,
+                            tokenModel: widget.tokenModel,
+                            userModel: widget.userModel!)),
+                  );
+                },
+                icon: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.black,
+                )),
+          ),
+        ],
         title: Text(
           'Kết thúc thuê',
           style: GoogleFonts.montserrat(
@@ -114,13 +136,11 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
             child: SecondMainButton(
                 text: 'Gửi',
                 onPress: () {
-                  if (ratingStar.round() < 0) {
+                  if (ratingStar <= 0) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng đánh giá!"),
                     ));
-                  } else if (comment == null ||
-                      comment.isEmpty ||
-                      comment == "") {
+                  } else if (comment.isEmpty || comment == "") {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Vui lòng nhập đánh giá!"),
                     ));
@@ -142,6 +162,12 @@ class _RatingAndCommentPageState extends State<RatingAndCommentPage> {
                               ),
                               true);
                         });
+                        Fluttertoast.showToast(
+                            msg: "Đánh giá thành công!",
+                            textColor: Colors.white,
+                            backgroundColor:
+                                const Color.fromRGBO(137, 128, 255, 1),
+                            toastLength: Toast.LENGTH_SHORT);
                       }
                     });
                   }

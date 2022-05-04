@@ -78,7 +78,8 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -122,7 +123,13 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                             style: GoogleFonts.montserrat(),
                             controller: fromHourController,
                             maxLength: 2,
-                            decoration: const InputDecoration(counterText: ""),
+                            decoration: const InputDecoration(
+                              counterText: "",
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xff320444), width: 1),
+                              ),
+                            ),
                             onChanged: (value) {
                               setState(() {
                                 if (value.isNotEmpty) {
@@ -158,7 +165,13 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                           child: TextField(
                             style: GoogleFonts.montserrat(),
                             controller: fromMinuteController,
-                            decoration: const InputDecoration(counterText: ""),
+                            decoration: const InputDecoration(
+                              counterText: "",
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xff320444), width: 1),
+                              ),
+                            ),
                             maxLength: 2,
                             onChanged: (value) {
                               setState(() {
@@ -219,7 +232,13 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                         child: TextField(
                           style: GoogleFonts.montserrat(),
                           controller: toHourController,
-                          decoration: const InputDecoration(counterText: ""),
+                          decoration: const InputDecoration(
+                            counterText: "",
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xff320444), width: 1),
+                            ),
+                          ),
                           maxLength: 2,
                           onChanged: (value) {
                             setState(() {
@@ -256,7 +275,13 @@ class _UpdateSingleHourPageState extends State<UpdateSingleHourPage> {
                         child: TextField(
                           style: GoogleFonts.montserrat(),
                           controller: toMinuteController,
-                          decoration: const InputDecoration(counterText: ""),
+                          decoration: const InputDecoration(
+                            counterText: "",
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xff320444), width: 1),
+                            ),
+                          ),
                           maxLength: 2,
                           onChanged: (value) {
                             setState(() {

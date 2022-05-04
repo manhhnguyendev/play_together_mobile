@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/image_model.dart';
+import 'package:play_together_mobile/models/momo_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
 import 'package:play_together_mobile/models/user_balance_model.dart';
@@ -16,8 +17,8 @@ class UserService {
     ResponseModel<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/personal'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/personal'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<UserModel>.fromJson(json.decode(response.body));
@@ -34,8 +35,8 @@ class UserService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/personal'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/personal'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(userUpdateModel.toJson()),
       );
       if (response.statusCode == 204) {
@@ -53,8 +54,9 @@ class UserService {
     ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsNewAccount=true&IsPlayer=true&PageSize=5'),
-        headers: configJson.headerAuth(token),
+        Uri.parse(
+            '${api_url.users}?IsNewAccount=true&IsPlayer=true&PageSize=5'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<GetAllUserModel>.fromJson(
@@ -73,8 +75,8 @@ class UserService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?IsSkillSameHobbies=true&IsPlayer=true&PageSize=5'),
-        headers: configJson.headerAuth(token),
+            '${api_url.users}?IsSkillSameHobbies=true&IsPlayer=true&PageSize=5'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<GetAllUserModel>.fromJson(
@@ -92,8 +94,8 @@ class UserService {
     ResponseListModel<GetAllUserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}?IsOrderByRating=true&PageSize=5'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}?IsOrderByRating=true&PageSize=5'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<GetAllUserModel>.fromJson(
@@ -112,8 +114,8 @@ class UserService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}?IsRecentOrder=true&IsPlayer=true&PageSize=5'),
-        headers: configJson.headerAuth(token),
+            '${api_url.users}?IsRecentOrder=true&IsPlayer=true&PageSize=5'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<GetAllUserModel>.fromJson(
@@ -131,8 +133,8 @@ class UserService {
     ResponseModel<UserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$userId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/$userId'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<UserModel>.fromJson(json.decode(response.body));
@@ -149,8 +151,8 @@ class UserService {
     ResponseModel<PlayerModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$id'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/$id'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -168,8 +170,8 @@ class UserService {
     ResponseModel<GetAllUserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$id'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/$id'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -187,8 +189,8 @@ class UserService {
     ResponseModel<UserServiceModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/service/$userId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/service/$userId'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<UserServiceModel>.fromJson(
@@ -206,8 +208,8 @@ class UserService {
     ResponseModel<UserBalanceModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$userId/balance'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/$userId/balance'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<UserBalanceModel>.fromJson(
@@ -224,8 +226,8 @@ class UserService {
     ResponseModel<StatisticModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/statistic'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/statistic'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -243,8 +245,8 @@ class UserService {
     ResponseListModel<GameOfUserModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$userId/games?PageSize=50'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/$userId/games?PageSize=50'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<GameOfUserModel>.fromJson(
@@ -262,8 +264,8 @@ class UserService {
     ResponseListModel<ImageModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/$userId/images'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/$userId/images'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -281,8 +283,8 @@ class UserService {
     bool? result;
     try {
       response = await post(
-        Uri.parse('${apiUrl.users}/donates/$charityId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/donates/$charityId'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
       if (response.statusCode == 200) {
@@ -300,8 +302,8 @@ class UserService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/player'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/player'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(isPlayerModel.toJson()),
       );
       if (response.statusCode == 204) {
@@ -319,8 +321,8 @@ class UserService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/service'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/service'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(serviceUserModel.toJson()),
       );
       if (response.statusCode == 204) {
@@ -337,8 +339,8 @@ class UserService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/un-active-balance'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/un-active-balance'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 204) {
         result = true;
@@ -354,8 +356,8 @@ class UserService {
     bool? result;
     try {
       response = await post(
-        Uri.parse('${apiUrl.users}/deposit'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/deposit'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(depositModel.toJson()),
       );
       if (response.statusCode == 200) {
@@ -373,12 +375,51 @@ class UserService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/withdraw'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/withdraw'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(withdrawModel.toJson()),
       );
       if (response.statusCode == 204) {
         result = true;
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseModel<MomoModel>?> getLinkMomo(
+      MomoCreateModel momoCreateModel, dynamic token) async {
+    Response response;
+    ResponseModel<MomoModel>? result;
+    try {
+      response = await post(
+        Uri.parse(api_url.momo),
+        headers: config_json.headerAuth(token),
+        body: jsonEncode(momoCreateModel.toJson()),
+      );
+      if (response.statusCode == 200) {
+        result = ResponseModel<MomoModel>.fromJson(json.decode(response.body));
+      }
+    } on Exception {
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<ResponseListModel<UnActiveBalanceModel>?> getListUnActiveBalance(
+      dynamic token) async {
+    Response response;
+    ResponseListModel<UnActiveBalanceModel>? result;
+    try {
+      response = await get(
+        Uri.parse(
+            '${api_url.users}/un-active-balance?IsNew=true&isRelease=false'),
+        headers: config_json.headerAuth(token),
+      );
+      if (response.statusCode == 200) {
+        result = ResponseListModel<UnActiveBalanceModel>.fromJson(
+            json.decode(response.body));
       }
     } on Exception {
       rethrow;

@@ -8,7 +8,7 @@ const String emailNullError = "Vui lòng nhập email !";
 const String invalidEmailError = "Email nhập không đúng định dạng !";
 const String passNullError = "Vui lòng nhập mật khẩu !";
 const String invalidPassError =
-    "Mật khẩu 8-30 kí tự, có 1 số, 1 chữ hoa và kí tự đặc biệt";
+    "Mật khẩu 8-30 kí tự có số, chữ hoa & kí tự đặc biệt";
 const String matchPassError = "Mật khẩu xác nhận không trùng khớp !";
 const String confirmNullError = "Mật khẩu xác nhận lại chưa được nhập !";
 const String otpNullError = "Mã OTP chưa đủ 6 kí tự số !";

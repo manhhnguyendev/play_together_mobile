@@ -91,7 +91,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       text: "THAY ĐỔI MẬT KHẨU",
                       onPress: () {
                         if (_formKey.currentState == null) {
-                          print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           if (listErrorPass.length == 1 &&

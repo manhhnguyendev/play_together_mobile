@@ -39,6 +39,7 @@ class _AddNewHourState extends State<AddNewHour> {
   int dayOfWeek = 1;
   bool checkFirstTime = true;
   late OnlineHourModel newOnlineHourModel;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -51,7 +52,8 @@ class _AddNewHourState extends State<AddNewHour> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -93,12 +95,16 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isMonday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.2,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
+                      style: TextButton.styleFrom(primary: Colors.black),
                       onPressed: () {
                         setState(() {
                           if (!isMonday) {
@@ -122,9 +128,6 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isMonday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
                     ),
                   ),
                 ),
@@ -136,12 +139,15 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isTuesday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.2,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         setState(() {
                           if (!isTuesday) {
@@ -165,9 +171,7 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isTuesday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
+                      style: TextButton.styleFrom(primary: Colors.black),
                     ),
                   ),
                 ),
@@ -179,12 +183,15 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isWednesday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.2,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         setState(() {
                           if (!isWednesday) {
@@ -208,9 +215,7 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isWednesday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
+                      style: TextButton.styleFrom(primary: Colors.black),
                     ),
                   ),
                 ),
@@ -222,12 +227,15 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isThursday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.2,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         setState(() {
                           if (!isThursday) {
@@ -251,9 +259,7 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isThursday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
+                      style: TextButton.styleFrom(primary: Colors.black),
                     ),
                   ),
                 ),
@@ -274,12 +280,15 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isFriday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.25,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         setState(() {
                           if (!isFriday) {
@@ -303,9 +312,7 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isFriday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
+                      style: TextButton.styleFrom(primary: Colors.black),
                     ),
                   ),
                 ),
@@ -317,12 +324,15 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isSaturday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.25,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         setState(() {
                           if (!isSaturday) {
@@ -346,9 +356,7 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isSaturday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
+                      style: TextButton.styleFrom(primary: Colors.black),
                     ),
                   ),
                 ),
@@ -360,12 +368,15 @@ class _AddNewHourState extends State<AddNewHour> {
                     border: Border.all(
                       color: const Color(0xff8980FF),
                     ),
+                    color: isSunday
+                        ? const Color(0xff8980FF).withOpacity(1)
+                        : const Color(0xff8980FF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: SizedBox(
                     width: width * 0.3,
                     height: height * 0.05,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         setState(() {
                           if (!isSunday) {
@@ -389,9 +400,7 @@ class _AddNewHourState extends State<AddNewHour> {
                           )
                         ],
                       ),
-                      color: isSunday
-                          ? const Color(0xff8980FF).withOpacity(1)
-                          : const Color(0xff8980FF).withOpacity(0.1),
+                      style: TextButton.styleFrom(primary: Colors.black),
                     ),
                   ),
                 ),
@@ -412,7 +421,13 @@ class _AddNewHourState extends State<AddNewHour> {
                       style: GoogleFonts.montserrat(),
                       controller: fromHourController,
                       maxLength: 2,
-                      decoration: const InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(
+                        counterText: "",
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xff320444), width: 1),
+                        ),
+                      ),
                       onChanged: (value) {
                         setState(() {
                           if (value.isNotEmpty) {
@@ -447,7 +462,13 @@ class _AddNewHourState extends State<AddNewHour> {
                     child: TextField(
                       style: GoogleFonts.montserrat(),
                       controller: fromMinuteController,
-                      decoration: const InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(
+                        counterText: "",
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xff320444), width: 1),
+                        ),
+                      ),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
@@ -507,7 +528,13 @@ class _AddNewHourState extends State<AddNewHour> {
                     child: TextField(
                       style: GoogleFonts.montserrat(),
                       controller: toHourController,
-                      decoration: const InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(
+                        counterText: "",
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xff320444), width: 1),
+                        ),
+                      ),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
@@ -542,7 +569,13 @@ class _AddNewHourState extends State<AddNewHour> {
                     child: TextField(
                       style: GoogleFonts.montserrat(),
                       controller: toMinuteController,
-                      decoration: const InputDecoration(counterText: ""),
+                      decoration: const InputDecoration(
+                        counterText: "",
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xff320444), width: 1),
+                        ),
+                      ),
                       maxLength: 2,
                       onChanged: (value) {
                         setState(() {
@@ -620,10 +653,10 @@ class _AddNewHourState extends State<AddNewHour> {
                   if (dayOfWeek == 1) {
                     valid = false;
                   }
-                  if (fromHour.isEmpty || fromHour == null || fromHour == "") {
+                  if (fromHour.isEmpty || fromHour == "") {
                     valid = false;
                   }
-                  if (toHour.isEmpty || toHour == null || toHour == "") {
+                  if (toHour.isEmpty || toHour == "") {
                     valid = false;
                   }
                   if (fromHour.isNotEmpty && toHour.isNotEmpty) {

@@ -29,22 +29,56 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
+  final ScrollController _scrollController = ScrollController();
   UserModel? lateUser;
   List<OrderModel> _listOrder = [];
   List<NotificationModel> _listNotification = [];
   bool checkFirstTime = true;
   bool checkEmptyNotification = false;
+  int pageSize = 10;
+  bool checkHasNext = false;
+  bool checkGetData = false;
 
   Future loadListNotifications() {
     Future<ResponseListModel<NotificationModel>?> listNotificationFuture =
-        NotificationService().getNotifications(widget.tokenModel.message);
+        NotificationService()
+            .getNotifications(widget.tokenModel.message, pageSize);
     listNotificationFuture.then((_notificationList) {
-      if (checkFirstTime) {
+      if (checkFirstTime || checkGetData) {
         _listNotification = _notificationList!.content;
         checkFirstTime = false;
+        if (_notificationList.hasNext == false) {
+          checkHasNext = true;
+        } else {
+          checkHasNext = false;
+        }
       }
     });
     return listNotificationFuture;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        getMoreData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void getMoreData() {
+    if (checkHasNext == false) {
+      pageSize += 10;
+      checkGetData = true;
+    }
   }
 
   @override
@@ -79,10 +113,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ),
             ),
             body: SingleChildScrollView(
+              controller: _scrollController,
               child: FutureBuilder(
                 future: loadListNotifications(),
                 builder: (context, snapshot) {
-                  if (_listNotification.isEmpty) {
+                  if (_listNotification.isEmpty && checkHasNext != false) {
                     checkEmptyNotification = true;
                   } else {
                     checkEmptyNotification = false;
@@ -105,6 +140,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               child: Text('Không có thông báo',
                                   style: GoogleFonts.montserrat()),
                             )),
+                        Visibility(
+                          visible: !checkHasNext,
+                          child: _buildProgressIndicator(),
+                        )
                       ]));
                 },
               ),
@@ -116,6 +155,20 @@ class _NotificationsPageState extends State<NotificationsPage> {
             ),
           );
         });
+  }
+
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: !checkHasNext ? 1.0 : 00,
+          child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromRGBO(137, 128, 255, 1))),
+        ),
+      ),
+    );
   }
 
   Widget buildListNotification(NotificationModel _notificationModel) {

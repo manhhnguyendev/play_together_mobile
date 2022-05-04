@@ -31,7 +31,7 @@ class HistoryHiringCard extends StatefulWidget {
 
 class _HistoryHiringCardState extends State<HistoryHiringCard> {
   final formatCurrency = NumberFormat.simpleCurrency(locale: 'vi');
-  bool checkReorder = false;
+  bool checkReorder = true;
   bool checkStatus = true;
 
   @override
@@ -58,6 +58,12 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
       checkStatus = false;
     } else {
       checkStatus = true;
+    }
+
+    if (widget.orderModel.toUser!.id == widget.userModel.id) {
+      checkReorder = false;
+    } else {
+      checkReorder = true;
     }
 
     return Container(
@@ -125,7 +131,9 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.orderModel.toUser!.name,
+                      widget.orderModel.user!.id == widget.userModel.id
+                          ? widget.orderModel.toUser!.name
+                          : widget.orderModel.user!.name,
                       style: GoogleFonts.montserrat(
                           fontSize: 18, color: Colors.black),
                     ),
@@ -141,7 +149,16 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
                 Visibility(
                   visible: checkStatus,
                   child: Text(
-                    widget.orderModel.finalPrices.toStringAsFixed(0).toVND(),
+                    widget.orderModel.user!.id == widget.userModel.id
+                        ? '− ' +
+                            (widget.orderModel.finalPrices /
+                                    (1 - widget.orderModel.percentSub))
+                                .toStringAsFixed(0)
+                                .toVND()
+                        : '+ ' +
+                            widget.orderModel.finalPrices
+                                .toStringAsFixed(0)
+                                .toVND(),
                     style: GoogleFonts.montserrat(
                         fontSize: 18, color: Colors.black),
                   ),
@@ -154,7 +171,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
             Row(
               children: [
                 Visibility(
-                  visible: true,
+                  visible: checkReorder,
                   child: GestureDetector(
                     onTap: () {
                       Future<ResponseModel<PlayerModel>?> getPlayerByIdFuture =
@@ -283,7 +300,7 @@ class _HistoryHiringCardState extends State<HistoryHiringCard> {
     if (status == 'Interrupt') {
       checkReorder = true;
       return Text(
-        'Người dùng bị khóa',
+        'Bị gián đoạn',
         style: GoogleFonts.montserrat(fontSize: 15, color: Colors.grey),
       );
     }

@@ -30,12 +30,18 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
   List<CheckBoxState> listGamesCheckBox = [];
   List<GamesModel> listAllGames = [];
   List listGamesChoosen = [];
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: getAllGames(),
         builder: (context, snapshot) {
+          if (listGamesCheckBox.isEmpty) {
+            isLoading = true;
+          } else {
+            isLoading = false;
+          }
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(50),
@@ -44,7 +50,8 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(
                       Icons.arrow_back_ios,
                     ),
@@ -63,18 +70,29 @@ class _AddNewSkillsPageState extends State<AddNewSkillsPage> {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Column(
-                    children: List.generate(
-                      listGamesCheckBox.length,
-                      (index) => buildSingleCheckBox(listGamesCheckBox[index]),
+            body: isLoading
+                ? const Center(
+                    child: SizedBox(
+                      height: 40.0,
+                      width: 40.0,
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Color.fromRGBO(137, 128, 255, 1))),
                     ),
-                  ),
-                ])),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Column(
+                          children: List.generate(
+                            listGamesCheckBox.length,
+                            (index) =>
+                                buildSingleCheckBox(listGamesCheckBox[index]),
+                          ),
+                        ),
+                      ])),
             bottomNavigationBar: BottomAppBar(
               elevation: 0,
               child: Padding(

@@ -12,6 +12,7 @@ import 'package:play_together_mobile/models/rating_comment_model.dart';
 import 'package:play_together_mobile/models/search_history_model.dart';
 import 'package:play_together_mobile/models/system_feedback_model.dart';
 import 'package:play_together_mobile/models/transaction_model.dart';
+import 'package:play_together_mobile/models/user_balance_model.dart';
 import 'package:play_together_mobile/models/user_model.dart';
 
 class ResponseListModel<T> {
@@ -75,6 +76,9 @@ class ResponseListModel<T> {
           as ResponseListModel<T>;
     } else if (T == ImageModel) {
       return ListImageModelResponse.fromJson(json) as ResponseListModel<T>;
+    } else if (T == UnActiveBalanceModel) {
+      return ListUnActiveBalanceModelResponse.fromJson(json)
+          as ResponseListModel<T>;
     }
     throw UnsupportedError('Not Supported Type');
   }
@@ -94,6 +98,16 @@ class ListGetAllUserModelResponse extends ResponseListModel<GetAllUserModel> {
       : super._fromJson(json) {
     content = (json['content'] as List<dynamic>)
         .map((dynamic item) => GetAllUserModel.fromJson(item))
+        .toList();
+  }
+}
+
+class ListUnActiveBalanceModelResponse
+    extends ResponseListModel<UnActiveBalanceModel> {
+  ListUnActiveBalanceModelResponse.fromJson(Map<String, dynamic> json)
+      : super._fromJson(json) {
+    content = (json['content'] as List<dynamic>)
+        .map((dynamic item) => UnActiveBalanceModel.fromJson(item))
         .toList();
   }
 }

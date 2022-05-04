@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/online_hour_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 
@@ -14,8 +14,8 @@ class DatingService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}/$userId/datings?PageSize=100&SortByDay=true'),
-        headers: configJson.headerAuth(token),
+            '${api_url.users}/$userId/datings?PageSize=100&SortByDay=true'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseListModel<OnlineHourModel>.fromJson(
@@ -33,8 +33,8 @@ class DatingService {
     bool? result = false;
     try {
       response = await post(
-        Uri.parse(apiUrl.dating),
-        headers: configJson.headerAuth(token),
+        Uri.parse(api_url.dating),
+        headers: config_json.headerAuth(token),
         body: json.encoder.convert(createOnlineHourModel),
       );
       if (response.statusCode == 200) {
@@ -52,8 +52,8 @@ class DatingService {
     bool? result = false;
     try {
       response = await put(
-        Uri.parse('${apiUrl.dating}/$datingId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.dating}/$datingId'),
+        headers: config_json.headerAuth(token),
         body: json.encoder.convert(updateOnlineHourModel),
       );
       if (response.statusCode == 204) {
@@ -70,8 +70,8 @@ class DatingService {
     bool? result = false;
     try {
       response = await delete(
-        Uri.parse('${apiUrl.dating}/$id'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.dating}/$id'),
+        headers: config_json.headerAuth(token),
         body: json.encoder.convert(id),
       );
       if (response.statusCode == 204) {

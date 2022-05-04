@@ -138,7 +138,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
   }
 
   void convertBirthday() {
-    if (dateOfBirth == null) {
+    if (dateOfBirth.toString().isEmpty) {
       dateDisplay.value = "Ngày sinh của bạn";
     } else {
       dateDisplay.value =
@@ -235,14 +235,12 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                             ),
                           ),
                         ),
-                        FormError(listError: listErrorProvince),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         buildBirthdayField(),
-                        FormError(listError: listErrorBirthday),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         Container(
                           decoration: BoxDecoration(
@@ -286,7 +284,6 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                       text: "HOÀN TẤT",
                       onPress: () {
                         if (_formKey.currentState == null) {
-                          print("_formKey.currentState is null!");
                         } else if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           if (listErrorName.length == 1 &&
@@ -303,10 +300,10 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                             register.dateOfBirth = dateOfBirth.toString();
                             register.gender = gender;
                             register.city = city!;
-                            Future<RegisterModel?> registerModelFuture =
+                            Future<bool?> registerModelFuture =
                                 RegisterService().register(register);
                             registerModelFuture.then((registerModel) {
-                              if (registerModel != null) {
+                              if (registerModel == true) {
                                 Fluttertoast.showToast(
                                     msg: "Đăng kí tài khoản thành công",
                                     textColor: Colors.white,
@@ -496,25 +493,14 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
           lastDate: DateTime(DateTime.now().year + 1),
         ).then((date) {
           dateOfBirth = date!;
-          if (listErrorBirthday.contains(birthdayNullError)) {
-            removeError(listErrorBirthday, error: birthdayNullError);
-          }
           convertBirthday();
         });
-      },
-      validator: (value) {
-        if ((value!.isEmpty) &&
-            !listErrorBirthday.contains(birthdayNullError)) {
-          addError(listErrorBirthday, error: birthdayNullError);
-          return "";
-        }
-        return null;
       },
     );
   }
 
-  Container buildProvinceField() {
-    return Container(
+  SizedBox buildProvinceField() {
+    return SizedBox(
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           isExpanded: true,
@@ -529,9 +515,6 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
           elevation: 16,
           onChanged: (value) {
             city = value as String;
-            if (listErrorProvince.contains(cityNullError)) {
-              removeError(listErrorProvince, error: cityNullError);
-            }
             setState(() {
               city = value;
             });

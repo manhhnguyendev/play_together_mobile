@@ -32,6 +32,7 @@ class CharityPage extends StatefulWidget {
 }
 
 class _CharityPageState extends State<CharityPage> {
+  final ScrollController _scrollController = ScrollController();
   UserModel? lateUser;
   List<OrderModel> _listOrder = [];
   late String search;
@@ -39,17 +40,52 @@ class _CharityPageState extends State<CharityPage> {
   List<CharityModel> _listCharity = [];
   bool checkFirstTime = true;
   bool checkSearchFirstTime = true;
+  bool checkEmptyCharity = false;
+  int pageSize = 10;
+  bool checkHasNext = false;
+  bool checkGetData = false;
 
   Future loadListCharity() {
     Future<ResponseListModel<CharityModel>?> listCharityModelFuture =
-        CharityService().getAllCharities(widget.tokenModel.message);
+        CharityService().getAllCharities(widget.tokenModel.message, pageSize);
     listCharityModelFuture.then((_charityList) {
-      if (checkFirstTime) {
-        _listCharity = _charityList!.content;
-        checkFirstTime = false;
+      if (_charityList != null) {
+        if (checkFirstTime || checkGetData) {
+          _listCharity = _charityList.content;
+          checkFirstTime = false;
+          if (_charityList.hasNext == false) {
+            checkHasNext = true;
+          } else {
+            checkHasNext = false;
+          }
+        }
       }
     });
     return listCharityModelFuture;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        getMoreData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void getMoreData() {
+    if (checkHasNext == false) {
+      pageSize += 10;
+      checkGetData = true;
+    }
   }
 
   @override
@@ -122,18 +158,39 @@ class _CharityPageState extends State<CharityPage> {
               ),
             ),
             body: SingleChildScrollView(
+                controller: _scrollController,
                 child: FutureBuilder(
                     future: loadListCharity(),
                     builder: (context, snapshot) {
+                      if (_listCharity.isEmpty && checkHasNext != false) {
+                        checkEmptyCharity = true;
+                      } else {
+                        checkEmptyCharity = false;
+                      }
                       return Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Column(
-                              children: List.generate(
-                                  _listCharity.isNotEmpty
-                                      ? _listCharity.length
-                                      : 0,
-                                  (index) =>
-                                      buildListSearch(_listCharity[index]))));
+                            children: [
+                              Column(
+                                  children: List.generate(
+                                      _listCharity.isNotEmpty
+                                          ? _listCharity.length
+                                          : 0,
+                                      (index) => buildListSearch(
+                                          _listCharity[index]))),
+                              Visibility(
+                                  visible: checkEmptyCharity,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text('Không có dữ liệu',
+                                        style: GoogleFonts.montserrat()),
+                                  )),
+                              Visibility(
+                                visible: !checkHasNext,
+                                child: _buildProgressIndicator(),
+                              )
+                            ],
+                          ));
                     })),
             bottomNavigationBar: BottomBar(
               userModel: widget.userModel,
@@ -142,6 +199,20 @@ class _CharityPageState extends State<CharityPage> {
             ),
           );
         });
+  }
+
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: !checkHasNext ? 1.0 : 00,
+          child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromRGBO(137, 128, 255, 1))),
+        ),
+      ),
+    );
   }
 
   Widget buildListSearch(CharityModel _charityModel) {

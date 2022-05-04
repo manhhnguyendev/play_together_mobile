@@ -1,6 +1,7 @@
+// ignore_for_file: deprecated_member_use, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:play_together_mobile/helpers/api_url.dart';
 import 'package:play_together_mobile/models/game_of_user_model.dart';
 import 'package:play_together_mobile/models/rank_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
@@ -26,12 +27,18 @@ class UpdateGameSkillsPage extends StatefulWidget {
 
 class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
   List<GameOfUserModel> listGameOfUser = [];
+  bool checkEmptyGameOfUser = false;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: getAllGameOfUser(),
         builder: (context, snapshot) {
+          if (listGameOfUser.isEmpty) {
+            checkEmptyGameOfUser = true;
+          } else {
+            checkEmptyGameOfUser = false;
+          }
           return Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(50),
@@ -40,7 +47,8 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(
                       Icons.arrow_back_ios,
                     ),
@@ -79,10 +87,19 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
             ),
             body: SingleChildScrollView(
               padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: List.generate(listGameOfUser.length,
-                    (index) => buildSkills(listGameOfUser[index])),
-              ),
+              child: Column(children: [
+                Column(
+                  children: List.generate(listGameOfUser.length,
+                      (index) => buildSkills(listGameOfUser[index])),
+                ),
+                Visibility(
+                    visible: checkEmptyGameOfUser,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text('Không có dữ liệu',
+                          style: GoogleFonts.montserrat()),
+                    )),
+              ]),
             ),
           );
         });
@@ -198,26 +215,35 @@ class _UpdateGameSkillsPageState extends State<UpdateGameSkillsPage> {
                     ),
                     IconButton(
                         onPressed: () {
-                          checkOnPress = true;
-                          Future<bool?> deleteFuture = GameOfUserService()
-                              .deleteGameOfUser(_gameOfUserModel.id,
-                                  widget.tokenModel.message);
-                          deleteFuture.then((value) {
-                            setState(() {
-                              if (value == true) {
-                                checkOnPress = false;
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("Xóa thành công"),
-                                ));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("Xóa thất bại"),
-                                ));
-                              }
+                          if (widget.userModel.isPlayer == true &&
+                              listGameOfUser.length <= 1) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Trạng thái nhận yêu cầu thuê đang bật, bạn cần có tối thiểu 1 kỹ năng"),
+                            ));
+                          } else {
+                            checkOnPress = true;
+                            Future<bool?> deleteFuture = GameOfUserService()
+                                .deleteGameOfUser(_gameOfUserModel.id,
+                                    widget.tokenModel.message);
+                            deleteFuture.then((value) {
+                              setState(() {
+                                if (value == true) {
+                                  checkOnPress = false;
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Xóa thành công"),
+                                  ));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Xóa thất bại"),
+                                  ));
+                                }
+                              });
                             });
-                          });
+                          }
                         },
                         icon: const Icon(
                           FontAwesomeIcons.solidTrashAlt,

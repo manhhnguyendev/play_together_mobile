@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +14,7 @@ import 'package:play_together_mobile/widgets/feedback_card.dart';
 class SystemFeedbackPage extends StatefulWidget {
   final UserModel userModel;
   final TokenModel tokenModel;
+
   const SystemFeedbackPage(
       {Key? key, required this.userModel, required this.tokenModel})
       : super(key: key);
@@ -48,7 +51,8 @@ class _SystemFeedbackPageState extends State<SystemFeedbackPage> {
                 elevation: 1,
                 leading: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: FlatButton(
+                  child: TextButton(
+                    style: TextButton.styleFrom(primary: Colors.black),
                     child: const Icon(
                       Icons.arrow_back_ios,
                     ),
@@ -88,9 +92,7 @@ class _SystemFeedbackPageState extends State<SystemFeedbackPage> {
             body: SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                  children: List.generate(listFeedback.length,
-                      (index) => buildFeedbackCard(listFeedback[index]))),
+              child: buildListEmpty(listFeedback),
             )),
           );
         });
@@ -104,5 +106,19 @@ class _SystemFeedbackPageState extends State<SystemFeedbackPage> {
           userModel: widget.userModel,
           systemFeedbackModel: model),
     );
+  }
+
+  Widget buildListEmpty(List<SystemFeedbackModel> listFeedback) {
+    if (listFeedback.isNotEmpty) {
+      return Column(
+          children: List.generate(listFeedback.length,
+              (index) => buildFeedbackCard(listFeedback[index])));
+    } else {
+      return Container(
+        alignment: Alignment.center,
+        child: Text('Không có dữ liệu',
+            style: GoogleFonts.montserrat(fontSize: 15)),
+      );
+    }
   }
 }

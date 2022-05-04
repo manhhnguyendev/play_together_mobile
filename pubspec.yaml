@@ -60,13 +60,14 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_format_money_vietnam: ^0.0.2
   fluttertoast: ^8.0.7
+  flutter_native_splash: ^2.1.6
   
   #Another
   provider: ^6.0.2
   image_picker: ^0.8.4+11
-  momo_vn: ^2.0.1
   pattern_formatter: ^2.0.0
-  page_transition: ^2.0.5
+  url_launcher: ^6.1.0
+  shimmer: ^2.0.0
   
 dev_dependencies:
   flutter_test:
@@ -123,3 +124,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_native_splash:
+      color: ffffff
+      image: assets/images/logo_splash.png
+      
+      

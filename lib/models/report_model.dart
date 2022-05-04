@@ -39,13 +39,11 @@ class ReportCreateModel {
 class ReportOrderModel {
   String id;
   String reportMessage;
-  bool isApprove;
   String createdDate;
 
   ReportOrderModel({
     required this.id,
     required this.reportMessage,
-    required this.isApprove,
     required this.createdDate,
   });
 
@@ -53,14 +51,12 @@ class ReportOrderModel {
       ReportOrderModel(
         id: json['id'] as String,
         reportMessage: json['reportMessage'] as String,
-        isApprove: json['isApprove'] as bool,
         createdDate: json['createdDate'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "reportMessage": reportMessage,
-        "isApprove": isApprove,
         "createDate": createdDate
       };
 }

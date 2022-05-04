@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/password_model.dart';
 import 'package:play_together_mobile/models/token_model.dart';
 
@@ -12,8 +12,8 @@ class PasswordService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.accounts}/reset-password'),
-        headers: configJson.header(),
+        Uri.parse('${api_url.accounts}/reset-password'),
+        headers: config_json.header(),
         body: jsonEncode(resetPasswordModel.toJson()),
       );
       if (response.statusCode == 200) {
@@ -30,8 +30,8 @@ class PasswordService {
     TokenModel? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.accounts}/reset-password-token'),
-        headers: configJson.header(),
+        Uri.parse('${api_url.accounts}/reset-password-token'),
+        headers: config_json.header(),
         body: jsonEncode(emailModel.toJson()),
       );
       if (response.statusCode == 200) {
@@ -49,11 +49,10 @@ class PasswordService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.accounts}/change-password'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.accounts}/change-password'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(changePasswordModel.toJson()),
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
         result = true;
       }

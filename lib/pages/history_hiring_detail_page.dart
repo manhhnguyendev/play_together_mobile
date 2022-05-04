@@ -33,6 +33,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
   bool checkReason = true;
   bool checkRating = true;
   bool checkComment = true;
+  bool checkPlayer = true;
+  bool checkExpectedPrice = true;
   int rate = 5;
 
   @override
@@ -58,6 +60,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       checkFinalPrice = true;
     } else if (widget.orderDetailModel.status == "Cancel") {
       checkFinalPrice = true;
+    } else if (widget.orderDetailModel.toUserId == widget.userModel.id) {
+      checkFinalPrice = true;
     } else {
       checkFinalPrice = false;
     }
@@ -79,6 +83,18 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
       checkRating = true;
     } else {
       checkRating = false;
+    }
+
+    if (widget.orderDetailModel.toUserId == widget.userModel.id) {
+      checkPlayer = true;
+    } else {
+      checkPlayer = false;
+    }
+
+    if (widget.orderDetailModel.userId == widget.userModel.id) {
+      checkExpectedPrice = true;
+    } else {
+      checkExpectedPrice = false;
     }
 
     rating = widget.orderDetailModel.status == 'Reject'
@@ -113,7 +129,8 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -246,22 +263,46 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
-                child: Row(
-                  children: [
-                    Text(
-                      'Chi phí dự kiến: ',
-                      style: GoogleFonts.montserrat(fontSize: 15),
-                    ),
-                    const Spacer(),
-                    Text(
-                      widget.orderDetailModel.totalPrices
-                          .toStringAsFixed(0)
-                          .toVND(),
-                      style: GoogleFonts.montserrat(fontSize: 15),
-                    ),
-                  ],
+              Visibility(
+                visible: checkExpectedPrice,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Chi phí dự kiến: ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.orderDetailModel.totalPrices
+                            .toStringAsFixed(0)
+                            .toVND(),
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: checkPlayer,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Số tiền dự kiến: ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        widget.orderDetailModel.totalPrices
+                            .toStringAsFixed(0)
+                            .toVND(),
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Visibility(
@@ -272,6 +313,28 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
                     children: [
                       Text(
                         'Chi phí cuối cùng: ',
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
+                      const Spacer(),
+                      Text(
+                        (widget.orderDetailModel.finalPrices /
+                                (1 - widget.orderDetailModel.percentSub))
+                            .toStringAsFixed(0)
+                            .toVND(),
+                        style: GoogleFonts.montserrat(fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: checkPlayer,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 25, 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Số tiền nhận được: ',
                         style: GoogleFonts.montserrat(fontSize: 15),
                       ),
                       const Spacer(),
@@ -479,7 +542,7 @@ class _HistoryHiringDetailState extends State<HistoryHiringDetail> {
 
     if (status == 'Interrupt') {
       return Text(
-        'Người dùng bị khóa',
+        'Bị gián đoạn',
         style: GoogleFonts.montserrat(fontSize: 17, color: Colors.grey),
       );
     }

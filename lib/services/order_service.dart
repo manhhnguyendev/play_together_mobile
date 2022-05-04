@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:play_together_mobile/helpers/api_url.dart' as apiUrl;
-import 'package:play_together_mobile/helpers/config_json.dart' as configJson;
+import 'package:play_together_mobile/helpers/api_url.dart' as api_url;
+import 'package:play_together_mobile/helpers/config_json.dart' as config_json;
 import 'package:play_together_mobile/models/order_model.dart';
 import 'package:play_together_mobile/models/response_list_model.dart';
 import 'package:play_together_mobile/models/response_model.dart';
@@ -14,8 +14,8 @@ class OrderService {
     ResponseModel<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.orders}/$id'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.orders}/$id'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<OrderModel>.fromJson(json.decode(response.body));
@@ -32,8 +32,8 @@ class OrderService {
     ResponseModel<OrderDetailModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.orders}/detail/$orderId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.orders}/detail/$orderId'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result = ResponseModel<OrderDetailModel>.fromJson(
@@ -52,8 +52,8 @@ class OrderService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}/orders/requests?IsNew=true&PageSize=3&Status=$status'),
-        headers: configJson.headerAuth(token),
+            '${api_url.users}/orders/requests?IsNew=true&PageSize=3&Status=$status'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -72,8 +72,8 @@ class OrderService {
     try {
       response = await get(
         Uri.parse(
-            '${apiUrl.users}/orders/?IsNew=true&PageSize=3&Status=$status'),
-        headers: configJson.headerAuth(token),
+            '${api_url.users}/orders/?IsNew=true&PageSize=3&Status=$status'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -86,13 +86,13 @@ class OrderService {
   }
 
   Future<ResponseListModel<OrderModel>?> getAllOrdersFromCreateUser(
-      dynamic token) async {
+      dynamic token, int pageSize) async {
     Response response;
     ResponseListModel<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders?IsNew=true'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/orders?IsNew=true&PageSize=$pageSize'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -105,13 +105,14 @@ class OrderService {
   }
 
   Future<ResponseListModel<OrderModel>?> getAllOrdersFromReceivedUser(
-      dynamic token) async {
+      dynamic token, int pageSize) async {
     Response response;
     ResponseListModel<OrderModel>? result;
     try {
       response = await get(
-        Uri.parse('${apiUrl.users}/orders/requests?IsNew=true'),
-        headers: configJson.headerAuth(token),
+        Uri.parse(
+            '${api_url.users}/orders/requests?IsNew=true&PageSize=$pageSize'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 200) {
         result =
@@ -129,8 +130,8 @@ class OrderService {
     ResponseModel<OrderModel>? result;
     try {
       response = await post(
-        Uri.parse('${apiUrl.users}/orders/$toUserId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/orders/$toUserId'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(createOrderModel.toJson()),
       );
       if (response.statusCode == 201) {
@@ -142,13 +143,14 @@ class OrderService {
     return result;
   }
 
-  Future<bool?> cancelOrderRequest(String orderId, dynamic token, CancelOrderModel cancelOrderModel) async {
+  Future<bool?> cancelOrderRequest(
+      String orderId, dynamic token, CancelOrderModel cancelOrderModel) async {
     Response response;
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/orders/cancel/$orderId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/orders/cancel/$orderId'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(cancelOrderModel.toJson()),
       );
       if (response.statusCode == 204) {
@@ -166,8 +168,8 @@ class OrderService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/orders/$orderId/process'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/orders/$orderId/process'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(isAccept.toJson()),
       );
       if (response.statusCode == 204) {
@@ -185,8 +187,8 @@ class OrderService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.users}/orders/$orderId/process'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.users}/orders/$orderId/process'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(isAccept.toJson()),
       );
       if (response.statusCode == 204) {
@@ -203,8 +205,8 @@ class OrderService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.orders}/finish/$orderId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.orders}/finish/$orderId'),
+        headers: config_json.headerAuth(token),
       );
       if (response.statusCode == 204) {
         result = true;
@@ -221,8 +223,8 @@ class OrderService {
     bool? result;
     try {
       response = await put(
-        Uri.parse('${apiUrl.orders}/finish-soon/$orderId'),
-        headers: configJson.headerAuth(token),
+        Uri.parse('${api_url.orders}/finish-soon/$orderId'),
+        headers: config_json.headerAuth(token),
         body: jsonEncode(model.toJson()),
       );
       if (response.statusCode == 204) {

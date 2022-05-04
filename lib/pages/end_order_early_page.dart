@@ -85,7 +85,8 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
             centerTitle: true,
             leading: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: FlatButton(
+              child: TextButton(
+                style: TextButton.styleFrom(primary: Colors.black),
                 child: const Icon(
                   Icons.arrow_back_ios,
                 ),
@@ -293,7 +294,7 @@ class _EndOrderEarlyPageState extends State<EndOrderEarlyPage> {
                 child: SecondMainButton(
                     text: 'Kết thúc',
                     onPress: () {
-                      if (reason == null || reason.isEmpty || reason == "") {
+                      if (reason.isEmpty || reason == "") {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text("Vui lòng nhập lý do!"),

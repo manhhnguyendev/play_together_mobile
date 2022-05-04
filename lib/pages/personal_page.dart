@@ -19,6 +19,7 @@ import 'package:play_together_mobile/pages/select_deposit_method.dart';
 import 'package:play_together_mobile/pages/statistics_page.dart';
 import 'package:play_together_mobile/pages/system_feedback_page.dart';
 import 'package:play_together_mobile/pages/transaction_page.dart';
+import 'package:play_together_mobile/pages/un_active_balance.dart';
 import 'package:play_together_mobile/pages/update_hobbies_page.dart';
 import 'package:play_together_mobile/pages/user_profile_page.dart';
 import 'package:play_together_mobile/services/logout_service.dart';
@@ -187,19 +188,37 @@ class _PersonalPageState extends State<PersonalPage> {
                                 ]),
                                 Row(
                                   children: [
-                                    Text(
-                                      'Số khả dụng: ',
-                                      style:
-                                          GoogleFonts.montserrat(fontSize: 15),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UnActiveBalancePage(
+                                                    tokenModel:
+                                                        widget.tokenModel,
+                                                    userModel: widget.userModel,
+                                                  )),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Số dư khả dụng:',
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 15,
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
                                     ),
                                     Text(
-                                      widget.activeBalance != null
-                                          ? widget.activeBalance!
-                                              .toStringAsFixed(0)
-                                              .toVND()
-                                          : lateUser!.userBalance.activeBalance
-                                              .toStringAsFixed(0)
-                                              .toVND(),
+                                      ' ' +
+                                          (widget.activeBalance != null
+                                              ? widget.activeBalance!
+                                                  .toStringAsFixed(0)
+                                                  .toVND()
+                                              : lateUser!
+                                                  .userBalance.activeBalance
+                                                  .toStringAsFixed(0)
+                                                  .toVND()),
                                       style: GoogleFonts.montserrat(
                                           fontSize: 15, color: Colors.black),
                                     ),
@@ -211,85 +230,88 @@ class _PersonalPageState extends State<PersonalPage> {
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(border: Border.all()),
-                            height: 110,
+                            height: 118,
                             width: 1,
                           ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SelectDepositMethodPage(
-                                                tokenModel: widget.tokenModel,
-                                                userModel: widget.userModel,
-                                              )),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      const Icon(
-                                        FontAwesomeIcons.wallet,
-                                        size: 30,
-                                      ),
-                                      const SizedBox(
-                                        height: 0,
-                                      ),
-                                      Text(
-                                        'Nạp tiền',
-                                        style: GoogleFonts.montserrat(
-                                            fontSize: 15,
-                                            color: const Color(0xff320444)),
-                                      ),
-                                    ],
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SelectDepositMethodPage(
+                                                  tokenModel: widget.tokenModel,
+                                                  userModel: widget.userModel,
+                                                )),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        const Icon(
+                                          FontAwesomeIcons.wallet,
+                                          size: 30,
+                                        ),
+                                        const SizedBox(
+                                          height: 0,
+                                        ),
+                                        Text(
+                                          'Nạp tiền',
+                                          style: GoogleFonts.montserrat(
+                                              fontSize: 15,
+                                              color: const Color(0xff320444)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              EnterWithdrawAmount(
-                                                tokenModel: widget.tokenModel,
-                                                userModel: widget.userModel,
-                                              )),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      const Icon(
-                                        FontAwesomeIcons.moneyBill,
-                                        size: 30,
-                                      ),
-                                      const SizedBox(
-                                        height: 0,
-                                      ),
-                                      Text(
-                                        'Rút tiền',
-                                        style: GoogleFonts.montserrat(
-                                            fontSize: 15,
-                                            color: const Color(0xff320444)),
-                                      ),
-                                    ],
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EnterWithdrawAmount(
+                                                  tokenModel: widget.tokenModel,
+                                                  userModel: widget.userModel,
+                                                )),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        const Icon(
+                                          FontAwesomeIcons.moneyBill,
+                                          size: 30,
+                                        ),
+                                        const SizedBox(
+                                          height: 0,
+                                        ),
+                                        Text(
+                                          ' Rút tiền',
+                                          style: GoogleFonts.montserrat(
+                                              fontSize: 15,
+                                              color: const Color(0xff320444)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 7, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 6, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -325,7 +347,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -361,7 +383,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -397,7 +419,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -433,7 +455,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Future<ResponseModel<StatisticModel>?> statisticFuture =
@@ -484,7 +506,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -517,7 +539,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -532,7 +554,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       child: Row(
                         children: [
                           Text(
-                            'Trung tâm hỗ trợ',
+                            'Trung tâm phản hồi',
                             style: GoogleFonts.montserrat(fontSize: 20),
                           ),
                           const Spacer(),
@@ -553,7 +575,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    padding: const EdgeInsets.fromLTRB(15, 9, 15, 5),
                     child: FutureBuilder(
                         future: _initialization,
                         builder: (context, snapshot) {
@@ -576,7 +598,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                           context, const LoginPage(), true);
                                     });
                                     Fluttertoast.showToast(
-                                        msg: "Đăng xuất thành công",
+                                        msg: "ĐĂNG XUẤT THÀNH CÔNG",
                                         textColor: Colors.white,
                                         backgroundColor: const Color.fromRGBO(
                                             137, 128, 255, 1),
@@ -600,7 +622,9 @@ class _PersonalPageState extends State<PersonalPage> {
                               ),
                             );
                           }
-                          return const CircularProgressIndicator();
+                          return const SizedBox(
+                            height: 0,
+                          );
                         }),
                   ),
                 ],

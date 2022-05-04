@@ -19,8 +19,10 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
       required this.tokenModel,
       required this.userModel})
       : super(key: key);
+
   @override
   Size get preferredSize => Size.fromHeight(height);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -45,13 +47,13 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
+                  context,
+                  MaterialPageRoute(
                     builder: (context) => SearchHistoryAndRecommendPage(
-                          userModel: userModel,
-                          tokenModel: tokenModel,
-                        )),
-              );
+                      tokenModel: tokenModel,
+                      userModel: userModel,
+                    ),
+                  ));
             },
             child: Container(
               width: size.width * 0.7,
@@ -80,7 +82,6 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
           )
         ]),
       ),
-      // bottom: bottomAppBar,
     );
   }
 }

@@ -25,15 +25,14 @@ class UserCategoriesPage extends StatefulWidget {
 }
 
 class _UserCategoriesPageState extends State<UserCategoriesPage> {
-  final _formKey = GlobalKey<FormState>();
-  List<GamesModel>? listGames;
+  List<GamesModel> listGames = [];
   List<CreateHobbiesModel> listCreateHobbies = [];
-  List listGamesCheckBox = [];
+  List<CheckBoxState> listGamesCheckBox = [];
   List listGamesChoosen = [];
   bool checkFirstTime = true;
+  bool isLoading = false;
 
   Future getAllGames() {
-    listGames ??= [];
     Future<ResponseListModel<GamesModel>?> gameFuture =
         GameService().getAllGames(widget.tokenModel.message);
     gameFuture.then((value) {
@@ -41,75 +40,80 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
         if (checkFirstTime) {
           setState(() {
             listGames = value.content;
-            checkFirstTime = false;
+            for (var games in listGames) {
+              listGamesCheckBox
+                  .add(CheckBoxState(title: games.name, value: false));
+            }
           });
+          checkFirstTime = false;
         }
       }
     });
     return gameFuture;
   }
 
-  void createAListCheckBox() {
-    if (listGames == null) {
-    } else {
-      for (var i = 0; i < listGames!.length; i++) {
-        listGamesCheckBox.add(CheckBoxState(title: listGames![i].name));
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    createAListCheckBox();
     Size size = MediaQuery.of(context).size;
     return FutureBuilder(
         future: getAllGames(),
         builder: (context, snapshot) {
+          if (listGames.isEmpty) {
+            isLoading = true;
+          } else {
+            isLoading = false;
+          }
           return Scaffold(
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: size.width,
-                    height: size.height * 0.45,
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        image: DecorationImage(
-                            image: AssetImage(
-                                "assets/images/play_together_logo_text.png"),
-                            fit: BoxFit.cover)),
+            body: isLoading
+                ? const Center(
+                    child: SizedBox(
+                      height: 40.0,
+                      width: 40.0,
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Color.fromRGBO(137, 128, 255, 1))),
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          width: size.width,
+                          height: size.height * 0.45,
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/play_together_logo_text.png"),
+                                  fit: BoxFit.cover)),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Bạn thích tựa game nào (Chọn ít nhất 1 tựa game):',
+                                  style: GoogleFonts.montserrat(fontSize: 17),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: Column(
+                                    children: List.generate(
+                                        listGamesCheckBox.length,
+                                        (index) => buildSingleCheckBox(
+                                            listGamesCheckBox[index])),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Text(
-                              'Bạn thích tựa game nào (Chọn ít nhất 1 tựa game):',
-                              style: GoogleFonts.montserrat(fontSize: 17),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Column(
-                                children: List.generate(
-                                    listGamesCheckBox.length,
-                                    (index) => buildSingleCheckBox(
-                                        listGamesCheckBox[index])),
-                              ),
-                            ),
-                            //GoBackButton(text: "QUAY LẠI", onPress: () {})
-                          ],
-                        )),
-                  ),
-                ],
-              ),
-            ),
             bottomNavigationBar: BottomAppBar(
               elevation: 0,
               child: Padding(
@@ -126,7 +130,7 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
                         ));
                       } else {
                         for (var gameChoose in listGamesChoosen) {
-                          for (var game in listGames!) {
+                          for (var game in listGames) {
                             if (game.name.contains(gameChoose)) {
                               CreateHobbiesModel createHobbies =
                                   CreateHobbiesModel(gameId: game.id);
@@ -160,22 +164,26 @@ class _UserCategoriesPageState extends State<UserCategoriesPage> {
         });
   }
 
-  Widget buildSingleCheckBox(CheckBoxState cbState) => CheckboxListTile(
-        controlAffinity: ListTileControlAffinity.leading,
-        activeColor: const Color(0xff8980FF),
-        value: cbState.value,
-        onChanged: (value) => setState(() {
-          if (value == true) {
-            cbState.value = value!;
-            listGamesChoosen.add(cbState.title);
-          } else {
-            cbState.value = value!;
+  Widget buildSingleCheckBox(CheckBoxState cbState) {
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      activeColor: const Color(0xff8980FF),
+      value: cbState.value,
+      onChanged: (value) => setState(
+        () {
+          if (cbState.value) {
             listGamesChoosen.remove(cbState.title);
+            cbState.value = value!;
+          } else {
+            listGamesChoosen.add(cbState.title);
+            cbState.value = value!;
           }
-        }),
-        title: Text(
-          cbState.title,
-          style: GoogleFonts.montserrat(fontSize: 15),
-        ),
-      );
+        },
+      ),
+      title: Text(
+        cbState.title,
+        style: GoogleFonts.montserrat(fontSize: 15),
+      ),
+    );
+  }
 }

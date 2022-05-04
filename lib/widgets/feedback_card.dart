@@ -69,7 +69,7 @@ class _FeedbackCardState extends State<FeedbackCard> {
                     fontWeight: FontWeight.normal),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
               width: 120,
               child: Container(
@@ -78,7 +78,7 @@ class _FeedbackCardState extends State<FeedbackCard> {
                       buildApproveStatus(widget.systemFeedbackModel.isApprove)),
             ),
           ]),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -88,7 +88,7 @@ class _FeedbackCardState extends State<FeedbackCard> {
                 color: Colors.grey,
                 fontWeight: FontWeight.normal),
           ),
-          Divider(),
+          const Divider(),
         ],
       ),
     );

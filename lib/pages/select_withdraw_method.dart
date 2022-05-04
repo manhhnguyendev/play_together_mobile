@@ -31,7 +31,8 @@ class _SelectWithdrawMethodState extends State<SelectWithdrawMethod> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -98,14 +99,6 @@ class _SelectWithdrawMethodState extends State<SelectWithdrawMethod> {
                           "Thanh toán qua MOMO",
                           style: GoogleFonts.montserrat(
                               fontSize: 18, color: Colors.black),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Hỗ trợ từ 8:30 -> 22:00 (trừ CN, ngày lễ)",
-                          style: GoogleFonts.montserrat(
-                              fontSize: 15, color: Colors.grey),
                         ),
                       ],
                     ),

@@ -193,7 +193,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void convertBirthday() {
-    if (dateOfBirth == null) {
+    if (dateOfBirth.toString().isEmpty) {
       dateDisplay.value = "Ngày sinh của bạn";
     } else {
       dateDisplay.value =
@@ -243,7 +243,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -459,7 +460,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
               text: "CẬP NHẬT",
               onPress: () {
                 if (_formKey.currentState == null) {
-                  print("_formKey.currentState is null!");
                 } else if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   if (listErrorName.length == 1 &&
@@ -651,8 +651,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Container buildCityField() {
-    return Container(
+  SizedBox buildCityField() {
+    return SizedBox(
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           isExpanded: true,
@@ -758,8 +758,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           decoration: BoxDecoration(
               color: Colors.white,
               image: DecorationImage(
-                  image: NetworkImage(imageLink.imageLink),
-                  fit: BoxFit.cover)), //sua asset image thanh network
+                  image: NetworkImage(imageLink.imageLink), fit: BoxFit.cover)),
         ),
       ),
     );

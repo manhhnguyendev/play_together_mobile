@@ -30,6 +30,7 @@ class _SearchHistoryAndRecommendPageState
   List<SearchHistoryModel> listHotSearch = [];
   List<GamesModel> listMostFavoriteGame = [];
   String searchValue = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,8 @@ class _SearchHistoryAndRecommendPageState
         backgroundColor: Colors.white,
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: FlatButton(
+          child: TextButton(
+            style: TextButton.styleFrom(primary: Colors.black),
             child: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pop(context);
@@ -93,83 +95,96 @@ class _SearchHistoryAndRecommendPageState
           ),
         ),
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Tìm kiếm gần đây',
-                style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 18),
+      body: isLoading
+          ? const Center(
+              child: SizedBox(
+                height: 40.0,
+                width: 40.0,
+                child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromRGBO(137, 128, 255, 1))),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: FutureBuilder(
-                future: loadListSearchHistory(),
-                builder: (context, snapshot) {
-                  return Container(
+            )
+          : SingleChildScrollView(
+              child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Container(
                     alignment: Alignment.topLeft,
-                    child: Column(
-                      children: List.generate(
-                          listSearchHistory.length,
-                          (index) => buildSearchHistory(
-                              listSearchHistory[index].searchString)),
+                    child: Text(
+                      'Tìm kiếm gần đây',
+                      style: GoogleFonts.montserrat(
+                          color: Colors.grey, fontSize: 18),
                     ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Top tìm kiếm',
-                style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 18),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: FutureBuilder(
-                future: loadListHotSearch(),
-                builder: (context, snapshot) {
-                  return Container(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: FutureBuilder(
+                      future: loadListSearchHistory(),
+                      builder: (context, snapshot) {
+                        return Container(
+                          alignment: Alignment.topLeft,
+                          child: Column(
+                            children: List.generate(
+                                listSearchHistory.length,
+                                (index) => buildSearchHistory(
+                                    listSearchHistory[index].searchString)),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
                     alignment: Alignment.topLeft,
-                    child: Column(
-                      children: List.generate(
-                          listHotSearch.length,
-                          (index) => buildSearchHistory(
-                              listHotSearch[index].searchString)),
+                    child: Text(
+                      'Top tìm kiếm',
+                      style: GoogleFonts.montserrat(
+                          color: Colors.grey, fontSize: 18),
                     ),
-                  );
-                },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: FutureBuilder(
+                      future: loadListHotSearch(),
+                      builder: (context, snapshot) {
+                        return Container(
+                          alignment: Alignment.topLeft,
+                          child: Column(
+                            children: List.generate(
+                                listHotSearch.length,
+                                (index) => buildSearchHistory(
+                                    listHotSearch[index].searchString)),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Các tựa game hot',
+                      style: GoogleFonts.montserrat(
+                          color: Colors.grey, fontSize: 18),
+                    ),
+                  ),
+                  FutureBuilder(
+                    future: loadListMostFavoriteGame(),
+                    builder: (context, snapshot) {
+                      return GridView.count(
+                        shrinkWrap: true,
+                        childAspectRatio: (130 / 50),
+                        crossAxisCount: 2,
+                        children: List.generate(
+                            listMostFavoriteGame.length,
+                            (index) => buildTopGameTag(
+                                listMostFavoriteGame[index].name)),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Các tựa game hot',
-                style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 18),
-              ),
-            ),
-            FutureBuilder(
-              future: loadListMostFavoriteGame(),
-              builder: (context, snapshot) {
-                return GridView.count(
-                  shrinkWrap: true,
-                  childAspectRatio: (130 / 50),
-                  crossAxisCount: 2,
-                  children: List.generate(
-                      listMostFavoriteGame.length,
-                      (index) =>
-                          buildTopGameTag(listMostFavoriteGame[index].name)),
-                );
-              },
-            ),
-          ],
-        ),
-      )),
+            )),
     );
   }
 

@@ -27,6 +27,8 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  final ScrollController _scrollControllerCre = ScrollController();
+  final ScrollController _scrollControllerRev = ScrollController();
   UserModel? lateUser;
   List<OrderModel> _listOrder = [];
   List<OrderModel> _listCreateOrder = [];
@@ -35,6 +37,50 @@ class _HistoryPageState extends State<HistoryPage> {
   bool checkListReceiveOrder = true;
   bool checkEmptyCreateOrder = false;
   bool checkEmptyReceiveOrder = false;
+  int pageSizeCre = 10;
+  int pageSizeRev = 10;
+  bool checkHasNextCre = false;
+  bool checkHasNextRev = false;
+  bool checkGetDataCre = false;
+  bool checkGetDataRev = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollControllerCre.addListener(() {
+      if (_scrollControllerCre.position.maxScrollExtent ==
+          _scrollControllerCre.position.pixels) {
+        getMoreDataCre();
+      }
+    });
+    _scrollControllerRev.addListener(() {
+      if (_scrollControllerRev.position.maxScrollExtent ==
+          _scrollControllerRev.position.pixels) {
+        getMoreDataRev();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollControllerCre.dispose();
+    _scrollControllerRev.dispose();
+    super.dispose();
+  }
+
+  void getMoreDataCre() {
+    if (checkHasNextCre == false) {
+      pageSizeCre += 10;
+      checkGetDataCre = true;
+    }
+  }
+
+  void getMoreDataRev() {
+    if (checkHasNextRev == false) {
+      pageSizeRev += 10;
+      checkGetDataRev = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +132,12 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               body: TabBarView(children: [
                 SingleChildScrollView(
+                    controller: _scrollControllerCre,
                     child: FutureBuilder(
                         future: loadListFromCreateUser(),
                         builder: (context, snapshot) {
-                          if (_listCreateOrder.isEmpty) {
+                          if (_listCreateOrder.isEmpty &&
+                              checkHasNextCre != false) {
                             checkEmptyCreateOrder = true;
                           } else {
                             checkEmptyCreateOrder = false;
@@ -110,15 +158,23 @@ class _HistoryPageState extends State<HistoryPage> {
                                     visible: checkEmptyCreateOrder,
                                     child: Text('Không có dữ liệu',
                                         style: GoogleFonts.montserrat())),
+                                Visibility(
+                                  visible: !checkHasNextCre,
+                                  child: _buildProgressIndicatorCre(),
+                                )
                               ],
                             ),
                           );
                         })),
                 SingleChildScrollView(
+                    controller: _scrollControllerRev,
                     child: FutureBuilder(
                         future: loadListFromReceiveUser(),
                         builder: (context, snapshot) {
-                          if (_listReceiveOrder.isEmpty) {
+                          if (_listReceiveOrder.isEmpty &&
+                              checkGetDataRev != false) {
+                            checkEmptyReceiveOrder = true;
+                          } else if (_listReceiveOrder.isEmpty) {
                             checkEmptyReceiveOrder = true;
                           } else {
                             checkEmptyReceiveOrder = false;
@@ -138,7 +194,11 @@ class _HistoryPageState extends State<HistoryPage> {
                                 Visibility(
                                     visible: checkEmptyReceiveOrder,
                                     child: Text('Không có dữ liệu',
-                                        style: GoogleFonts.montserrat()))
+                                        style: GoogleFonts.montserrat())),
+                                Visibility(
+                                  visible: !checkHasNextRev,
+                                  child: _buildProgressIndicatorRev(),
+                                )
                               ],
                             ),
                           );
@@ -159,6 +219,34 @@ class _HistoryPageState extends State<HistoryPage> {
       orderModel: _orderModel,
       userModel: widget.userModel,
       tokenModel: widget.tokenModel,
+    );
+  }
+
+  Widget _buildProgressIndicatorCre() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: !checkHasNextCre ? 1.0 : 00,
+          child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromRGBO(137, 128, 255, 1))),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressIndicatorRev() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: !checkHasNextRev ? 1.0 : 00,
+          child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Color.fromRGBO(137, 128, 255, 1))),
+        ),
+      ),
     );
   }
 
@@ -266,11 +354,19 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future loadListFromCreateUser() {
     Future<ResponseListModel<OrderModel>?> listOrderFromCreateUserModelFuture =
-        OrderService().getAllOrdersFromCreateUser(widget.tokenModel.message);
+        OrderService()
+            .getAllOrdersFromCreateUser(widget.tokenModel.message, pageSizeCre);
     listOrderFromCreateUserModelFuture.then((_createOrderList) {
-      if (checkListCreateOrder) {
-        _listCreateOrder = _createOrderList!.content;
-        checkListCreateOrder = false;
+      if (_createOrderList != null) {
+        if (checkListCreateOrder || checkGetDataCre) {
+          _listCreateOrder = _createOrderList.content;
+          checkListCreateOrder = false;
+          if (_createOrderList.hasNext == false) {
+            checkHasNextCre = true;
+          } else {
+            checkHasNextCre = false;
+          }
+        }
       }
     });
     return listOrderFromCreateUserModelFuture;
@@ -278,11 +374,19 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future loadListFromReceiveUser() {
     Future<ResponseListModel<OrderModel>?> listOrderFromReceiveUserModelFuture =
-        OrderService().getAllOrdersFromReceivedUser(widget.tokenModel.message);
+        OrderService().getAllOrdersFromReceivedUser(
+            widget.tokenModel.message, pageSizeRev);
     listOrderFromReceiveUserModelFuture.then((_receiveOrderList) {
-      if (checkListReceiveOrder) {
-        _listReceiveOrder = _receiveOrderList!.content;
-        checkListReceiveOrder = false;
+      if (_receiveOrderList != null) {
+        if (checkListReceiveOrder || checkGetDataRev) {
+          _listReceiveOrder = _receiveOrderList.content;
+          checkListReceiveOrder = false;
+          if (_receiveOrderList.hasNext == false) {
+            checkHasNextRev = true;
+          } else {
+            checkHasNextRev = false;
+          }
+        }
       }
     });
     return listOrderFromReceiveUserModelFuture;

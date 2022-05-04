@@ -43,7 +43,8 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
           elevation: 1,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: FlatButton(
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.black),
               child: const Icon(
                 Icons.arrow_back_ios,
               ),
@@ -141,10 +142,9 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               keyboardType: TextInputType.multiline,
               maxLength: 200,
               enabled: false,
-              //onChanged: (newValue) => title = newValue,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                 counterText: "",
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 border: InputBorder.none,
@@ -168,10 +168,9 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               keyboardType: TextInputType.multiline,
               maxLength: 200,
               enabled: false,
-              //onChanged: (newValue) => title = newValue,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                 counterText: "",
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 border: InputBorder.none,
@@ -195,10 +194,9 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
               keyboardType: TextInputType.multiline,
               maxLength: 200,
               enabled: false,
-              //onChanged: (newValue) => title = newValue,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
                 counterText: "",
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 border: InputBorder.none,
@@ -208,7 +206,7 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
         ),
       );
     }
-    return Text(
+    return const Text(
       'Lỗi gửi',
     );
   }
@@ -231,9 +229,9 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
             onChanged: (newValue) {
               message = newValue;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                  EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
               counterText: "",
               floatingLabelBehavior: FloatingLabelBehavior.never,
               border: InputBorder.none,
@@ -260,9 +258,9 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
             keyboardType: TextInputType.multiline,
             maxLength: 200,
             onChanged: (newValue) => title = newValue,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                  EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
               counterText: "",
               floatingLabelBehavior: FloatingLabelBehavior.never,
               border: InputBorder.none,
@@ -273,7 +271,3 @@ class _FeedbackDetailPageState extends State<FeedbackDetailPage> {
     );
   }
 }
-
-// 'Báo cáo lỗi của hệ thống',
-//     'Đề xuất tính năng hoặc thêm mới danh mục game',
-//     'Phản hồi về dịch vụ'
